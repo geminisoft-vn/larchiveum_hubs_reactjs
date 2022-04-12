@@ -12,12 +12,17 @@ export function CreateRoomButton() {
       thick={breakpoint === "sm" || breakpoint === "md"}
       xl={breakpoint !== "sm" && breakpoint !== "md"}
       preset="landing"
-      onClick={e => {
-        e.preventDefault();
-        createAndRedirectToNewHub(null, null, false);
+      onClick={async () => {
+        const response = await fetch('https://vdc-dev.gemiso.com/larchiveum/v1/exhibitions?page=1&pageSize=9&sort=startDate|asc');
+        const myJson = await response.json(); //extract JSON from the http response
+        // do something with myJson
+        console.log(myJson);
+
+        // e.preventDefault();
+        // createAndRedirectToNewHub(null, null, false);
       }}
     >
-      <FormattedMessage id="create-room-button" defaultMessage="Create Room" />
+      <FormattedMessage id="create-room-button" defaultMessage="Get Data Here" />
     </Button>
   );
 }
