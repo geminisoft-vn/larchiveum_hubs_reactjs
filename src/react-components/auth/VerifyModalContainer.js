@@ -21,14 +21,13 @@ function useVerify() {
     
     () => {
 
-      async.parallel([
+      async.waterfall([
         (cb) => {
           const param = (new URLSearchParams(location.href)).get('auth_topic') || '';
           const token = param.replace('auth:', '');
 
-          UserService.verifyUser(token)
+          UserService.checkToken(token)
             .then((res)=>{
-              Store.setUser(res.data.data);
               cb(null, res);
             })
             .catch((error)=>{
@@ -36,20 +35,25 @@ function useVerify() {
               cb(null, null);
             });
         },
-        async (cb) => {
-          try {
-            const qs = new URLSearchParams(location.search);
-            const authParams = {
-              topic: qs.get("auth_topic"),
-              token: qs.get("auth_token"),
-              origin: qs.get("auth_origin"),
-              payload: qs.get("auth_payload")
-            };
-            await verify(authParams);
-            cb(null, true);
-          } catch (error) {
-            setHubMessage("Hubs signin error");
-            cb(null, true);
+        async (res,cb) => {
+          if(res){
+            try {
+              const qs = new URLSearchParams(location.search);
+              const authParams = {
+                topic: qs.get("auth_topic"),
+                token: qs.get("auth_token"),
+                origin: qs.get("auth_origin"),
+                payload: qs.get("auth_payload")
+              };
+              await verify(authParams);
+              cb(null, true);
+            } catch (error) {
+              setHubMessage("Hubs signin error");
+              cb(null, null);
+            }
+          }
+          else{
+            cb(null, null);
           }
         }
       ], (err, [larchiveum, hubs])=>{
@@ -84,7 +88,7 @@ export function VerifyModalContainer() {
       <br></br><br></br>
       <b>Verifying Email Error</b>
       <br></br><br></br><br></br><br></br>
-      <p>{larchiveumMessage}</p>
+      <h>{larchiveumMessage}</h>
       <br></br>
       <p>{hubMessage}</p>
       <div className="d-flex center-flex margin-bottom20px"><a className="btn btn-backhome" href="/">Back Home</a></div>
