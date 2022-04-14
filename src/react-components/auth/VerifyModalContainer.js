@@ -26,7 +26,7 @@ function useVerify() {
           const param = (new URLSearchParams(location.href)).get('auth_topic') || '';
           const token = param.replace('auth:', '');
 
-          UserService.checkToken(token)
+          UserService.verifyUser(token)
             .then((res)=>{
               cb(null, res);
             })
