@@ -1,8 +1,8 @@
 
 const expireCookies = 1;
 
-//const API_ROOT = "http://localhost:7500";
-const API_ROOT = "https://vdc-dev.gemiso.com/larchiveum";
+const API_ROOT = "http://localhost:7500";
+//const API_ROOT = "https://vdc-dev.gemiso.com/larchiveum";
 const ENV = "https://vdc-dev.gemiso.com/larchiveum";
 
 // const APP_ROOT = "https://larchiveum.link";

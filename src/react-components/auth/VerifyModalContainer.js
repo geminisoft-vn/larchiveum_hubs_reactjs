@@ -4,6 +4,7 @@ import { AuthContext } from "./AuthContext";
 import { VerifyModal, VerificationError, EmailVerified, VerifyingEmail } from "./VerifyModal";
 import UserService from "../../utilities/apiServices/UserService";
 import Store from '../../utilities/store';
+import store from "../../utilities/store";
 
 const VerificationStep = {
   verifying: "verifying",
@@ -28,7 +29,14 @@ function useVerify() {
 
           UserService.verifyUser(token)
             .then((res)=>{
-              cb(null, res);
+              if(res.data.result == 'ok'){
+                store.setUser(res.data.data);
+                cb(null, res);
+              }
+              else{
+                setLarchiveumMessage("Larchiveum singin error");
+                cb(null, null);
+              }
             })
             .catch((error)=>{
               setLarchiveumMessage("Larchiveum singin error");
@@ -56,8 +64,8 @@ function useVerify() {
             cb(null, null);
           }
         }
-      ], (err, [larchiveum, hubs])=>{
-        if(larchiveum && hubs){
+      ], (err, result)=>{
+        if(result){
           setStep(VerificationStep.complete);
         }
         else{
