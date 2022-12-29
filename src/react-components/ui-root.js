@@ -51,7 +51,7 @@ import { MicSetupModalContainer } from "./room/MicSetupModalContainer";
 import { InvitePopoverContainer } from "./room/InvitePopoverContainer";
 import { MoreMenuPopoverButton, CompactMoreMenuButton, MoreMenuContextProvider } from "./room/MoreMenuPopover";
 import { ChatSidebarContainer, ChatContextProvider, ChatToolbarButtonContainer } from "./room/ChatSidebarContainer";
-import { ContentMenu, PeopleMenuButton, ObjectsMenuButton } from "./room/ContentMenu";
+import { ContentMenu, PeopleMenuButton, ObjectsMenuButton, ContentsMenuButton } from "./room/ContentMenu";
 import { ReactComponent as CameraIcon } from "./icons/Camera.svg";
 import { ReactComponent as AvatarIcon } from "./icons/Avatar.svg";
 import { ReactComponent as AddIcon } from "./icons/Add.svg";
@@ -73,6 +73,7 @@ import { ReactComponent as InviteIcon } from "./icons/Invite.svg";
 import { PeopleSidebarContainer, userFromPresence } from "./room/PeopleSidebarContainer";
 import { ObjectListProvider } from "./room/useObjectList";
 import { ObjectsSidebarContainer } from "./room/ObjectsSidebarContainer";
+import { ContentsSidebarContainer } from "./room/ContentsSidebarContainer";
 import { ObjectMenuContainer } from "./room/ObjectMenuContainer";
 import { useCssBreakpoints } from "react-use-css-breakpoints";
 import { PlacePopoverContainer } from "./room/PlacePopoverContainer";
@@ -796,7 +797,7 @@ class UIRoot extends Component {
   onChangeAvatar = e => {
     e.preventDefault();
     // this.props.mediaSearchStore.sourceNavigateWithNoNav("avatars", "use");
-    this.setSidebar("profile")
+    this.setSidebar("profile");
   };
 
   renderInterstitialPrompt = () => {
@@ -1434,6 +1435,10 @@ class UIRoot extends Component {
                           onClick={() => this.toggleSidebar("people")}
                           presencecount={this.state.presenceCount}
                         />
+                        <ContentsMenuButton
+                          active={this.state.sidebarId === "contents"}
+                          onClick={() => this.toggleSidebar("contents")}
+                        />
                       </ContentMenu>
                     )}
                     {!entered && !streaming && !isMobile && streamerName && <SpectatingLabel name={streamerName} />}
@@ -1495,6 +1500,12 @@ class UIRoot extends Component {
                           scene={this.props.scene}
                           onClose={() => this.setSidebar(null)}
                           inputEffect={this.state.chatInputEffect}
+                        />
+                      )}
+                      {this.state.sidebarId === "contents" && (
+                        <ContentsSidebarContainer
+                          hubChannel={this.props.hubChannel}
+                          onClose={() => this.setSidebar(null)}
                         />
                       )}
                       {this.state.sidebarId === "objects" && (
@@ -1711,7 +1722,5 @@ UIRootHooksWrapper.propTypes = {
   messageDispatch: PropTypes.object,
   store: PropTypes.object.isRequired
 };
-
-
 
 export default UIRootHooksWrapper;
