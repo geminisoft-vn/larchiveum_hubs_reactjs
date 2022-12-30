@@ -5,7 +5,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Layout } from "antd";
-import "./PermissionDenied.scss";
+import "./NotFound.scss";
 
 const { Content } = Layout;
 
@@ -15,7 +15,7 @@ const QUIZ_STEPS = {
   RESULT: 3
 };
 
-export default function PermissionDenied() {
+export default function NotFound() {
   return (
     <Content
       style={{
@@ -28,7 +28,7 @@ export default function PermissionDenied() {
         alignItems: "center"
       }}
     >
-      <h1 style={{color: '#aaaaaa'}}>Permission Denied</h1>
+      <h1 style={{color: '#aaaaaa'}}>Not Found</h1>
     </Content>
   );
 }

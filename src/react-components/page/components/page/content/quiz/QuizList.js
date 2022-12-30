@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { LoadingOutlined, EyeOutlined, DeleteOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Layout, Menu, Col, Row, Button, Spin, Empty, Card } from "antd";
+import Store from "../../../../../../utilities/store";
+import { CONTENT_ROOT } from "../../../../../../utilities/constants";
 import PopupCreateQuiz from "./PopupCreateQuiz";
 import QuizService from "../../../../../../utilities/apiServices/QuizService";
 
@@ -57,7 +59,7 @@ export default function(props) {
   }
 
   function handleGotoViewQuiz(quizId) {
-    window.open("/?page=view-quiz&quizId=" + quizId);
+    window.open(CONTENT_ROOT + "/quiz?quizId=" + quizId + "&token=" + Store.getAccessToken());
   }
 
   return (

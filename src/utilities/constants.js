@@ -6,6 +6,8 @@ const expireCookies = 7;
 const API_ROOT = "https://api.larchiveum.link";
 const APP_ROOT = "https://larchiveum.link";
 
+const CONTENT_ROOT = "http://larchiveum-content.360fairs.com";
+
 const naverApp = {
   clientID: "QPIOm41T66AJMeNwzeBI",
   appSecret: "7actnLYjGi"
@@ -25,4 +27,4 @@ const googleApp = {
   clientSecret: "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"
 };
 
-export { expireCookies, naverApp, kakaoApp, facebookApp, googleApp, API_ROOT, APP_ROOT };
+export { expireCookies, naverApp, kakaoApp, facebookApp, googleApp, API_ROOT, APP_ROOT, CONTENT_ROOT };

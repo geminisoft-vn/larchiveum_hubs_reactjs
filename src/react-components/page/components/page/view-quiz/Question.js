@@ -45,7 +45,7 @@ export default function(props) {
     if (checked) {
       setSelectedAnswerIds([...(selectedAnswerIds || []), name]);
     } else {
-      setSelectedAnswerIds(selectedAnswerIds.current.filter(id => id != name));
+      setSelectedAnswerIds(selectedAnswerIds.filter(id => id != name));
     }
   }
 
