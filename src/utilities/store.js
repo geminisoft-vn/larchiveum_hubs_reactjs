@@ -7,15 +7,15 @@ const store = new StoreHub();
 class Store {
   getUser() {
     if (Cookies.get("_larchiveum_user") && Cookies.get("_larchiveum_user") != "") {
-      let str = Cookies.get("_larchiveum_user");
-      let user = JSON.parse(str || "{}");
+      const str = Cookies.get("_larchiveum_user");
+      const user = JSON.parse(str || "{}");
       if (user && user.token) {
         return user;
       }
-    } 
+    }
     return null;
   }
-  
+
   setUser(data) {
     if (data != undefined) {
       Cookies.set("_larchiveum_user", data, {
@@ -26,7 +26,7 @@ class Store {
   }
 
   removeUser() {
-    let str = Cookies.remove("_larchiveum_user");
+    const str = Cookies.remove("_larchiveum_user");
   }
 }
 
