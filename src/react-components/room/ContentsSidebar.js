@@ -16,73 +16,12 @@ import listStyles from "../layout/List.scss";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import Linkify from "react-linkify";
 import { LoadingOutlined } from "@ant-design/icons";
-import { APP_ROOT } from "../../utilities/constants";
+import Store from "../../utilities/store";
+import { CONTENT_ROOT } from "../../utilities/constants";
 import QuizService from "../../utilities/apiServices/QuizService";
 import { useState, useEffect } from "react";
 import { setLocale } from "../../utils/i18n";
 import { Button, Space, Spin } from "antd";
-
-// const conetnTypeNames = defineMessages({
-//   quiz: { id: "contents-sidebar.content-type.quiz", defaultMessage: "Quiz" },
-//   document: { id: "contents-sidebar.content-type.document", defaultMessage: "Document" },
-//   map: { id: "contents-sidebar.content-type.map", defaultMessage: "Map" }
-// });
-
-// export function ContentsSidebarItem({ children }) {
-//   return <li>{children}</li>;
-// }
-
-// ContentsSidebarItem.propTypes = {
-//   children: PropTypes.node
-// };
-
-// export function QuizsSidebarItem({ quiz }) {
-//   const intl = useIntl();
-//   return (
-//     <ul style={{ width: "100%" }}>
-//       <ButtonListItem
-//         className={classNames(styles.object)}
-//         type="button"
-//         aria-label={intl.formatMessage(
-//           { id: "contents-sidebar.quiz-label", defaultMessage: "{quizTitle}" },
-//           {
-//             quizTitle: quiz?.title
-//           }
-//         )}
-//       >
-//         <p>{quiz?.title}</p>
-//       </ButtonListItem>
-//     </ul>
-//   );
-// }
-
-// QuizsSidebarItem.propTypes = {
-//   selected: PropTypes.bool,
-//   quiz: PropTypes.any
-// };
-
-// export function QuizsSidebar({ children }) {
-//   return (
-//     <Sidebar title={<FormattedMessage id="contents-sidebar.quiz.title" defaultMessage="Quizs" />}>
-//       <ul>{children}</ul>
-//     </Sidebar>
-//   );
-// }
-
-// QuizsSidebar.propTypes = {
-//   children: PropTypes.node
-// };
-
-// export function NoItems() {
-//   return (
-//     <li>
-//       <p>
-//         <FormattedMessage id="contents-sidebar.no-items" defaultMessage="There are no item." />
-//       </p>
-//     </li>
-//   );
-// }
-
 export function ContentsSidebar({ children, onClose }) {
   return (
     <Sidebar
@@ -99,7 +38,6 @@ ContentsSidebar.propTypes = {
   onClose: PropTypes.func
 };
 
-//////////////////////
 export function QuizList() {
   const [quizs, setQuizs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -134,7 +72,11 @@ export function QuizList() {
         <>
           {quizs?.map(quiz => (
             <Linkify key={quiz.id} properties={{ target: "_blank", rel: "noopener referrer" }}>
-              <a href={APP_ROOT + "/?page=view-quiz&quizId=" + quiz.id} target="_blank" rel="noopener referrer">
+              <a
+                href={CONTENT_ROOT + "/quiz?quizId=" + quiz.id + +"&token=" + Store.getAccessToken()}
+                target="_blank"
+                rel="noopener referrer"
+              >
                 {quiz.title}
               </a>
             </Linkify>
