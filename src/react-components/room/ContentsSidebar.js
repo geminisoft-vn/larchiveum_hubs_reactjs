@@ -22,6 +22,7 @@ import QuizService from "../../utilities/apiServices/QuizService";
 import { useState, useEffect } from "react";
 import { setLocale } from "../../utils/i18n";
 import { Button, Space, Spin } from "antd";
+
 export function ContentsSidebar({ children, onClose }) {
   return (
     <Sidebar
@@ -73,7 +74,7 @@ export function QuizList() {
           {quizs?.map(quiz => (
             <Linkify key={quiz.id} properties={{ target: "_blank", rel: "noopener referrer" }}>
               <a
-                href={CONTENT_ROOT + "/quiz?quizId=" + quiz.id + +"&token=" + Store.getAccessToken()}
+                href={CONTENT_ROOT + "/quiz?quizId=" + quiz.id + "&token=" + Store.getAccessToken()}
                 target="_blank"
                 rel="noopener referrer"
               >
