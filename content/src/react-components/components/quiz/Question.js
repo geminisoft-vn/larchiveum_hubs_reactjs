@@ -23,7 +23,7 @@ export default function Question(props) {
     () => {
       setIsLoading(true);
       setSelectedAnswerIds([]);
-      QuestionService.getOne(props.questionId)
+      QuestionService.getOneWithoutAuth(props.questionId)
         .then(res => {
           setQuestion(res.data);
           setIsLoading(false);

@@ -8,8 +8,20 @@ class QuizService {
     });
   }
 
+  static getAllWithoutAuth(params) {
+    return request.get("/v1/quizs", { params: params }).then(res => {
+      return res.data;
+    });
+  }
+
   static getOne(id) {
     return request.get("/v1/auth/quizs/" + id).then(res => {
+      return res.data;
+    });
+  }
+
+  static getOneWithoutAuth(id) {
+    return request.get("/v1/quizs/" + id).then(res => {
       return res.data;
     });
   }

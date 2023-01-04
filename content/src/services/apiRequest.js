@@ -26,7 +26,7 @@ service.interceptors.response.use(
   },
   error => {
     if(error.response?.data?.result === 'fail' && (error.response?.data?.error === 'invalid_token' || error.response?.data?.error === 'verify_token_fail')){
-      window.location.href = '/permission-denied';
+      //window.location.href = '/permission-denied';
     }
     return Promise.reject(error);
   }

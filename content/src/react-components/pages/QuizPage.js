@@ -34,14 +34,14 @@ export default function QuizPage() {
   const [quizStep, setQuizStep] = useState(QUIZ_STEPS.GETTING_STARTED);
 
   useEffect(() => {
-    const token = new URL(window.location.href).searchParams.get("token");
-    if(token){
-      Store.setAccessToken(token);
-    }
+    // const token = new URL(window.location.href).searchParams.get("token");
+    // if(token){
+    //   Store.setAccessToken(token);
+    // }
 
     const quizId = new URL(window.location.href).searchParams.get("quizId");
     setIsLoading(true);
-    QuizService.getOne(quizId)
+    QuizService.getOneWithoutAuth(quizId)
       .then(res => {
         setQuiz(res.data);
         setIsLoading(false);

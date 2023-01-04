@@ -8,8 +8,20 @@ class QuestionService {
     });
   }
 
+  static getAllWithoutAuth(params) {
+    return request.get("/v1/auth/questions", { params: params }).then(res => {
+      return res.data;
+    });
+  }
+
   static getOne(id) {
     return request.get("/v1/auth/questions/" + id).then(res => {
+      return res.data;
+    });
+  }
+
+  static getOneWithoutAuth(id) {
+    return request.get("/v1/questions/" + id).then(res => {
       return res.data;
     });
   }

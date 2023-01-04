@@ -28,8 +28,10 @@ export default function GettingStarted(props) {
 
   function handleStartQuiz() {
     setIsStarting(true);
+    const userId = new URL(window.location.href).searchParams.get("userId");
     QuizResultService.create({
-      quizId: quiz.id
+      quizId: quiz.id,
+      userId: userId || null,
     })
       .then(res => {
         setQuizResult(res.data);
