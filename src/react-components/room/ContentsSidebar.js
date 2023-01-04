@@ -74,7 +74,7 @@ export function QuizList() {
           {quizs?.map(quiz => (
             <Linkify key={quiz.id} properties={{ target: "_blank", rel: "noopener referrer" }}>
               <a
-                href={CONTENT_ROOT + "/quiz?quizId=" + quiz.id + "&token=" + Store.getAccessToken()}
+                href={CONTENT_ROOT + "/quiz?quizId=" + quiz.id + "&userId=" + Store.getUser()?.id}
                 target="_blank"
                 rel="noopener referrer"
               >
