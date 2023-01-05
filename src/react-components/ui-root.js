@@ -930,7 +930,6 @@ class UIRoot extends Component {
   };
 
   renderQuizPanel = () => {
-    console.log(this.props.history);
     return (
       <StateRoute
         stateKey="entry_step"
