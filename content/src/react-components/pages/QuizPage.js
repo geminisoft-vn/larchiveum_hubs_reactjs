@@ -33,7 +33,7 @@ export default function QuizPage() {
     id: new URL(window.location.href).searchParams.get("id"),
     title: new URL(window.location.href).searchParams.get("title"),
     description: new URL(window.location.href).searchParams.get("description"),
-    questions: []
+    questions: [{}]
   });
   const [quizResult, setQuizResult] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
