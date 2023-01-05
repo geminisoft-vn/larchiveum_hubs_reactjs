@@ -33,7 +33,7 @@ export default function QuizPage() {
     id: new URL(window.location.href).searchParams.get("id"),
     title: new URL(window.location.href).searchParams.get("title"),
     description: new URL(window.location.href).searchParams.get("description"),
-    questions: [{}]
+    questions: [{}, {}]
   });
   const [quizResult, setQuizResult] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -80,7 +80,7 @@ export default function QuizPage() {
     <Content
       style={{
         position: "relative",
-        height: "100vh",
+        minHeight: "100vh",
         width: "100%",
         backgroundColor: "white",
         display: "flex",
@@ -92,7 +92,6 @@ export default function QuizPage() {
         <div
           style={{
             height: "100%",
-            minHeight: "300px",
             width: "100%",
             display: "flex",
             justifyContent: "center",
@@ -122,7 +121,6 @@ export default function QuizPage() {
               {quizStep === QUIZ_STEPS.QUESTIONS && (
                 <div
                   style={{
-                    height: "100vh",
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",

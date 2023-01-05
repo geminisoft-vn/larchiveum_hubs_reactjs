@@ -16,6 +16,7 @@ import { useCssBreakpoints } from "react-use-css-breakpoints";
 import { Column } from "../layout/Column";
 import { FormattedMessage } from "react-intl";
 import configs from "../../utils/configs";
+import Store from "../../utilities/store";
 
 export function QuizContentModal({ className, quizUrl, closeable, onClose }) {
   return (

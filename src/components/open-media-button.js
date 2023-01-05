@@ -8,6 +8,7 @@ import {
 import { guessContentType } from "../utils/media-url-utils";
 import { handleExitTo2DInterstitial } from "../utils/vr-interstitial";
 import { changeHub } from "../change-hub";
+import Store from "../utilities/store";
 
 AFRAME.registerComponent("open-media-button", {
   schema: {
@@ -76,14 +77,15 @@ AFRAME.registerComponent("open-media-button", {
           location.href = this.src;
         }
       } else if (await isQuizUrl(this.src)) {
+        const src = this.src + (Store.getUser()?.id && "&userId=" + Store.getUser()?.id);
+        console.log("src: ", src);
         window.dispatchEvent(
           new CustomEvent("action_open_popup_quiz", {
             detail: {
-              quizUrl: this.src
+              quizUrl: src
             }
           })
         );
-        //this.el.sceneEl.emit("scene_media_selected", this.src);
       } else {
         await exitImmersive();
         window.open(this.src);

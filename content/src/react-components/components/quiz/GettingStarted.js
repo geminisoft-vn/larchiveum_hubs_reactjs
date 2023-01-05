@@ -3,7 +3,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -59,15 +59,9 @@ export default function GettingStarted(props) {
       </Row>
       <Row style={{ width: "100%", marginTop: "15vh" }}>
         <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
-          {quiz?.questions?.length > 0 ? (
-            <Button size="large" type="primary" loading={isStarting} onClick={handleStartQuiz}>
-              {"Start quiz"}
-            </Button>
-          ) : (
-            <Button size="large" type="primary" disabled={true}>
-              {"Start quiz"}
-            </Button>
-          )}
+          <Button size="large" type="primary" loading={isStarting} disabled={!(quiz?.questions && quiz?.questions?.length > 0)} onClick={handleStartQuiz}>
+            {"Start quiz"}
+          </Button>
         </Col>
       </Row>
     </div>
