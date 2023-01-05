@@ -1,4 +1,10 @@
-import { isLocalHubsUrl, isLocalHubsSceneUrl, isHubsRoomUrl, isLocalHubsAvatarUrl } from "../utils/media-url-utils";
+import {
+  isLocalHubsUrl,
+  isLocalHubsSceneUrl,
+  isHubsRoomUrl,
+  isLocalHubsAvatarUrl,
+  isQuizUrl
+} from "../utils/media-url-utils";
 import { guessContentType } from "../utils/media-url-utils";
 import { handleExitTo2DInterstitial } from "../utils/vr-interstitial";
 import { changeHub } from "../change-hub";
@@ -34,6 +40,8 @@ AFRAME.registerComponent("open-media-button", {
             } else {
               label = "visit room";
             }
+          } else if (await isQuizUrl(src)) {
+            label = "open quiz";
           }
         }
         this.label.setAttribute("text", "value", label);
@@ -67,6 +75,15 @@ AFRAME.registerComponent("open-media-button", {
           await exitImmersive();
           location.href = this.src;
         }
+      } else if (await isQuizUrl(this.src)) {
+        window.dispatchEvent(
+          new CustomEvent("action_open_popup_quiz", {
+            detail: {
+              quizUrl: this.src
+            }
+          })
+        );
+        //this.el.sceneEl.emit("scene_media_selected", this.src);
       } else {
         await exitImmersive();
         window.open(this.src);

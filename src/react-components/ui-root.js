@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { Component, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -97,6 +98,7 @@ import { TipContainer, FullscreenTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
+import { QuizContentModal } from "./room/QuizContentModal";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -927,6 +929,36 @@ class UIRoot extends Component {
     );
   };
 
+  renderQuizPanel = () => {
+    console.log(this.props.history);
+    return (
+      <StateRoute
+        stateKey="entry_step"
+        stateValue="content-quiz"
+        history={this.props.history}
+        render={props => (
+          <QuizContentModal
+            quizUrl={this.props.history.location.state.detail.quizUrl}
+            closeable={true}
+            onClose={() => {
+              this.props.history.goBack();
+            }}
+          />
+        )}
+      />
+      // <MicSetupModalContainer
+      //   scene={this.props.scene}
+      //   onEnterRoom={this.onAudioReadyButton}
+      //   onMicMuted={() =>
+      //     this.props.store.update({
+      //       preferences: { muteMicOnEntry: !this.props.store.state.preferences["muteMicOnEntry"] }
+      //     })
+      //   }
+      //   onBack={() => this.props.history.goBack()}
+      // />
+    );
+  };
+
   isInModalOrOverlay = () => {
     if (
       this.state.entered &&
@@ -1420,6 +1452,7 @@ class UIRoot extends Component {
                 viewport={
                   <>
                     {!this.state.dialog && renderEntryFlow ? entryDialog : undefined}
+                    {!this.state.dialog && this.renderQuizPanel()}
                     {!this.props.selectedObject && <CompactMoreMenuButton />}
                     {(!this.props.selectedObject ||
                       (this.props.breakpoint !== "sm" && this.props.breakpoint !== "md")) && (

@@ -55,6 +55,13 @@ export function QuizList() {
       });
   }, []);
 
+  function generateQuizUrl(quiz) {
+    const url = new URL(CONTENT_ROOT + "/quiz");
+    url.searchParams.append("id", quiz.id);
+    url.searchParams.append("title", quiz.title);
+    return url.href;
+  }
+
   return (
     <Space direction="vertical" size="middle" style={{ display: "flex" }}>
       {isLoading ? (
@@ -73,17 +80,10 @@ export function QuizList() {
         <>
           {quizs?.map(quiz => (
             <Linkify key={quiz.id} properties={{ target: "_blank", rel: "noopener referrer" }}>
-              <a
-                href={CONTENT_ROOT + "/quiz?quizId=" + quiz.id + "&userId=" + Store.getUser()?.id}
-                target="_blank"
-                rel="noopener referrer"
-              >
+              <a href={generateQuizUrl(quiz)} target="_blank" rel="noopener referrer">
                 {quiz.title}
               </a>
             </Linkify>
-            // <Button key={quiz.id}>
-
-            // </Button>
           ))}
         </>
       )}

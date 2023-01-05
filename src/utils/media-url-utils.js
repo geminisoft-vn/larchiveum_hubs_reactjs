@@ -1,5 +1,6 @@
 import { hasReticulumServer } from "./phoenix-utils";
 import configs from "./configs";
+import { CONTENT_ROOT } from "./../utilities/constants";
 
 const nonCorsProxyDomains = (configs.NON_CORS_PROXY_DOMAINS || "").split(",");
 if (configs.CORS_PROXY_SERVER) {
@@ -207,6 +208,8 @@ export const isHubsRoomUrl = async url =>
 
 export const isHubsDestinationUrl = async url =>
   (await isHubsServer(url)) && ((await isHubsSceneUrl(url)) || (await isHubsRoomUrl(url)));
+
+export const isQuizUrl = async url => url.startsWith(CONTENT_ROOT + "/quiz");
 
 export const idForAvatarUrl = url => {
   const match = url.match(hubsAvatarRegex);

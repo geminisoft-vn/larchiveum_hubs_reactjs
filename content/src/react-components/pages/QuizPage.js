@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
 /* eslint-disable no-debugger */
 /* eslint-disable react/display-name */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
@@ -28,7 +29,12 @@ export default function QuizPage() {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [quiz, setQuiz] = useState(null);
+  const [quiz, setQuiz] = useState({
+    id: new URL(window.location.href).searchParams.get("id"),
+    title: new URL(window.location.href).searchParams.get("title"),
+    description: new URL(window.location.href).searchParams.get("description"),
+    questions: []
+  });
   const [quizResult, setQuizResult] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [quizStep, setQuizStep] = useState(QUIZ_STEPS.GETTING_STARTED);
@@ -39,15 +45,15 @@ export default function QuizPage() {
     //   Store.setAccessToken(token);
     // }
 
-    const quizId = new URL(window.location.href).searchParams.get("quizId");
-    setIsLoading(true);
+    const quizId = new URL(window.location.href).searchParams.get("id");
+    //setIsLoading(true);
     QuizService.getOneWithoutAuth(quizId)
       .then(res => {
         setQuiz(res.data);
-        setIsLoading(false);
+        //setIsLoading(false);
       })
       .catch(error => {
-        setIsLoading(false);
+        //setIsLoading(false);
         setIsError(true);
       });
   }, []);

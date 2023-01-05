@@ -6,7 +6,7 @@ const expireCookies = 7;
 const API_ROOT = "https://api.larchiveum.link";
 const APP_ROOT = "https://larchiveum.link";
 
-const CONTENT_ROOT = "http://larchiveum-content.360fairs.com";
+const CONTENT_ROOT = "https://larchiveum-content.360fairs.com";
 
 const naverApp = {
   clientID: "QPIOm41T66AJMeNwzeBI",

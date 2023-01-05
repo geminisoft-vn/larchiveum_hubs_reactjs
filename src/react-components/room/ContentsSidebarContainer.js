@@ -8,7 +8,7 @@ import { useContentList } from "./useContentList";
 
 const { Panel } = Collapse;
 
-export function ContentsSidebarContainer({ onClose, hubChannel }) {
+export function ContentsSidebarContainer({ onClose }) {
   const quizs = [
     {
       id: 1,
@@ -29,7 +29,7 @@ export function ContentsSidebarContainer({ onClose, hubChannel }) {
   // );
 
   return (
-    <ContentsSidebar>
+    <ContentsSidebar onClose={onClose}>
       <Collapse defaultActiveKey={["1"]} style={{ borderRadius: "0px" }}>
         <Panel header="Quizs" key="1" style={{ borderRadius: "0px" }}>
           <QuizList />
@@ -46,6 +46,5 @@ export function ContentsSidebarContainer({ onClose, hubChannel }) {
 }
 
 ContentsSidebarContainer.propTypes = {
-  hubChannel: PropTypes.object.isRequired,
   onClose: PropTypes.func
 };
