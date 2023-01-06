@@ -31,6 +31,17 @@ export function ObjectsMenuButton(props) {
   );
 }
 
+export function ContentsMenuButton(props) {
+  return (
+    <ContentMenuButton {...props}>
+      <ObjectsIcon />
+      <span>
+        <FormattedMessage id="content-menu.contents-menu-button" defaultMessage="Contents" />
+      </span>
+    </ContentMenuButton>
+  );
+}
+
 export function PeopleMenuButton(props) {
   return (
     <ContentMenuButton {...props}>

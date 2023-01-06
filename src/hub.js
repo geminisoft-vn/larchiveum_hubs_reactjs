@@ -822,14 +822,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     );
   });
 
-   // #### ready player me avatar create ADD. jbshin 2022.04.14
-   window.addEventListener("action_create_avatar_ready_player_me", () => {
+  // #### ready player me avatar create ADD. jbshin 2022.04.14
+  window.addEventListener("action_create_avatar_ready_player_me", () => {
     performConditionalSignIn(
       () => hubChannel.signedIn,
       // () => pushHistoryState(history, "overlay", "avatar-editor"),
       () => pushHistoryState(history, "overlay", "avatar-creator"),
       SignInMessages.createAvatar
     );
+  });
+
+  window.addEventListener("action_open_popup_quiz", e => {
+    pushHistoryState(history, "entry_step", "content-quiz", e.detail);
   });
 
   scene.addEventListener("scene_media_selected", e => {

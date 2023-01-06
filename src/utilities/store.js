@@ -5,18 +5,18 @@ import { expireCookies } from "./constants";
 const store = new StoreHub();
 
 class Store {
-  getUser() {
+  static getUser() {
     if (Cookies.get("_larchiveum_user") && Cookies.get("_larchiveum_user") != "") {
-      let str = Cookies.get("_larchiveum_user");
-      let user = JSON.parse(str || "{}");
+      const str = Cookies.get("_larchiveum_user");
+      const user = JSON.parse(str || "{}");
       if (user && user.token) {
         return user;
       }
-    } 
+    }
     return null;
   }
-  
-  setUser(data) {
+
+  static setUser(data) {
     if (data != undefined) {
       Cookies.set("_larchiveum_user", data, {
         expires: expireCookies,
@@ -25,9 +25,14 @@ class Store {
     }
   }
 
-  removeUser() {
-    let str = Cookies.remove("_larchiveum_user");
+  static removeUser() {
+    Cookies.remove("_larchiveum_user");
+  }
+
+  static getAccessToken() {
+    const { token } = Store.getUser();
+    return token;
   }
 }
 
-export default new Store();
+export default Store;

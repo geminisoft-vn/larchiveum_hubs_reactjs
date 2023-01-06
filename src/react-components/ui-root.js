@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { Component, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -51,7 +52,7 @@ import { MicSetupModalContainer } from "./room/MicSetupModalContainer";
 import { InvitePopoverContainer } from "./room/InvitePopoverContainer";
 import { MoreMenuPopoverButton, CompactMoreMenuButton, MoreMenuContextProvider } from "./room/MoreMenuPopover";
 import { ChatSidebarContainer, ChatContextProvider, ChatToolbarButtonContainer } from "./room/ChatSidebarContainer";
-import { ContentMenu, PeopleMenuButton, ObjectsMenuButton } from "./room/ContentMenu";
+import { ContentMenu, PeopleMenuButton, ObjectsMenuButton, ContentsMenuButton } from "./room/ContentMenu";
 import { ReactComponent as CameraIcon } from "./icons/Camera.svg";
 import { ReactComponent as AvatarIcon } from "./icons/Avatar.svg";
 import { ReactComponent as AddIcon } from "./icons/Add.svg";
@@ -73,6 +74,7 @@ import { ReactComponent as InviteIcon } from "./icons/Invite.svg";
 import { PeopleSidebarContainer, userFromPresence } from "./room/PeopleSidebarContainer";
 import { ObjectListProvider } from "./room/useObjectList";
 import { ObjectsSidebarContainer } from "./room/ObjectsSidebarContainer";
+import { ContentsSidebarContainer } from "./room/ContentsSidebarContainer";
 import { ObjectMenuContainer } from "./room/ObjectMenuContainer";
 import { useCssBreakpoints } from "react-use-css-breakpoints";
 import { PlacePopoverContainer } from "./room/PlacePopoverContainer";
@@ -96,6 +98,7 @@ import { TipContainer, FullscreenTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
+import { QuizContentModal } from "./room/QuizContentModal";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -796,7 +799,7 @@ class UIRoot extends Component {
   onChangeAvatar = e => {
     e.preventDefault();
     // this.props.mediaSearchStore.sourceNavigateWithNoNav("avatars", "use");
-    this.setSidebar("profile")
+    this.setSidebar("profile");
   };
 
   renderInterstitialPrompt = () => {
@@ -923,6 +926,35 @@ class UIRoot extends Component {
         }
         onBack={() => this.props.history.goBack()}
       />
+    );
+  };
+
+  renderQuizPanel = () => {
+    return (
+      <StateRoute
+        stateKey="entry_step"
+        stateValue="content-quiz"
+        history={this.props.history}
+        render={props => (
+          <QuizContentModal
+            quizUrl={this.props.history.location.state.detail.quizUrl}
+            closeable={true}
+            onClose={() => {
+              this.props.history.goBack();
+            }}
+          />
+        )}
+      />
+      // <MicSetupModalContainer
+      //   scene={this.props.scene}
+      //   onEnterRoom={this.onAudioReadyButton}
+      //   onMicMuted={() =>
+      //     this.props.store.update({
+      //       preferences: { muteMicOnEntry: !this.props.store.state.preferences["muteMicOnEntry"] }
+      //     })
+      //   }
+      //   onBack={() => this.props.history.goBack()}
+      // />
     );
   };
 
@@ -1419,6 +1451,7 @@ class UIRoot extends Component {
                 viewport={
                   <>
                     {!this.state.dialog && renderEntryFlow ? entryDialog : undefined}
+                    {!this.state.dialog && this.renderQuizPanel()}
                     {!this.props.selectedObject && <CompactMoreMenuButton />}
                     {(!this.props.selectedObject ||
                       (this.props.breakpoint !== "sm" && this.props.breakpoint !== "md")) && (
@@ -1433,6 +1466,10 @@ class UIRoot extends Component {
                           active={this.state.sidebarId === "people"}
                           onClick={() => this.toggleSidebar("people")}
                           presencecount={this.state.presenceCount}
+                        />
+                        <ContentsMenuButton
+                          active={this.state.sidebarId === "contents"}
+                          onClick={() => this.toggleSidebar("contents")}
                         />
                       </ContentMenu>
                     )}
@@ -1495,6 +1532,12 @@ class UIRoot extends Component {
                           scene={this.props.scene}
                           onClose={() => this.setSidebar(null)}
                           inputEffect={this.state.chatInputEffect}
+                        />
+                      )}
+                      {this.state.sidebarId === "contents" && (
+                        <ContentsSidebarContainer
+                          hubChannel={this.props.hubChannel}
+                          onClose={() => this.setSidebar(null)}
                         />
                       )}
                       {this.state.sidebarId === "objects" && (
@@ -1711,7 +1754,5 @@ UIRootHooksWrapper.propTypes = {
   messageDispatch: PropTypes.object,
   store: PropTypes.object.isRequired
 };
-
-
 
 export default UIRootHooksWrapper;
