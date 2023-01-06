@@ -47,7 +47,6 @@ function Home() {
     pageSize: 9,
     sort: "startDate|desc" //format <attribute>|<order type>,
   });
-  const [language, setLanguage] = useState("en");
 
   const user = Store.getUser();
   const { t } = useTranslation();
@@ -63,10 +62,6 @@ function Home() {
         window.location = redirectUrl;
       }
       getAllExhibitions();
-
-      const lang = Language.getLanguage();
-      //Language.setLanguage(lang);
-      setLanguage(lang);
     },
     [filterExhibitionList.page, filterExhibitionList.sort]
   );
@@ -178,12 +173,6 @@ function Home() {
 
   const handleButtonLogin = event => {
     window.location.href = "/?page=signin";
-  };
-
-  const handleChangeLanguage = event => {
-    const lang = event.target.value;
-    setLanguage(lang);
-    Language.setLanguage(lang);
   };
 
   const changePages = page => {

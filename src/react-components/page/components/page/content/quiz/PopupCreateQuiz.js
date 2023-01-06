@@ -55,7 +55,7 @@ export default function(props) {
   return (
     <Modal
       className="popup-create-quiz"
-      title="Create Quiz"
+      title={t("content.QUIZ_TAB__POPUP_CREATE_QUIZ__POPUP_NAME_LABEL")}
       centered
       open={true}
       width={700}
