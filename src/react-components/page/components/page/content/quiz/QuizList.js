@@ -59,7 +59,7 @@ export default function(props) {
   }
 
   function handleGotoViewQuiz(quizId) {
-    window.open(CONTENT_ROOT + "/quiz?quizId=" + quizId + "&token=" + Store.getAccessToken());
+    window.open(CONTENT_ROOT + "/quiz?id=" + quizId);
   }
 
   return (
