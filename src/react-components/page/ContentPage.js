@@ -73,9 +73,7 @@ export function ContentPage() {
       return (
         <>
           <div className="manager-page">
-            <div className="row_1" style={{ position: "relative" }}>
-              <LayoutHeader style={{ width: "100%", height: "100%" }} />
-            </div>
+            <LayoutHeader />
             <div className="row_2">
               <Layout style={{ minHeight: "80vh", marginTop: "30px", background: "white" }}>
                 <Sider

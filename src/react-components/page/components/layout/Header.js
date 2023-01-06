@@ -9,7 +9,7 @@ import Language from "../../languages/language";
 
 export default function(props) {
   const { t } = useTranslation();
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState(Language.getLanguage());
   const user = Store.getUser();
   const [page, setPage] = useState(null);
 
@@ -41,29 +41,30 @@ export default function(props) {
     window.location.href = "/";
   };
 
-  if (user) {
-    return (
+  return (
+    <Space
+      wrap
+      className={"_header"}
+      style={{
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center"
+      }}
+    >
+      <a href="/" style={{ float: "left", height: "100%" }}>
+        <img src={logo} style={{ height: "60px" }} />
+      </a>
       <Space
-        wrap
         style={{
           height: "100%",
-          width: "100%",
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "center",
           alignItems: "center"
         }}
       >
-        <a href="/" style={{ float: "left", height: "100%" }}>
-          <img src={logo} style={{ height: "60px" }} />
-        </a>
-        <Space
-          style={{
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
+        {user?.type >= 4 && (
           <Button
             type="default"
             className={"page-btn " + (page == "content" ? "active" : "")}
@@ -72,6 +73,8 @@ export default function(props) {
           >
             {t("_header.TAB_CONTENT_LABEL")}
           </Button>
+        )}
+        {user?.type >= 4 && (
           <Button
             type="default"
             className={"page-btn " + (page == "manager" ? "active" : "")}
@@ -80,68 +83,56 @@ export default function(props) {
           >
             {t("_header.TAB_ROOM_LABEL")}
           </Button>
+        )}
+        {user?.type >= 4 && (
           <Button type="default" className="page-btn" shape="round" href={checkCredentials() ? "/spoke" : "/signin"}>
             {t("_header.TAB_SPOKE_LABEL")}
           </Button>
+        )}
+        {user?.type >= 5 && (
           <Button type="default" className="page-btn" shape="round" href={checkCredentials() ? "/admin" : "/signin"}>
             {t("_header.TAB_ADMIN_LABEL")}
           </Button>
-        </Space>
-        <Space
-          wrap
-          style={{
-            height: "100%"
-          }}
-        >
-          <Select
-            defaultValue={language}
-            style={{ width: 120 }}
-            onChange={handleChangeLanguage}
-            options={[
-              {
-                value: "en",
-                label: "English"
-              },
-              {
-                value: "ko",
-                label: "Korea"
-              }
-            ]}
-          />
-          <span style={{ marginLeft: "30px" }}>
-            {user.displayName || user.email} {" |"}
-          </span>
-          <Button type="link" onClick={handleSignOut}>
-            {"Logout"}
-          </Button>
-        </Space>
+        )}
       </Space>
-      // <span className="display-name">
-      //   <>
-      //     {user?.type == 5 && (
-      //       <>
-      //         <a className="gotospoke" href={"/?page=content"}>
-      //           {t("manager.CONTENT")}
-      //         </a>
-      //         <a className="gotospoke" href={"/?page=manager"}>
-      //           {t("manager.ROOM")}
-      //         </a>
-      //         <a className="gotospoke" href={checkCredentials() ? "/spoke" : "/signin"}>
-      //           {t("manager.SPOKE")}
-      //         </a>
-      //         <a className="gotoadmin" href={checkCredentials() ? "/admin" : "/signin"}>
-      //           {t("manager.ADMIN")}
-      //         </a>
-      //       </>
-      //     )}
-      //   </>
-      //   <span className="nameA">{user.displayName || user.email}</span> |{" "}
-      //   <a className="gotohome" onClick={handleSignOut}>
-      //     {t("manager.SIGN_OUT")}
-      //   </a>
-      // </span>
-    );
-  } else {
-    return <></>;
-  }
+      <Space
+        wrap
+        style={{
+          height: "100%"
+        }}
+      >
+        <Select
+          defaultValue={language}
+          style={{ width: 120 }}
+          onChange={handleChangeLanguage}
+          options={[
+            {
+              value: "en",
+              label: "English"
+            },
+            {
+              value: "ko",
+              label: "Korea"
+            }
+          ]}
+        />
+        {user ? (
+          <>
+            <span style={{ marginLeft: "30px" }}>
+              {user?.displayName || user?.email} {" |"}
+            </span>
+            <Button type="link" onClick={handleSignOut}>
+              {"Logout"}
+            </Button>
+          </>
+        ) : (
+          <>
+            <a href="/?page=signin" className="signin-up">
+              Sign in / Sign up
+            </a>
+          </>
+        )}
+      </Space>
+    </Space>
+  );
 }

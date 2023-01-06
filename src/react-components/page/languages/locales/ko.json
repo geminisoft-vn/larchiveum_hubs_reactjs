@@ -1,4 +1,10 @@
 {
+    "_header": {
+        "TAB_CONTENT_LABEL": "Content",
+        "TAB_ROOM_LABEL": "Room",
+        "TAB_SPOKE_LABEL": "Spoke",
+        "TAB_ADMIN_LABEL": "Admin"
+    },
     "home": {
         "SIGN_IN": "로그인",
         "SIGN_UP": "가입하기",

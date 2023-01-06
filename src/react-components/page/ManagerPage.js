@@ -15,7 +15,6 @@ import MediaService from "../../utilities/apiServices/MediaService";
 import ProjectService from "../../utilities/apiServices/ProjectService";
 import Popup from "../../react-components/popup/popup";
 import AddIcon from "../../assets/larchiveum/add_black_24dp.svg";
-import Moment from "react-moment";
 import "reactjs-popup/dist/index.css";
 import moment from "moment-timezone";
 import { toast } from "react-toastify";
@@ -24,7 +23,7 @@ import defaultImage from "../../assets/larchiveum/default-image.png";
 import defaultModel from "../../assets/larchiveum/model-default.png";
 import defaultImage1 from "../../assets/larchiveum/siri.gif";
 import Pagination from "../../react-components/pagination/pagination";
-import LayoutHeader from "../../react-components/page/components/layout/Header";
+import Header from "../../react-components/page/components/layout/Header";
 import { APP_ROOT } from "../../utilities/constants";
 import {
   FaUserFriends,
@@ -767,13 +766,6 @@ function ManagerHome() {
         {exhibitionsLoaded ? (
           <>
             {t("manager.LIST_EXHIBITION")}
-            <div style={{ float: "right", fontFamily: '"Poppins", sans-serif', fontSize: "16px", color: "black" }}>
-              <span> {t("manager.LANGUAGE")} </span>
-              <select value={language} onChange={handleChangeLanguage}>
-                <option value="en">English</option>
-                <option value="ko">Korean</option>
-              </select>
-            </div>
             <button
               className="btn btn-create"
               onClick={() => {
@@ -977,13 +969,6 @@ function ManagerHome() {
         {projectsLoaded ? (
           <>
             {t("manager.LIST_PROJECT")}
-            <div style={{ float: "right", fontFamily: '"Poppins", sans-serif', fontSize: "16px", color: "black" }}>
-              <span> {t("manager.LANGUAGE")} </span>
-              <select value={language} onChange={handleChangeLanguage}>
-                <option value="en">English</option>
-                <option value="ko">Korean</option>
-              </select>
-            </div>
             {projects.data.map((item, index) => {
               let count_Image = 0;
               let count_Video = 0;
@@ -1697,9 +1682,7 @@ function ManagerHome() {
           )}
 
           <div className="manager-page">
-            <div className="row_1" style={{ position: "relative" }}>
-              <LayoutHeader style={{ width: "100%", height: "100%" }} />
-            </div>
+            <Header />
             <div className="row_2">
               {renderTabs()}
               <AccountPermision />

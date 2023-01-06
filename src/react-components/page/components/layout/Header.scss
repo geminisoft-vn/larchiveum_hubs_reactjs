@@ -1,15 +1,33 @@
-.page-btn {
-    background-color: transparent;
-    font-weight: bold;
-    color: rgb(63, 63, 255);
-}
+._header {
+    margin-top: 20px;
+    width: 80% !important;
+    margin-left: 10%;
+    background: rgba(209, 209, 209, 0.39);
+    height: 100px !important;
+    line-height: 100px;
+    border-radius: 10px;
+    padding: 0px 20px;
+    position: relative;
 
-.page-btn.active {
-    background-color: rgb(63, 63, 255);
-    color: #ffffff;
-}
+    .text_1 {
+        color: #2b81f7;
+        font-weight: 600;
+        font-size: 30px;
+    }
 
-.page-btn.active:hover {
-    box-shadow: 0px 0px 0px 3px rgba(0, 144, 237, 0.4);
-    color: #ffffff;
+    .page-btn {
+        background-color: transparent;
+        font-weight: bold;
+        color: rgb(63, 63, 255);
+    }
+
+    .page-btn.active {
+        background-color: rgb(63, 63, 255);
+        color: #ffffff;
+    }
+
+    .page-btn.active:hover {
+        box-shadow: 0px 0px 0px 3px rgba(0, 144, 237, 0.4);
+        color: #ffffff;
+    }
 }

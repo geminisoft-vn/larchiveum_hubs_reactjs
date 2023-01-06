@@ -9,7 +9,6 @@ import registerTelemetry from "../../telemetry";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
 import { LoadingOutlined } from "@ant-design/icons";
-import LayoutHeader from "./components/layout/Header";
 import QuizService from "../../utilities/apiServices/QuizService";
 import { Breadcrumb, Layout, Menu, Col, Row, Button, Card, Spin } from "antd";
 import GettingStarted from "./components/page/view-quiz/GettingStarted";

@@ -12,23 +12,15 @@ import ReserveService from "../../utilities/apiServices/ReserveService";
 import Popup from "../../react-components/popup/popup";
 import Pagination from "../../react-components/pagination/pagination";
 import { APP_ROOT } from "../../utilities/constants";
-import defaultImage from "../../assets/larchiveum/siri.gif";
-import Moment from "react-moment";
 import "reactjs-popup/dist/index.css";
 import UserService from "../../utilities/apiServices/UserService";
 import { toast } from "react-toastify";
+import Header from "./components/layout/Header";
 import "react-toastify/dist/ReactToastify.css";
-import Language from './languages/language';
-import { useTranslation } from 'react-i18next';
-import logo from "./../../assets/images/larchiveum_logo.png";
+import Language from "./languages/language";
+import { useTranslation } from "react-i18next";
 // ICON
-import {
-  MdPublic,
-  MdPeopleAlt,
-  MdCalendarToday,
-  MdOutlineCheckCircleOutline,
-} from "react-icons/md";
-
+import { MdPublic, MdPeopleAlt, MdCalendarToday, MdOutlineCheckCircleOutline } from "react-icons/md";
 
 registerTelemetry("/home", "Hubs Home Page");
 
@@ -53,16 +45,15 @@ function Home() {
   const [filterExhibitionList, setfilterExhibitionList] = useState({
     page: 1,
     pageSize: 9,
-    sort: "startDate|desc", //format <attribute>|<order type>,
+    sort: "startDate|desc" //format <attribute>|<order type>,
   });
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState("en");
 
   const user = Store.getUser();
   const { t } = useTranslation();
- 
+
   useEffect(
     () => {
-
       auth();
       // redirect to verify page
       const qs = new URLSearchParams(location.search);
@@ -73,7 +64,7 @@ function Home() {
       }
       getAllExhibitions();
 
-      let lang = Language.getLanguage();
+      const lang = Language.getLanguage();
       //Language.setLanguage(lang);
       setLanguage(lang);
     },
@@ -135,9 +126,9 @@ function Home() {
   };
 
   const handleButtonVisit = event => {
-    let user = Store.getUser();
+    const user = Store.getUser();
     let url = APP_ROOT;
-    var roomId = event.currentTarget.getAttribute("data-roomid");
+    const roomId = event.currentTarget.getAttribute("data-roomid");
     if (roomId && roomId != "") {
       if (APP_ROOT === "https://larchiveum.link") {
         url += "/" + roomId;
@@ -148,23 +139,21 @@ function Home() {
 
     url = new URL(url);
 
-    if(user?.displayName){
-      url.searchParams.set('displayName', user.displayName);
+    if (user?.displayName) {
+      url.searchParams.set("displayName", user.displayName);
     }
 
-    if(user?.avatar){
-      url.searchParams.set('avatarId', user.avatar.url);
-    }
-    else
-    if(user?.avatarId){
-      url.searchParams.set('avatarId', user.avatarId);
+    if (user?.avatar) {
+      url.searchParams.set("avatarId", user.avatar.url);
+    } else if (user?.avatarId) {
+      url.searchParams.set("avatarId", user.avatarId);
     }
 
-    window.open(url.href,'_blank');
+    window.open(url.href, "_blank");
   };
 
   const openPopupReservation = event => {
-    var exhibitionId = event.currentTarget.getAttribute("data-id-exhibition");
+    const exhibitionId = event.currentTarget.getAttribute("data-id-exhibition");
     togglePopup(exhibitionId);
   };
 
@@ -187,12 +176,12 @@ function Home() {
     });
   };
 
-  const handleButtonLogin = (event) => {
-    window.location.href = '/?page=signin';
+  const handleButtonLogin = event => {
+    window.location.href = "/?page=signin";
   };
 
-  const handleChangeLanguage = (event) => {
-    let lang = event.target.value;
+  const handleChangeLanguage = event => {
+    const lang = event.target.value;
     setLanguage(lang);
     Language.setLanguage(lang);
   };
@@ -226,125 +215,128 @@ function Home() {
         {exhibitionsLoaded ? (
           <>
             {exhibitions.data.map((item, index) => {
-              let user = Store.getUser();
-              let today = new Date();
-              let startDate = item.startDate ? new Date(item.startDate) : null;
-              let endDate = item.endDate ? new Date(item.endDate) : null;
+              const user = Store.getUser();
+              const today = new Date();
+              const startDate = item.startDate ? new Date(item.startDate) : null;
+              const endDate = item.endDate ? new Date(item.endDate) : null;
 
-              let ActionButton = ()=>{
-
-                if(startDate && startDate > today && (item.public || item.reservated)){
-                  return (
-                    <button 
-                      key={'will-open-on'}
-                      className="signin-up btn-visit nt-time-yet"
-                      onClick={() => { openPopupNotification(item) }}
-                      data-id-exhibition={item.id}
-                    >
-                      {t('home.WILL_OPEN_ON')} {moment(item.startDate).format('MMMM DD')}
-                    </button>
-                  )
-                }
-
-                if(user && !item.reservated && !item.public && item.reservationCount < item.maxSize){
+              const ActionButton = () => {
+                if (startDate && startDate > today && (item.public || item.reservated)) {
                   return (
                     <button
-                      key={'reservation'}
+                      key={"will-open-on"}
+                      className="signin-up btn-visit nt-time-yet"
+                      onClick={() => {
+                        openPopupNotification(item);
+                      }}
+                      data-id-exhibition={item.id}
+                    >
+                      {t("home.WILL_OPEN_ON")} {moment(item.startDate).format("MMMM DD")}
+                    </button>
+                  );
+                }
+
+                if (user && !item.reservated && !item.public && item.reservationCount < item.maxSize) {
+                  return (
+                    <button
+                      key={"reservation"}
                       className="signin-up btn-visit reserved"
                       onClick={openPopupReservation}
                       data-id-exhibition={item.id}
                     >
-                      {t('home.MAKE_RESERVATION')}
+                      {t("home.MAKE_RESERVATION")}
                     </button>
                   );
                 }
 
-                if(!startDate || (startDate <= today && (item.public || item.reservated))){
+                if (!startDate || (startDate <= today && (item.public || item.reservated))) {
                   return (
                     <button
-                      key={'enter'}
+                      key={"enter"}
                       className="signin-up btn-visit"
                       onClick={handleButtonVisit}
                       data-roomid={item.roomId}
                     >
-                      {t('home.ENTER')}
+                      {t("home.ENTER")}
                     </button>
                   );
                 }
 
-                if(user && !item.reservated && item.reservationCount >= item.maxSize ){
+                if (user && !item.reservated && item.reservationCount >= item.maxSize) {
                   return (
-                    <button
-                      key={'exhibition-full'}
-                      className="signin-up btn-visit full"
-                    >
-                      {t('home.EXHIBITION_FULL')}
+                    <button key={"exhibition-full"} className="signin-up btn-visit full">
+                      {t("home.EXHIBITION_FULL")}
                     </button>
                   );
                 }
 
-                if(!user && !item.public){
+                if (!user && !item.public) {
                   return (
-                    <button
-                      key={'signin'}
-                      className="signin-up btn-visit signin"
-                      onClick={handleButtonLogin}
-                    >
-                      {t('home.SIGN_IN')}
+                    <button key={"signin"} className="signin-up btn-visit signin" onClick={handleButtonLogin}>
+                      {t("home.SIGN_IN")}
                     </button>
                   );
                 }
 
-                return <></>
+                return <></>;
               };
 
-              let StatusIcon = ()=>{
-                if(item.public){
+              const StatusIcon = () => {
+                if (item.public) {
                   return (
                     <div className="span3">
                       <MdPublic size={37} color="#FFF" />
                     </div>
-                  )
-                }
-                else
-                if(item.reservated){
-                  return ( 
+                  );
+                } else if (item.reservated) {
+                  return (
                     <div className="span3">
-                    <MdOutlineCheckCircleOutline size={37} color="#FFF" />
-                  </div>
-                  )
+                      <MdOutlineCheckCircleOutline size={37} color="#FFF" />
+                    </div>
+                  );
+                } else {
+                  return <></>;
                 }
-                else{
-                  return <></>
-                }
-              }
-              
-              return <>
-                <div key={index} className={"items"}>
-                  <img src={item?.room?.thumbnailUrl} alt="" />
-                  <StatusIcon/>
-                  <div className="span1">{item?.room?.name}</div>
-                  <div className="span2">
-                    <p className="p-1">
-                      <MdPeopleAlt style={{marginTop:"5px"}}/>
-                      {item.reservationCount}/{item.maxSize}
-                    </p>
-                    {(item.startDate) && (
+              };
+
+              return (
+                <>
+                  <div key={index} className={"items"}>
+                    <img src={item?.room?.thumbnailUrl} alt="" />
+                    <StatusIcon />
+                    <div className="span1">{item?.room?.name}</div>
+                    <div className="span2">
                       <p className="p-1">
-                      <MdCalendarToday style={{marginTop:"5px"}}/>
-                        { moment.utc(item.startDate).local().locale(Language.getLanguage()).format("L LT")} {' (start)'}
+                        <MdPeopleAlt style={{ marginTop: "5px" }} />
+                        {item.reservationCount}/{item.maxSize}
                       </p>
-                    )}
-                    {(item.endDate) && (
-                      <p className="p-1">
-                      <MdCalendarToday style={{marginTop:"5px"}} />
-                        { moment.utc(item.endDate).local().locale(Language.getLanguage()).format("L LT")} {' (end)'}
-                      </p>
-                    )}
+                      {item.startDate && (
+                        <p className="p-1">
+                          <MdCalendarToday style={{ marginTop: "5px" }} />
+                          {moment
+                            .utc(item.startDate)
+                            .local()
+                            .locale(Language.getLanguage())
+                            .format("L LT")}{" "}
+                          {" (start)"}
+                        </p>
+                      )}
+                      {item.endDate && (
+                        <p className="p-1">
+                          <MdCalendarToday style={{ marginTop: "5px" }} />
+                          {moment
+                            .utc(item.endDate)
+                            .local()
+                            .locale(Language.getLanguage())
+                            .format("L LT")}{" "}
+                          {" (end)"}
+                        </p>
+                      )}
+                    </div>
+                    <ActionButton />
                   </div>
-                  <ActionButton/>
-                </div>
-              </>
+                </>
+              );
             })}
           </>
         ) : (
@@ -352,38 +344,6 @@ function Home() {
         )}
       </>
     );
-  };
-
-  const UIAuth = () => {
-    const user = Store.getUser();
-    if (user) {
-      const ManagerBtn = () => {
-        if (user.type >= 3) {
-          return (
-            <a className="manager" href="/?page=manager">
-              {t('home.MANAGER')}
-            </a>
-          );
-        } else {
-          return <></>;
-        }
-      };
-      return (
-        <span className="display-name">
-          <ManagerBtn />
-          <span className="nameA"> {user.displayName || user.email} </span> |{" "}
-          <a className="logout_btn" onClick={handleSignOut}>
-           {t('home.SIGN_OUT')}
-          </a>
-        </span>
-      );
-    } else {
-      return (
-        <a href="/?page=signin" className="signin-up">
-          {t('home.SIGN_IN')} / {t('home.SIGN_UP')}
-        </a>
-      );
-    }
   };
 
   const openPopupNotification = exhibitionNoti => {
@@ -410,19 +370,19 @@ function Home() {
     return (
       <div className="loader-2">
         <div className="loader">
-            <svg viewBox="0 0 80 80">
-                <circle id="test" cx="40" cy="40" r="32"></circle>
-            </svg>
+          <svg viewBox="0 0 80 80">
+            <circle id="test" cx="40" cy="40" r="32" />
+          </svg>
         </div>
         <div className="loader triangle">
-            <svg viewBox="0 0 86 80">
-                <polygon points="43 8 79 72 7 72"></polygon>
-            </svg>
+          <svg viewBox="0 0 86 80">
+            <polygon points="43 8 79 72 7 72" />
+          </svg>
         </div>
         <div className="loader">
-            <svg viewBox="0 0 80 80">
-                <rect x="8" y="8" width="64" height="64"></rect>
-            </svg>
+          <svg viewBox="0 0 80 80">
+            <rect x="8" y="8" width="64" height="64" />
+          </svg>
         </div>
       </div>
     );
@@ -431,26 +391,26 @@ function Home() {
       <>
         {isOpen && (
           <Popup
-            key={'popup-confirm-reservation'}
+            key={"popup-confirm-reservation"}
             size={"sm"}
-            title={<>{t('home.POPUP_CONFIRM_RESERVATION__TITLE')}</>}
+            title={<>{t("home.POPUP_CONFIRM_RESERVATION__TITLE")}</>}
             content={
               <>
                 <br />
-                <div style={{textAlign: "center"}}>{t('home.POPUP_CONFIRM_RESERVATION__MESSAGE')}</div>
+                <div style={{ textAlign: "center" }}>{t("home.POPUP_CONFIRM_RESERVATION__MESSAGE")}</div>
                 <br />
               </>
             }
             actions={[
               {
-                text: t('home.POPUP_CONFIRM_RESERVATION__YES'),
+                text: t("home.POPUP_CONFIRM_RESERVATION__YES"),
                 class: "btn1",
                 callback: () => {
                   handleReservate();
                 }
               },
               {
-                text: t('home.POPUP_CONFIRM_RESERVATION__CANCEL'),
+                text: t("home.POPUP_CONFIRM_RESERVATION__CANCEL"),
                 class: "btn2",
                 callback: () => {
                   togglePopup();
@@ -463,19 +423,19 @@ function Home() {
 
         {isOpenNotification && (
           <Popup
-            key={'popup-exhibition-not-open-yet'}
+            key={"popup-exhibition-not-open-yet"}
             size={"lg"}
-            title={<>{t('home.POPUP_EXHIBITION_NOT_OPEN_YET__TTILE')}</>}
+            title={<>{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__TTILE")}</>}
             content={
               <>
                 <div className="info-room">
-                  <p className="noti-title">{t('home.POPUP_EXHIBITION_NOT_OPEN_YET__MESSAGE')}</p>
+                  <p className="noti-title">{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__MESSAGE")}</p>
                 </div>
               </>
             }
             actions={[
               {
-                text: t('home.POPUP_EXHIBITION_NOT_OPEN_YET__CLOSE'),
+                text: t("home.POPUP_EXHIBITION_NOT_OPEN_YET__CLOSE"),
                 class: "btn2",
                 callback: () => {
                   closePopupNotification();
@@ -487,37 +447,35 @@ function Home() {
         )}
 
         <div className="background-homepage">
-          <div className="row_1">
-            <a href="/" style={{float: 'left', height: '100%'}}>
-              <img src={logo} style={{height: '100%'}}/>
-            </a>
-            {/* <img src={LogoCompany}/> */}
-            <UIAuth style={{float: 'right'}}/>
-          </div>
+          <Header />
           <div className="row_2">
             <div className="test">
-              <div className="row" style={{margin: '5vh 0'}}>
-              { user && (
-                <a href="?page=profile">
-                  <button style={{fontSize: '17px', color: '#149BF3', fontWeight: 'bold', padding: '5px 10px', border: '2px solid #1cbeff', borderRadius: '5px'}}>{t('home.PROFILE')}</button>
-                </a>
-              )}
+              <div className="row" style={{ margin: "5vh 0" }}>
+                {user && (
+                  <a href="?page=profile">
+                    <button
+                      style={{
+                        fontSize: "17px",
+                        color: "#149BF3",
+                        fontWeight: "bold",
+                        padding: "5px 10px",
+                        border: "2px solid #1cbeff",
+                        borderRadius: "5px"
+                      }}
+                    >
+                      {t("home.PROFILE")}
+                    </button>
+                  </a>
+                )}
               </div>
               <div className="tools">
-                <div style={{float: 'left'}}>
+                <div style={{ float: "left" }}>
                   <button className={isActiveSortASC ? "active" : ""} onClick={sortNewest}>
-                    {t('home.NEWEST')}
+                    {t("home.NEWEST")}
                   </button>
                   <button className={isActiveSortDESC ? "active" : ""} onClick={sortOldest}>
-                    {t('home.OLDEST')}
+                    {t("home.OLDEST")}
                   </button>
-                </div>
-                <div style={{float: 'right'}}>
-                  <span> {t('home.LANGUAGE')} </span>
-                  <select value={language} onChange={handleChangeLanguage}>
-                    <option value="en">English</option>
-                    <option value="ko">Korean</option>
-                  </select>
                 </div>
               </div>
               <div className="col">{renderExhibitions()}</div>
