@@ -9,6 +9,7 @@ import "../../assets/larchiveum/manager.scss";
 import "../../assets/larchiveum/loading.scss";
 import "react-datetime/css/react-datetime.css";
 import QuizComponent from "./components/page/content/quiz/Quiz";
+import DocumentComponent from "./components/page/content/document/Document";
 import "reactjs-popup/dist/index.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -106,7 +107,7 @@ export function ContentPage() {
                         {
                           className: tab == "map" ? "selected" : "",
                           key: "map",
-                          label: t("content.LEFT_MENU__DOCUMENT_LABEL"),
+                          label: t("content.LEFT_MENU__MAP_LABEL"),
                           onClick: () => {
                             switchTab("map");
                           }
@@ -118,11 +119,7 @@ export function ContentPage() {
                 </Sider>
                 <Layout className="site-layout" style={{ marginLeft: "30px", background: "white" }}>
                   {tab == "quiz" && <QuizComponent />}
-                  {tab == "document" && (
-                    <Content style={{ margin: "0 16px" }}>
-                      <div style={{ padding: 24, minHeight: 360 }}>Documnet</div>
-                    </Content>
-                  )}
+                  {tab == "document" && <DocumentComponent />}
                   {tab == "map" && (
                     <Content style={{ margin: "0 16px" }}>
                       <div style={{ padding: 24, minHeight: 360 }}>Map</div>
