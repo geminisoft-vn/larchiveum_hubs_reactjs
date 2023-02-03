@@ -16,7 +16,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 export default function(props) {
   const { t } = useTranslation();
-  const { onOpenDocumentDetail } = props;
+  const { onOpenDocumentEditDetail } = props;
   const [isOpenPopupCreate, setIsOpenPopupCreate] = useState(false);
   const [deletingDocumentId, setDeletingDocumentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,11 +39,6 @@ export default function(props) {
       .catch(error => {
         setIsLoading(false);
       });
-  }
-
-  function handleOpenPopupCreate() {
-    console.log(isOpenPopupCreate);
-    setIsOpenPopupCreate(true);
   }
 
   function handleDeleteDocument(documentId) {
@@ -80,69 +75,11 @@ export default function(props) {
       ) : (
         <>
           <Row>
-            <Col span={24} style={{ padding: "10px 0px" }}>
-              <Button type="primary" style={{ float: "right" }} onClick={handleOpenPopupCreate}>
-                {"+ " + t("content.DOCUMENT_TAB__DOCUMENT_LIST__DOCUMENT_TAB__ADD_DOCUMENT_BUTTON_LABEL")}
-              </Button>
-            </Col>
-          </Row>
-          <Row>
             <Col span={24}>
-              {/* {1 + 1 == 2 ? (
+              {listDocument.length <= 0 ? (
                 <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ marginTop: "100px" }} />
               ) : (
                 <>
-                  <Card key={1} style={{ marginBottom: "20px" }}>
-                    <Row>
-                      <Col span={18}>
-                        <Row style={{ height: "30px", fontWeight: "bold" }}>
-                          <Col span={24}>{"Test"}</Col>
-                        </Row>
-                        <Row>
-                          <Col span={24} style={{ fontSize: "0.9em", color: "#aaaaaa" }}>
-                            {"description"}
-                          </Col>
-                        </Row>
-                      </Col>
-                      <Col span={6} style={{ justifyContent: "right", alignItems: "center", display: "flex" }}>
-                        <Button
-                          type="default"
-                          className="flex-center"
-                          style={{ marginLeft: "10px" }}
-                          icon={<EyeOutlined />}
-                          onClick={() => {
-                            handleGotoViewDocument(document.id);
-                          }}
-                        >
-                          {t("content.DOCUMENT_TAB__DOCUMENT_LIST__PREVIEW_BUTTON_LABEL")}
-                        </Button>
-                        <Button
-                          type="primary"
-                          className="flex-center"
-                          style={{ marginLeft: "10px" }}
-                          icon={<UnorderedListOutlined />}
-                          onClick={() => {
-                            onOpenDocumentDetail(document);
-                          }}
-                        >
-                          {t("content.DOCUMENT_TAB__DOCUMENT_LIST__DETAIL_BUTTON_LABEL")}
-                        </Button>
-                        <Button
-                          type="primary"
-                          className="flex-center"
-                          danger
-                          style={{ marginLeft: "10px" }}
-                          icon={<DeleteOutlined />}
-                          loading={deletingDocumentId == document.id}
-                          onClick={() => {
-                            handleDeleteDocument(document.id);
-                          }}
-                        >
-                          {t("content.DOCUMENT_TAB__DOCUMENT_LIST__DELETE_BUTTON_LABEL")}
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Card>
                   {listDocument.map(document => {
                     return (
                       <Card key={document.id} style={{ marginBottom: "20px" }}>
@@ -175,7 +112,7 @@ export default function(props) {
                               style={{ marginLeft: "10px" }}
                               icon={<UnorderedListOutlined />}
                               onClick={() => {
-                                onOpenDocumentDetail(document);
+                                onOpenDocumentEditDetail(document);
                               }}
                             >
                               {t("content.DOCUMENT_TAB__DOCUMENT_LIST__DETAIL_BUTTON_LABEL")}
@@ -199,72 +136,11 @@ export default function(props) {
                     );
                   })}
                 </>
-              )} */}
-              <>
-                <Card key={1} style={{ marginBottom: "20px" }}>
-                  <Row>
-                    <Col span={18}>
-                      <Row style={{ height: "30px", fontWeight: "bold" }}>
-                        <Col span={24}>{"Test"}</Col>
-                      </Row>
-                      <Row>
-                        <Col span={24} style={{ fontSize: "0.9em", color: "#aaaaaa" }}>
-                          {"description"}
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col span={6} style={{ justifyContent: "right", alignItems: "center", display: "flex" }}>
-                      <Button
-                        type="default"
-                        className="flex-center"
-                        style={{ marginLeft: "10px" }}
-                        icon={<EyeOutlined />}
-                        onClick={() => {
-                          handleGotoViewDocument(document.id);
-                        }}
-                      >
-                        {t("content.DOCUMENT_TAB__DOCUMENT_LIST__PREVIEW_BUTTON_LABEL")}
-                      </Button>
-                      <Button
-                        type="primary"
-                        className="flex-center"
-                        style={{ marginLeft: "10px" }}
-                        icon={<UnorderedListOutlined />}
-                        onClick={() => {
-                          onOpenDocumentDetail(document);
-                        }}
-                      >
-                        {t("content.DOCUMENT_TAB__DOCUMENT_LIST__DETAIL_BUTTON_LABEL")}
-                      </Button>
-                      <Button
-                        type="primary"
-                        className="flex-center"
-                        danger
-                        style={{ marginLeft: "10px" }}
-                        icon={<DeleteOutlined />}
-                        loading={false}
-                        onClick={() => {
-                          handleDeleteDocument(document.id);
-                        }}
-                      >
-                        {t("content.DOCUMENT_TAB__DOCUMENT_LIST__DELETE_BUTTON_LABEL")}
-                      </Button>
-                    </Col>
-                  </Row>
-                </Card>
-              </>
+              )}
             </Col>
           </Row>
         </>
       )}
-      {/* {isOpenPopupCreate && (
-        <PopupCreateDocument
-          setVisiable={setIsOpenPopupCreate}
-          onComplete={() => {
-            load();
-          }}
-        />
-      )} */}
     </Content>
   );
 }

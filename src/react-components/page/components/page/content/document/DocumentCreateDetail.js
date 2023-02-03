@@ -7,54 +7,21 @@ import React, { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { LoadingOutlined, LeftOutlined } from "@ant-design/icons";
-import { Layout, Menu, Col, Row, Button, Spin, Empty, Input, Card } from "antd";
+import { Layout, Menu, Col, Row, Button, Spin, Empty, Input, Card, Typography } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import DocumentService from "../../../../../../utilities/apiServices/DocumentService";
 import MediaService from "../../../../../../utilities/apiServices/MediaService";
-import async from "async";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 export default function(props) {
   const { t } = useTranslation();
-  const MAX_QUESTION = 10;
-  const { documentId, onBack } = props;
+  toast.configure();
+  const { onBack } = props;
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState([]);
   const [isSaveDocumentSubmiting, setIsSaveDocumentSubmiting] = useState(false);
-  const [isAddQuestionSubmiting, setIsAddQuestionSubmiting] = useState(false);
-  const [questions, setQuestions] = useState([]);
   const documentRef = useRef({});
-  const editorRef = useRef();
-
-  useEffect(
-    () => {
-      load(documentId);
-    },
-    [documentId]
-  );
-
-  function load(documentId) {
-    setIsLoading(true);
-    async.parallel(
-      [
-        function(next) {
-          DocumentService.getOne(documentId)
-            .then(res => {
-              return next(null, res.data);
-            })
-            .catch(error => {
-              return next(error);
-            });
-        }
-      ],
-      function(error, [documentData, questionsData]) {
-        documentRef.current = documentData;
-        console.log(questions);
-        setQuestions(questionsData);
-        setIsLoading(false);
-      }
-    );
-  }
 
   function onInputChange(e) {
     const { value, name } = e.target;
@@ -62,26 +29,31 @@ export default function(props) {
     console.log(documentRef.current);
   }
 
-  function handleSaveDocument() {
+  function handleCreateDocument() {
     setIsSaveDocumentSubmiting(true);
-    DocumentService.update(documentId, documentRef.current)
+    DocumentService.create(documentRef.current)
       .then(res => {
         documentRef.current = res.data;
         setIsSaveDocumentSubmiting(false);
+        onBack();
       })
       .catch(error => {
+        if (error.response.data?.result == "fail" && error.response.data.error == "invalid_input") {
+          showValidateErrors(error.response.data.all);
+        }
         setIsSaveDocumentSubmiting(false);
       });
-  }
-
-  function onDeleteQuestion(question) {
-    setQuestions(questions.filter(q => q.id != question.id));
   }
 
   function onPickFile(callback, value, meta) {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
+    if (meta.filetype == "image") {
+      input.setAttribute("accept", "image/*");
+    }
+    if (meta.filetype == "media") {
+      input.setAttribute("accept", "video/*,audio/*");
+    }
     input.onchange = function() {
       const file = this.files[0];
       MediaService.upload(file)
@@ -93,6 +65,15 @@ export default function(props) {
         });
     };
     input.click();
+  }
+
+  function showValidateErrors(errors) {
+    try {
+      const all = JSON.parse(errors);
+      setErrors(all);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -121,17 +102,26 @@ export default function(props) {
                 icon={<LeftOutlined />}
                 onClick={onBack}
               >
-                {t("content.QUIZ_TAB__QUIZ_DETAIL__BACK_BUTTON_LABEL")}
+                {t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__BACK_BUTTON_LABEL")}
+              </Button>
+              <Button
+                type="primary"
+                className="flex-center"
+                style={{ float: "right" }}
+                onClick={handleCreateDocument}
+                loading={isSaveDocumentSubmiting}
+              >
+                {t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__CREATE_BUTTON_LABEL")}
               </Button>
             </Col>
           </Row>
           <Row>
             <Col span={24}>
-              <Card title={t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DETAIL__QUIZ_DETAIL_LABEL")}>
+              <Card title={t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__PAGE_TITLE")}>
                 <Row>
                   <Col span={24}>
                     <label style={{ fontSize: "14px", margin: "10px 0px" }}>
-                      {t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DETAIL__QUIZ_TITLE_INPUT_LABEL")}
+                      {t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__TITLE_INPUT_LABEL")}
                     </label>
                   </Col>
                 </Row>
@@ -140,17 +130,17 @@ export default function(props) {
                     <Input
                       type="text"
                       name="title"
-                      placeholder={t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_TITLE_INPUT_PLACEHOLDER")}
+                      placeholder={t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__TITLE_INPUT_PLACEHOLDER")}
                       defaultValue={documentRef.current?.title}
                       onChange={onInputChange}
-                      onBlur={handleSaveDocument}
                     />
+                    <Typography.Text type="danger">{errors.find(e => e.name == "title")?.message}</Typography.Text>
                   </Col>
                 </Row>
                 <Row>
                   <Col span={24}>
                     <label style={{ fontSize: "14px", margin: "10px 0px" }}>
-                      {t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DESCRIPTION_INPUT_LABEL")}
+                      {t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__DESCRIPTION_INPUT_LABEL")}
                     </label>
                   </Col>
                 </Row>
@@ -159,27 +149,32 @@ export default function(props) {
                     <Input
                       type="text"
                       name="description"
-                      placeholder={t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DESCRIPTION_INPUT_PLACEHOLDER")}
+                      placeholder={t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__DESCRIPTION_INPUT_PLACEHOLDER")}
                       defaultValue={documentRef.current?.description}
                       onChange={onInputChange}
-                      onBlur={handleSaveDocument}
                     />
+                    <Typography.Text type="danger">
+                      {errors.find(e => e.name == "description")?.message}
+                    </Typography.Text>
                   </Col>
                 </Row>
               </Card>
             </Col>
           </Row>
-          <Row style={{ marginTop: "5px" }}>
+          <Row style={{ marginTop: "5px", marginBottom: "20px" }}>
             <Col span={24}>
               <Editor
                 apiKey="qzz6w46f7989o76s4onx6qkmpwn9fwz1pz4quj7sek81vbxv"
-                onInit={(evt, editor) => (editorRef.current = editor)}
-                initialValue="<p>This is the initial content of the editor.</p>"
+                onInit={e => {
+                  console.log(e, e.target.dom.getRoot(), e.target.dom.getParent());
+                }}
+                initialValue=""
+                onChange={e => {
+                  onInputChange({ target: { name: "content", value: e.target.getBody().innerHTML } });
+                }}
                 init={{
-                  height: 500,
-                  menubar: false,
-                  images_upload_url: "postAcceptor.php",
-                  automatic_uploads: false,
+                  height: 400,
+                  menubar: true,
                   file_picker_callback: onPickFile,
                   plugins: [
                     "a11ychecker",
@@ -202,15 +197,14 @@ export default function(props) {
                     "fullscreen",
                     "formatpainter",
                     "insertdatetime",
-                    "media",
                     "table",
                     "help",
                     "wordcount"
                   ],
                   toolbar:
-                    "undo redo | casechange blocks | bold italic backcolor | image | media | " +
+                    "undo redo | casechange blocks | bold italic backcolor | image media file | " +
                     "alignleft aligncenter alignright alignjustify | " +
-                    "bullist numlist checklist outdent indent | removeformat | a11ycheck code table help"
+                    "bullist numlist checklist outdent indent | removeformat | code table help"
                 }}
               />
             </Col>
