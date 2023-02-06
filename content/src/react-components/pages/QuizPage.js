@@ -27,7 +27,7 @@ const QUIZ_STEPS = {
 
 export default function QuizPage() {
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [quiz, setQuiz] = useState({
     id: new URL(window.location.href).searchParams.get("id"),
@@ -46,14 +46,14 @@ export default function QuizPage() {
     // }
 
     const quizId = new URL(window.location.href).searchParams.get("id");
-    //setIsLoading(true);
+    setIsLoading(true);
     QuizService.getOneWithoutAuth(quizId)
       .then(res => {
         setQuiz(res.data);
-        //setIsLoading(false);
+        setIsLoading(false);
       })
       .catch(error => {
-        //setIsLoading(false);
+        setIsLoading(false);
         setIsError(true);
       });
   }, []);
@@ -91,14 +91,20 @@ export default function QuizPage() {
       {isLoading ? (
         <div
           style={{
-            height: "100%",
+            height: "100vh",
             width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
           }}
         >
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />} />
+          <Row>
+            <Col span={24} style={{ textAlign: 'center', padding: '20px 0px', borderBottom: '1px solid gray', fontSize: '2em'}}>
+              <span>Quiz</span>
+            </Col>
+          </Row>
+          <Row style={{height: 'calc(100% - 80px)'}}>
+            <Col span={24} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px 0px'}}>
+              <h2>{quiz.title}</h2>
+            </Col>
+          </Row>
         </div>
       ) : (
         <>

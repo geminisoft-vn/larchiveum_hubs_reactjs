@@ -836,6 +836,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     pushHistoryState(history, "entry_step", "content-quiz", e.detail);
   });
 
+  window.addEventListener("action_open_popup_document", e => {
+    pushHistoryState(history, "entry_step", "content-document", e.detail);
+  });
+
   scene.addEventListener("scene_media_selected", e => {
     const sceneInfo = e.detail;
 

@@ -1,10 +1,10 @@
 const expireCookies = 7;
 
-const API_ROOT = "http://localhost:7600";
-const APP_ROOT = "https://hubs.local:8080";
+// const API_ROOT = "http://localhost:7600";
+// const APP_ROOT = "https://hubs.local:8080";
 
-// const API_ROOT = "https://api.larchiveum.link";
-// const APP_ROOT = "https://larchiveum.link";
+const API_ROOT = "https://api.larchiveum.link";
+const APP_ROOT = "https://larchiveum.link";
 
 const CONTENT_ROOT = "https://larchiveum-content.360fairs.com";
 
@@ -27,4 +27,8 @@ const googleApp = {
   clientSecret: "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"
 };
 
-export { expireCookies, naverApp, kakaoApp, facebookApp, googleApp, API_ROOT, APP_ROOT, CONTENT_ROOT };
+const tinyApp = {
+  apiKey: "n4peat6u9i8lam0qbxvn226a6ntjpnyd8udunftjeid9kofe"
+};
+
+export { expireCookies, naverApp, kakaoApp, facebookApp, googleApp, tinyApp, API_ROOT, APP_ROOT, CONTENT_ROOT };

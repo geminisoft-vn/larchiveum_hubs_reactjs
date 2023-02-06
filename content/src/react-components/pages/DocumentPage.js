@@ -24,33 +24,27 @@ const QUIZ_STEPS = {
 
 export default function DocumentPage() {
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [document, setDocument] = useState({
     id: new URL(window.location.href).searchParams.get("id"),
     title: new URL(window.location.href).searchParams.get("title"),
     description: new URL(window.location.href).searchParams.get("description"),
-    questions: [{}, {}]
   });
   const [documentResult, setDocumentResult] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [documentStep, setDocumentStep] = useState(QUIZ_STEPS.GETTING_STARTED);
   
   useEffect(() => {
-    // const token = new URL(window.location.href).searchParams.get("token");
-    // if(token){
-    //   Store.setAccessToken(token);
-    // }
-
     const documentId = new URL(window.location.href).searchParams.get("id");
-    //setIsLoading(true);
+    setIsLoading(true);
     DocumentService.getOneWithoutAuth(documentId)
       .then(res => {
         setDocument(res.data);
-        //setIsLoading(false);
+        setIsLoading(false);
       })
       .catch(error => {
-        //setIsLoading(false);
+        setIsLoading(false);
         setIsError(true);
       });
   }, []);
@@ -66,11 +60,20 @@ export default function DocumentPage() {
       {isLoading ? (
         <div
           style={{
-            height: "100%",
+            height: "100vh",
             width: "100%",
           }}
         >
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />} />
+          <Row>
+            <Col span={24} style={{ textAlign: 'center', padding: '20px 0px', borderBottom: '1px solid gray', fontSize: '2em'}}>
+              <span>Document</span>
+            </Col>
+          </Row>
+          <Row style={{height: 'calc(100% - 80px)'}}>
+            <Col span={24} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px 0px'}}>
+              <h2>{document.title}</h2>
+            </Col>
+          </Row>
         </div>
       ) : (
         <>
@@ -89,8 +92,8 @@ export default function DocumentPage() {
             </div>
           ) : (
             <div
-              style={{ width: '100%', margin: '20px'}}
-              dangerouslySetInnerHTML={{__html: document.content}} 
+              style={{ width: 'calc(100% - 40px)', padding: '20px'}}
+              dangerouslySetInnerHTML={{__html: document.content}}
             />
           )}
         </>

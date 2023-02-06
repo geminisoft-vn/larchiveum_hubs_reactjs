@@ -11,6 +11,7 @@ import { Layout, Menu, Col, Row, Button, Spin, Empty, Input, Card, Typography } 
 import { Editor } from "@tinymce/tinymce-react";
 import DocumentService from "../../../../../../utilities/apiServices/DocumentService";
 import MediaService from "../../../../../../utilities/apiServices/MediaService";
+import { tinyApp } from "../../../../../../utilities/constants";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -164,10 +165,7 @@ export default function(props) {
           <Row style={{ marginTop: "5px", marginBottom: "20px" }}>
             <Col span={24}>
               <Editor
-                apiKey="qzz6w46f7989o76s4onx6qkmpwn9fwz1pz4quj7sek81vbxv"
-                onInit={e => {
-                  console.log(e, e.target.dom.getRoot(), e.target.dom.getParent());
-                }}
+                apiKey={tinyApp.apiKey}
                 initialValue=""
                 onChange={e => {
                   onInputChange({ target: { name: "content", value: e.target.getBody().innerHTML } });

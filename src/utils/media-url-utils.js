@@ -211,6 +211,8 @@ export const isHubsDestinationUrl = async url =>
 
 export const isQuizUrl = async url => url.startsWith(CONTENT_ROOT + "/quiz");
 
+export const isDocumentUrl = async url => url.startsWith(CONTENT_ROOT + "/document");
+
 export const idForAvatarUrl = url => {
   const match = url.match(hubsAvatarRegex);
   if (match) {
