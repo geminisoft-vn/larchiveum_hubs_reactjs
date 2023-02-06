@@ -7,7 +7,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { LoadingOutlined, LeftOutlined } from "@ant-design/icons";
-import { Layout, Menu, Col, Row, Button, Spin, Empty, Input, Card } from "antd";
+import { Layout, Menu, Col, Row, Button, Spin, Empty, Input, Card, Typography } from "antd";
+import validator from "../../../../../../utilities/validator";
 import Question from "./Question";
 import QuizService from "../../../../../../utilities/apiServices/QuizService";
 import QuestionService from "../../../../../../utilities/apiServices/QuestionService";
@@ -20,6 +21,8 @@ export default function(props) {
   const MAX_QUESTION = 10;
   const { quizId, onBack } = props;
   const [isLoading, setIsLoading] = useState(false);
+  const [isValidated, setIsValidated] = useState(false);
+  const [errors, setErrors] = useState([]);
   const [isSaveQuizSubmiting, setIsSaveQuizSubmiting] = useState(false);
   const [isAddQuestionSubmiting, setIsAddQuestionSubmiting] = useState(false);
   const [questions, setQuestions] = useState([]);
@@ -80,6 +83,9 @@ export default function(props) {
         setIsSaveQuizSubmiting(false);
       })
       .catch(error => {
+        if (error.response.data?.result == "fail" && error.response.data.error == "invalid_input") {
+          showValidateErrors(error.response.data.all);
+        }
         setIsSaveQuizSubmiting(false);
       });
   }
@@ -100,6 +106,39 @@ export default function(props) {
 
   function onDeleteQuestion(question) {
     setQuestions(questions.filter(q => q.id != question.id));
+  }
+
+  function showValidateErrors(errors) {
+    try {
+      errors = JSON.parse(errors);
+    } catch (error) {}
+    setErrors(errors);
+  }
+
+  function validate(name) {
+    const errors = [];
+    const isValidated = true;
+    // if (!validator.validLength(quiz.current.title, 1, 255)) {
+    //   isValidated = false;
+    //   (!name || name == "title") &&
+    //     errors.push({ name: "title", message: "title must be not empty and length less than 256 characters" });
+    // }
+    // if (!validator.validLength(quiz.current.introduction, undefined, 255)) {
+    //   isValidated = false;
+    //   (!name || name == "introduction") &&
+    //     errors.push({ name: "introduction", message: "introduction length must be between 1 and 255 characters" });
+    // }
+    // if (!validator.validLength(quiz.current.description, undefined, 255)) {
+    //   isValidated = false;
+    //   (!name || name == "description") &&
+    //     errors.push({ name: "description", message: "description length must be between 1 and 255 characters" });
+    // }
+
+    showValidateErrors(errors);
+
+    setIsValidated(isValidated);
+
+    return isValidated;
   }
 
   return (
@@ -134,11 +173,24 @@ export default function(props) {
           </Row>
           <Row>
             <Col span={24}>
-              <Card title={t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DETAIL__QUIZ_DETAIL_LABEL")}>
+              <Card
+                title={t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DETAIL__QUIZ_DETAIL_LABEL")}
+                extra={
+                  <>
+                    {isSaveQuizSubmiting && (
+                      <div style={{ float: "right", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <Spin indicator={<LoadingOutlined spin style={{ fontSize: 18, marginRight: "5px" }} />} />
+                        {" Saving ..."}
+                      </div>
+                    )}
+                  </>
+                }
+              >
                 <Row>
                   <Col span={24}>
                     <label style={{ fontSize: "14px", margin: "10px 0px" }}>
                       {t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DETAIL__QUIZ_TITLE_INPUT_LABEL")}
+                      <span style={{ color: "red" }}>{" *"}</span>
                     </label>
                   </Col>
                 </Row>
@@ -150,8 +202,13 @@ export default function(props) {
                       placeholder={t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_TITLE_INPUT_PLACEHOLDER")}
                       defaultValue={quiz.current?.title}
                       onChange={onInputChange}
-                      onBlur={handleSaveQuiz}
+                      onBlur={() => {
+                        if (validate("title")) {
+                          handleSaveQuiz();
+                        }
+                      }}
                     />
+                    <Typography.Text type="danger">{errors.find(e => e.name == "title")?.message}</Typography.Text>
                   </Col>
                 </Row>
                 <Row>
@@ -169,8 +226,15 @@ export default function(props) {
                       placeholder={t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_INTRODUCTION_INPUT_PLACEHOLDER")}
                       defaultValue={quiz.current?.introduction}
                       onChange={onInputChange}
-                      onBlur={handleSaveQuiz}
+                      onBlur={() => {
+                        if (validate("introduction")) {
+                          handleSaveQuiz();
+                        }
+                      }}
                     />
+                    <Typography.Text type="danger">
+                      {errors.find(e => e.name == "introduction")?.message}
+                    </Typography.Text>
                   </Col>
                 </Row>
                 <Row>
@@ -188,8 +252,15 @@ export default function(props) {
                       placeholder={t("content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DESCRIPTION_INPUT_PLACEHOLDER")}
                       defaultValue={quiz.current?.description}
                       onChange={onInputChange}
-                      onBlur={handleSaveQuiz}
+                      onBlur={() => {
+                        if (validate("description")) {
+                          handleSaveQuiz();
+                        }
+                      }}
                     />
+                    <Typography.Text type="danger">
+                      {errors.find(e => e.name == "description")?.message}
+                    </Typography.Text>
                   </Col>
                 </Row>
               </Card>

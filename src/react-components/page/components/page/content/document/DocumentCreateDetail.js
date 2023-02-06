@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { LoadingOutlined, LeftOutlined } from "@ant-design/icons";
 import { Layout, Menu, Col, Row, Button, Spin, Empty, Input, Card, Typography } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
+import validator from "../../../../../../utilities/validator";
 import DocumentService from "../../../../../../utilities/apiServices/DocumentService";
 import MediaService from "../../../../../../utilities/apiServices/MediaService";
 import { tinyApp } from "../../../../../../utilities/constants";
@@ -20,6 +21,7 @@ export default function(props) {
   toast.configure();
   const { onBack } = props;
   const [isLoading, setIsLoading] = useState(false);
+  const [isValidated, setIsValidated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [isSaveDocumentSubmiting, setIsSaveDocumentSubmiting] = useState(false);
   const documentRef = useRef({});
@@ -70,11 +72,30 @@ export default function(props) {
 
   function showValidateErrors(errors) {
     try {
-      const all = JSON.parse(errors);
-      setErrors(all);
-    } catch (error) {
-      console.error(error);
+      errors = JSON.parse(errors);
+    } catch (error) {}
+    setErrors(errors);
+  }
+
+  function validate(name) {
+    const errors = [];
+    let isValidated = true;
+    if (!validator.validLength(documentRef.current.title, 1, 255)) {
+      isValidated = false;
+      (!name || name == "title") &&
+        errors.push({ name: "title", message: "title must be not empty and length less than 256 characters" });
     }
+    if (!validator.validLength(documentRef.current.description, undefined, 255)) {
+      isValidated = false;
+      (!name || name == "description") &&
+        errors.push({ name: "description", message: "description length must be between 1 and 255 characters" });
+    }
+
+    showValidateErrors(errors);
+
+    setIsValidated(isValidated);
+
+    return isValidated;
   }
 
   return (
@@ -111,6 +132,7 @@ export default function(props) {
                 style={{ float: "right" }}
                 onClick={handleCreateDocument}
                 loading={isSaveDocumentSubmiting}
+                disabled={!isValidated}
               >
                 {t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__CREATE_BUTTON_LABEL")}
               </Button>
@@ -123,6 +145,7 @@ export default function(props) {
                   <Col span={24}>
                     <label style={{ fontSize: "14px", margin: "10px 0px" }}>
                       {t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__TITLE_INPUT_LABEL")}
+                      <span style={{ color: "red" }}>{" *"}</span>
                     </label>
                   </Col>
                 </Row>
@@ -134,6 +157,9 @@ export default function(props) {
                       placeholder={t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__TITLE_INPUT_PLACEHOLDER")}
                       defaultValue={documentRef.current?.title}
                       onChange={onInputChange}
+                      onBlur={() => {
+                        validate("title");
+                      }}
                     />
                     <Typography.Text type="danger">{errors.find(e => e.name == "title")?.message}</Typography.Text>
                   </Col>
@@ -153,6 +179,9 @@ export default function(props) {
                       placeholder={t("content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__DESCRIPTION_INPUT_PLACEHOLDER")}
                       defaultValue={documentRef.current?.description}
                       onChange={onInputChange}
+                      onBlur={() => {
+                        validate("description");
+                      }}
                     />
                     <Typography.Text type="danger">
                       {errors.find(e => e.name == "description")?.message}
