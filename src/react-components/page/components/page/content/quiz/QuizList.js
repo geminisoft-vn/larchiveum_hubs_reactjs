@@ -21,6 +21,16 @@ export default function(props) {
   const [deletingQuizId, setDeletingQuizId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [listQuiz, setListQuiz] = useState([]);
+  const [params, setParams] = useState({
+    sort: "-createdAt",
+    filter: JSON.stringify([
+      {
+        operator: "=",
+        key: "createdBy",
+        value: Store.getUser()?.id
+      }
+    ])
+  });
 
   useEffect(() => {
     load();
@@ -28,9 +38,7 @@ export default function(props) {
 
   function load() {
     setIsLoading(true);
-    QuizService.getAll({
-      sort: "-createdAt"
-    })
+    QuizService.getAll(params)
       .then(res => {
         const quizs = res.data.items;
         setListQuiz(quizs);

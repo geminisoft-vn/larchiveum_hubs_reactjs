@@ -21,6 +21,16 @@ export default function(props) {
   const [deletingDocumentId, setDeletingDocumentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [listDocument, setListDocument] = useState([]);
+  const [params, setParams] = useState({
+    sort: "-createdAt",
+    filter: JSON.stringify([
+      {
+        operator: "=",
+        key: "createdBy",
+        value: Store.getUser()?.id
+      }
+    ])
+  });
 
   useEffect(() => {
     load();
@@ -28,9 +38,7 @@ export default function(props) {
 
   function load() {
     setIsLoading(true);
-    DocumentService.getAll({
-      sort: "-createdAt"
-    })
+    DocumentService.getAll(params)
       .then(res => {
         const documents = res.data.items;
         setListDocument(documents);
