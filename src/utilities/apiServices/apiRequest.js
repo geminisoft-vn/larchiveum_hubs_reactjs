@@ -4,7 +4,9 @@ import { API_ROOT } from "./../constants";
 
 const service = axios.create({
   baseURL: API_ROOT,
-  timeout: 15000
+  timeout: 20000,
+  maxContentLength: Infinity,
+  maxBodyLength: Infinity
 });
 
 service.interceptors.request.use(

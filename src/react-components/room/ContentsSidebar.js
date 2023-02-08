@@ -6,19 +6,13 @@ import classNames from "classnames";
 import styles from "./ObjectsSidebar.scss";
 import { Sidebar } from "../sidebar/Sidebar";
 import { CloseButton } from "../input/CloseButton";
-import { ButtonListItem } from "../layout/List";
-import listStyles from "../layout/List.scss";
-// import { ReactComponent as ObjectIcon } from "../icons/Object.svg";
-// import { ReactComponent as ImageIcon } from "../icons/Image.svg";
-// import { ReactComponent as VideoIcon } from "../icons/Video.svg";
-// import { ReactComponent as AudioIcon } from "../icons/Audio.svg";
-// import { ReactComponent as TextDocumentIcon } from "../icons/TextDocument.svg";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import Linkify from "react-linkify";
 import { LoadingOutlined } from "@ant-design/icons";
 import Store from "../../utilities/store";
 import { CONTENT_ROOT } from "../../utilities/constants";
 import QuizService from "../../utilities/apiServices/QuizService";
+import DocumentService from "../../utilities/apiServices/DocumentService";
 import { useState, useEffect } from "react";
 import { setLocale } from "../../utils/i18n";
 import { Button, Space, Spin } from "antd";
@@ -78,13 +72,107 @@ export function QuizList() {
         </div>
       ) : (
         <>
-          {quizs?.map(quiz => (
-            <Linkify key={quiz.id} properties={{ target: "_blank", rel: "noopener referrer" }}>
-              <a href={generateQuizUrl(quiz)} target="_blank" rel="noopener referrer">
-                {quiz.title}
-              </a>
-            </Linkify>
-          ))}
+          {quizs?.length > 0 ? (
+            <>
+              {quizs?.map(quiz => (
+                <a
+                  key={quiz.id}
+                  href={generateQuizUrl(quiz)}
+                  target="_blank"
+                  rel="noopener referrer"
+                  style={{
+                    display: "inline-block",
+                    width: "100%",
+                    padding: "5px 10px",
+                    border: "1px solid #48d7ff",
+                    borderRadius: "3px",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden"
+                  }}
+                >
+                  {quiz.title}
+                </a>
+              ))}
+            </>
+          ) : (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", color: "#aaaaaa" }}>
+              <span>{"No quiz"}</span>
+            </div>
+          )}
+        </>
+      )}
+    </Space>
+  );
+}
+
+export function DocumentList() {
+  const [documents, setdocuments] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    DocumentService.getAll()
+      .then(res => {
+        setdocuments(res.data.items);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  function generateDocumentUrl(document) {
+    const url = new URL(CONTENT_ROOT + "/document");
+    url.searchParams.append("id", document.id);
+    url.searchParams.append("title", document.title);
+    return url.href;
+  }
+
+  return (
+    <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+      {isLoading ? (
+        <div
+          style={{
+            height: "200px",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+        </div>
+      ) : (
+        <>
+          {documents?.length > 0 ? (
+            <>
+              {documents?.map(document => (
+                <a
+                  key={document.id}
+                  href={generateDocumentUrl(document)}
+                  target="_blank"
+                  rel="noopener referrer"
+                  style={{
+                    display: "inline-block",
+                    width: "100%",
+                    padding: "5px 10px",
+                    border: "1px solid #48d7ff",
+                    borderRadius: "3px",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden"
+                  }}
+                >
+                  {document.title}
+                </a>
+              ))}
+            </>
+          ) : (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", color: "#aaaaaa" }}>
+              <span>{"No document"}</span>
+            </div>
+          )}
         </>
       )}
     </Space>

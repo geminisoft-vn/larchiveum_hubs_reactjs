@@ -99,6 +99,7 @@ import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
 import { QuizContentModal } from "./room/QuizContentModal";
+import { DocumentContentModal } from "./room/DocumentContentModal";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -945,16 +946,25 @@ class UIRoot extends Component {
           />
         )}
       />
-      // <MicSetupModalContainer
-      //   scene={this.props.scene}
-      //   onEnterRoom={this.onAudioReadyButton}
-      //   onMicMuted={() =>
-      //     this.props.store.update({
-      //       preferences: { muteMicOnEntry: !this.props.store.state.preferences["muteMicOnEntry"] }
-      //     })
-      //   }
-      //   onBack={() => this.props.history.goBack()}
-      // />
+    );
+  };
+
+  renderDocumentPanel = () => {
+    return (
+      <StateRoute
+        stateKey="entry_step"
+        stateValue="content-document"
+        history={this.props.history}
+        render={props => (
+          <DocumentContentModal
+            documentUrl={this.props.history.location.state.detail.documentUrl}
+            closeable={true}
+            onClose={() => {
+              this.props.history.goBack();
+            }}
+          />
+        )}
+      />
     );
   };
 
@@ -1452,6 +1462,7 @@ class UIRoot extends Component {
                   <>
                     {!this.state.dialog && renderEntryFlow ? entryDialog : undefined}
                     {!this.state.dialog && this.renderQuizPanel()}
+                    {!this.state.dialog && this.renderDocumentPanel()}
                     {!this.props.selectedObject && <CompactMoreMenuButton />}
                     {(!this.props.selectedObject ||
                       (this.props.breakpoint !== "sm" && this.props.breakpoint !== "md")) && (

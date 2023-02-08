@@ -9,13 +9,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
 import { LoadingOutlined } from "@ant-design/icons";
-import QuizService from "../../services/QuizService";
+import DocumentService from "../../services/DocumentService";
 import Store from "../../utils/store";
-import { Breadcrumb, Layout, Menu, Col, Row, Button, Card, Spin } from "antd";
-import GettingStarted from "../components/quiz/GettingStarted";
-import Question from "../components/quiz/Question";
-import Result from "../components/quiz/Result";
-import "./QuizPage.scss";
+import { Layout, Col, Row, Spin } from "antd";
+import "./DocumentPage.scss";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -25,31 +22,25 @@ const QUIZ_STEPS = {
   RESULT: 3
 };
 
-export default function QuizPage() {
+export default function DocumentPage() {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [quiz, setQuiz] = useState({
+  const [document, setDocument] = useState({
     id: new URL(window.location.href).searchParams.get("id"),
     title: new URL(window.location.href).searchParams.get("title"),
     description: new URL(window.location.href).searchParams.get("description"),
-    questions: [{}, {}]
   });
-  const [quizResult, setQuizResult] = useState(null);
+  const [documentResult, setDocumentResult] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [quizStep, setQuizStep] = useState(QUIZ_STEPS.GETTING_STARTED);
-
+  const [documentStep, setDocumentStep] = useState(QUIZ_STEPS.GETTING_STARTED);
+  
   useEffect(() => {
-    // const token = new URL(window.location.href).searchParams.get("token");
-    // if(token){
-    //   Store.setAccessToken(token);
-    // }
-
-    const quizId = new URL(window.location.href).searchParams.get("id");
+    const documentId = new URL(window.location.href).searchParams.get("id");
     setIsLoading(true);
-    QuizService.getOneWithoutAuth(quizId)
+    DocumentService.getOneWithoutAuth(documentId)
       .then(res => {
-        setQuiz(res.data);
+        setDocument(res.data);
         setIsLoading(false);
       })
       .catch(error => {
@@ -58,34 +49,12 @@ export default function QuizPage() {
       });
   }, []);
 
-  function handleStartQuiz(quizResult) {
-    setQuizResult(quizResult);
-    handleNextStep();
-  }
-
-  function handleNextStep() {
-    setQuizStep(quizStep + 1);
-  }
-
-  function handleNextQuestion() {
-    const nextQuestionIndex = questionIndex + 1;
-    if (nextQuestionIndex < quiz?.questions?.length) {
-      setQuestionIndex(nextQuestionIndex);
-    } else {
-      handleNextStep();
-    }
-  }
-
   return (
     <Content
       style={{
         position: "relative",
         minHeight: "100vh",
         width: "100%",
-        backgroundColor: "white",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
       }}
     >
       {isLoading ? (
@@ -97,12 +66,12 @@ export default function QuizPage() {
         >
           <Row>
             <Col span={24} style={{ textAlign: 'center', padding: '20px 0px', borderBottom: '1px solid gray', fontSize: '2em'}}>
-              <span>Quiz</span>
+              <span>Document</span>
             </Col>
           </Row>
           <Row style={{height: 'calc(100% - 80px)'}}>
             <Col span={24} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px 0px'}}>
-              <h2>{quiz.title}</h2>
+              <h2>{document.title}</h2>
             </Col>
           </Row>
         </div>
@@ -117,32 +86,15 @@ export default function QuizPage() {
               </Row>
               <Row style={{ width: "100%", marginTop: "50px" }}>
                 <Col span={24} style={{ fontSize: "2em", textAlign: "center", color: "gray" }}>
-                  {"Wrong quiz"}
+                  {"Wrong document"}
                 </Col>
               </Row>
             </div>
           ) : (
-            <>
-              {quizStep === QUIZ_STEPS.GETTING_STARTED && <GettingStarted quiz={quiz} onStartQuiz={handleStartQuiz} />}
-              {quizStep === QUIZ_STEPS.QUESTIONS && (
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Question
-                    index={questionIndex}
-                    quizResultId={quizResult.id}
-                    questionId={quiz?.questions[questionIndex]?.id}
-                    onSubmitAnswer={handleNextQuestion}
-                  />
-                </div>
-              )}
-              {quizStep === QUIZ_STEPS.RESULT && <Result quizResultId={quizResult.id} />}
-            </>
+            <div
+              style={{ width: 'calc(100% - 40px)', padding: '20px'}}
+              dangerouslySetInnerHTML={{__html: document.content}}
+            />
           )}
         </>
       )}
