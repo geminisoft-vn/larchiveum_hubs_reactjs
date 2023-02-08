@@ -36,10 +36,19 @@ ContentsSidebar.propTypes = {
 export function QuizList() {
   const [quizs, setQuizs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [params, setParams] = useState({
+    filter: JSON.stringify([
+      {
+        operator: "=",
+        key: "createdBy",
+        value: Store.getUser()?.id
+      }
+    ])
+  });
 
   useEffect(() => {
     setIsLoading(true);
-    QuizService.getAll()
+    QuizService.getAll(params)
       .then(res => {
         setQuizs(res.data.items);
         setIsLoading(false);
@@ -109,10 +118,19 @@ export function QuizList() {
 export function DocumentList() {
   const [documents, setdocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [params, setParams] = useState({
+    filter: JSON.stringify([
+      {
+        operator: "=",
+        key: "createdBy",
+        value: Store.getUser()?.id
+      }
+    ])
+  });
 
   useEffect(() => {
     setIsLoading(true);
-    DocumentService.getAll()
+    DocumentService.getAll(params)
       .then(res => {
         setdocuments(res.data.items);
         setIsLoading(false);
