@@ -72,13 +72,34 @@ export function QuizList() {
         </div>
       ) : (
         <>
-          {quizs?.map(quiz => (
-            <Linkify key={quiz.id} properties={{ target: "_blank", rel: "noopener referrer" }}>
-              <a href={generateQuizUrl(quiz)} target="_blank" rel="noopener referrer">
-                {quiz.title}
-              </a>
-            </Linkify>
-          ))}
+          {quizs?.length > 0 ? (
+            <>
+              {quizs?.map(quiz => (
+                <a
+                  key={quiz.id}
+                  href={generateQuizUrl(quiz)}
+                  target="_blank"
+                  rel="noopener referrer"
+                  style={{
+                    display: "inline-block",
+                    width: "100%",
+                    padding: "5px 10px",
+                    border: "1px solid #48d7ff",
+                    borderRadius: "3px",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden"
+                  }}
+                >
+                  {quiz.title}
+                </a>
+              ))}
+            </>
+          ) : (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", color: "#aaaaaa" }}>
+              <span>{"No quiz"}</span>
+            </div>
+          )}
         </>
       )}
     </Space>
@@ -124,13 +145,34 @@ export function DocumentList() {
         </div>
       ) : (
         <>
-          {documents?.map(document => (
-            <Linkify key={document.id} properties={{ target: "_blank", rel: "noopener referrer" }}>
-              <a href={generateDocumentUrl(document)} target="_blank" rel="noopener referrer">
-                {document.title}
-              </a>
-            </Linkify>
-          ))}
+          {documents?.length > 0 ? (
+            <>
+              {documents?.map(document => (
+                <a
+                  key={document.id}
+                  href={generateDocumentUrl(document)}
+                  target="_blank"
+                  rel="noopener referrer"
+                  style={{
+                    display: "inline-block",
+                    width: "100%",
+                    padding: "5px 10px",
+                    border: "1px solid #48d7ff",
+                    borderRadius: "3px",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden"
+                  }}
+                >
+                  {document.title}
+                </a>
+              ))}
+            </>
+          ) : (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", color: "#aaaaaa" }}>
+              <span>{"No document"}</span>
+            </div>
+          )}
         </>
       )}
     </Space>
