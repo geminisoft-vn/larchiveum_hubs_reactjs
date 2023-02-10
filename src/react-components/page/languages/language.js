@@ -22,14 +22,14 @@ const resources = {
 
 const setLanguage = lang => {
   if (!lang) {
-    lang = window.localStorage.getItem("_larchiveum__lang") || "en";
+    lang = window.localStorage.getItem("__larchiveum__lang") || "en";
   }
-  window.localStorage.setItem("_larchiveum__lang", lang);
+  window.localStorage.setItem("__larchiveum__lang", lang);
   i18n.changeLanguage(lang);
 };
 
 const getLanguage = () => {
-  const lang = window.localStorage.getItem("_larchiveum__lang") || "en";
+  const lang = window.localStorage.getItem("__larchiveum__lang") || "en";
   return lang;
 };
 

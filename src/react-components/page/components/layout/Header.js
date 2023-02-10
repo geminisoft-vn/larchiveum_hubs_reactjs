@@ -1,17 +1,20 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
-import Store from "../../../../utilities/store";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+
+import React, { useEffect, useLayoutEffect, useState, useContext } from "react";
 import { Button, Space, Select } from "antd";
 import { useTranslation } from "react-i18next";
-import "./Header.scss";
-import logo from "./../../../../assets/images/larchiveum_logo.png";
+import LocalStorage from "../../utils/store";
 import Language from "../../languages/language";
+import { UserContext } from "../../contexts/UserContext";
+import logo from "../../assets/images/larchiveum_logo.png";
+import "./Header.scss";
 
-export default function(props) {
+export default function() {
   const { t } = useTranslation();
   const [language, setLanguage] = useState(Language.getLanguage());
-  const user = Store.getUser();
   const [page, setPage] = useState(null);
+  const [user] = useContext(UserContext);
 
   useEffect(() => {
     const page = new URL(location.href).searchParams.get("page");
@@ -37,9 +40,11 @@ export default function(props) {
   }
 
   const handleSignOut = () => {
-    Store.removeUser();
+    LocalStorage.removeAccessToken();
     window.location.href = "/";
   };
+
+  console.log(user);
 
   return (
     <Space

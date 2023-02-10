@@ -1,29 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
-import ReactDOM from "react-dom";
-import registerTelemetry from "../../telemetry";
-import "../../utils/theme";
-import "../../react-components/styles/global.scss";
-import "../../assets/stylesheets/globals.scss";
-import "../../assets/login/signin.scss";
-import "../../assets/login/utils.scss";
-import SigninSocial from "../../react-components/signin/SigninSocial";
-import UserService from "../../utilities/apiServices/UserService";
-import { validateEmail, validateLength, validateLengthSpace } from "../../utils/commonFunc";
-import Store from "../../utilities/store";
+import React, { useEffect, useState } from "react";
+import "../../../utils/theme";
+import "../../../react-components/styles/global.scss";
+import "../../../assets/stylesheets/globals.scss";
+import "../../../assets/login/signin.scss";
+import "../../../assets/login/utils.scss";
+import SigninSocial from "../components/page/singin/SigninSocial";
+import UserService from "../services/User.service";
+import LocalStorage from "../utils/store";
 import { FaHome } from "react-icons/fa";
-import { AuthContext } from "../auth/AuthContext";
-import hubChannel from "./../../utils/hub-channel";
-import Language from "./languages/language";
+import Language from "../languages/language";
 import { useTranslation } from "react-i18next";
-
-registerTelemetry("/signin", "Hubs Sign In Page");
 
 export function SigninPage() {
   return <LoginForm />;
 }
 
 const LoginForm = function() {
-  const user = Store.getUser();
   const { t } = useTranslation();
 
   const [data, setData] = useState({});
@@ -45,7 +37,7 @@ const LoginForm = function() {
     setSubmited(true);
     UserService.login(data).then(res => {
       if (res.result == "ok") {
-        Store.setUser(res.data);
+        LocalStorage.setAccessToken(res.data.token);
         window.location = `/`;
       } else if (res.result == "fail") {
         setError(t("forgot_password.FORGOT_PASSWORD_ERROR__" + res.error.toUpperCase()));
