@@ -20,7 +20,7 @@ function Exhibition(props) {
     let url = constants.API_URL_ROOT;
     const roomId = exhibition.roomId;
     if (roomId && roomId != "") {
-      if (constants.API_URL_ROOT === "https://larchiveum.link") {
+      if (constants.APP_URL_ROOT === "https://larchiveum.link") {
         url += "/" + roomId;
       } else {
         url += "/hub.html?hub_id=" + roomId;
