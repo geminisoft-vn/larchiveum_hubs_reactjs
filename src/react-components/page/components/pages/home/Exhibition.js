@@ -17,10 +17,10 @@ function Exhibition(props) {
   const endDate = exhibition.endDate ? new Date(exhibition.endDate) : null;
 
   function handleGoToExhibition(exhibition) {
-    let url = constants.API_URL_ROOT;
+    let url = constants.WEB_URL_ROOT;
     const roomId = exhibition.roomId;
     if (roomId && roomId != "") {
-      if (constants.APP_URL_ROOT === "https://larchiveum.link") {
+      if (constants.WEB_URL_ROOT === "https://larchiveum.link") {
         url += "/" + roomId;
       } else {
         url += "/hub.html?hub_id=" + roomId;
@@ -51,7 +51,7 @@ function Exhibition(props) {
       return (
         <button
           key={"will-open-on"}
-          className="signin-up btn-visit nt-time-yet"
+          className="action-btn"
           onClick={() => {
             //openPopupNotification(exhibition);
           }}
@@ -66,7 +66,7 @@ function Exhibition(props) {
       return (
         <button
           key={"reservation"}
-          className="signin-up btn-visit reserved"
+          className="action-btn"
           onClick={openPopupReservation}
           data-id-exhibition={exhibition.id}
         >
@@ -79,7 +79,7 @@ function Exhibition(props) {
       return (
         <button
           key={"enter"}
-          className="signin-up btn-visit"
+          className="action-btn"
           onClick={() => {
             handleGoToExhibition(exhibition);
           }}
@@ -92,7 +92,7 @@ function Exhibition(props) {
 
     if (user && !exhibition.reservated && exhibition.reservationCount >= exhibition.maxSize) {
       return (
-        <button key={"exhibition-full"} className="signin-up btn-visit full">
+        <button key={"exhibition-full"} className="action-btn">
           {t("home.EXHIBITION_FULL")}
         </button>
       );
@@ -100,7 +100,7 @@ function Exhibition(props) {
 
     if (!user && !exhibition.public) {
       return (
-        <button key={"signin"} className="signin-up btn-visit signin" onClick={handleGoToLogin}>
+        <button key={"signin"} className="action-btn" onClick={handleGoToLogin}>
           {t("home.SIGN_IN")}
         </button>
       );
@@ -143,8 +143,19 @@ function Exhibition(props) {
       <Row>
         <Col span={24}>{exhibition?.description}</Col>
       </Row>
-      <Row>
-        <Col span={24}>
+      <Row
+        style={{
+          marginTop: "30px"
+        }}
+      >
+        <Col
+          span={24}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
           <ActionButton />
         </Col>
       </Row>

@@ -1,10 +1,30 @@
 .exhibition {
     cursor: pointer;
     box-shadow: rgba(0, 0, 255, 0.1) 0px 1px 3px 0px, rgba(0, 0, 255, 0.06) 0px 1px 2px 0px;
-}
 
-.exhibition:hover {
-    transition: 0.5s ease-in;
-    border: 2px solid rgba(0, 0, 255, 0.3);
-    box-shadow: rgba(0, 0, 255, 0.16) 0px 3px 6px, rgba(0, 0, 255, 0.23) 0px 4px 8px;
+    .action-btn {
+        transition: 0.2s ease-in;
+        box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+        text-transform: uppercase;
+        background-color: #3EB2FD;
+        background-image: linear-gradient(1deg, #4F58FD, #149BF3 99%);
+        font-family: CircularStd, sans-serif;
+        font-size: 1rem;
+        color: #ffffff;
+        padding: 5px 10px;
+        border-radius: 100px;
+        border-width: 0;
+        background-color: #3eb2fd;
+        align-items: center;
+        appearance: none;
+        text-align: center;
+        width: 100%;
+    }
+
+    &:hover {
+
+        transition: 0.2s ease-in;
+        border: 2px solid rgba(0, 0, 255, 0.3);
+        box-shadow: rgba(0, 0, 255, 0.16) 0px 3px 6px, rgba(0, 0, 255, 0.23) 0px 4px 8px;
+    }
 }
