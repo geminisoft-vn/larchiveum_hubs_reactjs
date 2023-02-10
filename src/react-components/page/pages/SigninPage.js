@@ -4,7 +4,7 @@ import "../../../react-components/styles/global.scss";
 import "../../../assets/stylesheets/globals.scss";
 import "../../../assets/login/signin.scss";
 import "../../../assets/login/utils.scss";
-import SigninSocial from "../components/page/singin/SigninSocial";
+import SigninSocial from "../components/pages/singin/SigninSocial";
 import UserService from "../services/User.service";
 import LocalStorage from "../utils/store";
 import { FaHome } from "react-icons/fa";

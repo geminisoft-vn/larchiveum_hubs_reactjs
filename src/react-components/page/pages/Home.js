@@ -1,8 +1,6 @@
+/* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from "react";
-import "../../../utils/theme";
-import "../../../react-components/styles/global.scss";
 import "../../../assets/larchiveum/style.scss";
-import "../../../assets/larchiveum/loading.scss";
 import moment from "moment-timezone";
 import Store from "../../../utilities/store";
 import ExhibitionsService from "../../../utilities/apiServices/ExhibitionsService";
@@ -10,13 +8,14 @@ import ReserveService from "../../../utilities/apiServices/ReserveService";
 import Pagination from "../../../react-components/pagination/pagination";
 import { APP_ROOT } from "../../../utilities/constants";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Language from "../languages/language";
 import { useTranslation } from "react-i18next";
 import { Row, Col } from "antd";
 import { MdPublic, MdPeopleAlt, MdCalendarToday, MdOutlineCheckCircleOutline } from "react-icons/md";
-import { ManagerLayout } from "../components/layout/ManagerLayout";
+import { ManagerLayout } from "../components/layouts/ManagerLayout";
 import InputSelect from "../components/inputs/InputSelect";
+import Exhibition from "../components/pages/home/Exhibition";
+import "react-toastify/dist/ReactToastify.css";
 
 export function HomePage() {
   return <Home />;
@@ -26,16 +25,11 @@ function Home() {
   toast.configure();
   const [exhibitionsLoaded, setExhibitionsLoaded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isActiveSortASC, setIsActiveSortASC] = useState(true);
-  const [isActiveSortDESC, setIsActiveSortDESC] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [currentExhibitionId, setCurrentExhibitionId] = useState(null);
   const [exhibitions, setExhibitions] = useState({
     data: [],
     pagination: {}
   });
-  const [exhibitionNoti, setExhibitionNoti] = useState(undefined);
   const [filterExhibitionList, setfilterExhibitionList] = useState({
     page: 1,
     pageSize: 9,
@@ -85,11 +79,6 @@ function Home() {
         }
       });
     }
-  };
-
-  const handleSignOut = () => {
-    Store.removeUser();
-    window.location.reload();
   };
 
   const handleButtonVisit = event => {
@@ -143,7 +132,7 @@ function Home() {
     });
   };
 
-  const handleButtonLogin = event => {
+  const handleButtonLogin = () => {
     window.location.href = "/?page=signin";
   };
 
@@ -152,22 +141,6 @@ function Home() {
       ...filterExhibitionList,
       page
     });
-  };
-
-  const sortNewest = () => {
-    setfilterExhibitionList({
-      sort: "startDate|desc"
-    });
-    setIsActiveSortASC(true);
-    setIsActiveSortDESC(false);
-  };
-
-  const sortOldest = () => {
-    setfilterExhibitionList({
-      sort: "startDate|asc"
-    });
-    setIsActiveSortASC(false);
-    setIsActiveSortDESC(true);
   };
 
   const renderExhibitions = () => {
@@ -336,62 +309,6 @@ function Home() {
 
   return (
     <>
-      {/* {isOpen && (
-        <Popup
-          key={"popup-confirm-reservation"}
-          size={"sm"}
-          title={<>{t("home.POPUP_CONFIRM_RESERVATION__TITLE")}</>}
-          content={
-            <>
-              <br />
-              <div style={{ textAlign: "center" }}>{t("home.POPUP_CONFIRM_RESERVATION__MESSAGE")}</div>
-              <br />
-            </>
-          }
-          actions={[
-            {
-              text: t("home.POPUP_CONFIRM_RESERVATION__YES"),
-              class: "btn1",
-              callback: () => {
-                handleReservate();
-              }
-            },
-            {
-              text: t("home.POPUP_CONFIRM_RESERVATION__CANCEL"),
-              class: "btn2",
-              callback: () => {
-                togglePopup();
-              }
-            }
-          ]}
-          handleClose={togglePopup}
-        />
-      )}
-
-      {isOpenNotification && (
-        <Popup
-          key={"popup-exhibition-not-open-yet"}
-          size={"lg"}
-          title={<>{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__TTILE")}</>}
-          content={
-            <>
-              <div className="info-room">
-                <p className="noti-title">{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__MESSAGE")}</p>
-              </div>
-            </>
-          }
-          actions={[
-            {
-              text: t("home.POPUP_EXHIBITION_NOT_OPEN_YET__CLOSE"),
-              class: "btn2",
-              callback: () => {
-                closePopupNotification();
-              }
-            }
-          ]}
-          handleClose={closePopupNotification}
-        />
-      )} */}
       <ManagerLayout>
         <Row style={{ padding: "10px 0" }}>
           <Col span={24}>
@@ -412,14 +329,23 @@ function Home() {
             />
           </Col>
         </Row>
-        <div className="col">{renderExhibitions()}</div>
-        <div className="">
-          {exhibitionsLoaded ? (
-            exhibitions.data.length > 0 ? (
-              <Pagination pagination={exhibitions.pagination} callFetchList={changePages} />
-            ) : null
-          ) : null}
-        </div>
+        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+          {exhibitions &&
+            exhibitions.data.map((exhibition, i) => (
+              <Col span={6} key={i} style={{ marginBottom: "20px" }}>
+                <Exhibition exhibition={exhibition} />
+              </Col>
+            ))}
+        </Row>
+        <Row>
+          <Col span={24}>
+            {exhibitionsLoaded ? (
+              exhibitions.data.length > 0 ? (
+                <Pagination pagination={exhibitions.pagination} callFetchList={changePages} />
+              ) : null
+            ) : null}
+          </Col>
+        </Row>
       </ManagerLayout>
     </>
   );
