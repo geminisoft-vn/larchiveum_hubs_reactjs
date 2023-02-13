@@ -217,10 +217,10 @@ export default function(props) {
                   onInputChange({ target: { name: "content", value: e.target.getBody().innerHTML } });
                 }}
                 onBlur={e => {
-                  console.log("on blur: ", e);
+                  validate("content");
                 }}
                 init={{
-                  height: 400,
+                  min_height: 400,
                   menubar: true,
                   file_picker_callback: onPickFile,
                   plugins: [
@@ -246,7 +246,8 @@ export default function(props) {
                     "insertdatetime",
                     "table",
                     "help",
-                    "wordcount"
+                    "wordcount",
+                    "autoresize"
                   ],
                   toolbar:
                     "undo redo | casechange blocks | bold italic backcolor | image media file | " +

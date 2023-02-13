@@ -29,7 +29,6 @@ export default function(props) {
   function onInputChange(e) {
     const { value, name } = e.target;
     documentRef.current[name] = value;
-    console.log(documentRef.current);
   }
 
   function handleCreateDocument() {
@@ -191,7 +190,7 @@ export default function(props) {
               </Card>
             </Col>
           </Row>
-          <Row style={{ marginTop: "5px", marginBottom: "20px" }}>
+          <Row style={{ marginTop: "5px", marginBottom: "50px" }}>
             <Col span={24}>
               <Editor
                 apiKey={tinyApp.apiKey}
@@ -199,8 +198,11 @@ export default function(props) {
                 onChange={e => {
                   onInputChange({ target: { name: "content", value: e.target.getBody().innerHTML } });
                 }}
+                onBlur={() => {
+                  validate("content");
+                }}
                 init={{
-                  height: 400,
+                  min_height: 400,
                   menubar: true,
                   file_picker_callback: onPickFile,
                   plugins: [
@@ -226,7 +228,8 @@ export default function(props) {
                     "insertdatetime",
                     "table",
                     "help",
-                    "wordcount"
+                    "wordcount",
+                    "autoresize"
                   ],
                   toolbar:
                     "undo redo | casechange blocks | bold italic backcolor | image media file | " +
