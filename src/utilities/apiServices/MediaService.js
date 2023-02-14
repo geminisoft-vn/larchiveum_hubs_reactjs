@@ -48,14 +48,19 @@ class MediaService {
       });
   }
 
-  upload(file) {
+  upload(file, onProgress, cancellation) {
     const data = new FormData();
     data.append("file", file);
     return request
       .post("/v1/auth/medias/upload", data, {
         headers: {
           "Content-Type": "multipart/form-data"
-        }
+        },
+        onUploadProgress: progressEvent => {
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          if (onProgress) onProgress(percent);
+        },
+        cancelToken: cancellation.token
       })
       .then(res => {
         return res.data;

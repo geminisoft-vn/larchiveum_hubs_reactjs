@@ -123,7 +123,7 @@ export default function(props) {
                                 onOpenDocumentEditDetail(document);
                               }}
                             >
-                              {t("content.DOCUMENT_TAB__DOCUMENT_LIST__DETAIL_BUTTON_LABEL")}
+                              {t("content.DOCUMENT_TAB__DOCUMENT_LIST__EDIT_BUTTON_LABEL")}
                             </Button>
                             <Button
                               type="primary"

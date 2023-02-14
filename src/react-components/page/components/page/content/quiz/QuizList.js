@@ -135,7 +135,7 @@ export default function(props) {
                                 onOpenQuizDetail(quiz);
                               }}
                             >
-                              {t("content.QUIZ_TAB__QUIZ_LIST__DETAIL_BUTTON_LABEL")}
+                              {t("content.QUIZ_TAB__QUIZ_LIST__EDIT_BUTTON_LABEL")}
                             </Button>
                             <Button
                               type="primary"
