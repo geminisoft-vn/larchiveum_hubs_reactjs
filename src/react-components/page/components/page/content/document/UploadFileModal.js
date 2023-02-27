@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import { Trans } from "react-i18next";
+import PropTypes from "prop-types";
 import MediaService from "../../../../../../utilities/apiServices/MediaService";
 import { Layout, Menu, Col, Row, Button, Spin, Empty, Progress, Typography } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
@@ -22,6 +23,17 @@ class UploadFileModal extends React.Component {
       visiable: props.visiable
     };
   }
+
+  static propTypes = {
+    file: PropTypes.shape({
+      name: PropTypes.string
+    }),
+    progress: PropTypes.number,
+    visiable: PropTypes.bool,
+    style: PropTypes.object,
+    onCancel: PropTypes.func,
+    onClose: PropTypes.func
+  };
 
   componentDidMount() {
     document.body.appendChild(this.el);
