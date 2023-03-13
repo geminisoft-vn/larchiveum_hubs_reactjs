@@ -13,7 +13,7 @@ import QuizService from "../../utilities/apiServices/QuizService";
 import { Breadcrumb, Layout, Menu, Col, Row, Button, Card, Spin } from "antd";
 import GettingStarted from "./components/page/view-quiz/GettingStarted";
 import Question from "./components/page/view-quiz/Question";
-import Result from "./components/page/view-quiz/result";
+import Result from "./components/page/view-quiz/Result";
 import "./ViewQuizPage.scss";
 
 const { Header, Content, Footer, Sider } = Layout;
