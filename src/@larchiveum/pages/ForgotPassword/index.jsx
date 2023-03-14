@@ -12,11 +12,7 @@ import "reactjs-popup/dist/index.css";
 import Language from "src/@larchiveum/languages/language";
 import { useTranslation } from "react-i18next";
 
-export function ForgotPasswordPage() {
-  return <ForgotPassword />;
-}
-
-const ForgotPassword = function() {
+const ForgotPasswordPage = () => {
   const user = Store.getUser();
   const { t } = useTranslation();
 
@@ -112,3 +108,5 @@ const ForgotPassword = function() {
     </div>
   );
 };
+
+export default ForgotPasswordPage;

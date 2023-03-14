@@ -423,7 +423,7 @@ module.exports = async (env, argv) => {
           }
         },
         {
-          test: /\.js$/,
+          test: /\.(js|jsx)$/,
           include: [path.resolve(__dirname, "src")],
           // Exclude JS assets in node_modules because they are already transformed and often big.
           exclude: [path.resolve(__dirname, "node_modules")],
@@ -547,7 +547,8 @@ module.exports = async (env, argv) => {
       alias: {
         "@larchiveum": path.resolve(__dirname, "src/@larchiveum/"),
         src: path.resolve(__dirname, "src/")
-      }
+      },
+      extensions: [".js", ".jsx"]
     },
 
     plugins: [

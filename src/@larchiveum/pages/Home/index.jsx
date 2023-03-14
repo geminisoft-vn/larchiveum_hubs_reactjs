@@ -13,7 +13,7 @@ import { APP_ROOT } from "src/@larchiveum/utilities/constants";
 import "reactjs-popup/dist/index.css";
 import UserService from "src/@larchiveum/utilities/apiServices/UserService";
 import { toast } from "react-toastify";
-import Header from "src/@larchiveum/components/layout/Header";
+import { Header } from "src/@larchiveum/components";
 import "react-toastify/dist/ReactToastify.css";
 import Language from "src/@larchiveum/languages/language";
 import { useTranslation } from "react-i18next";
@@ -344,132 +344,134 @@ const HomePage = () => {
     setIsOpenNotification(false);
   };
 
-  if (isLoading) {
-    return (
-      <div className="loader-2">
-        <div className="loader">
-          <svg viewBox="0 0 80 80">
-            <circle id="test" cx="40" cy="40" r="32" />
-          </svg>
-        </div>
-        <div className="loader triangle">
-          <svg viewBox="0 0 86 80">
-            <polygon points="43 8 79 72 7 72" />
-          </svg>
-        </div>
-        <div className="loader">
-          <svg viewBox="0 0 80 80">
-            <rect x="8" y="8" width="64" height="64" />
-          </svg>
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <>
-        {isOpen && (
-          <Popup
-            key={"popup-confirm-reservation"}
-            size={"sm"}
-            title={<>{t("home.POPUP_CONFIRM_RESERVATION__TITLE")}</>}
-            content={
-              <>
-                <br />
-                <div style={{ textAlign: "center" }}>{t("home.POPUP_CONFIRM_RESERVATION__MESSAGE")}</div>
-                <br />
-              </>
-            }
-            actions={[
-              {
-                text: t("home.POPUP_CONFIRM_RESERVATION__YES"),
-                class: "btn1",
-                callback: () => {
-                  handleReservate();
-                }
-              },
-              {
-                text: t("home.POPUP_CONFIRM_RESERVATION__CANCEL"),
-                class: "btn2",
-                callback: () => {
-                  togglePopup();
-                }
-              }
-            ]}
-            handleClose={togglePopup}
-          />
-        )}
+  // if (isLoading) {
+  //   return (
+  //     <div className="loader-2">
+  //       <div className="loader">
+  //         <svg viewBox="0 0 80 80">
+  //           <circle id="test" cx="40" cy="40" r="32" />
+  //         </svg>
+  //       </div>
+  //       <div className="loader triangle">
+  //         <svg viewBox="0 0 86 80">
+  //           <polygon points="43 8 79 72 7 72" />
+  //         </svg>
+  //       </div>
+  //       <div className="loader">
+  //         <svg viewBox="0 0 80 80">
+  //           <rect x="8" y="8" width="64" height="64" />
+  //         </svg>
+  //       </div>
+  //     </div>
+  //   );
+  // } else {
 
-        {isOpenNotification && (
-          <Popup
-            key={"popup-exhibition-not-open-yet"}
-            size={"lg"}
-            title={<>{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__TTILE")}</>}
-            content={
-              <>
-                <div className="info-room">
-                  <p className="noti-title">{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__MESSAGE")}</p>
-                </div>
-              </>
-            }
-            actions={[
-              {
-                text: t("home.POPUP_EXHIBITION_NOT_OPEN_YET__CLOSE"),
-                class: "btn2",
-                callback: () => {
-                  closePopupNotification();
-                }
-              }
-            ]}
-            handleClose={closePopupNotification}
-          />
-        )}
+  // }
 
-        <div className="background-homepage">
-          <Header />
-          <div className="row_2">
-            <div className="test">
-              <div className="row" style={{ margin: "5vh 0" }}>
-                {user && (
-                  <a href="?page=profile">
-                    <button
-                      style={{
-                        fontSize: "17px",
-                        color: "#149BF3",
-                        fontWeight: "bold",
-                        padding: "5px 10px",
-                        border: "2px solid #1cbeff",
-                        borderRadius: "5px"
-                      }}
-                    >
-                      {t("home.PROFILE")}
-                    </button>
-                  </a>
-                )}
+  return (
+    <>
+      {isOpen && (
+        <Popup
+          key={"popup-confirm-reservation"}
+          size={"sm"}
+          title={<>{t("home.POPUP_CONFIRM_RESERVATION__TITLE")}</>}
+          content={
+            <>
+              <br />
+              <div style={{ textAlign: "center" }}>{t("home.POPUP_CONFIRM_RESERVATION__MESSAGE")}</div>
+              <br />
+            </>
+          }
+          actions={[
+            {
+              text: t("home.POPUP_CONFIRM_RESERVATION__YES"),
+              class: "btn1",
+              callback: () => {
+                handleReservate();
+              }
+            },
+            {
+              text: t("home.POPUP_CONFIRM_RESERVATION__CANCEL"),
+              class: "btn2",
+              callback: () => {
+                togglePopup();
+              }
+            }
+          ]}
+          handleClose={togglePopup}
+        />
+      )}
+
+      {isOpenNotification && (
+        <Popup
+          key={"popup-exhibition-not-open-yet"}
+          size={"lg"}
+          title={<>{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__TTILE")}</>}
+          content={
+            <>
+              <div className="info-room">
+                <p className="noti-title">{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__MESSAGE")}</p>
               </div>
-              <div className="tools">
-                <div style={{ float: "left" }}>
-                  <button className={isActiveSortASC ? "active" : ""} onClick={sortNewest}>
-                    {t("home.NEWEST")}
+            </>
+          }
+          actions={[
+            {
+              text: t("home.POPUP_EXHIBITION_NOT_OPEN_YET__CLOSE"),
+              class: "btn2",
+              callback: () => {
+                closePopupNotification();
+              }
+            }
+          ]}
+          handleClose={closePopupNotification}
+        />
+      )}
+
+      <div className="background-homepage">
+        <Header />
+        <div className="row_2">
+          <div className="test">
+            <div className="row" style={{ margin: "5vh 0" }}>
+              {user && (
+                <a href="?page=profile">
+                  <button
+                    style={{
+                      fontSize: "17px",
+                      color: "#149BF3",
+                      fontWeight: "bold",
+                      padding: "5px 10px",
+                      border: "2px solid #1cbeff",
+                      borderRadius: "5px"
+                    }}
+                  >
+                    {t("home.PROFILE")}
                   </button>
-                  <button className={isActiveSortDESC ? "active" : ""} onClick={sortOldest}>
-                    {t("home.OLDEST")}
-                  </button>
-                </div>
+                </a>
+              )}
+            </div>
+            <div className="tools">
+              <div style={{ float: "left" }}>
+                <button className={isActiveSortASC ? "active" : ""} onClick={sortNewest}>
+                  {t("home.NEWEST")}
+                </button>
+                <button className={isActiveSortDESC ? "active" : ""} onClick={sortOldest}>
+                  {t("home.OLDEST")}
+                </button>
               </div>
-              <div className="col">{renderExhibitions()}</div>
-              <div className="">
-                {exhibitionsLoaded ? (
-                  exhibitions.data.length > 0 ? (
-                    <Pagination pagination={exhibitions.pagination} callFetchList={changePages} />
-                  ) : null
-                ) : null}
-              </div>
+            </div>
+            <div className="col">{renderExhibitions()}</div>
+            <div className="">
+              {exhibitionsLoaded ? (
+                exhibitions.data.length > 0 ? (
+                  <Pagination pagination={exhibitions.pagination} callFetchList={changePages} />
+                ) : null
+              ) : null}
             </div>
           </div>
         </div>
-      </>
-    );
-  }
+      </div>
+    </>
+  );
 };
 
 export default HomePage;

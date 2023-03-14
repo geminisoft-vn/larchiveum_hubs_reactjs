@@ -7,7 +7,7 @@ import "./Header.scss";
 import logo from "src/assets/images/larchiveum_logo.png";
 import Language from "src/@larchiveum/languages/language";
 
-export default function Header(props) {
+const Header = () => {
   const { t } = useTranslation();
   const [language, setLanguage] = useState(Language.getLanguage());
   const user = Store.getUser();
@@ -132,4 +132,6 @@ export default function Header(props) {
       </Space>
     </Space>
   );
-}
+};
+
+export default Header;

@@ -1,24 +1,18 @@
 /* eslint-disable no-debugger */
 /* eslint-disable react/display-name */
-/* eslint-disable @calm/react-intl/missing-formatted-message */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-unused-vars */
+
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import registerTelemetry from "../../../telemetry";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
 import { LoadingOutlined } from "@ant-design/icons";
 import QuizService from "../../utilities/apiServices/QuizService";
 import { Breadcrumb, Layout, Menu, Col, Row, Button, Card, Spin } from "antd";
-import GettingStarted from "src/@larchiveum/components/page/view-quiz/GettingStarted";
-import Question from "src/@larchiveum/components/page/view-quiz/Question";
-import Result from "src/@larchiveum/components/page/view-quiz/Result";
+import GettingStarted from "src/@larchiveum/pages/ViewQuiz/components/GettingStarted";
+import Question from "src/@larchiveum/pages/ViewQuiz/components/Question";
+import Result from "src/@larchiveum/pages/ViewQuiz/components/Result";
 import "./ViewQuizPage.scss";
 
 const { Header, Content, Footer, Sider } = Layout;
-
-registerTelemetry("/content", "Content Page");
 
 const QUIZ_STEPS = {
   GETTING_STARTED: 1,
@@ -26,7 +20,7 @@ const QUIZ_STEPS = {
   RESULT: 3
 };
 
-export function ViewQuizPage() {
+const ViewQuizPage = () => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -135,4 +129,6 @@ export function ViewQuizPage() {
       )}
     </Content>
   );
-}
+};
+
+export default ViewQuizPage;

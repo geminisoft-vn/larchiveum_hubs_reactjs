@@ -32,6 +32,8 @@ module.exports = {
     "react-hooks/rules-of-hooks": "warn",
     "react-hooks/exhaustive-deps": "warn",
 
+    "react/prop-types": "warn",
+
     // https://github.com/calm/eslint-plugin-react-intl
     "@calm/react-intl/missing-formatted-message": [
       "warn",

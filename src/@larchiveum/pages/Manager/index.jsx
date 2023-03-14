@@ -1,6 +1,3 @@
-/* eslint-disable @calm/react-intl/missing-formatted-message */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import "src/utils/theme";
 import "src/react-components/styles/global.scss";
@@ -21,7 +18,7 @@ import defaultImage from "src/assets/larchiveum/default-image.png";
 import defaultModel from "src/assets/larchiveum/model-default.png";
 import defaultImage1 from "src/assets/larchiveum/siri.gif";
 import Pagination from "src/@larchiveum/pagination/pagination";
-import Header from "src/@larchiveum/components/layout/Header";
+import { Header } from "src/@larchiveum/components";
 import { APP_ROOT } from "src/@larchiveum/utilities/constants";
 import {
   FaUserFriends,

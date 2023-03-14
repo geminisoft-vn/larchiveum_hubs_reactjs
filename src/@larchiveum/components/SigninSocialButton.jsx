@@ -13,7 +13,7 @@ import { naverApp, kakaoApp, facebookApp, googleApp, APP_ROOT } from "../utiliti
 import Store from "../utilities/store";
 import { toast } from "react-toastify";
 
-function SigninSocial() {
+const SigninSocialButton = () => {
   toast.configure();
 
   // useEffect(() => {
@@ -87,7 +87,6 @@ function SigninSocial() {
   };
 
   const signupWithNaver = response => {
-    debugger;
     try {
       const data = { fbtoken: response.accessToken };
       UserService.naverLogin(data)
@@ -164,6 +163,6 @@ function SigninSocial() {
       />
     </div>
   );
-}
+};
 
-export default SigninSocial;
+export default SigninSocialButton;

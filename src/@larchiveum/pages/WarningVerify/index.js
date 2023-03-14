@@ -27,11 +27,7 @@ function auth() {
     });
 }
 
-export function WarningVerifyPage() {
-  return <WarningVerify />;
-}
-
-function WarningVerify() {
+const WarningVerifyPage = () => {
   auth();
   const [sending, setSending] = useState(false);
   const [sendingMessage, setSendingMessage] = useState("");
@@ -94,4 +90,6 @@ function WarningVerify() {
       </div>
     </div>
   );
-}
+};
+
+export default WarningVerifyPage;

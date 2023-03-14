@@ -4,7 +4,6 @@ import ReactDOM from "react-dom";
 
 import "./react-components/styles/global.scss";
 
-import registerTelemetry from "./telemetry";
 import Store from "./storage/store";
 import "./utils/theme";
 
@@ -21,8 +20,6 @@ import {
   CallbackNaverOAuthPage,
   ViewQuizPage
 } from "src/@larchiveum/pages";
-
-registerTelemetry("/home", "Hubs Home Page");
 
 const store = new Store();
 window.APP = { store };

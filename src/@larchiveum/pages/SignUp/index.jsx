@@ -1,24 +1,16 @@
 import React, { useEffect, useState } from "react";
-import registerTelemetry from "../../../telemetry";
 import "../../../utils/theme";
 import "src/react-components/styles/global.scss";
 import "src/assets/stylesheets/globals.scss";
 import "src/assets/login/signin.scss";
 import "src/assets/login/utils.scss";
-import SigninSocial from "../../components/SigninSocial";
 import UserService from "../../utilities/apiServices/UserService";
 import Store from "../../utilities/store";
 import { FaHome } from "react-icons/fa";
 import Language from "src/@larchiveum/languages/language";
 import { useTranslation } from "react-i18next";
 
-registerTelemetry("/signin", "Hubs Sign In Page");
-
-export function SigninPage() {
-  return <LoginForm />;
-}
-
-const LoginForm = function() {
+const SignUpForm = () => {
   const user = Store.getUser();
   const { t } = useTranslation();
 
@@ -36,23 +28,30 @@ const LoginForm = function() {
     setData({ ...data, [name]: value });
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    setSubmited(true);
-    UserService.login(data).then(res => {
-      if (res.result == "ok") {
-        Store.setUser(res.data);
-        window.location = `/`;
-      } else if (res.result == "fail") {
-        setError(t("forgot_password.FORGOT_PASSWORD_ERROR__" + res.error.toUpperCase()));
-      }
-    });
-  };
-
   const handleChangeLanguage = event => {
     const lang = event.target.value;
     setLanguage(lang);
     Language.setLanguage(lang);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    setSubmited(true);
+
+    if (data.password != data.repassword) {
+      setError(t("signup.SIGN_UP_ERROR__RE_PASSWORD_NOT_MATCH"));
+      return;
+    }
+
+    UserService.signupWithEmail(data).then(res => {
+      this.setState({ disabled: true });
+      if (res.result == "ok") {
+        Store.removeUser();
+        window.location = `/?page=warning-verify&email=${res.data.email}`;
+      } else if (res.result == "fail") {
+        setError(t("signup.SIGN_UP_ERROR__" + res.error.toUpperCase()));
+      }
+    });
   };
 
   return (
@@ -67,16 +66,29 @@ const LoginForm = function() {
             </div>
           </div>
           <form className="login100-form validate-form flex-sb flex-w" name="form" onSubmit={handleSubmit}>
-            <span className="login100-form-title">{t("signin.SIGN_IN")}</span>
-            <div className="p-t-31 p-b-9">
-              <span className="txt1">{t("signin.EMAIL_LABEL")}</span>
+            <span className="login100-form-title">{t("signup.SIGN_UP")}</span>
+            <div className="p-t-13 p-b-9">
+              <span className="txt1">{t("signup.DISPLAY_NAME_LABEL")}</span>
             </div>
             <div className="wrap-input100 validate-input" data-validate="Username is required">
-              <input className="input100" type="text" name="email" value={data.email || ""} onChange={handleChange} />
+              <input
+                className="input100"
+                type="text"
+                name="displayName"
+                value={data.displayName || ""}
+                onChange={handleChange}
+              />
               <span className="focus-input100" />
             </div>
             <div className="p-t-13 p-b-9">
-              <span className="txt1">{t("signin.PASSWORD_LABEL")}</span>
+              <span className="txt1">{t("signup.EMAIL_LABEL")}</span>
+            </div>
+            <div className="wrap-input100 validate-input" data-validate="Email is required">
+              <input className="input100" type="email" name="email" value={data.email || ""} onChange={handleChange} />
+              <span className="focus-input100" />
+            </div>
+            <div className="p-t-13 p-b-9">
+              <span className="txt1">{t("signup.PASSWORD_LABEL")}</span>
             </div>
             <div className="wrap-input100 validate-input" data-validate="Password is required">
               <input
@@ -88,23 +100,28 @@ const LoginForm = function() {
               />
               <span className="focus-input100" />
             </div>
-            <div className="container-login100-form-btn m-t-27 m-b-20">
-              <button className="login100-form-btn">{t("signin.SIGN_IN_BUTTON")}</button>
+            <div className="p-t-13 p-b-9">
+              <span className="txt1">{t("signup.RE_PASSWORD_LABEL")}</span>
             </div>
+            <div className="wrap-input100 validate-input" data-validate="Re Password is required">
+              <input
+                className="input100"
+                type="password"
+                name="repassword"
+                value={data.repassword || ""}
+                onChange={handleChange}
+              />
+              <span className="focus-input100" />
+            </div>
+            <div className="container-login100-form-btn m-t-27 m-b-30">
+              <button className="login100-form-btn">{t("signup.SIGN_UP_BUTTON")}</button>
+            </div>
+            {error ? <div className="error-form">{error}</div> : ""}
             <div id="alternativeLogin">
               <label className="txt1">
-                {t("signin.SIGN_UP_LABEL")}
-                <a href="/?page=signup" className="btn_signup">
-                  {" "}
-                  {t("signin.SIGN_UP_BUTTON")}
-                </a>
-              </label>
-              {error ? <div className="error-form">{error}</div> : ""}
-              <SigninSocial />
-              <label className="txt1 mt-3">
-                {t("signin.RESET_PASSWORD_LABEL")}{" "}
-                <a href="/?page=forgot-password" className="btn_signup">
-                  {t("signin.RESET_PASSWORD_BUTTON")}
+                {t("signup.SIGN_IN_LABEL")}{" "}
+                <a href="/?page=signin" className="btn_signup">
+                  {t("signup.SIGN_IN_BUTTON")}
                 </a>
               </label>
             </div>
@@ -114,3 +131,5 @@ const LoginForm = function() {
     </div>
   );
 };
+
+export default SignUpForm;

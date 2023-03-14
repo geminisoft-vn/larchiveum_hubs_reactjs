@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Store from "src/@larchiveum/utilities/store";
 import UserService from "src/@larchiveum/utilities/apiServices/UserService";
 
 toast.configure();
 
-export function CallbackNaverOAuthPage(props) {
+const CallbackNaverOAuthPage = props => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -45,4 +45,6 @@ export function CallbackNaverOAuthPage(props) {
       {!error ? <span>Authenticating...</span> : <span>Authentication Error: {error.toString()}</span>}
     </div>
   );
-}
+};
+
+export default CallbackNaverOAuthPage;

@@ -5,7 +5,7 @@ import "src/assets/stylesheets/globals.scss";
 import UserService from "src/@larchiveum/utilities/apiServices/UserService";
 import AvatarService from "src/@larchiveum/utilities/apiServices/AvatarService";
 import Popup from "src/react-components/popup/popup";
-import Header from "src/@larchiveum/components/layout/Header";
+import { Header } from "src/@larchiveum/components";
 import Store from "src/@larchiveum/utilities/store";
 import { toast } from "react-toastify";
 import Validator from "src/@larchiveum/utilities/validator";
@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 
 toast.configure();
 
-export function ProfilePage() {
+const ProfilePage = () => {
   toast.configure();
   const user = Store.getUser();
   const { t } = useTranslation();
@@ -236,7 +236,7 @@ export function ProfilePage() {
       )}
     </div>
   );
-}
+};
 
 const AvatarPreview = props => {
   const user = Store.getUser();
@@ -351,7 +351,7 @@ const GeneralPreview = props => {
           setIsSaving(false);
         });
     } else {
-      handleResult(displayName);
+      // handleResult(displayName);
       setIsSaving(false);
     }
   };
@@ -731,3 +731,5 @@ const PopupCreateAvatar = props => {
 //         />
 //     );
 // };
+
+export default ProfilePage;
