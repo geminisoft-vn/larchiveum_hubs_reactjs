@@ -7,6 +7,9 @@ import "./react-components/styles/global.scss";
 import Store from "./storage/store";
 import "./utils/theme";
 
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
 import {
   HomePage,
   SigninPage,
@@ -68,4 +71,9 @@ function Root() {
   }
 }
 
-ReactDOM.render(<Root />, document.getElementById("home-root"));
+ReactDOM.render(
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <Root />
+  </LocalizationProvider>,
+  document.getElementById("home-root")
+);

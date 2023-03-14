@@ -292,14 +292,15 @@ module.exports = async (env, argv) => {
     },
     devtool: argv.mode === "production" ? "source-map" : "inline-source-map",
     devServer: {
-      https: createHTTPSConfig(),
+      // https: createHTTPSConfig(),
       host: "0.0.0.0",
       public: `${host}:8080`,
       useLocalIp: true,
       allowedHosts: [host, "hubs.local"],
       headers: devServerHeaders,
-      hot: liveReload,
-      inline: liveReload,
+      hot: true,
+      liveReload: true,
+      inline: true,
       historyApiFallback: {
         rewrites: [
           { from: /^\/signin/, to: "/signin.html" },

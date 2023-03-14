@@ -5,11 +5,11 @@ const Popup = props => {
   const currentProps = {
     data: {},
     title: "Popup larchiveum",
-    size: 'lg',
+    size: "lg",
     content: <p>Wellcome to larchiveum</p>,
     closeButton: true,
     actions: []
-  }
+  };
 
   currentProps.data = props.data || currentProps.data;
   currentProps.title = props.title || currentProps.title;
@@ -18,28 +18,37 @@ const Popup = props => {
   currentProps.closeButton = props.closeButton || currentProps.closeButton;
   currentProps.actions = props.actions || currentProps.actions;
   currentProps.handleClose = props.handleClose || currentProps.handleClose;
-  
+
   return (
     <div className="popup-overlay">
-      <div className={'popup-content ' + currentProps.size}>
+      <div className={"popup-content " + currentProps.size}>
         <div className="modal">
-          {currentProps.closeButton = true ? 
-            <button className="close" onClick={currentProps.handleClose}>
-              &times;
-            </button>
-          :''}
+          {
+            (currentProps.closeButton = true ? (
+              <button className="close" onClick={currentProps.handleClose}>
+                &times;
+              </button>
+            ) : (
+              ""
+            ))
+          }
           <div className="header"> {currentProps.title}</div>
-          <div className="content">
-              {currentProps.content}
-          </div>
+          <div className="content">{currentProps.content}</div>
           <div className="actions">
-            {currentProps.actions.map((action, i)=>{
-              if(!action.hidden){
-                return <button key={i}
+            {currentProps.actions.map((action, i) => {
+              if (!action.hidden) {
+                return (
+                  <button
+                    key={i}
                     className={action.class}
-                    onClick={()=>{action.callback(currentProps.data)}} 
+                    onClick={() => {
+                      action.callback(currentProps.data);
+                    }}
                     disabled={action.disabled || false}
-                >{action.text}</button>
+                  >
+                    {action.text}
+                  </button>
+                );
               }
             })}
           </div>
@@ -48,5 +57,5 @@ const Popup = props => {
     </div>
   );
 };
- 
+
 export default Popup;
