@@ -1,7 +1,7 @@
 import { useCallback, useContext } from "react";
 import { usePaginatedAPI } from "./usePaginatedAPI";
 import { fetchReticulumAuthenticated } from "../../utils/phoenix-utils";
-import { AuthContext } from "../auth/AuthContext";
+import { AuthContext } from "src/react-components/auth/AuthContext";
 
 export function usePublicRooms() {
   const auth = useContext(AuthContext); // Re-render when you log in/out.

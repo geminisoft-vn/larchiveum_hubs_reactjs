@@ -1,6 +1,6 @@
 import { hasReticulumServer } from "./phoenix-utils";
 import configs from "./configs";
-import { CONTENT_ROOT } from "./../utilities/constants";
+import { CONTENT_ROOT } from "../@larchiveum/utilities/constants";
 
 const nonCorsProxyDomains = (configs.NON_CORS_PROXY_DOMAINS || "").split(",");
 if (configs.CORS_PROXY_SERVER) {

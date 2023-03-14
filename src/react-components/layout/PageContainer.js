@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Page } from "./Page";
-import { AuthContext } from "../auth/AuthContext";
+import { AuthContext } from "src/react-components/auth/AuthContext";
 import configs from "../../utils/configs";
 import { getAppLogo } from "../../utils/get-app-logo";
 import { useAccessibleOutlineStyle } from "../input/useAccessibleOutlineStyle";

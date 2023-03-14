@@ -9,7 +9,7 @@ import {
 import { guessContentType } from "../utils/media-url-utils";
 import { handleExitTo2DInterstitial } from "../utils/vr-interstitial";
 import { changeHub } from "../change-hub";
-import Store from "../utilities/store";
+import Store from "../@larchiveum/utilities/store";
 
 AFRAME.registerComponent("open-media-button", {
   schema: {

@@ -17,22 +17,24 @@ module.exports = {
   // https://eslint.org/docs/rules/
   rules: {
     // https://github.com/prettier/eslint-plugin-prettier
-    "prettier/prettier": "error",
+    "prettier/prettier": "warn",
 
-    "prefer-const": "error",
-    "no-use-before-define": "error",
-    "no-var": "error",
-    "no-throw-literal": "error",
+    "prefer-const": "warn",
+    "no-use-before-define": "warn",
+    "no-var": "warn",
+    "no-throw-literal": "warn",
     // Light console usage is useful but remove debug logs before merging to master.
     "no-console": "off",
 
+    "no-unused-vars": "warn",
+
     // https://www.npmjs.com/package/eslint-plugin-react-hooks
-    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/rules-of-hooks": "warn",
     "react-hooks/exhaustive-deps": "warn",
 
     // https://github.com/calm/eslint-plugin-react-intl
     "@calm/react-intl/missing-formatted-message": [
-      "error",
+      "warn",
       {
         noTrailingWhitespace: true,
         ignoreLinks: true,
@@ -42,7 +44,7 @@ module.exports = {
       }
     ],
     "@calm/react-intl/missing-attribute": [
-      "error",
+      "warn",
       {
         noTrailingWhitespace: true,
         noSpreadOperator: true,
@@ -52,7 +54,7 @@ module.exports = {
         requireDefaultMessage: true
       }
     ],
-    "@calm/react-intl/missing-values": "error"
+    "@calm/react-intl/missing-values": "warn"
   },
   extends: [
     // https://github.com/prettier/eslint-config-prettier

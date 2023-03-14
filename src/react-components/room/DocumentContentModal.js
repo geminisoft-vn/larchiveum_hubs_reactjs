@@ -16,7 +16,7 @@ import { useCssBreakpoints } from "react-use-css-breakpoints";
 import { Column } from "../layout/Column";
 import { FormattedMessage } from "react-intl";
 import configs from "../../utils/configs";
-import Store from "../../utilities/store";
+import Store from "../../@larchiveum/utilities/store";
 
 export function DocumentContentModal({ className, documentUrl, closeable, onClose }) {
   return (
