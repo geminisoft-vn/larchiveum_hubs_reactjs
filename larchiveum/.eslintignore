@@ -1,0 +1,3 @@
+src/vendor/*
+src/loaders/basis_transcoder.worker.js
+scripts/bot/node_modules/
