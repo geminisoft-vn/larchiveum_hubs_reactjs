@@ -5,7 +5,6 @@ import {
   EyeOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
-import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { Button } from "src/components";
@@ -25,20 +24,17 @@ const Quiz = (props) => {
       <div className="flex items-center gap-4">
         <Button
           beforeIcon={<EyeOutlined />}
-          onClick={() => handleGotoViewQuiz(quiz.id)}
-        >
+          onClick={() => handleGotoViewQuiz(quiz.id)}>
           {t("content.QUIZ_TAB__QUIZ_LIST__PREVIEW_BUTTON_LABEL")}
         </Button>
         <Button
           beforeIcon={<UnorderedListOutlined />}
-          onClick={handleGoToQuizForm}
-        >
+          onClick={() => handleGoToQuizForm(quiz.id)}>
           {t("content.QUIZ_TAB__QUIZ_LIST__EDIT_BUTTON_LABEL")}
         </Button>
         <Button
           beforeIcon={<DeleteOutlined />}
-          onClick={() => handleDeleteQuiz(quiz.id)}
-        >
+          onClick={() => handleDeleteQuiz(quiz.id)}>
           {" "}
           {t("content.QUIZ_TAB__QUIZ_LIST__DELETE_BUTTON_LABEL")}
         </Button>

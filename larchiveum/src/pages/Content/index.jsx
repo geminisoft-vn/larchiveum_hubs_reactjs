@@ -6,13 +6,9 @@ import { Grid } from "@mui/material";
 import { Card, Layout, Menu } from "antd";
 
 import { Header } from "src/components";
-import DocumentComponent from "src/pages/Content/components/document/Document";
-import QuizComponent from "src/pages/QuizManagement";
 
 import Sidebar from "./components/Sidebar";
 
-import "reactjs-popup/dist/index.css";
-import "react-toastify/dist/ReactToastify.css";
 import "./ContentPage.scss";
 
 const { Content, Sider } = Layout;
@@ -45,12 +41,6 @@ const ContentPage = () => {
     },
   ];
 
-  useEffect(() => {
-    const paramTab =
-      new URL(window.location.href).searchParams.get("tab") || "quiz";
-    setTab(paramTab);
-  }, []);
-
   return (
     <Grid container spacing={2}>
       <Grid item lg={2} xl={2}>
@@ -58,11 +48,6 @@ const ContentPage = () => {
       </Grid>
       <Grid item lg={10} xl={10}>
         <Outlet />
-        {/* {tab === "quiz" && <QuizComponent />}
-        {tab === "document" && <DocumentComponent />}
-        {tab === "map" && (
-          <div style={{ padding: 24, minHeight: 360 }}>Map</div>
-        )} */}
       </Grid>
     </Grid>
   );

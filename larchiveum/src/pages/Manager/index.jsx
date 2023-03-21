@@ -1,36 +1,38 @@
 import React, { useEffect, useState } from "react";
+import Datetime from "react-datetime";
+import { useTranslation } from "react-i18next";
+import {
+  FaCodepen,
+  FaLink,
+  FaListOl,
+  FaRegCalendarAlt,
+  FaRegImage,
+  FaTools,
+  FaUserFriends,
+  FaVideo,
+} from "react-icons/fa";
+import { toast } from "react-toastify";
+import moment from "moment-timezone";
+import { object } from "prop-types";
 
-import Store from "src/utilities/store";
-import ExhibitionsService from "src/utilities/apiServices/ExhibitionsService";
-import MediaService from "src/utilities/apiServices/MediaService";
-import ProjectService from "src/utilities/apiServices/ProjectService";
 // import Popup from "../../../../react-components/popup/popup";
 import AddIcon from "src/assets/larchiveum/add_black_24dp.svg";
-import "reactjs-popup/dist/index.css";
-import moment from "moment-timezone";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import defaultImage from "src/assets/larchiveum/default-image.png";
 import defaultModel from "src/assets/larchiveum/model-default.png";
 import defaultImage1 from "src/assets/larchiveum/siri.gif";
 import { Header } from "src/components";
-import { APP_ROOT } from "src/utilities/constants";
-import {
-  FaUserFriends,
-  FaRegCalendarAlt,
-  FaLink,
-  FaTools,
-  FaVideo,
-  FaRegImage,
-  FaCodepen,
-  FaListOl
-} from "react-icons/fa";
+import { getLanguage } from "src/language";
+import ExhibitionsService from "src/utilities/apiServices/ExhibitionsService";
+import MediaService from "src/utilities/apiServices/MediaService";
+import ProjectService from "src/utilities/apiServices/ProjectService";
 import UserService from "src/utilities/apiServices/UserService";
-import { object } from "prop-types";
-import Language from "src/languages/language";
-import { useTranslation } from "react-i18next";
-import Datetime from "react-datetime";
+import { APP_ROOT } from "src/utilities/constants";
+import Store from "src/utilities/store";
+
 import ExhibitionFormModal from "./components/ExhibitionFormModal";
+
+import "reactjs-popup/dist/index.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const Manager = () => {
   const { t } = useTranslation();
@@ -40,12 +42,24 @@ const Manager = () => {
   const [objectLoaded, setObjectLoaded] = useState(false);
   const [mediaLoaded, setMediaLoaded] = useState(false);
   const [iconLoaded, setIconLoaded] = useState(false);
-  const [shouldActiveExhibitionForm, setShouldActiveExhibitionForm] = useState(false);
-  const [isOpenPopupConfirmCloseExhibition, setIsOpenPopupConfirmCloseExhibition] = useState(false);
-  const [isOpenPopupConfirmOpenExhibition, setIsOpenPopupConfirmOpenExhibition] = useState(false);
-  const [isOpenPopupConfirmDeleteExhibition, setIsOpenPopupConfirmDeleteExhibition] = useState(false);
-  const [isOpenPopupConfirmChangePublic, setIsOpenPopupConfirmChangePublic] = useState(false);
-  const [isOpenPopupChangeMediaURLGuide, setIsOpenPopupChangeMediaURLGuide] = useState(false);
+  const [shouldActiveExhibitionForm, setShouldActiveExhibitionForm] =
+    useState(false);
+  const [
+    isOpenPopupConfirmCloseExhibition,
+    setIsOpenPopupConfirmCloseExhibition,
+  ] = useState(false);
+  const [
+    isOpenPopupConfirmOpenExhibition,
+    setIsOpenPopupConfirmOpenExhibition,
+  ] = useState(false);
+  const [
+    isOpenPopupConfirmDeleteExhibition,
+    setIsOpenPopupConfirmDeleteExhibition,
+  ] = useState(false);
+  const [isOpenPopupConfirmChangePublic, setIsOpenPopupConfirmChangePublic] =
+    useState(false);
+  const [isOpenPopupChangeMediaURLGuide, setIsOpenPopupChangeMediaURLGuide] =
+    useState(false);
   const [isOpenPopupMedia, setIsOpenPopupMedia] = useState(false);
   const [isOpenPopupObject, setIsOpenPopupObject] = useState(false);
   const [exhibition, setExhibition] = useState(undefined);
@@ -60,41 +74,41 @@ const Manager = () => {
 
   const [exhibitions, setExhibitions] = useState({
     data: [],
-    pagination: {}
+    pagination: {},
   });
 
   const [projects, setProjects] = useState({
     data: [],
-    pagination: {}
+    pagination: {},
   });
 
   const [medias, setMedias] = useState({
     data: [],
-    pagination: {}
+    pagination: {},
   });
 
   const [objects, setObjects] = useState({
     data: [],
-    pagination: {}
+    pagination: {},
   });
 
   const [filterExhibitionList, setfilterExhibitionList] = useState({
     page: 1,
     pageSize: 4,
     sort: "id|desc", //format <attribute>|<order type>
-    isAdmin: 1
+    isAdmin: 1,
   });
 
   const [filterProjectList, setfilterProjectList] = useState({
     page: 1,
     pageSize: 4,
-    sort: "id|desc" //format <attribute>|<order type>
+    sort: "id|desc", //format <attribute>|<order type>
   });
 
   function auth() {
     const user = Store.getUser();
     return UserService.checkToken(user?.token)
-      .then(res => {
+      .then((res) => {
         if (res.result == "ok") {
           if (res.data.id != user?.id) {
             Store.removeUser();
@@ -120,7 +134,7 @@ const Manager = () => {
       getAllProjects();
     }
 
-    setLanguage(Language.getLanguage());
+    setLanguage(getLanguage());
   }, [filterExhibitionList.page]);
 
   useEffect(() => {
@@ -134,7 +148,7 @@ const Manager = () => {
     const user = Store.getUser();
     const data = filterExhibitionList;
     if (user) {
-      ExhibitionsService.getAllWithAuthExhibitions(data).then(res => {
+      ExhibitionsService.getAllWithAuthExhibitions(data).then((res) => {
         if (res.result == "ok") {
           setExhibitions(res.data);
           setExhibitionsLoaded(true);
@@ -146,11 +160,11 @@ const Manager = () => {
           setIsLoadingF(false);
         }
       });
-      ExhibitionsService.getAllScenes().then(res => {
+      ExhibitionsService.getAllScenes().then((res) => {
         if (res.result == "ok") {
-          res.data = res.data.map(item => ({
+          res.data = res.data.map((item) => ({
             ...item,
-            label: item.name
+            label: item.name,
           }));
           setScenes(res.data);
         } else {
@@ -164,7 +178,7 @@ const Manager = () => {
     const Auth = Store.getUser();
     const data = filterProjectList;
     if (Auth) {
-      ProjectService.getListProjectWithObjects(data).then(res => {
+      ProjectService.getListProjectWithObjects(data).then((res) => {
         if (res.result == "ok") {
           setProjects(res.data);
           setProjectsLoaded(true);
@@ -177,7 +191,7 @@ const Manager = () => {
     }
   };
 
-  const openPopupExhibition = exhibition => {
+  const openPopupExhibition = (exhibition) => {
     if (exhibition) {
       setExhibition({
         id: exhibition.id,
@@ -193,11 +207,11 @@ const Manager = () => {
         enableSpawnAndMoveMedia: exhibition.enableSpawnAndMoveMedia,
         enableSpawnCamera: exhibition.enableSpawnCamera,
         enableSpawnDrawing: exhibition.enableSpawnDrawing,
-        enableSpawnEmoji: exhibition.enableSpawnEmoji
+        enableSpawnEmoji: exhibition.enableSpawnEmoji,
       });
     } else {
       setExhibition({
-        maxSize: 5
+        maxSize: 5,
       });
     }
     setShouldActiveExhibitionForm(true);
@@ -207,7 +221,7 @@ const Manager = () => {
     setShouldActiveExhibitionForm(false);
   };
 
-  const openPopupPublic = exhibitionId => {
+  const openPopupPublic = (exhibitionId) => {
     setExhibitionId(exhibitionId);
     setIsOpenPopupConfirmChangePublic(true);
   };
@@ -221,7 +235,7 @@ const Manager = () => {
   //   setIsOpenPopupChangeMediaURLGuide(true);
   // };
 
-  const handleChangeLanguage = event => {
+  const handleChangeLanguage = (event) => {
     const lang = event.target.value;
     setLanguage(lang);
     Language.setLanguage(lang);
@@ -241,7 +255,7 @@ const Manager = () => {
     setIsOpenPopupChangeMediaURLGuide(false);
   };
 
-  const openPopupCloseRoom = exhibitionId => {
+  const openPopupCloseRoom = (exhibitionId) => {
     setExhibitionId(exhibitionId);
     setIsOpenPopupConfirmCloseExhibition(true);
   };
@@ -250,7 +264,7 @@ const Manager = () => {
     setIsOpenPopupConfirmCloseExhibition(false);
   };
 
-  const openPopupOpenRoom = exhibitionId => {
+  const openPopupOpenRoom = (exhibitionId) => {
     setExhibitionId(exhibitionId);
     setIsOpenPopupConfirmOpenExhibition(true);
   };
@@ -259,15 +273,15 @@ const Manager = () => {
     setIsOpenPopupConfirmOpenExhibition(false);
   };
 
-  const openDeleteRoom = exhibitionId => {
+  const openDeleteRoom = (exhibitionId) => {
     setExhibitionId(exhibitionId);
     setIsOpenPopupConfirmDeleteExhibition(true);
   };
 
-  const openPopupCustomMedia = exhibitionId => {
+  const openPopupCustomMedia = (exhibitionId) => {
     setExhibitionId(exhibitionId);
     if (exhibitionId) {
-      MediaService.getListMedia(exhibitionId).then(res => {
+      MediaService.getListMedia(exhibitionId).then((res) => {
         if (res.result == "ok") {
           setMedias(res.data);
           setMediaLoaded(true);
@@ -284,14 +298,14 @@ const Manager = () => {
     setIsOpenPopupMedia(false);
     setMedias({
       data: [],
-      pagination: {}
+      pagination: {},
     });
   };
 
-  const openPopupCustomObject = ProjectId => {
+  const openPopupCustomObject = (ProjectId) => {
     if (ProjectId) {
       setProjectId(ProjectId);
-      ProjectService.getListObject(ProjectId).then(res => {
+      ProjectService.getListObject(ProjectId).then((res) => {
         if (res.result == "ok") {
           setObjects(res.data);
           setObjectLoaded(true);
@@ -308,20 +322,20 @@ const Manager = () => {
     setIsOpenPopupObject(false);
     setObjects({
       data: [],
-      pagination: {}
+      pagination: {},
     });
   };
 
   const handelSaveMediaURL = () => {
     setIconLoaded(true);
-    const data = medias.data.map(item => {
+    const data = medias.data.map((item) => {
       return {
         id: item.uuid,
-        url: item.url
+        url: item.url,
       };
     });
     const dataString = JSON.stringify(data);
-    MediaService.updateMediaMany(dataString).then(res => {
+    MediaService.updateMediaMany(dataString).then((res) => {
       if (res.result == "ok") {
         toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
         setIconLoaded(false);
@@ -334,7 +348,7 @@ const Manager = () => {
   const handelOpenPopupChangeMediaURLGuide = () => {
     setIconLoaded(true);
     let list_uuid = [];
-    list_uuid = objects.data.map(item => {
+    list_uuid = objects.data.map((item) => {
       if (item?.changeable == true) {
         return item.uuid;
       }
@@ -342,16 +356,20 @@ const Manager = () => {
     });
     const dataString = JSON.stringify(list_uuid);
     console.log(projectId);
-    ProjectService.updateChangeableObjects(projectId, dataString).then(res => {
-      if (res.result == "ok") {
-        setIconLoaded(false);
-        closePopupCustomObject();
-        setIsOpenPopupChangeMediaURLGuide(true);
-        toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-      } else {
-        toast.error(t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"), { autoClose: 5000 });
+    ProjectService.updateChangeableObjects(projectId, dataString).then(
+      (res) => {
+        if (res.result == "ok") {
+          setIconLoaded(false);
+          closePopupCustomObject();
+          setIsOpenPopupChangeMediaURLGuide(true);
+          toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
+        } else {
+          toast.error(t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"), {
+            autoClose: 5000,
+          });
+        }
       }
-    });
+    );
   };
 
   const deleteRoom = () => {
@@ -372,25 +390,26 @@ const Manager = () => {
     setIsListProject(true);
   };
 
-  const changePages = page => {
+  const changePages = (page) => {
     setIsLoading(true);
     setfilterExhibitionList({
       ...filterExhibitionList,
-      page
+      page,
     });
   };
 
-  const changePagesProject = page => {
+  const changePagesProject = (page) => {
     setIsLoading(true);
     setfilterProjectList({
       ...filterProjectList,
-      page
+      page,
     });
   };
 
-  const handleChange = evt => {
+  const handleChange = (evt) => {
     const name = evt.target.name;
-    const value = evt.target.type === "checkbox" ? evt.target.checked : evt.target.value;
+    const value =
+      evt.target.type === "checkbox" ? evt.target.checked : evt.target.value;
 
     if (name == "enableSpawnAndMoveMedia" && value == false) {
       exhibition.enableSpawnCamera = false;
@@ -399,15 +418,12 @@ const Manager = () => {
     setExhibition({ ...exhibition, [name]: value });
   };
 
-  const handleChangeDatetime = evt => {
+  const handleChangeDatetime = (evt) => {
     const name = evt.name;
     const value = evt.value;
     let utc = undefined;
     if (value) {
-      utc = moment(value)
-        .tz(moment.tz.guess())
-        .utc()
-        .format();
+      utc = moment(value).tz(moment.tz.guess()).utc().format();
     }
     setExhibition({ ...exhibition, [name]: utc });
   };
@@ -427,7 +443,7 @@ const Manager = () => {
     media.check = "checking";
     setMedias({ ...medias });
     fetch(media.url)
-      .then(response => {
+      .then((response) => {
         const contentType = response.headers.get("content-type");
         const type = contentType.split("/")[0];
         if (media.type.includes(type)) {
@@ -437,13 +453,13 @@ const Manager = () => {
         }
         setMedias({ ...medias });
       })
-      .catch(error => {
+      .catch((error) => {
         media.check = "fail";
         setMedias({ ...medias });
       });
   };
 
-  const getSceneThumnail = sceneId => {
+  const getSceneThumnail = (sceneId) => {
     let thumbnailUrl = null;
     for (const scene of scenes) {
       if (scene.id === sceneId) {
@@ -457,7 +473,7 @@ const Manager = () => {
   };
 
   const ListScenes = () => {
-    const handleChangeSceneThubmnail = e => {
+    const handleChangeSceneThubmnail = (e) => {
       for (const scene of scenes) {
         if (scene.id === e.target.value) {
           setExhibition({ ...exhibition, [e.target.name]: e.target.value });
@@ -473,9 +489,10 @@ const Manager = () => {
             className="input100"
             name="sceneId"
             value={exhibition ? exhibition.sceneId : undefined}
-            onChange={handleChangeSceneThubmnail}
-          >
-            <option>---{t("manager.POPUP_EXHIBITION__LIST_SCENE_DEFAULT_OPTION")}---</option>
+            onChange={handleChangeSceneThubmnail}>
+            <option>
+              ---{t("manager.POPUP_EXHIBITION__LIST_SCENE_DEFAULT_OPTION")}---
+            </option>
             {scenes.map((item, index) => {
               return (
                 <option key={index} value={item.id}>
@@ -487,32 +504,44 @@ const Manager = () => {
           <span className="focus-input100" />
         </div>
         <div className="p-t-13 p-b-9">
-          <span className="txt1">{t("manager.POPUP_EXHIBITION__SCENE_THUMBNAIL")}</span>
+          <span className="txt1">
+            {t("manager.POPUP_EXHIBITION__SCENE_THUMBNAIL")}
+          </span>
         </div>
-        <img className="f-image-thumbnail" src={getSceneThumnail(exhibition ? exhibition.sceneId : undefined)} alt="" />
+        <img
+          className="f-image-thumbnail"
+          src={getSceneThumnail(exhibition ? exhibition.sceneId : undefined)}
+          alt=""
+        />
       </>
     );
   };
 
   const handleCreate = () => {
     const data = exhibition;
-    ExhibitionsService.postCreateOne(data).then(res => {
+    ExhibitionsService.postCreateOne(data).then((res) => {
       if (res.result == "ok") {
         toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
         setShouldActiveExhibitionForm(false);
         // setExhibitions([...exhibitions, res.data]);
         window.location.reload();
       } else {
-        toast.error(t("manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__" + res.error.toUpperCase()), { autoClose: 5000 });
+        toast.error(
+          t(
+            "manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__" +
+              res.error.toUpperCase()
+          ),
+          { autoClose: 5000 }
+        );
       }
     });
   };
 
   const handleEdit = () => {
     const data = exhibition;
-    ExhibitionsService.putUpdateOne(data).then(res => {
+    ExhibitionsService.putUpdateOne(data).then((res) => {
       if (res.result == "ok") {
-        exhibitions.data.forEach(exhibition => {
+        exhibitions.data.forEach((exhibition) => {
           if (exhibition.id == res.data.id) {
             toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
             setShouldActiveExhibitionForm(false);
@@ -520,15 +549,21 @@ const Manager = () => {
           }
         });
       } else {
-        toast.error(t("manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__" + res.error.toUpperCase()), { autoClose: 5000 });
+        toast.error(
+          t(
+            "manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__" +
+              res.error.toUpperCase()
+          ),
+          { autoClose: 5000 }
+        );
       }
     });
   };
 
-  const handelTogglePublic = exhibitionId => {
-    ExhibitionsService.patchTogglePublic(exhibitionId).then(res => {
+  const handelTogglePublic = (exhibitionId) => {
+    ExhibitionsService.patchTogglePublic(exhibitionId).then((res) => {
       if (res.result == "ok") {
-        exhibitions.data.forEach(exhibition => {
+        exhibitions.data.forEach((exhibition) => {
           if (exhibition.id == exhibitionId) {
             exhibition.public = res.data.public;
             toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
@@ -536,16 +571,20 @@ const Manager = () => {
         });
         setIsOpenPopupConfirmChangePublic(!isOpenPopupConfirmChangePublic);
       } else {
-        toast.error(t("manager.CHANGE_EXHIBITION_PUBLIC_ERROR"), { autoClose: 5000 });
+        toast.error(t("manager.CHANGE_EXHIBITION_PUBLIC_ERROR"), {
+          autoClose: 5000,
+        });
       }
     });
   };
 
-  const handelToggleDeleteRoom = exhibitionId => {
-    ExhibitionsService.deleteOneExhibition(exhibitionId).then(res => {
+  const handelToggleDeleteRoom = (exhibitionId) => {
+    ExhibitionsService.deleteOneExhibition(exhibitionId).then((res) => {
       if (res.result == "ok") {
         toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-        setIsOpenPopupConfirmDeleteExhibition(!isOpenPopupConfirmDeleteExhibition);
+        setIsOpenPopupConfirmDeleteExhibition(
+          !isOpenPopupConfirmDeleteExhibition
+        );
         getAllExhibitions();
       } else {
         toast.error(t("manager.DELETE_EXHIBITION_ERROR"), { autoClose: 5000 });
@@ -553,26 +592,28 @@ const Manager = () => {
     });
   };
 
-  const handelCloseRoom = exhibitionId => {
-    ExhibitionsService.closeOneExhibition(exhibitionId).then(res => {
+  const handelCloseRoom = (exhibitionId) => {
+    ExhibitionsService.closeOneExhibition(exhibitionId).then((res) => {
       if (res.result == "ok") {
-        exhibitions.data.forEach(exhibition => {
+        exhibitions.data.forEach((exhibition) => {
           if (exhibition.id == exhibitionId) {
             exhibition.closed = res.data.closed;
             toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
           }
         });
-        setIsOpenPopupConfirmCloseExhibition(!isOpenPopupConfirmCloseExhibition);
+        setIsOpenPopupConfirmCloseExhibition(
+          !isOpenPopupConfirmCloseExhibition
+        );
       } else {
         toast.error(t("manager.CLOSE_EXHIBITION_ERROR"), { autoClose: 5000 });
       }
     });
   };
 
-  const handelOpenRoom = exhibitionId => {
-    ExhibitionsService.openOneExhibition(exhibitionId).then(res => {
+  const handelOpenRoom = (exhibitionId) => {
+    ExhibitionsService.openOneExhibition(exhibitionId).then((res) => {
       if (res.result == "ok") {
-        exhibitions.data.forEach(exhibition => {
+        exhibitions.data.forEach((exhibition) => {
           if (exhibition.id == exhibitionId) {
             exhibition.closed = res.data.closed;
             toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
@@ -629,13 +670,21 @@ const Manager = () => {
                           type="text"
                           name="src"
                           placeholder="URL"
-                          onChange={e => handleChangeURL(item, e)}
+                          onChange={(e) => handleChangeURL(item, e)}
                           value={item?.url}
                         />
                         <span className="focus-input100" />
                       </div>
-                      {item?.check != "cheking" ? "" : <span>{t("manager.POPUP_MEDIA__URL_CORRECT")}</span>}
-                      {item?.check != "fail" ? "" : <span>{t("manager.POPUP_MEDIA__URL_INCORRECT")}</span>}
+                      {item?.check != "cheking" ? (
+                        ""
+                      ) : (
+                        <span>{t("manager.POPUP_MEDIA__URL_CORRECT")}</span>
+                      )}
+                      {item?.check != "fail" ? (
+                        ""
+                      ) : (
+                        <span>{t("manager.POPUP_MEDIA__URL_INCORRECT")}</span>
+                      )}
                     </div>
                   </div>
                 );
@@ -705,9 +754,11 @@ const Manager = () => {
                           type="checkbox"
                           name="public"
                           checked={item?.changeable}
-                          onChange={e => handleChangeable(item, e)}
+                          onChange={(e) => handleChangeable(item, e)}
                         />
-                        <span className="textCheckbox">{t("manager.POPUP_OBJECT__URL_CHANEABLE")}</span>
+                        <span className="textCheckbox">
+                          {t("manager.POPUP_OBJECT__URL_CHANEABLE")}
+                        </span>
                       </label>
                     </div>
                   </div>
@@ -728,10 +779,14 @@ const Manager = () => {
       return (
         <>
           <div className="tabs-Admin">
-            <button className={isListRoom ? "active" : ""} onClick={ActionListRoom}>
+            <button
+              className={isListRoom ? "active" : ""}
+              onClick={ActionListRoom}>
               {t("manager.LIST_EXHIBITION")}
             </button>
-            <button className={isListProject ? "active" : ""} onClick={ActionListProject}>
+            <button
+              className={isListProject ? "active" : ""}
+              onClick={ActionListProject}>
               {t("manager.LIST_PROJECT")}
             </button>
           </div>
@@ -751,8 +806,7 @@ const Manager = () => {
               onClick={() => {
                 openPopupExhibition();
                 setExhibitionType("create");
-              }}
-            >
+              }}>
               <img src={AddIcon} />
             </button>
             {exhibitions.data.map((item, index) => {
@@ -764,8 +818,7 @@ const Manager = () => {
                       onClick={() => {
                         openPopupPublic(item.id);
                       }}
-                      data-id-exhibition={item.id}
-                    >
+                      data-id-exhibition={item.id}>
                       {t("manager.PRIVATE")}
                     </button>
                   );
@@ -776,8 +829,7 @@ const Manager = () => {
                       onClick={() => {
                         openPopupPublic(item.id);
                       }}
-                      data-id-exhibition={item.id}
-                    >
+                      data-id-exhibition={item.id}>
                       {t("manager.PUBLIC")}
                     </button>
                   );
@@ -792,8 +844,7 @@ const Manager = () => {
                       onClick={() => {
                         openPopupOpenRoom(item.id);
                       }}
-                      data-id-exhibition={item.id}
-                    >
+                      data-id-exhibition={item.id}>
                       {t("manager.OPEN_EXHIBITION")}
                     </button>
                   );
@@ -804,8 +855,7 @@ const Manager = () => {
                       onClick={() => {
                         openPopupCloseRoom(item.id);
                       }}
-                      data-id-exhibition={item.id}
-                    >
+                      data-id-exhibition={item.id}>
                       {t("manager.CLOSE_EXHIBITION")}
                     </button>
                   );
@@ -816,7 +866,10 @@ const Manager = () => {
                 return (
                   <div key={index} className={"items"}>
                     <span className="name-tour">{item.name}</span>
-                    <img src={getSceneThumnail(item ? item.sceneId : undefined)} alt="" />
+                    <img
+                      src={getSceneThumnail(item ? item.sceneId : undefined)}
+                      alt=""
+                    />
                     <FaTools
                       className="icon_edit_media"
                       onClick={() => {
@@ -831,7 +884,10 @@ const Manager = () => {
                       <div className="d-flex">
                         <FaLink className="IconFa" /> :{" "}
                         <span className="ml-1">
-                          <a href={APP_ROOT + "/" + item.roomId} target="_blank" rel="noopener noreferrer">
+                          <a
+                            href={APP_ROOT + "/" + item.roomId}
+                            target="_blank"
+                            rel="noopener noreferrer">
                             {APP_ROOT + "/" + item.roomId}
                           </a>
                         </span>
@@ -851,7 +907,7 @@ const Manager = () => {
                               ? moment
                                   .utc(item.startDate)
                                   .local()
-                                  .locale(Language.getLanguage())
+                                  .locale(getLanguage())
                                   .format("L LT")
                               : `<${t("manager.NOT_SET")}>`}
                             <span style={{ padding: "0 10px" }}> {"-"} </span>
@@ -859,7 +915,7 @@ const Manager = () => {
                               ? moment
                                   .utc(item.endDate)
                                   .local()
-                                  .locale(Language.getLanguage())
+                                  .locale(getLanguage())
                                   .format("L LT")
                               : `<${t("manager.NOT_SET")}>`}
                           </span>
@@ -874,8 +930,7 @@ const Manager = () => {
                           openPopupExhibition(item);
                           setExhibitionType("edit");
                         }}
-                        data-id-exhibition={item.id}
-                      >
+                        data-id-exhibition={item.id}>
                         {t("manager.EDIT")}
                       </button>
                       <ClosedButton />
@@ -885,11 +940,15 @@ const Manager = () => {
               } else {
                 return (
                   <div key={index} className={"items"}>
-                    <span className="name-tour">{t("manager.EXHIBITION_UNAVAILABLE")}</span>
+                    <span className="name-tour">
+                      {t("manager.EXHIBITION_UNAVAILABLE")}
+                    </span>
                     <img src={defaultImage1} alt="" />
                     <div className="content">
                       <div>
-                        <span className="text-bold">{t("manager.EXHIBITION_UNAVAILABLE")}</span>
+                        <span className="text-bold">
+                          {t("manager.EXHIBITION_UNAVAILABLE")}
+                        </span>
                       </div>
                       <div className="d-flex">
                         <FaLink className="IconFa" /> :{" "}
@@ -900,7 +959,8 @@ const Manager = () => {
                         </span>
                       </div>
                       <div className="d-flex">
-                        <FaUserFriends className="IconFa" /> : <span className="ml-1">.src.</span>
+                        <FaUserFriends className="IconFa" /> :{" "}
+                        <span className="ml-1">.src.</span>
                       </div>
                       <div>
                         <div className="d-flex">
@@ -909,7 +969,7 @@ const Manager = () => {
                             {moment
                               .utc(item.startDate)
                               .local()
-                              .locale(Language.getLanguage())
+                              .locale(getLanguage())
                               .format("L LT")}
                           </span>
                         </div>
@@ -921,8 +981,7 @@ const Manager = () => {
                         onClick={() => {
                           openDeleteRoom(item.id);
                         }}
-                        data-id-exhibition={item.id}
-                      >
+                        data-id-exhibition={item.id}>
                         {t("manager.DELETE")}
                       </button>
                     </div>
@@ -954,18 +1013,18 @@ const Manager = () => {
               let count_Video = 0;
               let count_Model = 0;
               item?.objects
-                .filter(item => item.type === "image")
-                .map(item => {
+                .filter((item) => item.type === "image")
+                .map((item) => {
                   count_Image++;
                 });
               item?.objects
-                .filter(item => item.type === "video")
-                .map(item => {
+                .filter((item) => item.type === "video")
+                .map((item) => {
                   count_Video++;
                 });
               item?.objects
-                .filter(item => item.type.includes("model"))
-                .map(item => {
+                .filter((item) => item.type.includes("model"))
+                .map((item) => {
                   count_Model++;
                 });
               return (
@@ -1036,7 +1095,10 @@ const Manager = () => {
     const user = Store.getUser();
 
     function checkCredentials() {
-      if (window?.APP?.store?.state?.credentials?.email && window?.APP?.store?.state?.credentials?.token) {
+      if (
+        window?.APP?.store?.state?.credentials?.email &&
+        window?.APP?.store?.state?.credentials?.token
+      ) {
         return true;
       }
       return false;
@@ -1052,10 +1114,14 @@ const Manager = () => {
             <a className="gotospoke" href={"/?page=manager"}>
               {t("manager.ROOM")}
             </a>
-            <a className="gotospoke" href={checkCredentials() ? "/spoke" : "/signin"}>
+            <a
+              className="gotospoke"
+              href={checkCredentials() ? "/spoke" : "/signin"}>
               {t("manager.SPOKE")}
             </a>
-            <a className="gotoadmin" href={checkCredentials() ? "/admin" : "/signin"}>
+            <a
+              className="gotoadmin"
+              href={checkCredentials() ? "/admin" : "/signin"}>
               {t("manager.ADMIN")}
             </a>
           </>
@@ -1127,7 +1193,12 @@ const Manager = () => {
               title={<>{t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__TITLE")}</>}
               size={"sm"}
               content={
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
                   {t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__MESSAGE")}
                 </div>
               }
@@ -1137,15 +1208,15 @@ const Manager = () => {
                   class: "btn1",
                   callback: () => {
                     handelTogglePublic(exhibitionId);
-                  }
+                  },
                 },
                 {
                   text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CANCEL"),
                   class: "btn2",
                   callback: () => {
                     closePopupPublic();
-                  }
-                }
+                  },
+                },
               ]}
               handleClose={closePopupPublic}
             />
@@ -1159,11 +1230,36 @@ const Manager = () => {
                 <>
                   {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT")}
                   <ul>
-                    <li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_1")}</li>
-                    <li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_2")}</li>
-                    <li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_3")}</li>
-                    <li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_4")}</li>
-                    <li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_5")}</li>
+                    <li>
+                      -{" "}
+                      {t(
+                        "manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_1"
+                      )}
+                    </li>
+                    <li>
+                      -{" "}
+                      {t(
+                        "manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_2"
+                      )}
+                    </li>
+                    <li>
+                      -{" "}
+                      {t(
+                        "manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_3"
+                      )}
+                    </li>
+                    <li>
+                      -{" "}
+                      {t(
+                        "manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_4"
+                      )}
+                    </li>
+                    <li>
+                      -{" "}
+                      {t(
+                        "manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_5"
+                      )}
+                    </li>
                   </ul>
                 </>
               }
@@ -1173,15 +1269,15 @@ const Manager = () => {
                   class: "btn1",
                   callback: () => {
                     handelSpoke(projectId);
-                  }
+                  },
                 },
                 {
                   text: t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CANCEL"),
                   class: "btn2",
                   callback: () => {
                     closePopupSpoke();
-                  }
-                }
+                  },
+                },
               ]}
               handleClose={closePopupSpoke}
             />
@@ -1192,7 +1288,12 @@ const Manager = () => {
               title={<>{t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__TITLE")}</>}
               size={"sm"}
               content={
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
                   {t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__MESSAGE")}
                 </div>
               }
@@ -1202,15 +1303,15 @@ const Manager = () => {
                   class: "btn1",
                   callback: () => {
                     handelCloseRoom(exhibitionId);
-                  }
+                  },
                 },
                 {
                   text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CANCEL"),
                   class: "btn2",
                   callback: () => {
                     closePopupCloseRoom();
-                  }
-                }
+                  },
+                },
               ]}
               handleClose={closePopupCloseRoom}
             />
@@ -1221,7 +1322,12 @@ const Manager = () => {
               title={<>{t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__TITLE")}</>}
               size={"sm"}
               content={
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
                   {t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__MESSAGE")}
                 </div>
               }
@@ -1231,15 +1337,15 @@ const Manager = () => {
                   class: "btn1",
                   callback: () => {
                     handelOpenRoom(exhibitionId);
-                  }
+                  },
                 },
                 {
                   text: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__CANCEL"),
                   class: "btn2",
                   callback: () => {
                     closePopupOpenRoom();
-                  }
-                }
+                  },
+                },
               ]}
               handleClose={closePopupOpenRoom}
             />
@@ -1250,7 +1356,12 @@ const Manager = () => {
               title={<>{t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__TITLE")}</>}
               size={"sm"}
               content={
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
                   {t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__MESSAGE")}
                 </div>
               }
@@ -1260,15 +1371,15 @@ const Manager = () => {
                   class: "btn1",
                   callback: () => {
                     handelToggleDeleteRoom(exhibitionId);
-                  }
+                  },
                 },
                 {
                   text: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__CANCEL"),
                   class: "btn2",
                   callback: () => {
                     deleteRoom();
-                  }
-                }
+                  },
+                },
               ]}
               handleClose={deleteRoom}
             />
@@ -1280,7 +1391,9 @@ const Manager = () => {
               title={t("manager.POPUP_MEDIA__TITLE")}
               content={
                 <>
-                  <form className="create100-form validate-form d-flex form-custom-media" name="form">
+                  <form
+                    className="create100-form validate-form d-flex form-custom-media"
+                    name="form">
                     <div className="w-100">
                       <div className="p-t-13 p-b-9">{renderListMedia()}</div>
                     </div>
@@ -1297,15 +1410,15 @@ const Manager = () => {
                   class: "btn-handle",
                   callback: () => {
                     handelSaveMediaURL();
-                  }
+                  },
                 },
                 {
                   text: t("manager.POPUP_MEDIA__CANCEL"),
                   class: "btn-cancle",
                   callback: () => {
                     closePopupCustomMedia();
-                  }
-                }
+                  },
+                },
               ]}
               handleClose={() => {
                 closePopupCustomMedia();
@@ -1319,7 +1432,9 @@ const Manager = () => {
               title={"List Object"}
               content={
                 <>
-                  <form className="create100-form validate-form d-flex form-custom-media" name="form">
+                  <form
+                    className="create100-form validate-form d-flex form-custom-media"
+                    name="form">
                     <div className="w-100">
                       <div className="p-t-13 p-b-9">{renderListObject()}</div>
                     </div>
@@ -1328,19 +1443,23 @@ const Manager = () => {
               }
               actions={[
                 {
-                  text: iconLoaded ? <div className="lds-dual-ring" /> : <span>{t("manager.POPUP_OBJECT__SAVE")}</span>,
+                  text: iconLoaded ? (
+                    <div className="lds-dual-ring" />
+                  ) : (
+                    <span>{t("manager.POPUP_OBJECT__SAVE")}</span>
+                  ),
                   class: "btn-handle",
                   callback: () => {
                     handelOpenPopupChangeMediaURLGuide();
-                  }
+                  },
                 },
                 {
                   text: t("manager.POPUP_OBJECT__CANCEL"),
                   class: "btn-cancle",
                   callback: () => {
                     closePopupCustomObject();
-                  }
-                }
+                  },
+                },
               ]}
               handleClose={() => {
                 closePopupCustomObject();

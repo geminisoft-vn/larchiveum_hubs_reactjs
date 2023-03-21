@@ -39,7 +39,11 @@ const Quizzes = (props) => {
     load();
   }, []);
 
-  const handleGoToQuizForm = () => {
+  const handleGoToQuizForm = (quizId) => {
+    if (quizId) {
+      navigate(`/home/content/quiz-form/${quizId}`);
+      return;
+    }
     navigate("/home/content/quiz-form");
   };
 
@@ -80,7 +84,7 @@ const Quizzes = (props) => {
   return (
     <div className="flex flex-col gap-2">
       <div>
-        <Button onClick={handleGoToQuizForm}>
+        <Button onClick={() => handleGoToQuizForm()}>
           {t("content.QUIZ_TAB__QUIZ_LIST__QUIZ_TAB__ADD_QUIZ_BUTTON_LABEL")}
         </Button>
       </div>

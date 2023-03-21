@@ -3,7 +3,10 @@ import { expireCookies } from "./constants";
 
 class Store {
   static getUser() {
-    if (Cookies.get("_larchiveum_user") && Cookies.get("_larchiveum_user") != "") {
+    if (
+      Cookies.get("_larchiveum_user") &&
+      Cookies.get("_larchiveum_user") != ""
+    ) {
       const str = Cookies.get("_larchiveum_user");
       const user = JSON.parse(str || "{}");
       if (user && user.token) {

@@ -6,7 +6,7 @@ import { Box, Container, Divider, Stack } from "@mui/material";
 
 import logo from "src/assets/images/larchiveum_logo.png";
 import { Button, Select, Typography } from "src/components";
-import Language from "src/languages/language";
+import { getLanguage, setLanguage } from "src/language";
 
 import Store from "../../utilities/store";
 
@@ -15,7 +15,7 @@ import "./Header.scss";
 const Header = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [language, setLanguage] = useState(Language.getLanguage());
+  const [language, setLanguage] = useState(getLanguage());
   const user = Store.getUser();
   const [page, setPage] = useState(null);
 
@@ -25,7 +25,7 @@ const Header = () => {
   }, []);
 
   useLayoutEffect(() => {
-    Language.setLanguage(language);
+    setLanguage(language);
   }, [language]);
 
   function checkCredentials() {
@@ -95,14 +95,12 @@ const Header = () => {
         borderBottom: "1px solid #c4c4c4",
 
         padding: "16px",
-      }}
-    >
+      }}>
       <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-between"
-        sx={{ width: "100%" }}
-      >
+        sx={{ width: "100%" }}>
         <a href="/" style={{ float: "left", height: "100%" }}>
           <img src={logo} alt="logo" style={{ height: "60px" }} />
         </a>
@@ -115,8 +113,7 @@ const Header = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
-          spacing={2}
-        >
+          spacing={2}>
           {btns &&
             btns.length > 0 &&
             btns.map((btn) => {

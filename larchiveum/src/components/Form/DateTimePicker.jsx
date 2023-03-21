@@ -1,13 +1,12 @@
 import React from "react";
-
-import { DateTimePicker as MUIDateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { TextField } from "@mui/material";
+import { DateTimePicker as MUIDateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const DateTimePicker = () => {
   return (
     <MUIDateTimePicker
       slots={{
-        textField: TextField
+        textField: TextField,
       }}
       slotProps={{ fullWidth: true }}
     />

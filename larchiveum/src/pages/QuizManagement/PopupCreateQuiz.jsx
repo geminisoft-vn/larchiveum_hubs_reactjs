@@ -78,8 +78,7 @@ export default function (props) {
           form="form-create-quiz"
           type="default"
           htmlType="reset"
-          onClick={handleClose}
-        >
+          onClick={handleClose}>
           {t("content.QUIZ_TAB__POPUP_CREATE_QUIZ__CLOSE_BUTTON_LABEL")}
         </Button>,
         <Button
@@ -88,12 +87,10 @@ export default function (props) {
           type="primary"
           htmlType="submit"
           onClick={handleSave}
-          loading={isSaving}
-        >
+          loading={isSaving}>
           {t("content.QUIZ_TAB__POPUP_CREATE_QUIZ__SAVE_BUTTON_LABEL")}
         </Button>,
-      ]}
-    >
+      ]}>
       {/* <Form
         id="form-create-quiz"
         form={form}

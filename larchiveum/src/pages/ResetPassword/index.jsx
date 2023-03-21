@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FaHome } from "react-icons/fa";
 
+import { getLanguage, setLanguage } from "src/language";
 // import Popup from "../../../../react-components/popup/popup";
 import UserService from "src/utilities/apiServices/UserService";
 import Store from "src/utilities/store";
-import { FaHome } from "react-icons/fa";
-import Language from "src/languages/language";
-import { useTranslation } from "react-i18next";
 
 const ResetPasswordPage = () => {
   const user = Store.getUser();
@@ -15,35 +15,36 @@ const ResetPasswordPage = () => {
   const [submitted, setSubmited] = useState(false);
   const [error, setError] = useState(null);
   const [isOpenPoupNotification, setIsOpenPoupNotification] = useState(false);
-  const [language, setLanguage] = useState("en");
 
   useEffect(() => {
-    setLanguage(Language.getLanguage());
+    setLanguage(getLanguage());
   }, []);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
 
-  const handleChangeLanguage = event => {
+  const handleChangeLanguage = (event) => {
     const lang = event.target.value;
     setLanguage(lang);
-    Language.setLanguage(lang);
+    setLanguage(lang);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setSubmited(true);
 
-    const access_token = new URL(window.location.href).searchParams.get("token");
+    const access_token = new URL(window.location.href).searchParams.get(
+      "token"
+    );
     data.access_token = access_token;
 
     if (data.password != data.repassword) {
       setError("Re-entered password does not match");
       return false;
     } else {
-      UserService.resetPassword(data).then(res => {
+      UserService.resetPassword(data).then((res) => {
         if (res.result == "ok") {
           setIsOpenPoupNotification(true);
         } else if (res.result == "fail") {
@@ -64,12 +65,19 @@ const ResetPasswordPage = () => {
               </a>
             </div>
           </div>
-          <form className="login100-form validate-form flex-sb flex-w" name="form" onSubmit={handleSubmit}>
-            <span className="login100-form-title">{t("reset_password.RESET_PASSWORD")}</span>
+          <form
+            className="login100-form validate-form flex-sb flex-w"
+            name="form"
+            onSubmit={handleSubmit}>
+            <span className="login100-form-title">
+              {t("reset_password.RESET_PASSWORD")}
+            </span>
             <div className="p-t-13 p-b-9">
               <span className="txt1">{t("reset_password.PASSWORD_LABEL")}</span>
             </div>
-            <div className="wrap-input100 validate-input" data-validate="Password is required">
+            <div
+              className="wrap-input100 validate-input"
+              data-validate="Password is required">
               <input
                 className="input100"
                 type="password"
@@ -80,9 +88,13 @@ const ResetPasswordPage = () => {
               <span className="focus-input100" />
             </div>
             <div className="p-t-13 p-b-9">
-              <span className="txt1">{t("reset_password.RE_PASSWORD_LABEL")}</span>
+              <span className="txt1">
+                {t("reset_password.RE_PASSWORD_LABEL")}
+              </span>
             </div>
-            <div className="wrap-input100 validate-input" data-validate="Re Password is required">
+            <div
+              className="wrap-input100 validate-input"
+              data-validate="Re Password is required">
               <input
                 className="input100"
                 type="password"
@@ -110,23 +122,27 @@ const ResetPasswordPage = () => {
           </form>
         </div>
       </div>
-      {isOpenPoupNotification && (
+      {/* {isOpenPoupNotification && (
         <Popup
           key={"popup-notification"}
           title={<>{t("reset_password.POPUP_NOTIFICATION__TITLE")}</>}
           size={"sm"}
-          content={<div style={{ textAlign: "center" }}>{t("reset_password.POPUP_NOTIFICATION__MESSAGE")}</div>}
+          content={
+            <div style={{ textAlign: "center" }}>
+              {t("reset_password.POPUP_NOTIFICATION__MESSAGE")}
+            </div>
+          }
           actions={[
             {
               text: t("reset_password.POPUP_NOTIFICATION__OKAY"),
               class: "btn1",
               callback: () => {
                 window.location = "/?page=signin";
-              }
-            }
+              },
+            },
           ]}
         />
-      )}
+      )} */}
     </div>
   );
 };

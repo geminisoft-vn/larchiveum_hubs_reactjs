@@ -1,6 +1,6 @@
 import { API_ROOT } from "../constants";
 import Store from "../store";
-import request from "./apiRequest";
+import request from "../axiosInstance";
 
 class MediaService {
   getListMedia(id) {
@@ -8,11 +8,11 @@ class MediaService {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        access_token: Store.getUser()?.token
-      }
+        access_token: Store.getUser()?.token,
+      },
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -22,11 +22,11 @@ class MediaService {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        access_token: ""
-      }
+        access_token: "",
+      },
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -36,14 +36,14 @@ class MediaService {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        access_token: Store.getUser()?.token
+        access_token: Store.getUser()?.token,
       },
       body: JSON.stringify({
-        medias: data
-      })
+        medias: data,
+      }),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -54,15 +54,17 @@ class MediaService {
     return request
       .post("/v1/auth/medias/upload", data, {
         headers: {
-          "Content-Type": "multipart/form-data"
+          "Content-Type": "multipart/form-data",
         },
-        onUploadProgress: progressEvent => {
-          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
           if (onProgress) onProgress(percent);
         },
-        cancelToken: cancellation.token
+        cancelToken: cancellation.token,
       })
-      .then(res => {
+      .then((res) => {
         return res.data;
       });
   }

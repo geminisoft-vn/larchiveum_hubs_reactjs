@@ -14,7 +14,7 @@ import {
 import moment from "moment";
 
 import { Button, Typography } from "src/components";
-import Language from "src/languages/language";
+import { getLanguage } from "src/language";
 
 const Exhibition = (props) => {
   const { exhibition } = props;
@@ -53,7 +53,7 @@ const Exhibition = (props) => {
                     {moment
                       .utc(exhibition.startDate)
                       .local()
-                      .locale(Language.getLanguage())
+                      .locale(getLanguage())
                       .format("L LT")}{" "}
                     {" (start)"}
                   </Typography>
@@ -67,7 +67,7 @@ const Exhibition = (props) => {
                     {moment
                       .utc(exhibition.endDate)
                       .local()
-                      .locale(Language.getLanguage())
+                      .locale(getLanguage())
                       .format("L LT")}{" "}
                     {" (end)"}
                   </Typography>

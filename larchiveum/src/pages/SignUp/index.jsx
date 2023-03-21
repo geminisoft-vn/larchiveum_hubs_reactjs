@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 
 import logo from "src/assets/images/larchiveum_logo.png";
-import { Alert, Button, SigninSocialButton, TextField } from "src/components";
-import Language from "src/languages/language";
+import { Alert, Button, SigninSocialButton, TextInput } from "src/components";
+import { getLanguage, setLanguage } from "src/language";
 import UserService from "src/utilities/apiServices/UserService";
 import Store from "src/utilities/store";
 
@@ -26,7 +26,7 @@ const SignUpForm = () => {
   const [language, setLanguage] = useState("en");
 
   useEffect(() => {
-    setLanguage(Language.getLanguage());
+    setLanguage(getLanguage());
   }, []);
 
   const handleChange = (e) => {
@@ -38,7 +38,7 @@ const SignUpForm = () => {
   const handleChangeLanguage = (event) => {
     const lang = event.target.value;
     setLanguage(lang);
-    Language.setLanguage(lang);
+    setLanguage(lang);
   };
 
   const handleSubmit = (e) => {
@@ -72,8 +72,7 @@ const SignUpForm = () => {
         width: "100%",
         height: "100%",
       }}
-      component="div"
-    >
+      component="div">
       <Container
         sx={{
           display: "flex",
@@ -82,20 +81,17 @@ const SignUpForm = () => {
 
           width: "100%",
           height: "100%",
-        }}
-      >
+        }}>
         <Paper
           elevation={4}
           sx={{ p: 2, width: "512px" }}
           component="form"
-          onSubmit={handleSubmit}
-        >
+          onSubmit={handleSubmit}>
           <Stack direction="column" justifyContent="flex-start" spacing={4}>
             <Stack
               direction="row"
               justifyContent="center"
-              sx={{ width: "100%" }}
-            >
+              sx={{ width: "100%" }}>
               <a href="./">
                 <img
                   src={logo}
@@ -109,7 +105,7 @@ const SignUpForm = () => {
 
             <Stack direction="column" spacing={2}>
               {error && <Alert type="error" message={error} />}
-              <TextField
+              <TextInput
                 name="displayName"
                 label={t("signup.DISPLAY_NAME_LABEL")}
                 fullWidth
@@ -117,14 +113,14 @@ const SignUpForm = () => {
                 onChange={handleChange}
               />
 
-              <TextField
+              <TextInput
                 name="email"
                 label={t("signup.EMAIL_LABEL")}
                 fullWidth
                 value={data.email}
                 onChange={handleChange}
               />
-              <TextField
+              <TextInput
                 name="password"
                 type="password"
                 label={t("signup.PASSWORD_LABEL")}
@@ -133,7 +129,7 @@ const SignUpForm = () => {
                 onChange={handleChange}
               />
 
-              <TextField
+              <TextInput
                 name="repassword"
                 type="password"
                 label={t("signup.RE_PASSWORD_LABEL")}
@@ -148,8 +144,7 @@ const SignUpForm = () => {
                 fullWidth
                 sx={{
                   background: `linear-gradient(45deg, #00dbde, #fc00ff) !important`,
-                }}
-              >
+                }}>
                 {t("signup.SIGN_UP_BUTTON")}
               </Button>
             </Stack>

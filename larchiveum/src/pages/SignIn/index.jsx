@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 
 import logo from "src/assets/images/larchiveum_logo.png";
-import { Alert, Button, SigninSocialButton, TextField } from "src/components";
-import Language from "src/languages/language";
+import { Alert, Button, SigninSocialButton, TextInput } from "src/components";
+import { getLanguage, setLanguage } from "src/language";
 import UserService from "src/utilities/apiServices/UserService";
 import Store from "src/utilities/store";
 
@@ -23,10 +23,9 @@ function SignIn() {
   const [data, setData] = useState({});
   const [submitted, setSubmited] = useState(false);
   const [error, setError] = useState(null);
-  const [language, setLanguage] = useState("en");
 
   useEffect(() => {
-    setLanguage(Language.getLanguage());
+    setLanguage(getLanguage());
   }, []);
 
   const handleChange = (e) => {
@@ -53,7 +52,7 @@ function SignIn() {
   const handleChangeLanguage = (event) => {
     const lang = event.target.value;
     setLanguage(lang);
-    Language.setLanguage(lang);
+    setLanguage(lang);
   };
 
   return (
@@ -67,8 +66,7 @@ function SignIn() {
         width: "100%",
         height: "100%",
       }}
-      component="div"
-    >
+      component="div">
       <Container
         sx={{
           display: "flex",
@@ -77,20 +75,17 @@ function SignIn() {
 
           width: "100%",
           height: "100%",
-        }}
-      >
+        }}>
         <Paper
           elevation={4}
           sx={{ p: 2, width: "512px" }}
           component="form"
-          onSubmit={handleSubmit}
-        >
+          onSubmit={handleSubmit}>
           <Stack direction="column" justifyContent="flex-start" spacing={4}>
             <Stack
               direction="row"
               justifyContent="center"
-              sx={{ width: "100%" }}
-            >
+              sx={{ width: "100%" }}>
               <a href="./">
                 <img
                   src={logo}
@@ -104,7 +99,7 @@ function SignIn() {
 
             <Stack direction="column" spacing={2}>
               {error && <Alert type="error" message={error} />}
-              <TextField
+              <TextInput
                 name="email"
                 label={t("signin.EMAIL_LABEL")}
                 fullWidth
@@ -112,7 +107,7 @@ function SignIn() {
                 onChange={handleChange}
               />
 
-              <TextField
+              <TextInput
                 name="password"
                 type="password"
                 label={t("signin.PASSWORD_LABEL")}
@@ -127,8 +122,7 @@ function SignIn() {
                 fullWidth
                 sx={{
                   background: `linear-gradient(45deg, #00dbde, #fc00ff) !important`,
-                }}
-              >
+                }}>
                 {t("signin.SIGN_IN_BUTTON")}
               </Button>
             </Stack>

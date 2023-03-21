@@ -1,13 +1,31 @@
-export { default as HomePage } from "./Home";
-export { default as SigninPage } from "./SignIn";
-export { default as SignupPage } from "./SignUp";
-export { default as WarningVerifyPage } from "./WarningVerify";
-export { default as ContentPage } from "./Content";
-export { default as ManagerPage } from "./Manager";
-export { default as ForgotPasswordPage } from "./ForgotPassword";
-export { default as ResetPasswordPage } from "./ResetPassword";
-export { default as ProfilePage } from "./Profile";
-export { default as CallbackNaverOAuthPage } from "./CallbackNaverOAuth";
-export { default as ViewQuizPage } from "./ViewQuiz";
-export { default as QuizManagementPage } from "./QuizManagement";
-export { default as QuizFormPage } from "./QuizForm";
+import { lazy } from "react";
+
+const HomePage = lazy(() => import("./Home"));
+const SigninPage = lazy(() => import("./SignIn"));
+const SignupPage = lazy(() => import("./SignUp"));
+const WarningVerifyPage = lazy(() => import("./WarningVerify"));
+const ContentPage = lazy(() => import("./Content"));
+const ManagerPage = lazy(() => import("./Manager"));
+const ForgotPasswordPage = lazy(() => import("./ForgotPassword"));
+const ResetPasswordPage = lazy(() => import("./ResetPassword"));
+const ProfilePage = lazy(() => import("./Profile"));
+const CallbackNaverOAuthPage = lazy(() => import("./CallbackNaverOAuth"));
+const ViewQuizPage = lazy(() => import("./ViewQuiz"));
+const QuizManagementPage = lazy(() => import("./QuizManagement"));
+const QuizFormPage = lazy(() => import("./QuizForm"));
+
+export {
+  HomePage,
+  SigninPage,
+  SignupPage,
+  WarningVerifyPage,
+  ContentPage,
+  ManagerPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+  CallbackNaverOAuthPage,
+  ViewQuizPage,
+  QuizManagementPage,
+  QuizFormPage,
+};

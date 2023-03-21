@@ -49,6 +49,10 @@ export default function Router() {
               path: "quiz-form",
               element: <QuizFormPage />,
             },
+            {
+              path: "quiz-form/:quizId",
+              element: <QuizFormPage />,
+            },
           ],
         },
         // {

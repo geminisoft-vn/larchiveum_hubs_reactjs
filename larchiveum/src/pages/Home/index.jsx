@@ -12,7 +12,7 @@ import { Box, Stack } from "@mui/material";
 import moment from "moment-timezone";
 
 import { Header, Pagination } from "src/components";
-import Language from "src/languages/language";
+import { getLanguage } from "src/language";
 import ExhibitionsService from "src/utilities/apiServices/ExhibitionsService";
 import ReserveService from "src/utilities/apiServices/ReserveService";
 import UserService from "src/utilities/apiServices/UserService";
@@ -204,8 +204,7 @@ function HomePage() {
           onClick={() => {
             openPopupNotification(item);
           }}
-          data-id-exhibition={item.id}
-        >
+          data-id-exhibition={item.id}>
           {t("home.WILL_OPEN_ON")} {moment(item.startDate).format("MMMM DD")}
         </button>
       );
@@ -222,8 +221,7 @@ function HomePage() {
           key="reservation"
           className="signin-up btn-visit reserved"
           onClick={openPopupReservation}
-          data-id-exhibition={item.id}
-        >
+          data-id-exhibition={item.id}>
           {t("home.MAKE_RESERVATION")}
         </button>
       );
@@ -238,8 +236,7 @@ function HomePage() {
           key="enter"
           className="signin-up btn-visit"
           onClick={handleButtonVisit}
-          data-roomid={item.roomId}
-        >
+          data-roomid={item.roomId}>
           {t("home.ENTER")}
         </button>
       );
@@ -259,8 +256,7 @@ function HomePage() {
           type=""
           key="signin"
           className="signin-up btn-visit signin"
-          onClick={handleButtonLogin}
-        >
+          onClick={handleButtonLogin}>
           {t("home.SIGN_IN")}
         </button>
       );
@@ -310,7 +306,7 @@ function HomePage() {
                 {moment
                   .utc(item.startDate)
                   .local()
-                  .locale(Language.getLanguage())
+                  .locale(getLanguage())
                   .format("L LT")}{" "}
                 {" (start)"}
               </p>
@@ -321,7 +317,7 @@ function HomePage() {
                 {moment
                   .utc(item.endDate)
                   .local()
-                  .locale(Language.getLanguage())
+                  .locale(getLanguage())
                   .format("L LT")}{" "}
                 {" (end)"}
               </p>
@@ -388,8 +384,7 @@ function HomePage() {
         height: "100%",
 
         p: 2,
-      }}
-    >
+      }}>
       {/* {isOpen && (
         <Popup
           key="popup-confirm-reservation"

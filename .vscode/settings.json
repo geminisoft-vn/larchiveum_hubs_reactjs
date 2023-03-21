@@ -8,5 +8,12 @@
   // Use 'prettier-eslint' instead of 'prettier'. Other settings will only be fallbacks in case they could not be inferred from eslint rules.
   "prettier.eslintIntegration": true,
   // Enable eslint for JavaScript files.
-  "eslint.enable": true
+  "eslint.enable": true,
+  "i18n-ally.localesPaths": [
+    "content/src/language",
+    "larchiveum/src/language",
+    "src/assets/locales",
+    "content/src/language/locales",
+    "larchiveum/src/language/locales"
+  ]
 }

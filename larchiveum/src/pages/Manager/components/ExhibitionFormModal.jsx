@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 // import "./ExhibitionFormModal.style.scss";
-
 import { useTranslation } from "react-i18next";
-
-import { Modal, TextField, DateTimePicker, AutoComplete, Switch } from "src/components";
 import { Grid, Stack } from "@mui/material";
+import PropTypes from "prop-types";
 
 import defaultImage from "src/assets/larchiveum/default-image.png";
+import {
+  AutoComplete,
+  DateTimePicker,
+  Modal,
+  Switch,
+  TextInput,
+} from "src/components";
 
-const ExhibitionFormModal = props => {
+const ExhibitionFormModal = (props) => {
   const { isActive, setIsActive, data, exhibitionType, scenes } = props;
 
   const { t } = useTranslation();
@@ -19,7 +23,7 @@ const ExhibitionFormModal = props => {
     return {};
   });
 
-  const getSceneThumnail = sceneId => {
+  const getSceneThumnail = (sceneId) => {
     let thumbnailUrl = null;
     for (const scene of scenes) {
       if (scene.id === sceneId) {
@@ -34,9 +38,9 @@ const ExhibitionFormModal = props => {
 
   const handleChange = (e, name) => {
     if (e.target.checked) {
-      setFormData(prev => ({ ...prev, [name]: e.target.checked }));
+      setFormData((prev) => ({ ...prev, [name]: e.target.checked }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: e.target.value }));
+      setFormData((prev) => ({ ...prev, [name]: e.target.value }));
     }
   };
 
@@ -51,33 +55,38 @@ const ExhibitionFormModal = props => {
         ) : (
           <> {t("manager.POPUP_EXHIBITION__CREATE_TITLE")}</>
         )
-      }
-    >
+      }>
       <Grid container spacing={2}>
         <Grid item lg={4} xl={4}>
-          <TextField
+          <TextInput
             label={t("manager.POPUP_EXHIBITION__NAME_LABEL")}
             placehodler={t("manager.POPUP_EXHIBITION__NAME_PLACEHOLDER")}
             value={formData.name}
-            onChange={e => handleChange(e, "name")}
+            onChange={(e) => handleChange(e, "name")}
           />
         </Grid>
 
         <Grid item lg={4} xl={4}>
-          <DateTimePicker label={t("manager.POPUP_EXHIBITION__START_DATE_LABEL")} />
+          <DateTimePicker
+            label={t("manager.POPUP_EXHIBITION__START_DATE_LABEL")}
+          />
         </Grid>
         <Grid item lg={4} xl={4}>
-          <DateTimePicker label={t("manager.POPUP_EXHIBITION__END_DATE_LABEL")} />
+          <DateTimePicker
+            label={t("manager.POPUP_EXHIBITION__END_DATE_LABEL")}
+          />
         </Grid>
         <Grid item lg={6} xl={6}>
           <Stack direction="column" spacing={2}>
-            <TextField
+            <TextInput
               multiline
               rows={4}
-              placeholder={t("manager.POPUP_EXHIBITION__DESCRIPTION_PLACEHOLDER")}
+              placeholder={t(
+                "manager.POPUP_EXHIBITION__DESCRIPTION_PLACEHOLDER"
+              )}
               label={t("manager.POPUP_EXHIBITION__DESCRIPTION_LABEL")}
               value={formData.description}
-              onChange={e => handleChange(e, "description")}
+              onChange={(e) => handleChange(e, "description")}
             />
 
             <Stack direction="row" justifyContent="space-between">
@@ -85,12 +94,12 @@ const ExhibitionFormModal = props => {
                 label={t("manager.POPUP_EXHIBITION__PUBLIC")}
                 placement="top"
                 checked={formData.public}
-                onChange={e => handleChange(e, "public")}
+                onChange={(e) => handleChange(e, "public")}
               />
-              <TextField
+              <TextInput
                 label={t("manager.POPUP_EXHIBITION__MAX_SIZE")}
                 value={formData.maxSize}
-                onChange={e => handleChange(e, "maxSize")}
+                onChange={(e) => handleChange(e, "maxSize")}
               />
             </Stack>
           </Stack>
@@ -98,7 +107,11 @@ const ExhibitionFormModal = props => {
         <Grid item lg={6} xl={6}>
           <Stack direction="column">
             {scenes && scenes.length > 0 && (
-              <AutoComplete label={t("manager.POPUP_EXHIBITION__LIST_SCENE_LABEL")} options={scenes} fullWidth />
+              <AutoComplete
+                label={t("manager.POPUP_EXHIBITION__LIST_SCENE_LABEL")}
+                options={scenes}
+                fullWidth
+              />
             )}
             <img className="" src={getSceneThumnail(formData.sceneId)} alt="" />
           </Stack>
@@ -428,7 +441,7 @@ const ExhibitionFormModal = props => {
 };
 
 ExhibitionFormModal.propTypes = {
-  scenes: PropTypes.array
+  scenes: PropTypes.array,
 };
 
 export default ExhibitionFormModal;

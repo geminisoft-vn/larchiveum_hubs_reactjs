@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import moment from "moment";
 
-import UserService from "src/utilities/apiServices/UserService";
-import AvatarService from "src/utilities/apiServices/AvatarService";
 // import Popup from "../../../../react-components/popup/popup";
 import { Header } from "src/components";
+import { getLanguage, setLanguage } from "src/language";
+import AvatarService from "src/utilities/apiServices/AvatarService";
+import UserService from "src/utilities/apiServices/UserService";
 import Store from "src/utilities/store";
-import { toast } from "react-toastify";
 import Validator from "src/utilities/validator";
-import moment from "moment";
-import Language from "src/languages/language";
-import { useTranslation } from "react-i18next";
-
 
 const ProfilePage = () => {
   const user = Store.getUser();
@@ -19,7 +18,6 @@ const ProfilePage = () => {
   const [avatars, setAvatars] = useState([]);
   const [avatar, setAvatar] = useState(null);
   const [displayName, setDisplayName] = useState(null);
-  const [language, setLanguage] = useState("en");
 
   const [isLoading, setIsLoading] = useState(true);
   const [isOpenPopupChangeAvatar, setIsOpenPopupChangeAvatar] = useState(false);
@@ -27,11 +25,11 @@ const ProfilePage = () => {
   // const [isOpenPopupChangeDisplayName, setIsOpenPopupChangeDisplayName] = useState(false);
 
   useEffect(() => {
-    AvatarService.getListAvatar().then(response => {
+    AvatarService.getListAvatar().then((response) => {
       if (response.result == "ok") {
         const avatars = response.data;
         loadFromLocalStorage(avatars);
-        setLanguage(Language.getLanguage());
+        setLanguage(getLanguage());
         setIsLoading(false);
       } else {
         alert("Get list avatar fail");
@@ -72,7 +70,7 @@ const ProfilePage = () => {
         let avatar;
         if (user.avatarId) {
           //-> get avatar is avatar in list ( which has avatarId = user.avatarId )
-          avatar = avatars.find(avt => avt.id == user.avatarId);
+          avatar = avatars.find((avt) => avt.id == user.avatarId);
         } else {
           //-> set avatar is default (first avatar in list)
           avatar = avatars[0];
@@ -94,18 +92,19 @@ const ProfilePage = () => {
         setDisplayName(store.profile.displayName);
       } else {
         //-> else -> set default displayName -> save to local
-        store.profile.displayName = "Visitor-" + moment().format("YYYYMMDDhhmmss");
+        store.profile.displayName =
+          "Visitor-" + moment().format("YYYYMMDDhhmmss");
         setDisplayName(store.profile.displayName);
       }
 
       // + avatar
       if (store.profile.avatarId) {
         //-> if have avatar in local -> set avatar by avatar in local
-        let avatar = avatars.find(avt => avt.id == store.profile.avatarId);
+        let avatar = avatars.find((avt) => avt.id == store.profile.avatarId);
         if (!avatar) {
           avatar = {
             isCustomAvatar: true,
-            url: store.profile.avatarId
+            url: store.profile.avatarId,
           };
         }
         setAvatar({ ...avatar });
@@ -119,22 +118,24 @@ const ProfilePage = () => {
     localStorage.setItem("___hubs_store", JSON.stringify(store));
   }
 
-  const handleResultAvatar = avatar => {
+  const handleResultAvatar = (avatar) => {
     setAvatar({ ...avatar });
   };
 
-  const handleResultDisplayName = displayName => {
+  const handleResultDisplayName = (displayName) => {
     setDisplayName(displayName);
   };
 
-  const handleChangeLanguage = event => {
+  const handleChangeLanguage = (event) => {
     const lang = event.target.value;
     setLanguage(lang);
-    Language.setLanguage(lang);
+    setLanguage(lang);
   };
 
   return (
-    <div className="background-homepage" style={{ width: "100%", height: "100%" }}>
+    <div
+      className="background-homepage"
+      style={{ width: "100%", height: "100%" }}>
       {isLoading ? (
         <div className="loader-2">
           <div className="loader">
@@ -165,14 +166,15 @@ const ProfilePage = () => {
                   fontWeight: "bold",
                   padding: "5px 10px",
                   border: "2px solid #1cbeff",
-                  borderRadius: "5px"
-                }}
-              >
+                  borderRadius: "5px",
+                }}>
                 {t("profile.BACK")}
               </button>
             </a>
           </div>
-          <div className="row" style={{ margin: "5vh 10% 5vh 10%", height: "60vh" }}>
+          <div
+            className="row"
+            style={{ margin: "5vh 10% 5vh 10%", height: "60vh" }}>
             <AvatarPreview
               props={{
                 avatar: avatar,
@@ -181,13 +183,13 @@ const ProfilePage = () => {
                 },
                 handleOpenPopupCreateAvatar: () => {
                   setIsOpenPopupCreateAvatar(true);
-                }
+                },
               }}
             />
             <GeneralPreview
               props={{
                 displayName: displayName,
-                handleChange: handleResultDisplayName
+                handleChange: handleResultDisplayName,
               }}
             />
           </div>
@@ -199,7 +201,7 @@ const ProfilePage = () => {
                 handleClose: () => {
                   setIsOpenPopupChangeAvatar(false);
                 },
-                handleResult: handleResultAvatar
+                handleResult: handleResultAvatar,
               }}
             />
           )}
@@ -209,10 +211,10 @@ const ProfilePage = () => {
                 handleClose: () => {
                   setIsOpenPopupCreateAvatar(false);
                 },
-                handleResult: avatar => {
+                handleResult: (avatar) => {
                   handleResultAvatar(avatar);
                   setIsOpenPopupCreateAvatar(false);
-                }
+                },
               }}
             />
           )}
@@ -234,7 +236,7 @@ const ProfilePage = () => {
   );
 };
 
-const AvatarPreview = props => {
+const AvatarPreview = (props) => {
   const user = Store.getUser();
   const { t } = useTranslation();
 
@@ -243,7 +245,13 @@ const AvatarPreview = props => {
   const handleOpenPopupCreateAvatar = props?.handleOpenPopupCreateAvatar;
 
   return (
-    <div style={{ float: "left", width: "45%", height: "100%", boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }}>
+    <div
+      style={{
+        float: "left",
+        width: "45%",
+        height: "100%",
+        boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+      }}>
       <div
         style={{
           width: "100%",
@@ -251,9 +259,8 @@ const AvatarPreview = props => {
           backgroundColor: "#efefef",
           display: "flex",
           justifyContent: "center",
-          justifyItems: "center"
-        }}
-      >
+          justifyItems: "center",
+        }}>
         <button>{t("profile.AVATAR_PANEL__TITLE")}</button>
       </div>
       <div style={{ width: "100%", height: "80%" }}>
@@ -272,9 +279,8 @@ const AvatarPreview = props => {
           borderTop: "2px solid rgb(239, 239, 239)",
           display: "flex",
           justifyContent: "space-around",
-          alignItems: "center"
-        }}
-      >
+          alignItems: "center",
+        }}>
         <button
           onClick={handleOpenPopupChooseAvatar}
           style={{
@@ -283,9 +289,8 @@ const AvatarPreview = props => {
             margin: "10px",
             color: "white",
             height: "40px",
-            borderRadius: "5px"
-          }}
-        >
+            borderRadius: "5px",
+          }}>
           {t("profile.AVATAR_PANEL__CHOOSE_AVATAR")}
         </button>
       </div>
@@ -293,14 +298,14 @@ const AvatarPreview = props => {
   );
 };
 
-const GeneralPreview = props => {
+const GeneralPreview = (props) => {
   const user = Store.getUser();
   const { t } = useTranslation();
   const [displayName, setDisplayName] = useState(props?.displayName);
   const [isSaving, setIsSaving] = useState(false);
   const [isValidated, setIsValidated] = useState(true);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const value = e.target.value;
     setDisplayName(value);
 
@@ -329,9 +334,9 @@ const GeneralPreview = props => {
     if (user) {
       // + if have user -> call API change update user
       UserService.update(user.id, {
-        displayName: displayName
+        displayName: displayName,
       })
-        .then(response => {
+        .then((response) => {
           if (response.result == "ok") {
             Store.setUser(response.data);
             if (props?.handleChange) {
@@ -342,7 +347,7 @@ const GeneralPreview = props => {
           }
           setIsSaving(false);
         })
-        .catch(error => {
+        .catch((error) => {
           toast.error(t("profile.GENERAL_PANEL__ERROR"), { autoClose: 3000 });
           setIsSaving(false);
         });
@@ -353,7 +358,13 @@ const GeneralPreview = props => {
   };
 
   return (
-    <div style={{ float: "right", width: "45%", height: "100%", boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }}>
+    <div
+      style={{
+        float: "right",
+        width: "45%",
+        height: "100%",
+        boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+      }}>
       <div
         style={{
           width: "100%",
@@ -361,15 +372,24 @@ const GeneralPreview = props => {
           backgroundColor: "#efefef",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
+          alignItems: "center",
+        }}>
         <button>{t("profile.GENERAL_PANEL__TITLE")}</button>
       </div>
       <div style={{ width: "100%", height: "80%" }}>
-        <div style={{ height: "100%", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
           <div style={{ width: "80%", position: "relative" }}>
-            <span style={{ height: "40px", width: "100%" }}> Display name :</span>
+            <span style={{ height: "40px", width: "100%" }}>
+              {" "}
+              Display name :
+            </span>
             <input
               type="text"
               value={displayName}
@@ -382,11 +402,13 @@ const GeneralPreview = props => {
                 border: "2px solid #b1b1ff",
                 padding: "0px 20px",
                 margin: "10px 0px",
-                borderRadius: "3px"
+                borderRadius: "3px",
               }}
             />
             {!isValidated ? (
-              <div style={{ color: "rgb(245 80 80)" }}>{t("profile.GENERAL_PANEL__DISPLAY_NAME_NOTE")}</div>
+              <div style={{ color: "rgb(245 80 80)" }}>
+                {t("profile.GENERAL_PANEL__DISPLAY_NAME_NOTE")}
+              </div>
             ) : (
               ""
             )}
@@ -400,9 +422,8 @@ const GeneralPreview = props => {
           borderTop: "2px solid rgb(239, 239, 239)",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
+          alignItems: "center",
+        }}>
         <button
           onClick={handleChangeDisplayName}
           disabled={isSaving || !isValidated}
@@ -412,9 +433,8 @@ const GeneralPreview = props => {
             padding: "10px 20px",
             color: "white",
             height: "40px",
-            borderRadius: "5px"
-          }}
-        >
+            borderRadius: "5px",
+          }}>
           {t("profile.GENERAL_PANEL__SAVE")}
         </button>
       </div>
@@ -422,7 +442,7 @@ const GeneralPreview = props => {
   );
 };
 
-const PopupChangeAvatar = props => {
+const PopupChangeAvatar = (props) => {
   const user = Store.getUser();
   const { t } = useTranslation();
 
@@ -433,7 +453,7 @@ const PopupChangeAvatar = props => {
   const handleClose = props?.handleClose;
   const handleResult = props?.handleResult;
 
-  const handleChangeAvatar = avatar => {
+  const handleChangeAvatar = (avatar) => {
     setIsSaving(true);
     const store = JSON.parse(localStorage.getItem("___hubs_store"));
     const user = Store.getUser();
@@ -453,16 +473,16 @@ const PopupChangeAvatar = props => {
     if (user) {
       // + if have user -> call API change update user
       UserService.update(user.id, {
-        avatarId: avatar.id
+        avatarId: avatar.id,
       })
-        .then(response => {
+        .then((response) => {
           if (response.result == "ok") {
             Store.setUser(response.data);
             handleResult(avatar);
             setIsSaving(false);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     } else {
@@ -479,7 +499,7 @@ const PopupChangeAvatar = props => {
 
   function loadAvatars() {
     AvatarService.getListAvatar()
-      .then(response => {
+      .then((response) => {
         if (response.result == "ok") {
           const avatars = response.data;
           setAvatars(avatars);
@@ -488,7 +508,7 @@ const PopupChangeAvatar = props => {
         }
         setIsLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         setIsLoading(false);
         alert("Load list avatar fail !");
       });
@@ -514,21 +534,33 @@ const PopupChangeAvatar = props => {
       size={"lg"}
       title={<>{t("profile.POPUP_CHANGE_AVATAR__TITLE")}</>}
       content={
-        <div style={{ width: "100%", overflowY: "auto", whiteSpace: "nowrap", maxHeight: "60vh", height: "60vh" }}>
+        <div
+          style={{
+            width: "100%",
+            overflowY: "auto",
+            whiteSpace: "nowrap",
+            maxHeight: "60vh",
+            height: "60vh",
+          }}>
           {isLoading ? (
             <div
-              style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}
-            >
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}>
               <span>{t("profile.POPUP_CHANGE_AVATAR__LOADING")}</span>
             </div>
           ) : (
             <div>
-              {avatars.map(avt => {
+              {avatars.map((avt) => {
                 return (
                   <div
                     key={avt.id}
                     className="preview-avatar"
-                    onClick={e => {
+                    onClick={(e) => {
                       handleSelectAvatar(e, avt);
                     }}
                     style={{
@@ -536,14 +568,22 @@ const PopupChangeAvatar = props => {
                       margin: "2%",
                       float: "left",
                       width: "21%",
-                      border: avt.id == avatar.id ? "4px solid blue" : "1px solid gray",
-                      backgroundColor: "whitesmoke"
-                    }}
-                  >
+                      border:
+                        avt.id == avatar.id
+                          ? "4px solid blue"
+                          : "1px solid gray",
+                      backgroundColor: "whitesmoke",
+                    }}>
                     {avt.isCustomAvatar ? (
-                      <model-viewer style={{ width: "100%", height: "100%" }} src={avt.url} />
+                      <model-viewer
+                        style={{ width: "100%", height: "100%" }}
+                        src={avt.url}
+                      />
                     ) : (
-                      <img style={{ width: "100%", height: "100%" }} src={avt.images.preview.url} />
+                      <img
+                        style={{ width: "100%", height: "100%" }}
+                        src={avt.images.preview.url}
+                      />
                     )}
                   </div>
                 );
@@ -555,25 +595,27 @@ const PopupChangeAvatar = props => {
       handleClose={handleClose}
       actions={[
         {
-          text: isSaving ? t("profile.POPUP_CHANGE_AVATAR__SAVING") : t("profile.POPUP_CHANGE_AVATAR__SAVE"),
+          text: isSaving
+            ? t("profile.POPUP_CHANGE_AVATAR__SAVING")
+            : t("profile.POPUP_CHANGE_AVATAR__SAVE"),
           class: "btn2",
           callback: () => {
             handleConfirmSelectAvatar();
-          }
+          },
         },
         {
           text: t("profile.POPUP_CHANGE_AVATAR__CANCEL"),
           class: "btn2",
           callback: () => {
             handleClose(false);
-          }
-        }
+          },
+        },
       ]}
     />
   );
 };
 
-const PopupCreateAvatar = props => {
+const PopupCreateAvatar = (props) => {
   const user = Store.getUser();
   const { t } = useTranslation();
 
@@ -587,11 +629,11 @@ const PopupCreateAvatar = props => {
     setIsSaving(true);
     if (user) {
       AvatarService.create({ url: avatarUrl })
-        .then(response => {
+        .then((response) => {
           setIsSaving(false);
           handleResult(response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           setIsSaving(false);
           console.log(error);
         });
@@ -599,14 +641,17 @@ const PopupCreateAvatar = props => {
       setIsSaving(false);
       handleResult({
         isCustomAvatar: true,
-        url: avatarUrl
+        url: avatarUrl,
       });
     }
   };
 
   useEffect(() => {
-    window.addEventListener("message", event => {
-      if (event.origin.startsWith("https://larchiveum.ready") && event.data.toString().includes(".glb")) {
+    window.addEventListener("message", (event) => {
+      if (
+        event.origin.startsWith("https://larchiveum.ready") &&
+        event.data.toString().includes(".glb")
+      ) {
         setAvatarUrl(event.data);
         setIsHiddenCreateButton(false);
       }
@@ -619,10 +664,25 @@ const PopupCreateAvatar = props => {
       title={<>Change Avatar</>}
       content={
         <div style={{ position: "relative", width: "100%", height: "60vh" }}>
-          <iframe src="https://larchiveum.readyplayer.me/avatar?frameApi" width="100%" height="100%" />
+          <iframe
+            src="https://larchiveum.readyplayer.me/avatar?frameApi"
+            width="100%"
+            height="100%"
+          />
           {avatarUrl && (
-            <div style={{ position: "absolute", width: "100%", height: "100%", top: "0px", backgroundColor: "white" }}>
-              <model-viewer style={{ width: "100%", height: "100%" }} src={avatarUrl} camera-controls />
+            <div
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                top: "0px",
+                backgroundColor: "white",
+              }}>
+              <model-viewer
+                style={{ width: "100%", height: "100%" }}
+                src={avatarUrl}
+                camera-controls
+              />
             </div>
           )}
         </div>
@@ -632,8 +692,8 @@ const PopupCreateAvatar = props => {
           text: isSaving ? "Saving..." : "Choose",
           class: "btn2",
           hidden: isHiddenCreateButton,
-          callback: handleCreateAvatar
-        }
+          callback: handleCreateAvatar,
+        },
       ]}
       handleClose={handleClose}
     />

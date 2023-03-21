@@ -12,13 +12,11 @@ const Sidebar = (props) => {
           return (
             <li
               className={clsx(
-                `inline-block cursor-pointer rounded-t-lg border-b-2 border-transparent p-4 `,
-                item.key !== selectedTab &&
-                  "hover:text-gray-60 hover:border-gray-300",
-                item.key === selectedTab && "border-blue-500 text-blue-500"
+                `inline-block cursor-pointer rounded-t-lg p-4`,
+                item.key === selectedTab &&
+                  "border-b-2 border-blue-500 text-blue-500"
               )}
-              onClick={item.onClick}
-            >
+              onClick={item.onClick}>
               {item.label}
             </li>
           );

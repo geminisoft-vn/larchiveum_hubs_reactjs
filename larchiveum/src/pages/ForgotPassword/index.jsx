@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 
 import logo from "src/assets/images/larchiveum_logo.png";
-import { Alert, Button, SigninSocialButton, TextField } from "src/components";
-import Language from "src/languages/language";
+import { Alert, Button, SigninSocialButton, TextInput } from "src/components";
+import { getLanguage, setLanguage } from "src/language";
 import UserService from "src/utilities/apiServices/UserService";
 import Store from "src/utilities/store";
 
@@ -28,10 +28,9 @@ const ForgotPasswordPage = () => {
   const [isOpenPoupEmailSentNotification, setIsOpenPoupEmailSentNotification] =
     useState(false);
   const [error, setError] = useState(null);
-  const [language, setLanguage] = useState("en");
 
   useEffect(() => {
-    setLanguage(Language.getLanguage());
+    setLanguage(getLanguage());
   }, []);
 
   const handleChangeEmail = (e) => {
@@ -43,7 +42,7 @@ const ForgotPasswordPage = () => {
   const handleChangeLanguage = (event) => {
     const lang = event.target.value;
     setLanguage(lang);
-    Language.setLanguage(lang);
+    setLanguage(lang);
   };
 
   const handleSubmit = (e) => {
@@ -147,8 +146,7 @@ const ForgotPasswordPage = () => {
         width: "100%",
         height: "100%",
       }}
-      component="div"
-    >
+      component="div">
       <Container
         sx={{
           display: "flex",
@@ -157,25 +155,22 @@ const ForgotPasswordPage = () => {
 
           width: "100%",
           height: "100%",
-        }}
-      >
+        }}>
         <Paper
           elevation={4}
           sx={{ p: 2, width: "512px" }}
           component="form"
-          onSubmit={handleSubmit}
-        >
+          onSubmit={handleSubmit}>
           <Stack direction="column" justifyContent="flex-start" spacing={4}>
             <Typography
               component="h5"
               variant="h5"
-              sx={{ textAlign: "center", fontWeight: 700 }}
-            >
+              sx={{ textAlign: "center", fontWeight: 700 }}>
               {t("forgot_password.FORGOT_PASSWORD")}
             </Typography>
             <Stack direction="column" spacing={2}>
               {error && <Alert type="error" message={error} />}
-              <TextField
+              <TextInput
                 name="email"
                 label={t("signin.EMAIL_LABEL")}
                 fullWidth
@@ -189,8 +184,7 @@ const ForgotPasswordPage = () => {
                 fullWidth
                 sx={{
                   background: `linear-gradient(45deg, #00dbde, #fc00ff) !important`,
-                }}
-              >
+                }}>
                 {t("forgot_password.SEND_BUTTON")}
               </Button>
             </Stack>

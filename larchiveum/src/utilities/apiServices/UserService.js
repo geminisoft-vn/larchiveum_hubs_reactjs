@@ -1,4 +1,4 @@
-import apiRequest from "./apiRequest";
+import apiRequest from "../axiosInstance";
 import { API_ROOT } from "../constants";
 
 class UserService {
@@ -6,12 +6,12 @@ class UserService {
     return fetch(`${API_ROOT}/v1/gglogin`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -20,12 +20,12 @@ class UserService {
     return fetch(`${API_ROOT}/v1/fblogin`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -34,12 +34,12 @@ class UserService {
     return fetch(`${API_ROOT}/v1/nvlogin`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -48,12 +48,12 @@ class UserService {
     return fetch(`${API_ROOT}/v1/kklogin`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -62,12 +62,12 @@ class UserService {
     return fetch(`${API_ROOT}/v1/users`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -76,12 +76,12 @@ class UserService {
     return fetch(`${API_ROOT}/v1/login`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -90,14 +90,14 @@ class UserService {
     return fetch(`${API_ROOT}/v1/users/checkToken`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        token: token
-      })
+        token: token,
+      }),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -106,12 +106,12 @@ class UserService {
     return fetch(`${API_ROOT}/v1/users/requestResetPassword`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(email)
+      body: JSON.stringify(email),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -120,18 +120,20 @@ class UserService {
     return fetch(`${API_ROOT}/v1/users/resetPassword`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .catch(error => {
+      .then((res) => res.json())
+      .catch((error) => {
         console.log(error);
       });
   }
 
   verifyUser(token) {
-    return apiRequest.post("/v1/auth/users/verifyUser", { access_token: token });
+    return apiRequest.post("/v1/auth/users/verifyUser", {
+      access_token: token,
+    });
   }
 
   reSendVerifyMail(email) {
@@ -139,7 +141,9 @@ class UserService {
   }
 
   update(id, data) {
-    return apiRequest.patch(`v1/auth/users/${id}`, data).then(response => response.data);
+    return apiRequest
+      .patch(`v1/auth/users/${id}`, data)
+      .then((response) => response.data);
   }
 }
 
