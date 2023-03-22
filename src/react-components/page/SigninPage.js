@@ -15,6 +15,7 @@ import { AuthContext } from "../auth/AuthContext";
 import hubChannel from "./../../utils/hub-channel";
 import Language from "./languages/language";
 import { useTranslation } from "react-i18next";
+import { Select, Spin } from "antd";
 
 registerTelemetry("/signin", "Hubs Sign In Page");
 
@@ -43,18 +44,21 @@ const LoginForm = function() {
   const handleSubmit = e => {
     e.preventDefault();
     setSubmited(true);
-    UserService.login(data).then(res => {
-      if (res.result == "ok") {
-        Store.setUser(res.data);
-        window.location = `/`;
-      } else if (res.result == "fail") {
-        setError(t("forgot_password.FORGOT_PASSWORD_ERROR__" + res.error.toUpperCase()));
-      }
-    });
+    UserService.login(data)
+      .then(res => {
+        if (res.result == "ok") {
+          Store.setUser(res.data);
+          window.location = `/`;
+        } else if (res.result == "fail") {
+          setError(t("signin.SIGN_IN_ERROR__" + res.error.toUpperCase()));
+        }
+      })
+      .finally(() => {
+        setSubmited(false);
+      });
   };
 
-  const handleChangeLanguage = event => {
-    const lang = event.target.value;
+  const handleChangeLanguage = lang => {
     setLanguage(lang);
     Language.setLanguage(lang);
   };
@@ -68,6 +72,23 @@ const LoginForm = function() {
               <a href="./">
                 <FaHome size={30} />
               </a>
+            </div>
+            <div style={{ float: "right" }}>
+              <Select
+                value={language}
+                style={{ width: 120 }}
+                onChange={handleChangeLanguage}
+                options={[
+                  {
+                    value: "en",
+                    label: "English"
+                  },
+                  {
+                    value: "ko",
+                    label: "Korea"
+                  }
+                ]}
+              />
             </div>
           </div>
           <form className="login100-form validate-form flex-sb flex-w" name="form" onSubmit={handleSubmit}>
@@ -93,7 +114,9 @@ const LoginForm = function() {
               <span className="focus-input100" />
             </div>
             <div className="container-login100-form-btn m-t-27 m-b-20">
-              <button className="login100-form-btn">{t("signin.SIGN_IN_BUTTON")}</button>
+              <button className="login100-form-btn" disabled={submitted}>
+                {submitted ? <Spin /> : t("signin.SIGN_IN_BUTTON")}
+              </button>
             </div>
             <div id="alternativeLogin">
               <label className="txt1">

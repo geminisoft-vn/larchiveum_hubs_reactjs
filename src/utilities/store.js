@@ -1,8 +1,5 @@
 import Cookies from "js-cookie";
-import StoreHub from "../storage/store";
-import hubChannel from "../utils/hub-channel";
 import { expireCookies } from "./constants";
-const store = new StoreHub();
 
 class Store {
   static getUser() {

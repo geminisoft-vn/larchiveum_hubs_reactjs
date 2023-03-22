@@ -13,6 +13,7 @@ import Store from "../../utilities/store";
 import { FaHome } from "react-icons/fa";
 import Language from "./languages/language";
 import { useTranslation } from "react-i18next";
+import { Spin, Select } from "antd";
 
 registerTelemetry("/signup", "Hubs Sign Up Page");
 
@@ -38,30 +39,32 @@ const SignUpForm = function() {
     setData({ ...data, [name]: value });
   };
 
-  const handleChangeLanguage = event => {
-    const lang = event.target.value;
+  const handleChangeLanguage = lang => {
     setLanguage(lang);
     Language.setLanguage(lang);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    setSubmited(true);
 
     if (data.password != data.repassword) {
       setError(t("signup.SIGN_UP_ERROR__RE_PASSWORD_NOT_MATCH"));
       return;
     }
 
-    UserService.signupWithEmail(data).then(res => {
-      this.setState({ disabled: true });
-      if (res.result == "ok") {
-        Store.removeUser();
-        window.location = `/?page=warning-verify&email=${res.data.email}`;
-      } else if (res.result == "fail") {
-        setError(t("signup.SIGN_UP_ERROR__" + res.error.toUpperCase()));
-      }
-    });
+    setSubmited(true);
+    UserService.signupWithEmail(data)
+      .then(res => {
+        if (res.result == "ok") {
+          Store.removeUser();
+          window.location = `/?page=signin`;
+        } else if (res.result == "fail") {
+          setError(t("signup.SIGN_UP_ERROR__" + res.error.toUpperCase()));
+        }
+      })
+      .finally(() => {
+        setSubmited(false);
+      });
   };
 
   return (
@@ -73,6 +76,23 @@ const SignUpForm = function() {
               <a href="./">
                 <FaHome size={30} />
               </a>
+            </div>
+            <div style={{ float: "right" }}>
+              <Select
+                value={language}
+                style={{ width: 120 }}
+                onChange={handleChangeLanguage}
+                options={[
+                  {
+                    value: "en",
+                    label: "English"
+                  },
+                  {
+                    value: "ko",
+                    label: "Korea"
+                  }
+                ]}
+              />
             </div>
           </div>
           <form className="login100-form validate-form flex-sb flex-w" name="form" onSubmit={handleSubmit}>
@@ -124,7 +144,9 @@ const SignUpForm = function() {
               <span className="focus-input100" />
             </div>
             <div className="container-login100-form-btn m-t-27 m-b-30">
-              <button className="login100-form-btn">{t("signup.SIGN_UP_BUTTON")}</button>
+              <button className="login100-form-btn loading" disabled={submitted}>
+                {submitted ? <Spin /> : t("signup.SIGN_UP_BUTTON")}
+              </button>
             </div>
             {error ? <div className="error-form">{error}</div> : ""}
             <div id="alternativeLogin">
