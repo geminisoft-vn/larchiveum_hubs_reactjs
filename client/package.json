@@ -10,19 +10,14 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .  --ext .js,.jsx,.ts,.tsx"
   },
+  "packageManager": "pnpm@7.30.0",
+  "engines": {
+    "pnpm": ">= 7.30.0",
+    "yarn": "Please use pnpm. npm i -g pnpm",
+    "npm": "Please use pnpm. npm i -g pnpm"
+  },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
-    "@editorjs/checklist": "^1.4.0",
-    "@editorjs/code": "^2.8.0",
-    "@editorjs/editorjs": "^2.26.5",
-    "@editorjs/header": "^2.7.0",
-    "@editorjs/image": "^2.8.1",
-    "@editorjs/link": "^2.5.0",
-    "@editorjs/list": "^1.8.0",
-    "@editorjs/quote": "^2.5.0",
-    "@editorjs/raw": "^2.4.0",
-    "@editorjs/simple-image": "^1.5.1",
-    "@editorjs/table": "^2.2.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",

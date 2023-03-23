@@ -1,9 +1,11 @@
+import { AxiosProgressEvent } from "axios";
+
 import request from "../axiosInstance";
 import { API_ROOT } from "../constants";
 import Store from "../store";
 
 class MediaService {
-	getListMedia(id) {
+	static getListMedia(id) {
 		return fetch(`${API_ROOT}/v1/auth/medias?exhibitionId=${id}`, {
 			method: "GET",
 			headers: {
@@ -17,7 +19,7 @@ class MediaService {
 			});
 	}
 
-	proxyMedia(objectId) {
+	static proxyMedia(objectId) {
 		return fetch(`${API_ROOT}/v1/medias/proxy/${objectId}`, {
 			method: "GET",
 			headers: {
@@ -31,7 +33,7 @@ class MediaService {
 			});
 	}
 
-	updateMediaMany(data) {
+	static updateMediaMany(data) {
 		return fetch(`${API_ROOT}/v1/auth/medias`, {
 			method: "PUT",
 			headers: {
@@ -48,7 +50,11 @@ class MediaService {
 			});
 	}
 
-	upload(file, onProgress, cancellation) {
+	static upload(
+		file: File,
+		onProgress: (percent: number) => void,
+		abortController: AbortController | null,
+	) {
 		const data = new FormData();
 		data.append("file", file);
 		return request
@@ -56,16 +62,18 @@ class MediaService {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
-				onUploadProgress: (progressEvent) => {
-					const percent = Math.round(
-						(progressEvent.loaded * 100) / progressEvent.total
-					);
-					if (onProgress) onProgress(percent);
+				onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+					if (progressEvent?.loaded && progressEvent?.total) {
+						const percent = Math.round(
+							(progressEvent.loaded * 100) / progressEvent.total,
+						);
+						if (onProgress) onProgress(percent);
+					}
 				},
-				cancelToken: cancellation.token,
+				signal: abortController?.signal,
 			})
 			.then((res) => res.data);
 	}
 }
 
-export default new MediaService();
+export default MediaService;

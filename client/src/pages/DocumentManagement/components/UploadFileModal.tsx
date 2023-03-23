@@ -73,7 +73,7 @@ class UploadFileModal extends React.Component {
 					progress,
 				});
 			},
-			this.cancellation
+			this.cancellation,
 		)
 			.then((res) => {
 				this.setState({
@@ -198,7 +198,7 @@ class UploadFileModal extends React.Component {
 					</Row>
 				</div>
 			</div>,
-			this.el
+			this.el,
 		);
 	}
 }

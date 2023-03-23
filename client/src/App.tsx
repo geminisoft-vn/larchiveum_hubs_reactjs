@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import "src/language";
 
-import { Loader } from "./components";
+import { Loader, Modal } from "./components";
 import Router from "./routes";
 import store from "./store";
 
@@ -23,6 +23,8 @@ const App = () => (
 				<Router />
 			</BrowserRouter>
 		</Suspense>
+
+		<Modal />
 	</Provider>
 );
 

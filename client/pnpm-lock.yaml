@@ -2,17 +2,6 @@ lockfileVersion: 5.4
 
 specifiers:
   '@ant-design/icons': ^5.0.1
-  '@editorjs/checklist': ^1.4.0
-  '@editorjs/code': ^2.8.0
-  '@editorjs/editorjs': ^2.26.5
-  '@editorjs/header': ^2.7.0
-  '@editorjs/image': ^2.8.1
-  '@editorjs/link': ^2.5.0
-  '@editorjs/list': ^1.8.0
-  '@editorjs/quote': ^2.5.0
-  '@editorjs/raw': ^2.4.0
-  '@editorjs/simple-image': ^1.5.1
-  '@editorjs/table': ^2.2.1
   '@emotion/react': ^11.10.6
   '@emotion/styled': ^11.10.6
   '@mui/icons-material': ^5.11.11
@@ -70,17 +59,6 @@ specifiers:
 
 dependencies:
   '@ant-design/icons': 5.0.1_biqbaboplfbrettd7655fr4n2y
-  '@editorjs/checklist': 1.4.0
-  '@editorjs/code': 2.8.0
-  '@editorjs/editorjs': 2.26.5
-  '@editorjs/header': 2.7.0
-  '@editorjs/image': 2.8.1
-  '@editorjs/link': 2.5.0
-  '@editorjs/list': 1.8.0
-  '@editorjs/quote': 2.5.0
-  '@editorjs/raw': 2.4.0
-  '@editorjs/simple-image': 1.5.1
-  '@editorjs/table': 2.2.1
   '@emotion/react': 11.10.6_pmekkgnqduwlme35zpnqhenc34
   '@emotion/styled': 11.10.6_oouaibmszuch5k64ms7uxp2aia
   '@mui/icons-material': 5.11.11_apxknyxvl46cjjhrrp53pe5pxy
@@ -424,22 +402,6 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@codexteam/icons/0.0.4:
-    resolution: {integrity: sha512-V8N/TY2TGyas4wLrPIFq7bcow68b3gu8DfDt1+rrHPtXxcexadKauRJL6eQgfG7Z0LCrN4boLRawR4S9gjIh/Q==}
-    dev: false
-
-  /@codexteam/icons/0.0.5:
-    resolution: {integrity: sha512-s6H2KXhLz2rgbMZSkRm8dsMJvyUNZsEjxobBEg9ztdrb1B2H3pEzY6iTwI4XUPJWJ3c3qRKwV4TrO3J5jUdoQA==}
-    dev: false
-
-  /@codexteam/icons/0.0.6:
-    resolution: {integrity: sha512-L7Q5PET8PjKcBT5wp7VR+FCjwCi5PUp7rd/XjsgQ0CI5FJz0DphyHGRILMuDUdCW2MQT9NHbVr4QP31vwAkS/A==}
-    dev: false
-
-  /@codexteam/icons/0.1.0:
-    resolution: {integrity: sha512-jW1fWnwtWzcP4FBGsaodbJY3s1ZaRU+IJy1pvJ7ygNQxkQinybJcwXoyt0a5mWwu/4w30A42EWhCrZn8lp4fdw==}
-    dev: false
-
   /@ctrl/tinycolor/3.6.0:
     resolution: {integrity: sha512-/Z3l6pXthq0JvMYdUFyX9j0MaCltlIn6mfh9jLyQwg5aPKxkyNa0PTHtU1AlFXLNk55ZuAeJRcpvq+tmLfKmaQ==}
     engines: {node: '>=10'}
@@ -529,77 +491,6 @@ packages:
     dependencies:
       '@date-io/core': 2.16.0
       moment: 2.29.4
-    dev: false
-
-  /@editorjs/checklist/1.4.0:
-    resolution: {integrity: sha512-KmkgWFYwkcFFvh7oBaUiqg8NBmJSnB87EC0P6obfqo3uDjCXXnen+KJfP+7JBcQx/OsiDlOS/lTxkyhxNtKtsA==}
-    dependencies:
-      '@codexteam/icons': 0.0.4
-    dev: false
-
-  /@editorjs/code/2.8.0:
-    resolution: {integrity: sha512-qlv1OqSEPKnLv/ZQgNFmVgqsMbGDkh/qgTEnbVWsS+yujo1nlwgVkqCB8tOkQGVsrpmAYLiWRlA413nKxxCN5w==}
-    dependencies:
-      '@codexteam/icons': 0.0.5
-    dev: false
-
-  /@editorjs/editorjs/2.26.5:
-    resolution: {integrity: sha512-imwXZi9NmzxKjNosa1xQf286liJYsTe2J2DWCiV5TwKhvYZ1INg5Y+FietcM2v65QmeLqP7wgBUhoI7wiCB+yQ==}
-    dependencies:
-      '@codexteam/icons': 0.1.0
-      codex-notifier: 1.1.2
-      codex-tooltip: 1.0.5
-      html-janitor: 2.0.4
-      nanoid: 3.3.4
-    dev: false
-
-  /@editorjs/header/2.7.0:
-    resolution: {integrity: sha512-4fGKGe2ZYblVqR/P/iw5ieG00uXInFgNMftBMqJRYcB2hUPD30kuu7Sn6eJDcLXoKUMOeqi8Z2AlUxYAmvw7zQ==}
-    dependencies:
-      '@codexteam/icons': 0.0.5
-    dev: false
-
-  /@editorjs/image/2.8.1:
-    resolution: {integrity: sha512-4WscDAoi6OO0F6L7N1mkQymADwj8hHgH/ICk5wGRPdkesUZW1TgldX8XvSmy+f5VylsEi3F/gUggaZsrYxu2sA==}
-    dependencies:
-      '@codexteam/icons': 0.0.6
-    dev: false
-
-  /@editorjs/link/2.5.0:
-    resolution: {integrity: sha512-3Oa1VweBY7Sscjzw8pv1QcWGyP+XdPl6+yu+gXnSETyjz9TQRZUjved0qw2OomYOjMZ3RumrdDJXxoALlZdvuQ==}
-    dependencies:
-      '@babel/runtime': 7.21.0
-      '@codexteam/icons': 0.0.4
-    dev: false
-
-  /@editorjs/list/1.8.0:
-    resolution: {integrity: sha512-Vq6cjyTXBzgegYv/MtTfuDdiz59yGhDEc/yAVXr6lmvoWAFs9cJ4TLuh4/9SbrbhIptcQLDvUjMDKmRrV6v2NQ==}
-    dependencies:
-      '@codexteam/icons': 0.0.4
-    dev: false
-
-  /@editorjs/quote/2.5.0:
-    resolution: {integrity: sha512-24Mu8cESaj34a0kg1Enj7qiZ3yiCOsZI59+8xpfXLO/NkO7hBYWNForVcBy5yIWs/VLlEZK11FP37f/mHrKugQ==}
-    dependencies:
-      '@codexteam/icons': 0.0.5
-    dev: false
-
-  /@editorjs/raw/2.4.0:
-    resolution: {integrity: sha512-6k7ngx1T8+ztTG4/i5QcGPKXkF2YvdqgKgtzpOTaG6Pzm17D7Hr30Krbqz2E2Y/uoV8SiR/X1UAyKTQxrk9B6Q==}
-    dependencies:
-      '@codexteam/icons': 0.0.4
-    dev: false
-
-  /@editorjs/simple-image/1.5.1:
-    resolution: {integrity: sha512-eXfNzYMOPE7I/HllX00XvEO1MGiFu34lzOIyQzxQ3GdD+GlEJgIN9IhLGN7glsyAhCVmNyxNXGa9kUHzWQ9c5Q==}
-    dependencies:
-      '@codexteam/icons': 0.0.6
-    dev: false
-
-  /@editorjs/table/2.2.1:
-    resolution: {integrity: sha512-6RJKF0DfPh7YuBVPmT5mHXjjhil2IJ8ytZpw2hTHAuduqoRlu6OJbaGzH2NTCdg7cgD4H4BbX0RB9kcVxRtB2w==}
-    dependencies:
-      '@codexteam/icons': 0.0.6
     dev: false
 
   /@emotion/babel-plugin/11.10.6:
@@ -1951,14 +1842,6 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /codex-notifier/1.1.2:
-    resolution: {integrity: sha512-DCp6xe/LGueJ1N5sXEwcBc3r3PyVkEEDNWCVigfvywAkeXcZMk9K41a31tkEFBW0Ptlwji6/JlAb49E3Yrxbtg==}
-    dev: false
-
-  /codex-tooltip/1.0.5:
-    resolution: {integrity: sha512-IuA8LeyLU5p1B+HyhOsqR6oxyFQ11k3i9e9aXw40CrHFTRO2Y1npNBVU3W1SvhKAbUU7R/YikUBdcYFP0RcJag==}
-    dev: false
-
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -2877,10 +2760,6 @@ packages:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
     dependencies:
       react-is: 16.13.1
-    dev: false
-
-  /html-janitor/2.0.4:
-    resolution: {integrity: sha512-92J5h9jNZRk30PMHapjHEJfkrBWKCOy0bq3oW2pBungky6lzYSoboBGPMvxl1XRKB2q+kniQmsLsPbdpY7RM2g==}
     dev: false
 
   /html-parse-stringify/3.0.1:
