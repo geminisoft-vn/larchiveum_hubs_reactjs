@@ -3,10 +3,15 @@ import { useTranslation } from "react-i18next";
 import { Button } from "src/components";
 
 const Document = (props) => {
-	const { document } = props;
+	const {
+		document,
+		handleGotoViewDocument,
+		handleGoToDocumentForm,
+		handleDeleteDocument,
+	} = props;
 	const { t } = useTranslation();
 	return (
-		<div className="flex items-center justify-between border-2 rounded-lg p-4">
+		<div className="flex items-center justify-between border rounded-lg p-4">
 			<div>
 				<div>
 					<div>{document.title}</div>
@@ -27,7 +32,7 @@ const Document = (props) => {
 				</Button>
 				<Button
 					onClick={() => {
-						onOpenDocumentEditDetail(document);
+						handleGoToDocumentForm(document.id);
 					}}
 				>
 					{t("content.DOCUMENT_TAB__DOCUMENT_LIST__EDIT_BUTTON_LABEL")}

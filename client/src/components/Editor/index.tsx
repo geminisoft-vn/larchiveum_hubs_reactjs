@@ -21,7 +21,7 @@ const Editor: React.FC<Props> = () => {
 			.catch(() => console.error("EditorJS started failed!"));
 	}, []);
 
-	return <div id="LARCHIVEUM__EDITOR" className="border-2 rounded w-full" />;
+	return <div id="LARCHIVEUM__EDITOR" className="border rounded w-full" />;
 };
 
 export default Editor;

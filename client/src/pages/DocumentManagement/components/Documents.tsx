@@ -2,16 +2,10 @@
 /* eslint-disable react/display-name */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
-import {
-	DeleteOutlined,
-	EyeOutlined,
-	LoadingOutlined,
-	UnorderedListOutlined,
-} from "@ant-design/icons";
-import { Button, Card, Col, Empty, Layout, Menu, Row, Spin } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Empty } from "antd";
 
 // import PopupCreateDocument from "./PopupCreateDocument";
 import DocumentService from "src/utilities/apiServices/DocumentService";
@@ -20,58 +14,55 @@ import Store from "src/utilities/store";
 
 import Document from "./Document";
 
-const { Header, Content, Footer, Sider } = Layout;
+const Documents = (props) => {
+	const navigate = useNavigate();
 
-export default function (props) {
-	const { t } = useTranslation();
-	const { onOpenDocumentEditDetail } = props;
-	const [isOpenPopupCreate, setIsOpenPopupCreate] = useState(false);
-	const [deletingDocumentId, setDeletingDocumentId] = useState(null);
-	const [isLoading, setIsLoading] = useState(false);
 	const [listDocument, setListDocument] = useState([]);
-	const [params, setParams] = useState({
-		sort: "-createdAt",
-		filter: JSON.stringify([
-			{
-				operator: "=",
-				key: "createdBy",
-				value: Store.getUser()?.id,
-			},
-		]),
-	});
 
 	useEffect(() => {
-		load();
+		loadDocuments();
 	}, []);
 
-	function load() {
-		setIsLoading(true);
-		DocumentService.getAll(params)
+	function loadDocuments() {
+		DocumentService.getAll({
+			sort: "-createdAt",
+			filter: JSON.stringify([
+				{
+					operator: "=",
+					key: "createdBy",
+					value: Store.getUser()?.id,
+				},
+			]),
+		})
 			.then((res) => {
 				const documents = res.data.items;
 				setListDocument(documents);
-				setIsLoading(false);
 			})
-			.catch((error) => {
-				setIsLoading(false);
-			});
+			.catch((error) => {});
 	}
 
-	function handleDeleteDocument(documentId) {
-		setDeletingDocumentId(documentId);
-		DocumentService.delete(documentId)
-			.then((document) => {
-				setListDocument(listDocument.filter((q) => q.id != documentId));
-				setDeletingDocumentId(null);
-			})
-			.catch((error) => {
-				setDeletingDocumentId(null);
-			});
-	}
+	const handleDeleteDocument = useCallback((documentId) => {
+		// handleDeleteDocument(documentId);
+	}, []);
 
-	function handleGotoViewDocument(documentId) {
+	const handleGoToDocumentForm = useCallback((documentId) => {
+		navigate(`/home/content/document-form/${documentId}`);
+	}, []);
+
+	// function handleDeleteDocument(documentId) {
+	// 	// DocumentService.delete(documentId)
+	// 	// 	.then((document) => {
+	// 	// 		setListDocument(listDocument.filter((q) => q.id != documentId));
+	// 	// 		setDeletingDocumentId(null);
+	// 	// 	})
+	// 	// 	.catch((error) => {
+	// 	// 		setDeletingDocumentId(null);
+	// 	// 	});
+	// }
+
+	const handleGotoViewDocument = useCallback((documentId) => {
 		window.open(`${CONTENT_ROOT}/document?id=${documentId}`);
-	}
+	}, []);
 
 	return (
 		<div>
@@ -83,10 +74,18 @@ export default function (props) {
 			) : (
 				<div className="flex flex-col gap-2">
 					{listDocument.map((document) => (
-						<Document key={document.id} document={document} />
+						<Document
+							key={document.id}
+							document={document}
+							handleGotoViewDocument={handleGotoViewDocument}
+							handleGoToDocumentForm={handleGoToDocumentForm}
+							handleDeleteDocument={handleDeleteDocument}
+						/>
 					))}
 				</div>
 			)}
 		</div>
 	);
-}
+};
+
+export default Documents;

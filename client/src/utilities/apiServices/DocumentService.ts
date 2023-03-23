@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 import request from "../axiosInstance";
-import { API_ROOT } from "../constants";
-import Store from "../store";
 
 class DocumentService {
 	static getAll(params) {

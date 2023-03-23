@@ -11,7 +11,7 @@ import Store from "src/utilities/store";
 import PopupCreateQuiz from "./PopupCreateQuiz";
 import Quiz from "./Quiz";
 
-function Quizzes(props) {
+const Quizzes = (props) => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [isOpenPopupCreate, setIsOpenPopupCreate] = useState(false);
@@ -100,6 +100,6 @@ function Quizzes(props) {
 			)}
 		</div>
 	);
-}
+};
 
 export default Quizzes;

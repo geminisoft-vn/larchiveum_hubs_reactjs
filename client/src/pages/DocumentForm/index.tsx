@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { LeftOutlined } from "@ant-design/icons";
 import { Editor } from "@tinymce/tinymce-react";
 
 import {
@@ -22,12 +23,27 @@ import { tinyApp } from "src/utilities/constants";
 const DocumentForm = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+	const { documentId } = useParams();
 
 	const dispatch = useDispatch();
 
-	const { handleSubmit, register } = useForm();
-
 	const [editorData, setEditorData] = useState<string>("");
+
+	const { handleSubmit, register } = useForm({
+		defaultValues: async () => {
+			const res = await DocumentService.getOne(documentId);
+			if (res.result === "ok") {
+				const { content } = res.data;
+				setEditorData(content);
+				console.log(res.data, editorData);
+				return res.data;
+			}
+			return {
+				title: "",
+				description: "",
+			};
+		},
+	});
 
 	const handleGoBack = () => {
 		navigate(-1);
@@ -96,7 +112,7 @@ const DocumentForm = () => {
 					justfyContent="between"
 					className="w-full"
 				>
-					<Button onClick={handleGoBack}>
+					<Button beforeIcon={<LeftOutlined />} onClick={handleGoBack}>
 						{t(
 							"content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__BACK_BUTTON_LABEL",
 						)}
@@ -142,7 +158,7 @@ const DocumentForm = () => {
 
 				<Editor
 					apiKey={tinyApp.apiKey}
-					initialValue=""
+					initialValue={editorData}
 					onChange={(e) => {
 						setEditorData(e.target.getBody().innerHTML);
 					}}
