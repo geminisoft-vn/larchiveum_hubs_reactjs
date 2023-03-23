@@ -1,4 +1,3 @@
-import React from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 // import NaverLogin from "react-naver-login";
 import GoogleLogin from "react-google-login";
@@ -20,7 +19,7 @@ import {
 	naverApp,
 } from "../utilities/constants";
 
-function SigninSocialButton() {
+const SigninSocialButton = () => {
 	// useEffect(() => {
 	//   gapi.load('client:auth2', ()=>{
 	//     gapi.client.init({
@@ -189,6 +188,6 @@ function SigninSocialButton() {
 			/>
 		</div>
 	);
-}
+};
 
 export default SigninSocialButton;

@@ -1,4 +1,3 @@
-import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,7 +9,7 @@ import QuizService from "src/utilities/apiServices/QuizService";
 
 import Questions from "./components/Questions";
 
-function QuizForm(props) {
+const QuizForm = (props) => {
 	const { t } = useTranslation();
 
 	const { quizId } = useParams();
@@ -23,8 +22,8 @@ function QuizForm(props) {
 			if (res.result === "ok") {
 				let questions = await Promise.all(
 					res.data.questions.map((question) =>
-						QuestionService.getOne(question.id)
-					)
+						QuestionService.getOne(question.id),
+					),
 				);
 				questions = questions.map((question) => ({
 					...question.data,
@@ -111,14 +110,14 @@ function QuizForm(props) {
 					<div className="flex flex-col gap-2">
 						<FormItem
 							label={t(
-								"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DETAIL__QUIZ_TITLE_INPUT_LABEL"
+								"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DETAIL__QUIZ_TITLE_INPUT_LABEL",
 							)}
 							renderInput={(props) => (
 								<TextInput
 									{...props}
 									{...methods.register("title")}
 									placeholder={t(
-										"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_TITLE_INPUT_PLACEHOLDER"
+										"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_TITLE_INPUT_PLACEHOLDER",
 									)}
 								/>
 							)}
@@ -126,14 +125,14 @@ function QuizForm(props) {
 
 						<FormItem
 							label={t(
-								"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_INTRODUCTION_INPUT_LABEL"
+								"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_INTRODUCTION_INPUT_LABEL",
 							)}
 							renderInput={(props) => (
 								<TextInput
 									{...props}
 									{...methods.register("introduction")}
 									placeholder={t(
-										"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_INTRODUCTION_INPUT_PLACEHOLDER"
+										"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_INTRODUCTION_INPUT_PLACEHOLDER",
 									)}
 								/>
 							)}
@@ -141,14 +140,14 @@ function QuizForm(props) {
 
 						<FormItem
 							label={t(
-								"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DESCRIPTION_INPUT_LABEL"
+								"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DESCRIPTION_INPUT_LABEL",
 							)}
 							renderInput={(props) => (
 								<TextInput
 									{...props}
 									{...methods.register("description")}
 									placeholder={t(
-										"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DESCRIPTION_INPUT_PLACEHOLDER"
+										"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DESCRIPTION_INPUT_PLACEHOLDER",
 									)}
 								/>
 							)}
@@ -160,6 +159,6 @@ function QuizForm(props) {
 			</FormContainer>
 		</FormProvider>
 	);
-}
+};
 
 export default QuizForm;

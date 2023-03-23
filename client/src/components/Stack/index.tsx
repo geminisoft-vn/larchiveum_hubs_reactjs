@@ -1,4 +1,3 @@
-import React from "react";
 import clsx from "clsx";
 
 type Props = {
@@ -21,7 +20,7 @@ const Stack = (props: Props) => {
 				`justify-${justfyContent || "start"}`,
 				`items-${alignItems || "start"}`,
 				`gap-${gap}`,
-				className
+				className,
 			)}
 		>
 			{children}

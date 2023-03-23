@@ -1,9 +1,8 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "src/components";
 
-function Filter(props) {
+const Filter = (props) => {
 	const { sortNewest, sortOldest, isActiveSortASC, isActiveSortDESC } = props;
 	const { t } = useTranslation();
 	return (
@@ -12,6 +11,6 @@ function Filter(props) {
 			<Button onClick={sortOldest}>{t("home.OLDEST")}</Button>
 		</div>
 	);
-}
+};
 
 export default Filter;

@@ -1,9 +1,8 @@
-import React from "react";
 import { Grid } from "@mui/material";
 
 import Exhibition from "./Exhibition";
 
-function Exhibitions(props) {
+const Exhibitions = (props) => {
 	const { exhibitions } = props;
 	return (
 		<Grid container spacing={2}>
@@ -15,6 +14,6 @@ function Exhibitions(props) {
 				))}
 		</Grid>
 	);
-}
+};
 
 export default Exhibitions;

@@ -1,4 +1,3 @@
-import React from "react";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
 import PublicRoundedIcon from "@mui/icons-material/PublicRounded";
@@ -16,7 +15,7 @@ import moment from "moment";
 import { Button, Typography } from "src/components";
 import { getLanguage } from "src/language";
 
-function Exhibition(props) {
+const Exhibition = (props) => {
 	const { exhibition } = props;
 	return (
 		<Card>
@@ -82,6 +81,6 @@ function Exhibition(props) {
 			</CardActions>
 		</Card>
 	);
-}
+};
 
 export default Exhibition;

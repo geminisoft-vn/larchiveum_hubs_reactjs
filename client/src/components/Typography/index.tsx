@@ -1,11 +1,10 @@
-import React from "react";
 import { Typography as MUITypography } from "@mui/material";
 import PropTypes from "prop-types";
 
-function Typography(props) {
+const Typography = (props) => {
 	const { text, fullWidth } = props;
 	return <MUITypography fullWidth={fullWidth}>{props.children}</MUITypography>;
-}
+};
 
 Typography.propTypes = {
 	text: PropTypes.string,

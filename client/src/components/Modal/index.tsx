@@ -1,4 +1,3 @@
-import React from "react";
 import clsx from "clsx";
 
 type Props = {
@@ -19,7 +18,7 @@ const Modal = (props: Props) => {
 			className={clsx(
 				`fixed top-0 left-0 right-0 z-50 hidden w-${
 					width || "full"
-				} p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full`
+				} p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full`,
 			)}
 		>
 			<div className="relative w-full h-full max-w-2xl md:h-auto">

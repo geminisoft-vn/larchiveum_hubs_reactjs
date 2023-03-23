@@ -1,8 +1,7 @@
-import React from "react";
 import { Autocomplete as MUIAutocomplete, TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
-function AutoComplete(props) {
+const AutoComplete = (props) => {
 	const { options, label, fullWidth } = props;
 	return (
 		<MUIAutocomplete
@@ -11,7 +10,7 @@ function AutoComplete(props) {
 			renderInput={(params) => <TextField {...params} label={label} />}
 		/>
 	);
-}
+};
 
 AutoComplete.propTypes = {
 	options: PropTypes.array,

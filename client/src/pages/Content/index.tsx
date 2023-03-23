@@ -1,13 +1,11 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Grid } from "@mui/material";
 
 import Sidebar from "./components/Sidebar";
 
 import "./ContentPage.scss";
 
-function ContentPage() {
+const ContentPage = () => {
 	const navigate = useNavigate();
 
 	const { t } = useTranslation();
@@ -38,14 +36,14 @@ function ContentPage() {
 
 	return (
 		<div className="grid grid-cols-12 gap-2">
-			<div className="col-span-3" >
+			<div className="col-span-3">
 				<Sidebar items={sidebarMenuItems} />
 			</div>
-			<div className="col-span-9" >
+			<div className="col-span-9">
 				<Outlet />
 			</div>
-		</Grid>
+		</div>
 	);
-}
+};
 
 export default ContentPage;

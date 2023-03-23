@@ -1,7 +1,6 @@
-import React from "react";
 import PropTypes from "prop-types";
 
-function FormContainer(props) {
+const FormContainer = (props) => {
 	const { onSubmit } = props;
 
 	return (
@@ -15,7 +14,7 @@ function FormContainer(props) {
 			{props.children}
 		</form>
 	);
-}
+};
 
 FormContainer.propTypes = {
 	children: PropTypes.element,

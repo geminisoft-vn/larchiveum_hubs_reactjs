@@ -8,17 +8,17 @@ export function auth() {
 			if (res.result == "ok") {
 				if (!res.data.id != user?.id) {
 					Store.removeUser();
-					window.location = "/?page=signin";
+					window.location = "/signin";
 				} else {
 					return true;
 				}
 			} else {
 				Store.removeUser();
-				window.location = "/?page=signin";
+				window.location = "/signin";
 			}
 		})
 		.catch(() => {
 			Store.removeUser();
-			window.location = "/?page=signin";
+			window.location = "/signin";
 		});
 }

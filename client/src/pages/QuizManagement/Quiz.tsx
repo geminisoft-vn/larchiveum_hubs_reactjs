@@ -1,4 +1,3 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
 import {
 	DeleteOutlined,
@@ -9,7 +8,7 @@ import PropTypes from "prop-types";
 
 import { Button } from "src/components";
 
-function Quiz(props) {
+const Quiz = (props) => {
 	const { quiz, handleGotoViewQuiz, handleGoToQuizForm, handleDeleteQuiz } =
 		props;
 
@@ -44,7 +43,7 @@ function Quiz(props) {
 			</div>
 		</div>
 	);
-}
+};
 
 Quiz.propTypes = {};
 

@@ -1,11 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import EditorJS from "@editorjs/editorjs";
 
 import { EDITOR_TOOLS } from "./Tools";
 
-const Editor = () => {
-	const editorRef = useRef<EditorJS | null>(null);
+type Props = {};
 
+const Editor: React.FC<Props> = () => {
 	useEffect(() => {
 		const editor = new EditorJS({
 			/**
@@ -16,15 +16,9 @@ const Editor = () => {
 			tools: EDITOR_TOOLS,
 		});
 
-		if (!editorRef.current) {
-			editorRef.current = editor;
-		}
-
-		return () => {
-			if (editorRef.current) {
-				editorRef.current = null;
-			}
-		};
+		editor.isReady
+			.then(() => console.log("EditorJS is ready!"))
+			.catch(() => console.error("EditorJS started failed!"));
 	}, []);
 
 	return <div id="LARCHIVEUM__EDITOR" className="border-2 rounded w-full" />;

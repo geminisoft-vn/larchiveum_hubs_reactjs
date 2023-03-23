@@ -1,4 +1,3 @@
-import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -8,7 +7,7 @@ import Question from "./Question";
 
 const MAX_QUESTION = 10;
 
-function Questions(props) {
+const Questions = (props) => {
 	const {} = props;
 
 	const { control } = useFormContext();
@@ -38,13 +37,13 @@ function Questions(props) {
 				{fields && fields.length < MAX_QUESTION && (
 					<Button onClick={() => append({ text: "" })}>
 						{`+ ${t(
-							"content.QUIZ_TAB__QUIZ_DETAIL__ADD_QUESTION_BUTTON_LABEL"
+							"content.QUIZ_TAB__QUIZ_DETAIL__ADD_QUESTION_BUTTON_LABEL",
 						)}`}
 					</Button>
 				)}
 			</div>
 		</div>
 	);
-}
+};
 
 export default Questions;

@@ -1,4 +1,3 @@
-import React from "react";
 import clsx from "clsx";
 
 type Props = {
@@ -18,7 +17,7 @@ const Sidebar = (props: Props) => {
 				items.map((item) => (
 					<li
 						className={clsx(
-							`inline-block cursor-pointer rounded-t-lg p-4`
+							`inline-block cursor-pointer rounded-t-lg p-4`,
 							// item.key === selectedTab &&
 							// 	"border-b-2 border-blue-500 text-blue-500"
 						)}

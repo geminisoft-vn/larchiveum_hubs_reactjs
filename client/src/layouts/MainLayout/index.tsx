@@ -1,27 +1,24 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
 import { Box, Container, Stack } from "@mui/material";
 
 import { Header } from "src/components";
 
-function MainLayout(props) {
-	return (
-		<Box
-			sx={{
-				backgroundColor: "#fff",
+const MainLayout = (props) => (
+	<Box
+		sx={{
+			backgroundColor: "#fff",
 
-				height: "100%",
-			}}
-		>
-			<Container>
-				<Stack direction="column" spacing={2}>
-					<Header />
+			height: "100%",
+		}}
+	>
+		<Container>
+			<Stack direction="column" spacing={2}>
+				<Header />
 
-					<Outlet />
-				</Stack>
-			</Container>
-		</Box>
-	);
-}
+				<Outlet />
+			</Stack>
+		</Container>
+	</Box>
+);
 
 export default MainLayout;
