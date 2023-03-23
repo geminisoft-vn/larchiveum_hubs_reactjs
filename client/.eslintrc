@@ -1,0 +1,139 @@
+{
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "prettier",
+    "simple-import-sort"
+  ],
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "18.0"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ],
+        "moduleDirectory": [
+          "node_modules",
+          "./"
+        ]
+      }
+    }
+  },
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "no-console": "warn",
+    "no-eval": "error",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-underscore-dangle": "off",
+    "import/prefer-default-export": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "no-param-reassign": [
+      2,
+      {
+        "props": false
+      }
+    ],
+    "react/jsx-filename-extension": [
+      2,
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
+    ],
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          // Packages `react` related packages come first.
+          [
+            "^react",
+            "^@?\\w"
+          ],
+          // Internal packages.
+          [
+            "^(@|src)(/.*|$)"
+          ],
+          // Side effect imports.
+          [
+            "^\\u0000"
+          ],
+          // Parent imports. Put `..` last.
+          [
+            "^\\.\\.(?!/?$)",
+            "^\\.\\./?$"
+          ],
+          // Other relative imports. Put same-folder imports and `.` last.
+          [
+            "^\\./(?=.*/)(?!/?$)",
+            "^\\.(?!/?$)",
+            "^\\./?$"
+          ],
+          // Style imports.
+          [
+            "^.+\\.?(css|scss)$"
+          ]
+        ]
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "tabWidth": 2,
+        "semi": true,
+        "singleQuote": false,
+        "trailingComma": "all",
+        "printWidth": 80,
+        "useTabs": true,
+        "endOfLine": "auto"
+      }
+    ]
+  },
+  "globals": {
+    "React": true,
+    "JSX": true
+  }
+}
