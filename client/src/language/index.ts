@@ -21,8 +21,8 @@ const resources = {
 };
 
 const setLanguage = (lang: string) => {
-	let locale = "";
-	if (!lang) {
+	let locale = lang;
+	if (!locale) {
 		locale = window.localStorage.getItem("LARCHIVEUM__language") || "en";
 	}
 	window.localStorage.setItem("LARCHIVEUM__language", locale);
