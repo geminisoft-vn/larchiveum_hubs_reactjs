@@ -3,7 +3,7 @@ import clsx from "clsx";
 type Props = {
 	children: JSX.Element | JSX.Element[] | string;
 	direction: "row" | "col";
-	alignItems?: "start" | "center" | "end";
+	alignItems?: "start" | "center" | "end" | "stretch";
 	justfyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
 	gap?: number;
 	className?: string;
