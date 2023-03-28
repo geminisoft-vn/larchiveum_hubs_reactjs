@@ -3,7 +3,7 @@ import clsx from "clsx";
 type Props = {
 	beforeIcon?: JSX.Element;
 	afterIcon?: JSX.Element;
-	onClick: () => void;
+	onClick?: (_e: React.SyntheticEvent) => void;
 	className?: string;
 	type?: "button" | "reset" | "submit";
 	children: JSX.Element | JSX.Element[] | string;
@@ -15,8 +15,8 @@ const Button = (props: Props) => {
 		/* eslint-disable react/button-has-type */
 		<button
 			className={clsx(
-				"border-gra flex items-center gap-2 rounded border border-gray-200 p-2",
-				className
+				"border-gra flex justify-center items-center gap-2 rounded border border-gray-200 p-2",
+				className,
 			)}
 			onClick={onClick}
 			type={type || "button"}
@@ -34,6 +34,7 @@ Button.defaultProps = {
 	afterIcon: null,
 	className: "",
 	type: "button",
+	onClick: undefined,
 };
 
 export default Button;

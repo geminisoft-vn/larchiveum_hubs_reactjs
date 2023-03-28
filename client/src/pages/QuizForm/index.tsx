@@ -112,9 +112,8 @@ const QuizForm = (props) => {
 							label={t(
 								"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DETAIL__QUIZ_TITLE_INPUT_LABEL",
 							)}
-							renderInput={(props) => (
+							renderInput={() => (
 								<TextInput
-									{...props}
 									{...methods.register("title")}
 									placeholder={t(
 										"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_TITLE_INPUT_PLACEHOLDER",
@@ -127,9 +126,8 @@ const QuizForm = (props) => {
 							label={t(
 								"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_INTRODUCTION_INPUT_LABEL",
 							)}
-							renderInput={(props) => (
+							renderInput={() => (
 								<TextInput
-									{...props}
 									{...methods.register("introduction")}
 									placeholder={t(
 										"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_INTRODUCTION_INPUT_PLACEHOLDER",
@@ -142,9 +140,8 @@ const QuizForm = (props) => {
 							label={t(
 								"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DESCRIPTION_INPUT_LABEL",
 							)}
-							renderInput={(props) => (
+							renderInput={() => (
 								<TextInput
-									{...props}
 									{...methods.register("description")}
 									placeholder={t(
 										"content.QUIZ_TAB__QUIZ_DETAIL__QUIZ_DESCRIPTION_INPUT_PLACEHOLDER",

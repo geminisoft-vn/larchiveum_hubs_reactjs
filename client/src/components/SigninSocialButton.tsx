@@ -111,7 +111,7 @@ const SigninSocialButton = () => {
 	};
 
 	return (
-		<div className="flex">
+		<div className="flex items-center gap-4">
 			<KakaoLogin
 				token={kakaoApp.jsKey}
 				onSuccess={signupWithKakao}

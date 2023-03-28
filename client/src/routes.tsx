@@ -92,7 +92,7 @@ export default function Router() {
 			element: <SignupPage />,
 		},
 		{
-			path: "forgot-password",
+			path: "forgot_password",
 			element: <ForgotPasswordPage />,
 		},
 		{

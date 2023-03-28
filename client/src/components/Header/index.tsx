@@ -17,8 +17,6 @@ const Header = () => {
 	const navigate = useNavigate();
 	const [shouldOpenLocaleDropdown, setShouldOpenLocaleDropdown] =
 		useState(false);
-	const [locale, setLocale] = useState(getLanguage());
-	const user = Store.getUser();
 
 	function checkCredentials() {
 		if (
@@ -78,79 +76,6 @@ const Header = () => {
 	];
 
 	return (
-		// <Box
-		// 	style={{
-		// 		height: "100%",
-		// 		width: "100%",
-
-		// 		borderBottom: "1px solid #c4c4c4",
-
-		// 		padding: "16px",
-		// 	}}
-		// >
-		// 	<Stack
-		// 		direction="row"
-		// 		alignItems="center"
-		// 		justifyContent="space-between"
-		// 		sx={{ width: "100%" }}
-		// 	>
-		// 		<a href="/" style={{ float: "left", height: "100%" }}>
-		// 			<img src={logo} alt="logo" style={{ height: "60px" }} />
-		// 		</a>
-		// 		<Stack
-		// 			direction="row"
-		// 			alignItems="center"
-		// 			style={{
-		// 				height: "100%",
-		// 				display: "flex",
-		// 				justifyContent: "center",
-		// 				alignItems: "center",
-		// 			}}
-		// 			spacing={2}
-		// 		>
-		// 			{btns &&
-		// 				btns.length > 0 &&
-		// 				btns.map(
-		// 					(btn) =>
-		// 						user.type >= btn.requiredUserType && (
-		// 							<Button key={btn.key} onClick={btn.onClick}>
-		// 								{btn.label}
-		// 							</Button>
-		// 						),
-		// 				)}
-		// 		</Stack>
-		// 		<Stack direction="row" spacing={2}>
-		// 			<Select
-		// 				value={language}
-		// 				onChange={handleChangeLanguage}
-		// 				options={[
-		// 					{
-		// 						value: "en",
-		// 						label: "English",
-		// 					},
-		// 					{
-		// 						value: "ko",
-		// 						label: "Korea",
-		// 					},
-		// 				]}
-		// 			/>
-		// 			{user ? (
-		// 				<Stack direction="row" alignItems="center" spacing={2}>
-		// 					<Typography>{user?.displayName || user?.email}</Typography>
-		// 					<Divider orientation="vertical" />
-		// 					<Button type="link" onClick={handleSignOut}>
-		// 						Logout
-		// 					</Button>
-		// 				</Stack>
-		// 			) : (
-		// 				<a href="/signin" className="signin-up">
-		// 					Sign in / Sign up
-		// 				</a>
-		// 			)}
-		// 		</Stack>
-		// 	</Stack>
-		// </Box>
-
 		<nav className="bg-white border-gray-200 px-2 md:px-4 py-2.5">
 			<div className="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto">
 				<a href="/home/app" className="flex items-center">
@@ -228,7 +153,7 @@ const Header = () => {
 						</div>
 					</div>
 					<Link
-						to="signin"
+						to="/signin"
 						className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 mr-1 md:mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
 					>
 						Log In

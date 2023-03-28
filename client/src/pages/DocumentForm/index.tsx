@@ -125,7 +125,6 @@ const DocumentForm = () => {
 				</Stack>
 				<Stack direction="col" gap={2} className="w-full">
 					<FormItem
-						name={register("title").name}
 						label={t(
 							"content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__TITLE_INPUT_LABEL",
 						)}
@@ -140,7 +139,6 @@ const DocumentForm = () => {
 						)}
 					/>
 					<FormItem
-						name={register("description").name}
 						label={t(
 							"content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__DESCRIPTION_INPUT_LABEL",
 						)}

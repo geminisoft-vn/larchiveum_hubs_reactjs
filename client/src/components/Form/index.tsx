@@ -1,25 +1,26 @@
-import PropTypes from "prop-types";
+import clsx from "clsx";
 
-const FormContainer = (props) => {
-	const { onSubmit } = props;
+type Props = {
+	onSubmit: () => void;
+	children: JSX.Element | JSX.Element[];
+	className: string;
+};
+
+const FormContainer = (props: Props) => {
+	const { onSubmit, children, className } = props;
 
 	return (
 		<form
+			className={clsx(className)}
 			onSubmit={(e) => {
 				e.preventDefault();
 				e.stopPropagation();
 				if (onSubmit) onSubmit();
 			}}
 		>
-			{props.children}
+			{children}
 		</form>
 	);
-};
-
-FormContainer.propTypes = {
-	children: PropTypes.element,
-	onSubmit: PropTypes.func,
-	formContext: PropTypes.object,
 };
 
 export default FormContainer;

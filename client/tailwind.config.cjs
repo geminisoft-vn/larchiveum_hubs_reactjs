@@ -8,6 +8,11 @@ module.exports = {
 				9999: "9999",
 			},
 		},
+		fontSize: {
+			sm: "0.8rem",
+			df: "1rem",
+			lg: "1.25rem",
+		},
 	},
 	plugins: [],
 };
