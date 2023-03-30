@@ -5,10 +5,10 @@ import { expireCookies } from "./constants";
 class Store {
 	static getUser() {
 		if (
-			Cookies.get("_larchiveum_user") &&
-			Cookies.get("_larchiveum_user") != ""
+			Cookies.get("__LARCHIVEUM__USER") &&
+			Cookies.get("__LARCHIVEUM__USER") !== ""
 		) {
-			const str = Cookies.get("_larchiveum_user");
+			const str = Cookies.get("__LARCHIVEUM__USER");
 			const user = JSON.parse(str || "{}");
 			if (user && user.token) {
 				return user;
@@ -18,8 +18,8 @@ class Store {
 	}
 
 	static setUser(data) {
-		if (data != undefined) {
-			Cookies.set("_larchiveum_user", JSON.stringify(data), {
+		if (data !== undefined) {
+			Cookies.set("__LARCHIVEUM__USER", JSON.stringify(data), {
 				expires: expireCookies,
 				path: "/",
 			});
@@ -27,7 +27,7 @@ class Store {
 	}
 
 	static removeUser() {
-		Cookies.remove("_larchiveum_user");
+		Cookies.remove("__LARCHIVEUM__USER");
 	}
 
 	static getAccessToken() {

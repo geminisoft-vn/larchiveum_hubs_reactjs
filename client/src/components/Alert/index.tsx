@@ -1,14 +1,12 @@
-import { FieldError } from "react-hook-form";
 import clsx from "clsx";
 
 type Props = {
 	type: "error" | "info" | "success" | "warning";
-	error: FieldError | undefined;
-	key: string;
+	error: string | undefined;
 };
 
 const Alert = (props: Props) => {
-	const { type, error, key } = props;
+	const { type, error } = props;
 	return (
 		<div
 			className={clsx(
@@ -20,7 +18,7 @@ const Alert = (props: Props) => {
 			)}
 			role="alert"
 		>
-			{error && error[key]}
+			{error}
 		</div>
 	);
 };

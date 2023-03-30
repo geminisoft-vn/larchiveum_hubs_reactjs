@@ -9,16 +9,25 @@ type Props = {
 	required?: boolean;
 	disabled?: boolean;
 	className?: string;
+	type?: "text" | "password";
 };
 
 const TextInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
-	const { name, onChange, onBlur, placeholder, required, disabled, className } =
-		props;
+	const {
+		name,
+		onChange,
+		onBlur,
+		placeholder,
+		required,
+		disabled,
+		className,
+		type,
+	} = props;
 
 	return (
 		<input
 			ref={ref}
-			type="text"
+			type={type}
 			name={name}
 			onChange={onChange}
 			onBlur={onBlur}
@@ -39,6 +48,7 @@ TextInput.defaultProps = {
 	className: "",
 	placeholder: "",
 	onBlur: undefined,
+	type: "text",
 };
 
 export default TextInput;

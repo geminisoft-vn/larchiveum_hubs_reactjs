@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { ErrorOption, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import logo from "src/assets/images/larchiveum_logo.png";
 import {
@@ -18,13 +19,14 @@ import Store from "src/utilities/store";
 
 const SignIn = () => {
 	const { t } = useTranslation();
+	const navigate = useNavigate();
 
 	const {
 		handleSubmit,
 		register,
 		setError,
 		formState: { errors },
-	} = useForm({
+	} = useForm<{ email: string; password: string }>({
 		defaultValues: {
 			email: "",
 			password: "",
@@ -35,29 +37,21 @@ const SignIn = () => {
 		setLanguage(getLanguage());
 	}, []);
 
-	// const handleSubmit = (e) => {
-	// 	// e.preventDefault();
-	// 	// UserService.login(data).then((res) => {
-	// 	// 	if (res.result === "ok") {
-	// 	// 		Store.setUser(res.data);
-	// 	// 		window.location = `/`;
-	// 	// 	} else if (res.result === "fail") {
-	// 	// 		setError(
-	// 	// 			t(
-	// 	// 				`forgot_password.FORGOT_PASSWORD_ERROR__${res.error.toUpperCase()}`,
-	// 	// 			),
-	// 	// 		);
-	// 	// 	}
-	// 	// });
-	// };
-
-	const handleLogin = handleSubmit((data) => {});
-
-	const handleChangeLanguage = (event) => {
-		// const lang = event.target.value;
-		// setLanguage(lang);
-		// setLanguage(lang);
-	};
+	const handleLogin = handleSubmit((data) => {
+		UserService.login(data).then((res) => {
+			if (res.result === "ok") {
+				Store.setUser(res.data);
+				navigate("/");
+			} else if (res.result === "fail") {
+				setError(
+					"email",
+					t(
+						`forgot_password.FORGOT_PASSWORD_ERROR__${res.error.toUpperCase()}`,
+					) as ErrorOption,
+				);
+			}
+		});
+	});
 
 	return (
 		<div
@@ -75,8 +69,12 @@ const SignIn = () => {
 				gap={2}
 				className="bg-white p-16 shadow-lg border rounded-lg "
 			>
-				<Alert type="error" message={errors.email} />
-				<Alert type="error" message={errors.password} />
+				<>
+					{errors.email && <Alert type="error" error={errors.email?.message} />}
+					{errors.password && (
+						<Alert type="error" error={errors.password?.message} />
+					)}
+				</>
 				<Stack direction="row" justfyContent="center">
 					<a href="./">
 						<img
@@ -100,6 +98,7 @@ const SignIn = () => {
 						renderInput={() => (
 							<TextInput
 								{...register("password")}
+								type="password"
 								placeholder=""
 								className=""
 							/>
@@ -125,72 +124,6 @@ const SignIn = () => {
 					<a href="/forgot_password">Reset password</a>
 				</p>
 			</Stack>
-			{/* <Paper
-					elevation={4}
-					sx={{ p: 2, width: "512px" }}
-					component="form"
-					// onSubmit={handleSubmit}
-				>
-					<Stack direction="column" justifyContent="flex-start" spacing={4}>
-						<Stack
-							direction="row"
-							justifyContent="center"
-							sx={{ width: "100%" }}
-						>
-							<a href="./">
-								<img
-									src={logo}
-									alt="logo"
-									style={{
-										width: "256px",
-									}}
-								/>
-							</a>
-						</Stack>
-
-						<Stack direction="column" spacing={2}>
-							{error && <Alert type="error" message={error} />}
-							<TextInput
-								name="email"
-								label={t("signin.EMAIL_LABEL")}
-								fullWidth
-								value={data.email}
-								onChange={handleChange}
-							/>
-
-							<TextInput
-								name="password"
-								type="password"
-								label={t("signin.PASSWORD_LABEL")}
-								value={data.password}
-								fullWidth
-								onChange={handleChange}
-							/>
-
-							<Button
-								type="submit"
-								variant="contained"
-								fullWidth
-								sx={{
-									background: `linear-gradient(45deg, #00dbde, #fc00ff) !important`,
-								}}
-							>
-								{t("signin.SIGN_IN_BUTTON")}
-							</Button>
-						</Stack>
-
-						<Divider>
-							Or register at <a href="/?page=signup">Sign up</a>
-						</Divider>
-
-						<SigninSocialButton />
-
-						<Typography sx={{ textAlign: "center" }}>
-							If you forgot your password{" "}
-							<a href="/?page=forgot-password">Reset password</a>
-						</Typography>
-					</Stack>
-				</Paper> */}
 		</div>
 	);
 };
