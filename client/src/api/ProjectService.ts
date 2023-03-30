@@ -1,0 +1,79 @@
+import { API_ROOT } from "src/utilities/constants";
+import Store from "src/utilities/store";
+
+class ProjectService {
+	static getListProject(data) {
+		return fetch(
+			`${API_ROOT}/v1/auth/projects?page=${
+				data.page ? data.page : 1
+			}&pageSize=${data.pageSize ? data.pageSize : 15}&sort=${
+				data.sort ? data.sort : ""
+			}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					access_token: Store.getUser()?.token,
+				},
+			},
+		)
+			.then((res) => res.json())
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
+	static getListObject(id) {
+		return fetch(`${API_ROOT}/v1/auth/projects/${id}/objects?sort=type|desc`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				access_token: Store.getUser()?.token,
+			},
+		})
+			.then((res) => res.json())
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
+	static getListProjectWithObjects(data) {
+		return fetch(
+			`${API_ROOT}/v1/auth/projects/objects?page=${
+				data.page ? data.page : 1
+			}&pageSize=${data.pageSize ? data.pageSize : 15}&sort=${
+				data.sort ? data.sort : ""
+			}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					access_token: Store.getUser()?.token,
+				},
+			},
+		)
+			.then((res) => res.json())
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
+	static updateChangeableObjects(projectId, data) {
+		return fetch(`${API_ROOT}/v1/auth/projects/${projectId}/objects`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				access_token: Store.getUser()?.token,
+			},
+			body: JSON.stringify({
+				uuids: data,
+			}),
+		})
+			.then((res) => res.json())
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+}
+
+export default ProjectService;
