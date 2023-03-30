@@ -6,8 +6,8 @@ import moment from "moment";
 // import Popup from "../../../../react-components/popup/popup";
 import { Button, Header, Stack } from "src/components";
 import { getLanguage, setLanguage } from "src/language";
-import AvatarService from "src/utilities/apiServices/AvatarService";
-import UserService from "src/utilities/apiServices/UserService";
+import AvatarService from "src/api/AvatarService";
+import UserService from "src/api/UserService";
 import Store from "src/utilities/store";
 import Validator from "src/utilities/validator";
 

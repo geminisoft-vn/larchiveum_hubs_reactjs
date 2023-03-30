@@ -4,8 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
 
 import { Button, FormContainer, FormItem, TextInput } from "src/components";
-import QuestionService from "src/utilities/apiServices/QuestionService";
-import QuizService from "src/utilities/apiServices/QuizService";
+import QuestionService from "src/api/QuestionService";
+import QuizService from "src/api/QuizService";
 
 import Questions from "./components/Questions";
 

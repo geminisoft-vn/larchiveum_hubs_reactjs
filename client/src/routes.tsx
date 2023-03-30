@@ -7,7 +7,6 @@ import {
 	// CallbackNaverOAuthPage,
 	ContentPage,
 	DocumentFormPage,
-	// WarningVerifyPage,
 	DocumentManagementPage,
 	ForgotPasswordPage,
 	HomePage,
@@ -19,6 +18,7 @@ import {
 	SigninPage,
 	SignupPage,
 	ViewQuizPage,
+	WarningVerifyPage,
 } from "src/pages";
 
 // ----------------------------------------------------------------------
@@ -94,6 +94,10 @@ export default function Router() {
 		{
 			path: "forgot_password",
 			element: <ForgotPasswordPage />,
+		},
+		{
+			path: "warning_verify",
+			element: <WarningVerifyPage />,
 		},
 		{
 			path: "*",

@@ -1,12 +1,10 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { Box, Container, Divider, Stack } from "@mui/material";
 import clsx from "clsx";
 
 import logo from "src/assets/images/larchiveum_logo.png";
-import { Button, Select, Typography } from "src/components";
 import { getLanguage, setLanguage } from "src/language";
 import Store from "src/utilities/store";
 
@@ -17,6 +15,10 @@ const Header = () => {
 	const navigate = useNavigate();
 	const [shouldOpenLocaleDropdown, setShouldOpenLocaleDropdown] =
 		useState(false);
+
+	const user = Store.getUser();
+
+	console.log({ user });
 
 	function checkCredentials() {
 		if (

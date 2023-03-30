@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import {
 	Box,
 	Container,
@@ -10,20 +11,19 @@ import {
 	Typography,
 } from "@mui/material";
 
+import UserService from "src/api/UserService";
 import logo from "src/assets/images/larchiveum_logo.png";
 import { Alert, Button, SigninSocialButton, TextInput } from "src/components";
 import { getLanguage, setLanguage } from "src/language";
-import UserService from "src/utilities/apiServices/UserService";
 import Store from "src/utilities/store";
 
-function SignUpForm() {
-	const user = Store.getUser();
+const SignUpForm = () => {
 	const { t } = useTranslation();
+	const navigate = useNavigate();
 
 	const [data, setData] = useState({});
 	const [submitted, setSubmited] = useState(false);
 	const [error, setError] = useState(null);
-	const [language, setLanguage] = useState("en");
 
 	useEffect(() => {
 		setLanguage(getLanguage());
@@ -51,10 +51,9 @@ function SignUpForm() {
 		}
 
 		UserService.signupWithEmail(data).then((res) => {
-			this.setState({ disabled: true });
 			if (res.result === "ok") {
 				Store.removeUser();
-				window.location = `/?page=warning-verify&email=${res.data.email}`;
+				navigate(`/warning_verify&email=${res.data.email}`);
 			} else if (res.result === "fail") {
 				setError(t(`signup.SIGN_UP_ERROR__${res.error.toUpperCase()}`));
 			}
@@ -162,6 +161,6 @@ function SignUpForm() {
 			</Container>
 		</Box>
 	);
-}
+};
 
 export default SignUpForm;

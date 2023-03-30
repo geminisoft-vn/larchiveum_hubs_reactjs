@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import logo from "src/assets/images/larchiveum_logo.png";
-import UserService from "src/utilities/apiServices/UserService";
+import UserService from "src/api/UserService";
 import Store from "src/utilities/store";
 
 function auth() {

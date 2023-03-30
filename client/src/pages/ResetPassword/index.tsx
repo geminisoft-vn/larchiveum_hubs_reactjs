@@ -4,7 +4,7 @@ import { FaHome } from "react-icons/fa";
 
 import { getLanguage, setLanguage } from "src/language";
 // import Popup from "../../../../react-components/popup/popup";
-import UserService from "src/utilities/apiServices/UserService";
+import UserService from "src/api/UserService";
 import Store from "src/utilities/store";
 
 function ResetPasswordPage() {

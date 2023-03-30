@@ -6,7 +6,7 @@ import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
 
 import { Button, Switch, TextInput } from "src/components";
 
-import AnswerService from "src/utilities/apiServices/AnswerService";
+import AnswerService from "src/api/AnswerService";
 
 function Answer(props) {
 	const {

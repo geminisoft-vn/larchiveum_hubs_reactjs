@@ -16,8 +16,8 @@ import {
 } from "src/components";
 import { closeModal, openModal } from "src/features/modal/ModalSlice";
 import { updateProgress } from "src/features/progress/ProgressSlice";
-import DocumentService from "src/utilities/apiServices/DocumentService";
-import MediaService from "src/utilities/apiServices/MediaService";
+import DocumentService from "src/api/DocumentService";
+import MediaService from "src/api/MediaService";
 import { tinyApp } from "src/utilities/constants";
 
 const DocumentForm = () => {

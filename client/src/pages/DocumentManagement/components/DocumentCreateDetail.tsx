@@ -21,8 +21,8 @@ import {
 	Typography,
 } from "antd";
 
-import DocumentService from "src/utilities/apiServices/DocumentService";
-import MediaService from "src/utilities/apiServices/MediaService";
+import DocumentService from "src/api/DocumentService";
+import MediaService from "src/api/MediaService";
 import { tinyApp } from "src/utilities/constants";
 import validator from "src/utilities/validator";
 

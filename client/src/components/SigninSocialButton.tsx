@@ -1,23 +1,23 @@
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-// import NaverLogin from "react-naver-login";
 import GoogleLogin from "react-google-login";
 import KakaoLogin from "react-kakao-login";
+// import NaverLogin from "react-naver-login";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import UserService from "src/api/UserService";
 import facebook from "src/assets/images/facebook.png";
 import google from "src/assets/images/google.png";
 import kakaotalk from "src/assets/images/kakao-talk.png";
 import naver from "src/assets/images/naver.png";
-import UserService from "src/utilities/apiServices/UserService";
-import Store from "src/utilities/store";
-
 import {
 	APP_ROOT,
 	facebookApp,
 	googleApp,
 	kakaoApp,
 	naverApp,
-} from "../utilities/constants";
+} from "src/utilities/constants";
+import Store from "src/utilities/store";
 
 const SigninSocialButton = () => {
 	// useEffect(() => {
@@ -29,15 +29,16 @@ const SigninSocialButton = () => {
 	//   })
 	// }, []);
 
+	const navigate = useNavigate();
+
 	const signupWithGoogle = (response) => {
-		console.log("Google Login Success :", response);
 		try {
 			const data = { ggtoken: response.tokenId };
 			UserService.googleLogin(data)
 				.then((response) => {
 					if (response.result === "ok") {
 						Store.setUser(response.data);
-						window.location = "/";
+						navigate("/");
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
 					}
@@ -57,7 +58,7 @@ const SigninSocialButton = () => {
 				.then((response) => {
 					if (response.result === "ok") {
 						Store.setUser(response.data);
-						window.location = "/";
+						navigate("/");
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
 					}
@@ -77,7 +78,7 @@ const SigninSocialButton = () => {
 				.then((response) => {
 					if (response.result === "ok") {
 						Store.setUser(response.data);
-						window.location = "/";
+						navigate("/");
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
 					}
@@ -91,19 +92,26 @@ const SigninSocialButton = () => {
 	};
 
 	const signupWithNaver = (response) => {
+		console.log(
+			"🚀 ~ file: SigninSocialButton.tsx:96 ~ signupWithNaver ~ response:",
+			response,
+		);
 		try {
 			const data = { fbtoken: response.accessToken };
 			UserService.naverLogin(data)
 				.then((response) => {
 					if (response.result === "ok") {
 						Store.setUser(response.data);
-						window.location = "/";
+						navigate("/");
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
 					}
 				})
 				.catch((error) => {
-					console.error(error);
+					console.error(
+						"🚀 ~ file: SigninSocialButton.tsx:108 ~ signupWithNaver ~ error:",
+						error,
+					);
 				});
 		} catch (err) {
 			console.log(err);
@@ -133,18 +141,18 @@ const SigninSocialButton = () => {
 			/>
 
 			{/* <NaverLogin
-        clientId={naverApp.clientID}
-        callbackUrl={APP_ROOT + "?page=callback-naver-oauth"}
-        onSuccess={signupWithNaver}
-        onFailure={err => {
-          console.log("Naver Login Error: ", err);
-        }}
-        render={props => (
-          <a onClick={props.onClick} className="naver-btn">
-            <img src={naver} />
-          </a>
-        )}
-      /> */}
+				clientId={naverApp.clientID}
+				callbackUrl={`${APP_ROOT}?page=callback-naver-oauth`}
+				onSuccess={signupWithNaver}
+				onFailure={(err) => {
+					console.log("Naver Login Error: ", err);
+				}}
+				render={(props) => (
+					<a onClick={props.onClick} className="naver-btn">
+						<img src={naver} />
+					</a>
+				)}
+			/> */}
 
 			<FacebookLogin
 				appId={facebookApp.clientID}

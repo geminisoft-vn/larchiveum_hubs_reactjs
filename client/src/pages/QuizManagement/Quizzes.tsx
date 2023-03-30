@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Empty } from "antd";
 
 import { Button } from "src/components";
-import QuizService from "src/utilities/apiServices/QuizService";
+import QuizService from "src/api/QuizService";
 import { CONTENT_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
 

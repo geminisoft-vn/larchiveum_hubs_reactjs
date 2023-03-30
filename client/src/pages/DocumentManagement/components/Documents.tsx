@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Empty } from "antd";
 
 // import PopupCreateDocument from "./PopupCreateDocument";
-import DocumentService from "src/utilities/apiServices/DocumentService";
+import DocumentService from "src/api/DocumentService";
 import { CONTENT_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
 

@@ -19,10 +19,10 @@ import defaultModel from "src/assets/larchiveum/model-default.png";
 import defaultImage1 from "src/assets/larchiveum/siri.gif";
 import { Header } from "src/components";
 import { getLanguage } from "src/language";
-import ExhibitionsService from "src/utilities/apiServices/ExhibitionsService";
-import MediaService from "src/utilities/apiServices/MediaService";
-import ProjectService from "src/utilities/apiServices/ProjectService";
-import UserService from "src/utilities/apiServices/UserService";
+import ExhibitionsService from "src/api/ExhibitionsService";
+import MediaService from "src/api/MediaService";
+import ProjectService from "src/api/ProjectService";
+import UserService from "src/api/UserService";
 import { APP_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
 

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { Button, FormItem, TextInput } from "src/components";
-import UserService from "src/utilities/apiServices/UserService";
+import UserService from "src/api/UserService";
 import Store from "src/utilities/store";
 import validator from "src/utilities/validator";
 

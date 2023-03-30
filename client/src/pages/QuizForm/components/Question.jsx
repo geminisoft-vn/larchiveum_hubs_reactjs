@@ -10,8 +10,8 @@ import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
 
 import { Button, Select, TextInput } from "src/components";
 
-import AnswerService from "src/utilities/apiServices/AnswerService";
-import QuestionService from "src/utilities/apiServices/QuestionService";
+import AnswerService from "src/api/AnswerService";
+import QuestionService from "src/api/QuestionService";
 
 import Answer from "./Answer";
 import Answers from "./Answers";

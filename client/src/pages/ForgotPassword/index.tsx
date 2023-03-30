@@ -13,7 +13,7 @@ import {
 import logo from "src/assets/images/larchiveum_logo.png";
 import { Alert, Button, SigninSocialButton, TextInput } from "src/components";
 import { getLanguage, setLanguage } from "src/language";
-import UserService from "src/utilities/apiServices/UserService";
+import UserService from "src/api/UserService";
 import Store from "src/utilities/store";
 
 // import Popup from "../../../../react-components/popup/popup";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-import UserService from "src/utilities/apiServices/UserService";
+import UserService from "src/api/UserService";
 import Store from "src/utilities/store";
 
 function CallbackNaverOAuthPage(props) {

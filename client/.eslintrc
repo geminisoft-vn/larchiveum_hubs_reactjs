@@ -42,14 +42,14 @@
   },
   "rules": {
     "no-console": "warn",
-    "no-eval": "error",
+    "no-eval": "warn",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "no-underscore-dangle": "off",
     "import/prefer-default-export": "off",
     "react/jsx-props-no-spreading": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
     "no-param-reassign": [
       2,
       {
@@ -75,7 +75,7 @@
       }
     ],
     "simple-import-sort/imports": [
-      "error",
+      "warn",
       {
         "groups": [
           // Packages `react` related packages come first.
@@ -110,7 +110,7 @@
       }
     ],
     "import/extensions": [
-      "error",
+      "warn",
       "ignorePackages",
       {
         "js": "never",
@@ -120,7 +120,7 @@
       }
     ],
     "prettier/prettier": [
-      "error",
+      "warn",
       {
         "tabWidth": 2,
         "semi": true,

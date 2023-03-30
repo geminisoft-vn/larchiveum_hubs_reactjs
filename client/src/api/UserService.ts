@@ -2,7 +2,7 @@ import apiRequest from "src/utilities/axiosInstance";
 import { API_ROOT } from "src/utilities/constants";
 
 class UserService {
-	static googleLogin(data) {
+	static googleLogin(data: { ggtoken: string }) {
 		return fetch(`${API_ROOT}/v1/gglogin`, {
 			method: "POST",
 			headers: {
@@ -16,7 +16,7 @@ class UserService {
 			});
 	}
 
-	static facebookLogin(data) {
+	static facebookLogin(data: { fbtoken: string }) {
 		return fetch(`${API_ROOT}/v1/fblogin`, {
 			method: "POST",
 			headers: {
@@ -30,7 +30,7 @@ class UserService {
 			});
 	}
 
-	static naverLogin(data) {
+	static naverLogin(data: { fbtoken: string }) {
 		return fetch(`${API_ROOT}/v1/nvlogin`, {
 			method: "POST",
 			headers: {
@@ -44,7 +44,7 @@ class UserService {
 			});
 	}
 
-	static kakaoLogin(data) {
+	static kakaoLogin(data: { kktoken: string }) {
 		return fetch(`${API_ROOT}/v1/kklogin`, {
 			method: "POST",
 			headers: {

@@ -19,7 +19,7 @@ import {
 import axios from "axios";
 import PropTypes from "prop-types";
 
-import MediaService from "src/utilities/apiServices/MediaService";
+import MediaService from "src/api/MediaService";
 
 import "./UploadFileModal.scss";
 
