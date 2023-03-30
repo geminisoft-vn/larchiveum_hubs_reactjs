@@ -3,6 +3,7 @@ import { ErrorOption, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+import UserService from "src/api/UserService";
 import logo from "src/assets/images/larchiveum_logo.png";
 import {
 	Alert,
@@ -12,9 +13,9 @@ import {
 	SigninSocialButton,
 	Stack,
 	TextInput,
+	Typography,
 } from "src/components";
 import { getLanguage, setLanguage } from "src/language";
-import UserService from "src/api/UserService";
 import Store from "src/utilities/store";
 
 const SignIn = () => {
@@ -75,7 +76,7 @@ const SignIn = () => {
 						<Alert type="error" error={errors.password?.message} />
 					)}
 				</>
-				<Stack direction="row" justfyContent="center">
+				<Stack direction="row" justifyContent="center">
 					<a href="./">
 						<img
 							src={logo}
@@ -86,7 +87,7 @@ const SignIn = () => {
 						/>
 					</a>
 				</Stack>
-				<FormContainer onSubmit={handleLogin} className="flex flex-col  gap-2">
+				<FormContainer onSubmit={handleLogin} className="flex flex-col gap-2">
 					<FormItem
 						label={t("signin.EMAIL_LABEL")}
 						renderInput={() => (
@@ -113,16 +114,16 @@ const SignIn = () => {
 					</Button>
 				</FormContainer>
 
-				<p>
+				<Typography>
 					Or register at <a href="/signup">Sign up</a>
-				</p>
+				</Typography>
 
 				<SigninSocialButton />
 
-				<p>
+				<Typography>
 					If you forgot your password{" "}
 					<a href="/forgot_password">Reset password</a>
-				</p>
+				</Typography>
 			</Stack>
 		</div>
 	);

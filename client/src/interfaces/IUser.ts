@@ -18,3 +18,10 @@ export interface IUser {
 	createdAt: Date;
 	updatedAt: Date;
 }
+
+export interface IUserAuthenticationForm {
+	displayName: string;
+	email: string;
+	password: string;
+	repassword: string;
+}

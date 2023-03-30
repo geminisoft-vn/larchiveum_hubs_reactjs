@@ -4,3 +4,4 @@ export { type IDocument } from "./IDocument";
 export { type IQuestion } from "./IQuestion";
 export { type IQuiz } from "./IQuiz";
 export { type IUser } from "./IUser";
+export { type IUserAuthenticationForm } from "./IUser";

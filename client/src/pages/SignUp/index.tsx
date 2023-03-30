@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { ErrorOption, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import {
-	Box,
-	Container,
-	Divider,
-	IconButton,
-	Paper,
-	Stack,
-	Typography,
-} from "@mui/material";
 
 import UserService from "src/api/UserService";
 import logo from "src/assets/images/larchiveum_logo.png";
-import { Alert, Button, SigninSocialButton, TextInput } from "src/components";
+import {
+	Alert,
+	Button,
+	FormContainer,
+	FormItem,
+	Stack,
+	TextInput,
+	Typography,
+} from "src/components";
+import { IUserAuthenticationForm } from "src/interfaces";
 import { getLanguage, setLanguage } from "src/language";
 import Store from "src/utilities/store";
 
@@ -21,32 +22,28 @@ const SignUpForm = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
-	const [data, setData] = useState({});
-	const [submitted, setSubmited] = useState(false);
-	const [error, setError] = useState(null);
+	const {
+		handleSubmit,
+		register,
+		setError,
+		formState: { errors },
+	} = useForm<IUserAuthenticationForm>({
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	});
 
 	useEffect(() => {
 		setLanguage(getLanguage());
 	}, []);
 
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setData({ ...data, [name]: value });
-		setError();
-	};
-
-	const handleChangeLanguage = (event) => {
-		const lang = event.target.value;
-		setLanguage(lang);
-		setLanguage(lang);
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		setSubmited(true);
-
+	const handleSignUp = handleSubmit((data) => {
 		if (data.password !== data.repassword) {
-			setError(t("signup.SIGN_UP_ERROR__RE_PASSWORD_NOT_MATCH"));
+			setError(
+				"password",
+				t("signup.SIGN_UP_ERROR__RE_PASSWORD_NOT_MATCH") as ErrorOption,
+			);
 			return;
 		}
 
@@ -55,14 +52,18 @@ const SignUpForm = () => {
 				Store.removeUser();
 				navigate(`/warning_verify&email=${res.data.email}`);
 			} else if (res.result === "fail") {
-				setError(t(`signup.SIGN_UP_ERROR__${res.error.toUpperCase()}`));
+				setError(
+					"email",
+					t(`signup.SIGN_UP_ERROR__${res.error.toUpperCase()}`) as ErrorOption,
+				);
 			}
 		});
-	};
+	});
 
 	return (
-		<Box
-			sx={{
+		<div
+			className="w-full h-full flex items-center justify-center"
+			style={{
 				backgroundImage: `url(https://hubs-dev-01-assets.larchiveum.link/hubs/assets/login/background-da651ea8f8f4db5bec199e614ba84843.jpg)`,
 				backgroundRepeat: "no-repeat",
 				backgroundPosition: "center",
@@ -71,95 +72,89 @@ const SignUpForm = () => {
 				width: "100%",
 				height: "100%",
 			}}
-			component="div"
 		>
-			<Container
-				sx={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-
-					width: "100%",
-					height: "100%",
-				}}
+			<Stack
+				direction="col"
+				justifyContent="start"
+				gap={4}
+				className="bg-white p-16 shadow-lg border rounded-lg "
 			>
-				<Paper
-					elevation={4}
-					sx={{ p: 2, width: "512px" }}
-					component="form"
-					onSubmit={handleSubmit}
-				>
-					<Stack direction="column" justifyContent="flex-start" spacing={4}>
-						<Stack
-							direction="row"
-							justifyContent="center"
-							sx={{ width: "100%" }}
-						>
-							<a href="./">
-								<img
-									src={logo}
-									alt="logo"
-									style={{
-										width: "256px",
-									}}
-								/>
-							</a>
-						</Stack>
+				<Stack direction="row" justifyContent="center" alignItems="center">
+					<a href="./">
+						<img
+							src={logo}
+							alt="logo"
+							style={{
+								width: "256px",
+							}}
+						/>
+					</a>
+				</Stack>
 
-						<Stack direction="column" spacing={2}>
-							{error && <Alert type="error" message={error} />}
+				<FormContainer onSubmit={handleSignUp} className="flex flex-col gap-2">
+					<>
+						{errors.email && (
+							<Alert type="error" error={errors.email?.message} />
+						)}
+						{errors.password && (
+							<Alert type="error" error={errors.password?.message} />
+						)}
+					</>
+					<FormItem
+						label={t("signup.DISPLAY_NAME_LABEL")}
+						renderInput={() => (
 							<TextInput
-								name="displayName"
-								label={t("signup.DISPLAY_NAME_LABEL")}
-								fullWidth
-								value={data.displayName}
-								onChange={handleChange}
+								{...register("displayName")}
+								placeholder=""
+								className=""
 							/>
+						)}
+					/>
 
+					<FormItem
+						label={t("signup.EMAIL_LABEL")}
+						renderInput={() => (
+							<TextInput {...register("email")} placeholder="" className="" />
+						)}
+					/>
+
+					<FormItem
+						label={t("signup.PASSWORD_LABEL")}
+						renderInput={() => (
 							<TextInput
-								name="email"
-								label={t("signup.EMAIL_LABEL")}
-								fullWidth
-								value={data.email}
-								onChange={handleChange}
-							/>
-							<TextInput
-								name="password"
+								{...register("password")}
 								type="password"
-								label={t("signup.PASSWORD_LABEL")}
-								value={data.password}
-								fullWidth
-								onChange={handleChange}
+								placeholder=""
+								className=""
 							/>
+						)}
+					/>
 
+					<FormItem
+						label={t("signup.RE_PASSWORD_LABEL")}
+						renderInput={() => (
 							<TextInput
-								name="repassword"
+								{...register("repassword")}
 								type="password"
-								label={t("signup.RE_PASSWORD_LABEL")}
-								value={data.repassword}
-								fullWidth
-								onChange={handleChange}
+								placeholder=""
+								className=""
 							/>
+						)}
+					/>
 
-							<Button
-								type="submit"
-								variant="contained"
-								fullWidth
-								sx={{
-									background: `linear-gradient(45deg, #00dbde, #fc00ff) !important`,
-								}}
-							>
-								{t("signup.SIGN_UP_BUTTON")}
-							</Button>
-						</Stack>
+					<Button
+						type="submit"
+						className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-df w-full sm:w-auto px-5 py-2.5"
+					>
+						{t("signup.SIGN_UP_BUTTON")}
+					</Button>
+				</FormContainer>
 
-						<Typography sx={{ textAlign: "center" }}>
-							Already have an account? <a href="/?page=signin">Sign in</a>
-						</Typography>
-					</Stack>
-				</Paper>
-			</Container>
-		</Box>
+				<Typography>
+					Already have an account? <a href="/signin">Sign in</a>
+				</Typography>
+			</Stack>
+		</div>
 	);
 };
 

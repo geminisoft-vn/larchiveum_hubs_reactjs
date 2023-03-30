@@ -1,14 +1,21 @@
-import { Typography as MUITypography } from "@mui/material";
-import PropTypes from "prop-types";
+import clsx from "clsx";
 
-const Typography = (props) => {
-	const { text, fullWidth } = props;
-	return <MUITypography fullWidth={fullWidth}>{props.children}</MUITypography>;
+type Props = {
+	children:
+		| JSX.Element
+		| JSX.Element[]
+		| string
+		| (JSX.Element | JSX.Element[] | string)[];
+	className?: string;
 };
 
-Typography.propTypes = {
-	text: PropTypes.string,
-	fullWidth: PropTypes.bool,
+const Typography = (props: Props) => {
+	const { children, className } = props;
+	return <p className={clsx(className)}>{children}</p>;
+};
+
+Typography.defaultProps = {
+	className: "",
 };
 
 export default Typography;

@@ -11,12 +11,12 @@ import { toast } from "react-toastify";
 import { Box, Stack } from "@mui/material";
 import moment from "moment-timezone";
 
-import { Pagination } from "src/components";
-import { IParams } from "src/interfaces";
-import { getLanguage } from "src/language";
 import ExhibitionsService from "src/api/ExhibitionsService";
 import ReserveService from "src/api/ReserveService";
 import UserService from "src/api/UserService";
+import { Pagination } from "src/components";
+import { IParams } from "src/interfaces";
+import { getLanguage } from "src/language";
 // import Popup from "../../../../react-components/popup/popup";
 import { APP_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
@@ -26,7 +26,7 @@ import Filter from "./components/Filter";
 
 import "react-toastify/dist/ReactToastify.css";
 
-function HomePage() {
+const HomePage = () => {
 	const [exhibitionsLoaded, setExhibitionsLoaded] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isActiveSortASC, setIsActiveSortASC] = useState(true);
@@ -45,34 +45,7 @@ function HomePage() {
 	const user = Store.getUser();
 	const { t } = useTranslation();
 
-	function auth() {
-		const token = Store.getUser()?.token;
-		UserService.checkToken(token)
-			.then((res) => {
-				if (res.result === "ok") {
-					const data = Store.getUser();
-					if (res.data.id !== data?.id) {
-						Store.removeUser();
-					}
-				} else {
-					Store.removeUser();
-				}
-				setIsLoading(false);
-			})
-			.catch((error) => {
-				setIsLoading(false);
-			});
-	}
-
 	useEffect(() => {
-		auth();
-		// redirect to verify page
-		const qs = new URLSearchParams(window.location.search);
-		if (qs.has("auth_topic")) {
-			const redirectUrl = new URL("/verify", window.location);
-			redirectUrl.search = window.location.search;
-			window.location = redirectUrl;
-		}
 		getAllExhibitions();
 	}, [params.page, params.sort]);
 
@@ -469,6 +442,6 @@ function HomePage() {
 			</Stack>
 		</Box>
 	);
-}
+};
 
 export default HomePage;

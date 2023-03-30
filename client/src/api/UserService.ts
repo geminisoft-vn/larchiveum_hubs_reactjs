@@ -1,3 +1,4 @@
+import { IUserAuthenticationForm } from "src/interfaces";
 import apiRequest from "src/utilities/axiosInstance";
 import { API_ROOT } from "src/utilities/constants";
 
@@ -9,11 +10,7 @@ class UserService {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		}).then((res) => res.json());
 	}
 
 	static facebookLogin(data: { fbtoken: string }) {
@@ -23,11 +20,7 @@ class UserService {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		}).then((res) => res.json());
 	}
 
 	static naverLogin(data: { fbtoken: string }) {
@@ -37,11 +30,7 @@ class UserService {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		}).then((res) => res.json());
 	}
 
 	static kakaoLogin(data: { kktoken: string }) {
@@ -51,42 +40,30 @@ class UserService {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		}).then((res) => res.json());
 	}
 
-	static signupWithEmail(data) {
+	static signupWithEmail(data: Partial<IUserAuthenticationForm>) {
 		return fetch(`${API_ROOT}/v1/users`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		}).then((res) => res.json());
 	}
 
-	static login(data) {
+	static login(data: Partial<IUserAuthenticationForm>) {
 		return fetch(`${API_ROOT}/v1/login`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		}).then((res) => res.json());
 	}
 
-	static checkToken(token) {
+	static checkToken(token: string) {
 		return fetch(`${API_ROOT}/v1/users/checkToken`, {
 			method: "POST",
 			headers: {
@@ -95,52 +72,40 @@ class UserService {
 			body: JSON.stringify({
 				token,
 			}),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		}).then((res) => res.json());
 	}
 
-	static requestResetPassword(email) {
+	static requestResetPassword(email: string) {
 		return fetch(`${API_ROOT}/v1/users/requestResetPassword`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(email),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		}).then((res) => res.json());
 	}
 
-	static resetPassword(data) {
+	static resetPassword(data: { access_token: string; pasword: string }) {
 		return fetch(`${API_ROOT}/v1/users/resetPassword`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		}).then((res) => res.json());
 	}
 
-	static verifyUser(token) {
+	static verifyUser(token: string) {
 		return apiRequest.post("/v1/auth/users/verifyUser", {
 			access_token: token,
 		});
 	}
 
-	static reSendVerifyMail(email) {
+	static reSendVerifyMail(email: string) {
 		return apiRequest.post("v1/users/reSendVerifyMail", { email });
 	}
 
-	static update(id, data) {
+	static update(id: number, data: Partial<IUserAuthenticationForm>) {
 		return apiRequest
 			.patch(`v1/auth/users/${id}`, data)
 			.then((response) => response.data);

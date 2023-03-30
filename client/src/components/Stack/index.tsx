@@ -2,22 +2,22 @@ import clsx from "clsx";
 
 type Props = {
 	children: JSX.Element | JSX.Element[] | string;
-	direction: "row" | "col";
+	direction?: "row" | "col";
 	alignItems?: "start" | "center" | "end" | "stretch";
-	justfyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
+	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
 	gap?: number;
 	className?: string;
 };
 
 const Stack = (props: Props) => {
-	const { children, direction, alignItems, justfyContent, gap, className } =
+	const { children, direction, alignItems, justifyContent, gap, className } =
 		props;
 	return (
 		<div
 			className={clsx(
 				`flex`,
 				direction === "row" ? "flex-row" : "flex-col",
-				`justify-${justfyContent || "start"}`,
+				`justify-${justifyContent || "start"}`,
 				`items-${alignItems || "start"}`,
 				`gap-${gap}`,
 				className,
@@ -29,8 +29,9 @@ const Stack = (props: Props) => {
 };
 
 Stack.defaultProps = {
+	direction: "row",
 	alignItems: "start",
-	justfyContent: "start",
+	justifyContent: "start",
 	gap: 0,
 	className: "",
 };
