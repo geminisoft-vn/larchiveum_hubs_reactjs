@@ -3,6 +3,7 @@ import { Navigate, useRoutes } from "react-router-dom";
 // layouts
 import AuthLayout from "src/layouts/AuthLayout";
 import MainLayout from "src/layouts/MainLayout";
+import ProtectedRoute from "src/layouts/ProtectedRoute";
 // pages
 import {
 	// CallbackNaverOAuthPage,
@@ -32,13 +33,29 @@ export default function Router() {
 			children: [
 				{ element: <Navigate to="/home/app" />, index: true },
 				{ path: "app", element: <HomePage /> },
-				{ path: "profile", element: <ProfilePage /> },
-				{ path: "manager", element: <ManagerPage /> },
-				// { path: "quiz", element: <ViewQuizPage /> },
-				{ path: "document", element: <ViewQuizPage /> },
+				{
+					path: "profile",
+					element: (
+						<ProtectedRoute>
+							<ProfilePage />
+						</ProtectedRoute>
+					),
+				},
+				{
+					path: "manager",
+					element: (
+						<ProtectedRoute>
+							<ManagerPage />
+						</ProtectedRoute>
+					),
+				},
 				{
 					path: "content",
-					element: <ContentPage />,
+					element: (
+						<ProtectedRoute>
+							<ContentPage />
+						</ProtectedRoute>
+					),
 					children: [
 						{
 							element: <Navigate to="/home/content/quiz" />,

@@ -5,15 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import UserService from "src/api/UserService";
 import logo from "src/assets/images/larchiveum_logo.png";
-import {
-	Alert,
-	Button,
-	FormContainer,
-	FormItem,
-	Stack,
-	TextInput,
-	Typography,
-} from "src/components";
+import { Alert, Button, FormContainer, FormItem, Stack, TextInput, Typography } from "src/components";
 import { IUserAuthenticationForm } from "src/interfaces";
 import { getLanguage, setLanguage } from "src/language";
 import Store from "src/utilities/store";
@@ -40,10 +32,7 @@ const SignUpForm = () => {
 
 	const handleSignUp = handleSubmit((data) => {
 		if (data.password !== data.repassword) {
-			setError(
-				"password",
-				t("signup.SIGN_UP_ERROR__RE_PASSWORD_NOT_MATCH") as ErrorOption,
-			);
+			setError("password", t("signup.SIGN_UP_ERROR__RE_PASSWORD_NOT_MATCH") as ErrorOption);
 			return;
 		}
 
@@ -52,10 +41,7 @@ const SignUpForm = () => {
 				Store.removeUser();
 				navigate(`/auth/warning_verify&email=${res.data.email}`);
 			} else if (res.result === "fail") {
-				setError(
-					"email",
-					t(`signup.SIGN_UP_ERROR__${res.error.toUpperCase()}`) as ErrorOption,
-				);
+				setError("email", t(`signup.SIGN_UP_ERROR__${res.error.toUpperCase()}`) as ErrorOption);
 			}
 		});
 	});
@@ -73,12 +59,7 @@ const SignUpForm = () => {
 				height: "100%",
 			}}
 		>
-			<Stack
-				direction="col"
-				justifyContent="start"
-				gap={4}
-				className="bg-white p-16 shadow-lg border rounded-lg "
-			>
+			<Stack direction="col" justifyContent="start" gap={4} className="bg-white p-16 shadow-lg border rounded-lg ">
 				<Stack direction="row" justifyContent="center" alignItems="center">
 					<a href="./">
 						<img
@@ -93,53 +74,27 @@ const SignUpForm = () => {
 
 				<FormContainer onSubmit={handleSignUp} className="flex flex-col gap-2">
 					<>
-						{errors.email && (
-							<Alert type="error" error={errors.email?.message} />
-						)}
-						{errors.password && (
-							<Alert type="error" error={errors.password?.message} />
-						)}
+						{errors.email && <Alert type="error" error={errors.email?.message} />}
+						{errors.password && <Alert type="error" error={errors.password?.message} />}
 					</>
 					<FormItem
 						label={t("signup.DISPLAY_NAME_LABEL")}
-						renderInput={() => (
-							<TextInput
-								{...register("displayName")}
-								placeholder=""
-								className=""
-							/>
-						)}
+						renderInput={() => <TextInput {...register("displayName")} placeholder="" className="" />}
 					/>
 
 					<FormItem
 						label={t("signup.EMAIL_LABEL")}
-						renderInput={() => (
-							<TextInput {...register("email")} placeholder="" className="" />
-						)}
+						renderInput={() => <TextInput {...register("email")} placeholder="" className="" />}
 					/>
 
 					<FormItem
 						label={t("signup.PASSWORD_LABEL")}
-						renderInput={() => (
-							<TextInput
-								{...register("password")}
-								type="password"
-								placeholder=""
-								className=""
-							/>
-						)}
+						renderInput={() => <TextInput {...register("password")} type="password" placeholder="" className="" />}
 					/>
 
 					<FormItem
 						label={t("signup.RE_PASSWORD_LABEL")}
-						renderInput={() => (
-							<TextInput
-								{...register("repassword")}
-								type="password"
-								placeholder=""
-								className=""
-							/>
-						)}
+						renderInput={() => <TextInput {...register("repassword")} type="password" placeholder="" className="" />}
 					/>
 
 					<Button

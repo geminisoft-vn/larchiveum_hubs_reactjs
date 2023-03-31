@@ -1,4 +1,5 @@
 export { default as Header } from "./Header";
+
 export { default as SigninSocialButton } from "./SigninSocialButton";
 export { default as Modal } from "./Modal";
 export { default as Button } from "./Button";
@@ -17,5 +18,6 @@ export { default as Stack } from "./Stack";
 export { default as Box } from "./Box";
 export { default as Loader } from "./Loader";
 export { default as Progress } from "./Progress";
+export { default as Toast } from "./Toast";
 
 export { default as Popup } from "./Popup";

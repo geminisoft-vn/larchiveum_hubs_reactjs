@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { ErrorOption, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
-import UserService from "src/api/UserService";
+import { useAppDispatch } from "src/app/hooks";
 import logo from "src/assets/images/larchiveum_logo.png";
 import {
 	Alert,
@@ -15,17 +15,17 @@ import {
 	TextInput,
 	Typography,
 } from "src/components";
+import { login } from "src/features/user/thunks";
 import { getLanguage, setLanguage } from "src/language";
-import Store from "src/utilities/store";
 
 const SignIn = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 
 	const {
 		handleSubmit,
 		register,
-		setError,
 		formState: { errors },
 	} = useForm<{ email: string; password: string }>({
 		defaultValues: {
@@ -39,19 +39,9 @@ const SignIn = () => {
 	}, []);
 
 	const handleLogin = handleSubmit((data) => {
-		UserService.login(data).then((res) => {
-			if (res.result === "ok") {
-				Store.setUser(res.data);
-				navigate("/");
-			} else if (res.result === "fail") {
-				setError(
-					"email",
-					t(
-						`forgot_password.FORGOT_PASSWORD_ERROR__${res.error.toUpperCase()}`,
-					) as ErrorOption,
-				);
-			}
-		});
+		dispatch(login(data))
+			.unwrap()
+			.then(() => navigate("/"));
 	});
 
 	return (
@@ -64,17 +54,10 @@ const SignIn = () => {
 				backgroundSize: "cover",
 			}}
 		>
-			<Stack
-				direction="col"
-				alignItems="center"
-				gap={2}
-				className="bg-white p-16 shadow-lg border rounded-lg "
-			>
+			<Stack direction="col" alignItems="center" gap={2} className="bg-white p-16 shadow-lg border rounded-lg ">
 				<>
 					{errors.email && <Alert type="error" error={errors.email?.message} />}
-					{errors.password && (
-						<Alert type="error" error={errors.password?.message} />
-					)}
+					{errors.password && <Alert type="error" error={errors.password?.message} />}
 				</>
 				<Stack direction="row" justifyContent="center">
 					<Link to="/">
@@ -90,20 +73,11 @@ const SignIn = () => {
 				<FormContainer onSubmit={handleLogin} className="flex flex-col gap-2">
 					<FormItem
 						label={t("signin.EMAIL_LABEL")}
-						renderInput={() => (
-							<TextInput {...register("email")} placeholder="" className="" />
-						)}
+						renderInput={() => <TextInput {...register("email")} placeholder="" className="" />}
 					/>
 					<FormItem
 						label={t("signin.PASSWORD_LABEL")}
-						renderInput={() => (
-							<TextInput
-								{...register("password")}
-								type="password"
-								placeholder=""
-								className=""
-							/>
-						)}
+						renderInput={() => <TextInput {...register("password")} type="password" placeholder="" className="" />}
 					/>
 
 					<Button
@@ -121,8 +95,7 @@ const SignIn = () => {
 				<SigninSocialButton />
 
 				<Typography>
-					If you forgot your password{" "}
-					<Link to="/auth/forgot_password">Reset password</Link>
+					If you forgot your password <Link to="/auth/forgot_password">Reset password</Link>
 				</Typography>
 			</Stack>
 		</div>

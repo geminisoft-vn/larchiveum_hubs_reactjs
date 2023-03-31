@@ -1,18 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
+import { configureStore, ThunkAction } from "@reduxjs/toolkit";
+import { Action, combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-import LoaderSlice from "./features/loader/LoaderSlice";
-import ModalSlice from "./features/modal/ModalSlice";
-import ProgressSlice from "./features/progress/ProgressSlice";
-import UserSlice from "./features/user/UserSlice";
+import LoaderSlice from "src/features/loader/LoaderSlice";
+import ModalSlice from "src/features/modal/ModalSlice";
+import ProgressSlice from "src/features/progress/ProgressSlice";
+import ToastSlice from "src/features/toast/ToastSlice";
+import UserSlice from "src/features/user/UserSlice";
 
 const reducers = combineReducers({
 	modal: ModalSlice,
 	progress: ProgressSlice,
 	user: UserSlice,
 	loader: LoaderSlice,
+	toast: ToastSlice,
 });
 
 const persistConfig = {
@@ -29,5 +31,6 @@ const store = configureStore({
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;
 
 export default store;

@@ -19,11 +19,7 @@ const Exhibition = (props) => {
 					height: "200px",
 				}}
 			>
-				<img
-					className="rounded-lg"
-					src={exhibition.room.thumbnailUrl}
-					alt={exhibition.room.name}
-				/>
+				<img className="rounded-lg" src={exhibition.room.thumbnailUrl} alt={exhibition.room.name} />
 			</div>
 			<Stack
 				className="absolute top-2 w-full px-4"
@@ -45,17 +41,10 @@ const Exhibition = (props) => {
 						}}
 					/>
 				)}
-				<Typography className="font-bold text-lg text-white">
-					{exhibition.name}
-				</Typography>
+				<Typography className="font-bold text-lg text-white">{exhibition.name}</Typography>
 			</Stack>
 
-			<Stack
-				className="absolute bottom-16 px-4 flex items-center gap-2"
-				direction="row"
-				alignItems="center"
-				gap={1}
-			>
+			<Stack className="absolute bottom-16 px-4 flex items-center gap-2" direction="row" alignItems="center" gap={1}>
 				<GroupRoundedIcon
 					style={{
 						color: "#fff",
@@ -71,12 +60,7 @@ const Exhibition = (props) => {
 					<Stack direction="row" alignItems="center" gap={1}>
 						<CalendarMonthRoundedIcon />
 						<Typography>
-							{moment
-								.utc(exhibition.startDate)
-								.local()
-								.locale(getLanguage())
-								.format("L LT")}{" "}
-							{" (start)"}
+							{moment.utc(exhibition.startDate).local().locale(getLanguage()).format("L LT")} {" (start)"}
 						</Typography>
 					</Stack>
 				)}
@@ -85,12 +69,7 @@ const Exhibition = (props) => {
 					<Stack direction="row" alignItems="center" gap={1}>
 						<CalendarMonthRoundedIcon />
 						<Typography>
-							{moment
-								.utc(exhibition.endDate)
-								.local()
-								.locale(getLanguage())
-								.format("L LT")}{" "}
-							{" (end)"}
+							{moment.utc(exhibition.endDate).local().locale(getLanguage()).format("L LT")} {" (end)"}
 						</Typography>
 					</Stack>
 				)}

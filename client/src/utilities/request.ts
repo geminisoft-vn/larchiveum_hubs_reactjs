@@ -1,6 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+import store from "src/app/store";
+import { startLoading, stopLoading } from "src/features/loader/LoaderSlice";
+
 import { API_ROOT } from "./constants";
 
 const axiosInstance = axios.create({
@@ -8,13 +11,13 @@ const axiosInstance = axios.create({
 	timeout: 20000,
 	maxContentLength: Infinity,
 	maxBodyLength: Infinity,
+	headers: {
+		"Content-Type": "application/json",
+	},
 });
 
 const getAccessToken = () => {
-	if (
-		Cookies.get("__LARCHIVEUM__USER") &&
-		Cookies.get("__LARCHIVEUM__USER") !== ""
-	) {
+	if (Cookies.get("__LARCHIVEUM__USER") && Cookies.get("__LARCHIVEUM__USER") !== "") {
 		const str = Cookies.get("__LARCHIVEUM__USER");
 		const user = JSON.parse(str || "{}");
 		if (user) {
@@ -26,6 +29,8 @@ const getAccessToken = () => {
 
 axiosInstance.interceptors.request.use(
 	(config) => {
+		store.dispatch(startLoading());
+
 		const accessToken = getAccessToken();
 		if (accessToken.length) {
 			config.headers.access_token = accessToken;
@@ -38,7 +43,10 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-	(response) => response,
+	(response) => {
+		store.dispatch(stopLoading());
+		return response;
+	},
 	(error) => Promise.reject(error),
 );
 

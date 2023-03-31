@@ -1,6 +1,6 @@
 import { IUserAuthenticationForm } from "src/interfaces";
-import apiRequest from "src/utilities/axiosInstance";
 import { API_ROOT } from "src/utilities/constants";
+import request from "src/utilities/request";
 
 class UserService {
 	static googleLogin(data: { ggtoken: string }) {
@@ -54,13 +54,11 @@ class UserService {
 	}
 
 	static login(data: Partial<IUserAuthenticationForm>) {
-		return fetch(`${API_ROOT}/v1/login`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		}).then((res) => res.json());
+			url: "/v1/login",
+			data,
+		}).then((res) => res.data);
 	}
 
 	static checkToken(token: string) {
@@ -96,19 +94,17 @@ class UserService {
 	}
 
 	static verifyUser(token: string) {
-		return apiRequest.post("/v1/auth/users/verifyUser", {
+		return request.post("/v1/auth/users/verifyUser", {
 			access_token: token,
 		});
 	}
 
 	static reSendVerifyMail(email: string) {
-		return apiRequest.post("v1/users/reSendVerifyMail", { email });
+		return request.post("v1/users/reSendVerifyMail", { email });
 	}
 
 	static update(id: number, data: Partial<IUserAuthenticationForm>) {
-		return apiRequest
-			.patch(`v1/auth/users/${id}`, data)
-			.then((response) => response.data);
+		return request.patch(`v1/auth/users/${id}`, data).then((response) => response.data);
 	}
 }
 

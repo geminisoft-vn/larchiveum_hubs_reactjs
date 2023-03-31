@@ -1,4 +1,4 @@
-import request from "src/utilities/axiosInstance";
+import request from "src/utilities/request";
 import { API_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
 

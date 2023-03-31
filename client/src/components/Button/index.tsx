@@ -6,16 +6,19 @@ type Props = {
 	onClick?: (_e: React.SyntheticEvent) => void;
 	className?: string;
 	type?: "button" | "reset" | "submit";
-	children: JSX.Element | JSX.Element[] | string;
+	variant?: "default" | "link";
+	children: JSX.Element | JSX.Element[] | string | (JSX.Element | JSX.Element[] | string)[];
 };
 
 const Button = (props: Props) => {
-	const { beforeIcon, afterIcon, onClick, className, type, children } = props;
+	const { beforeIcon, afterIcon, onClick, className, type, variant, children } = props;
+
 	return (
-		/* eslint-disable react/button-has-type */
 		<button
 			className={clsx(
-				"border-gra flex justify-center items-center gap-2 rounded border border-gray-200 p-2",
+				"flex justify-center items-center gap-2",
+				variant === "default" && "rounded border border-gra border-gray-200 p-2",
+				variant === "link" && "font-bold text-blue-500",
 				className,
 			)}
 			onClick={onClick}
@@ -25,7 +28,6 @@ const Button = (props: Props) => {
 			{children}
 			{afterIcon}
 		</button>
-		/* eslint-disable react/button-has-type */
 	);
 };
 
@@ -34,6 +36,7 @@ Button.defaultProps = {
 	afterIcon: null,
 	className: "",
 	type: "button",
+	variant: "default",
 	onClick: undefined,
 };
 
