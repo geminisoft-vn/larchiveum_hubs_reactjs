@@ -115,14 +115,14 @@ const SignIn = () => {
 				</FormContainer>
 
 				<Typography>
-					Or register at <a href="/signup">Sign up</a>
+					Or register at <a href="/auth/signup">Sign up</a>
 				</Typography>
 
 				<SigninSocialButton />
 
 				<Typography>
 					If you forgot your password{" "}
-					<a href="/forgot_password">Reset password</a>
+					<a href="/auth/forgot_password">Reset password</a>
 				</Typography>
 			</Stack>
 		</div>

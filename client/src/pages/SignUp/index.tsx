@@ -50,7 +50,7 @@ const SignUpForm = () => {
 		UserService.signupWithEmail(data).then((res) => {
 			if (res.result === "ok") {
 				Store.removeUser();
-				navigate(`/warning_verify&email=${res.data.email}`);
+				navigate(`/auth/warning_verify&email=${res.data.email}`);
 			} else if (res.result === "fail") {
 				setError(
 					"email",
@@ -151,7 +151,7 @@ const SignUpForm = () => {
 				</FormContainer>
 
 				<Typography>
-					Already have an account? <a href="/signin">Sign in</a>
+					Already have an account? <a href="/auth/signin">Sign in</a>
 				</Typography>
 			</Stack>
 		</div>
