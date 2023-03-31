@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { ErrorOption, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
+
+import UserService from "src/api/UserService";
 import {
+	Alert,
 	Box,
-	Container,
-	Divider,
-	IconButton,
-	Paper,
+	Button,
+	FormContainer,
+	FormItem,
 	Stack,
+	TextInput,
 	Typography,
 } from "@mui/material";
 
@@ -20,45 +24,35 @@ import Store from "src/utilities/store";
 import "reactjs-popup/dist/index.css";
 
 const ForgotPasswordPage = () => {
-	const user = Store.getUser();
 	const { t } = useTranslation();
+	const navigate = useNavigate();
 
-	const [email, setEmail] = useState(null);
-	const [submitted, setSubmited] = useState(false);
-	const [isOpenPoupEmailSentNotification, setIsOpenPoupEmailSentNotification] =
-		useState(false);
-	const [error, setError] = useState(null);
+	const {
+		handleSubmit,
+		register,
+		formState: { errors },
+		setError,
+	} = useForm<{ email: string }>({
+		defaultValues: { email: "" },
+	});
 
-	useEffect(() => {
-		setLanguage(getLanguage());
-	}, []);
-
-	const handleChangeEmail = (e) => {
-		const { value } = e.target;
-		setEmail(value);
-		setError();
-	};
-
-	const handleChangeLanguage = (event) => {
-		const lang = event.target.value;
-		setLanguage(lang);
-		setLanguage(lang);
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		setSubmited(true);
-
-		const data = { email };
+	const handleRetrievePassword = handleSubmit((data) => {
 		UserService.requestResetPassword(data).then((res) => {
-			if (res.result == "ok") {
-				setIsOpenPoupEmailSentNotification(true);
-			} else if (res.result == "fail") {
-				setError(t(`signup.SIGN_UP_ERROR__${res.error.toUpperCase()}`));
-				setError(res.error);
+			if (res.result === "ok") {
+				// setIsOpenPoupEmailSentNotification(true);
+				navigate("/auth/signin");
+			} else if (res.result === "fail") {
+				setError("email", {
+					type: res.code,
+					message: t(
+						`forgot_password.FORGOT_PASSWORD_ERROR__${res.error.toUpperCase()}`,
+					),
+				});
 			}
 		});
-	};
+	});
+
+	console.log({ errors });
 
 	return (
 		<div
@@ -106,26 +100,15 @@ const ForgotPasswordPage = () => {
 								onChange={handleChangeEmail}
 							/>
 
-							<Button
-								type="submit"
-								variant="contained"
-								fullWidth
-								sx={{
-									background: `linear-gradient(45deg, #00dbde, #fc00ff) !important`,
-								}}
-							>
-								{t("forgot_password.SEND_BUTTON")}
-							</Button>
-						</Stack>
+					<Button type="submit">{t("forgot_password.SEND_BUTTON")}</Button>
+				</FormContainer>
 
-						<Typography sx={{ textAlign: "center" }}>
-							<a href="/?page=signin">Sign in</a>
-						</Typography>
-					</Stack>
-				</Paper>
-			</Container>
+				<Link to="/auth/signin" className="text-center">
+					Sign in
+				</Link>
+			</Stack>
 		</div>
 	);
-};
+}
 
 export default ForgotPasswordPage;

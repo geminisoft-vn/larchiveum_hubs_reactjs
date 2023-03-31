@@ -1,17 +1,24 @@
 import React, { forwardRef } from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
 
-const Switch = forwardRef((props, ref) => {
-	const { name, onChange, onBlur, className, value } = props;
+type Props = {
+	name: string;
+	className: string;
+	onChange: (_e: React.SyntheticEvent) => void;
+	onBlur: (_e: React.SyntheticEvent) => void;
+};
+
+const Switch = forwardRef<HTMLInputElement, Props>((props, ref) => {
+	const { name, onChange, onBlur, className } = props;
 
 	return (
-		<label className={clsx("relative cursor-pointer", className)}>
+		<label
+			htmlFor={name}
+			className={clsx("relative cursor-pointer", className)}
+		>
 			<input
 				ref={ref}
 				type="checkbox"
-				value={value}
-				defaultChecked={parseInt(value) === 1}
 				name={name}
 				className={clsx("peer sr-only")}
 				onChange={onChange}
@@ -28,17 +35,13 @@ const Switch = forwardRef((props, ref) => {
           after:content-[''] 
           peer-checked:bg-blue-600 peer-checked:after:translate-x-full 
           peer-checked:after:border-white peer-focus:ring-4 
-          peer-focus:ring-blue-300`
+          peer-focus:ring-blue-300`,
 				)}
 			/>
 		</label>
 	);
 });
 
-Switch.propTypes = {
-	name: PropTypes.string,
-	value: PropTypes.string,
-	className: PropTypes.string,
-};
+Switch.propTypes = {};
 
 export default Switch;

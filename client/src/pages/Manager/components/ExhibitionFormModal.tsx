@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import React, { useState } from "react";
 // import "./ExhibitionFormModal.style.scss";
 import { useTranslation } from "react-i18next";

@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import { RootState } from "src/app/hooks";
 import { TModalAction } from "src/types";
 
 type TInitialState = {
@@ -37,6 +38,11 @@ const modalSlice = createSlice({
 		// increment: (state, action: PayloadAction<number>) => state + action.payload,
 	},
 });
+
+export const getModalInfo = createSelector(
+	(state: RootState) => state.modal,
+	(modal) => modal,
+);
 
 export const { openModal, closeModal } = modalSlice.actions;
 export default modalSlice.reducer;

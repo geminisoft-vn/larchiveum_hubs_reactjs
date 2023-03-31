@@ -6,7 +6,6 @@ const DateTimePicker = () => (
 		slots={{
 			textField: TextField,
 		}}
-		slotProps={{ fullWidth: true }}
 	/>
 );
 

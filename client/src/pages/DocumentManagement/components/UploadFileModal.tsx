@@ -1,6 +1,8 @@
 /* eslint-disable react/display-name */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
+// @ts-nocheck
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Trans } from "react-i18next";

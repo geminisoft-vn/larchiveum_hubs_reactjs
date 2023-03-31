@@ -1,32 +1,37 @@
-import React, { useState } from "react";
+// @ts-nocheck
+/* eslint-disable */
 
-import logo from "src/assets/images/larchiveum_logo.png";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import UserService from "src/api/UserService";
+import logo from "src/assets/images/larchiveum_logo.png";
 import Store from "src/utilities/store";
 
-function auth() {
-	const removeToken = () => {
-		Store.removeUser();
-	};
+const WarningVerifyPage = () => {
+	const navigate = useNavigate();
 
-	const token = Store.getUser()?.token;
-	return UserService.checkToken(token)
-		.then((res) => {
-			if (res.result == "ok") {
-				window.location = "/";
-			} else {
-				removeToken();
-			}
-		})
-		.catch((error) => {
-			console.log("catch");
-		});
-}
-
-function WarningVerifyPage() {
-	auth();
 	const [sending, setSending] = useState(false);
 	const [sendingMessage, setSendingMessage] = useState("");
+
+	function auth() {
+		const removeToken = () => {
+			Store.removeUser();
+		};
+
+		const token = Store.getUser()?.token;
+		return UserService.checkToken(token)
+			.then((res) => {
+				if (res.result === "ok") {
+					navigate("/");
+				} else {
+					removeToken();
+				}
+			})
+			.catch((error) => {
+				console.log("catch");
+			});
+	}
 
 	const email =
 		new URLSearchParams(location.href).get("email") || Store.getUser()?.email;
@@ -48,7 +53,7 @@ function WarningVerifyPage() {
 			});
 	};
 
-	function ResendButton() {
+	const ResendButton = () => {
 		if (!sending) {
 			return (
 				<div className="d-flex center-flex">
@@ -63,7 +68,11 @@ function WarningVerifyPage() {
 				<a className="btn btn-backhome">Sending</a>
 			</div>
 		);
-	}
+	};
+
+	useEffect(() => {
+		auth();
+	}, []);
 
 	return (
 		<div className="manager-page height-100vh">
@@ -86,6 +95,6 @@ function WarningVerifyPage() {
 			</div>
 		</div>
 	);
-}
+};
 
 export default WarningVerifyPage;

@@ -1,5 +1,7 @@
 /* eslint-disable no-debugger */
 /* eslint-disable react/display-name */
+// @ts-nocheck
+/* eslint-disable */
 
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,7 +12,7 @@ import GettingStarted from "src/pages/ViewQuiz/components/GettingStarted";
 import Question from "src/pages/ViewQuiz/components/Question";
 import Result from "src/pages/ViewQuiz/components/Result";
 
-import QuizService from "../../utilities/apiServices/QuizService";
+import QuizService from "src/api/QuizService";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./ViewQuizPage.scss";

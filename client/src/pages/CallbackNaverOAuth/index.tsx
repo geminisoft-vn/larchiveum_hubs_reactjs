@@ -1,10 +1,13 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import UserService from "src/api/UserService";
 import Store from "src/utilities/store";
 
-function CallbackNaverOAuthPage(props) {
+const CallbackNaverOAuthPage = (props) => {
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
@@ -13,7 +16,7 @@ function CallbackNaverOAuthPage(props) {
 			const search = hash.substring(1); // remove #
 			const obj = JSON.parse(
 				`{"${search.replace(/&/g, '","').replace(/=/g, '":"')}"}`,
-				(key, value) => (key === "" ? value : decodeURIComponent(value))
+				(key, value) => (key === "" ? value : decodeURIComponent(value)),
 			);
 			/**
                 access_token: ""
@@ -55,6 +58,6 @@ function CallbackNaverOAuthPage(props) {
 			)}
 		</div>
 	);
-}
+};
 
 export default CallbackNaverOAuthPage;

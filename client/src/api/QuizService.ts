@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import request from "src/utilities/axiosInstance";
+import request from "src/utilities/request";
 
 class QuizService {
 	static getAll(params) {

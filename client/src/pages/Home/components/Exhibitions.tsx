@@ -1,18 +1,16 @@
-import { Grid } from "@mui/material";
-
 import Exhibition from "./Exhibition";
 
 const Exhibitions = (props) => {
 	const { exhibitions } = props;
 	return (
-		<Grid container spacing={2}>
+		<div className="grid grid-cols-12 gap-2">
 			{exhibitions &&
 				exhibitions.map((exhibition) => (
-					<Grid key={exhibition.id} item lg={4} xl={4}>
+					<div className="col-span-3 md:col-span-4 sm:col-span-12" key={exhibition.id}>
 						<Exhibition exhibition={exhibition} />
-					</Grid>
+					</div>
 				))}
-		</Grid>
+		</div>
 	);
 };
 

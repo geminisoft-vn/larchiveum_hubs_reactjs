@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IParams } from "src/interfaces";
-import request from "src/utilities/axiosInstance";
+import request from "src/utilities/request";
 
 class QuestionService {
 	static getAll(params: IParams) {

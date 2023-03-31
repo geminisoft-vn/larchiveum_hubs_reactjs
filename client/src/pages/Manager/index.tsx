@@ -1,32 +1,42 @@
+// @ts-nocheck
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaCodepen, FaLink, FaListOl, FaRegCalendarAlt, FaRegImage, FaTools, FaUserFriends, FaVideo } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { useLocation, useSearchParams } from "react-router-dom";
+import {
+	FaCodepen,
+	FaLink,
+	FaListOl,
+	FaRegCalendarAlt,
+	FaRegImage,
+	FaTools,
+	FaUserFriends,
+	FaVideo,
+} from "react-icons/fa";
+import { toast } from "react-toastify";
 import moment from "moment-timezone";
 
 import ExhibitionsService from "src/api/ExhibitionsService";
 import MediaService from "src/api/MediaService";
 import ProjectService from "src/api/ProjectService";
 import UserService from "src/api/UserService";
-// import Popup from "../../../../react-components/popup/popup";
 import AddIcon from "src/assets/larchiveum/add_black_24dp.svg";
 import defaultImage from "src/assets/larchiveum/default-image.png";
 import defaultModel from "src/assets/larchiveum/model-default.png";
-import { Header } from "src/components";
-import { openModal } from "src/features/modal/ModalSlice";
+import defaultImage1 from "src/assets/larchiveum/siri.gif";
+import { Button, Popup } from "src/components";
 import { getLanguage } from "src/language";
 import { APP_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
 
 import Exhibition from "./components/Exhibition";
 import ExhibitionFormModal from "./components/ExhibitionFormModal";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import clsx from "clsx";
 
 const Manager = () => {
 	const { t } = useTranslation();
-	const { search } = useLocation();
-	const [searchParams] = useSearchParams();
-	const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams();
 
 	const [scenes, setScenes] = useState([]);
 	const [exhibitionsLoaded, setExhibitionsLoaded] = useState(false);
@@ -85,29 +95,12 @@ const Manager = () => {
 		sort: "id|desc", // format <attribute>|<order type>
 	});
 
-	useEffect(() => {
-		getAllExhibitions();
-		const user = Store.getUser();
-		if (user?.type === 5) {
-			getAllProjects();
-		}
-
-		setLanguage(getLanguage());
-	}, [filterExhibitionList.page]);
-
-	useEffect(() => {
-		const user = Store.getUser();
-		if (user?.type == 5) {
-			getAllProjects();
-		}
-	}, [filterProjectList.page]);
-
 	const getAllExhibitions = () => {
 		const user = Store.getUser();
 		const data = filterExhibitionList;
 		if (user) {
 			ExhibitionsService.getAllWithAuthExhibitions(data).then((res) => {
-				if (res.result == "ok") {
+				if (res.result === "ok") {
 					setExhibitions(res.data);
 					setExhibitionsLoaded(true);
 					setIsLoading(false);
@@ -119,7 +112,7 @@ const Manager = () => {
 				}
 			});
 			ExhibitionsService.getAllScenes().then((res) => {
-				if (res.result == "ok") {
+				if (res.result === "ok") {
 					res.data = res.data.map((item) => ({
 						...item,
 						label: item.name,
@@ -137,7 +130,7 @@ const Manager = () => {
 		const data = filterProjectList;
 		if (Auth) {
 			ProjectService.getListProjectWithObjects(data).then((res) => {
-				if (res.result == "ok") {
+				if (res.result === "ok") {
 					setProjects(res.data);
 					setProjectsLoaded(true);
 					setIsLoading(false);
@@ -193,22 +186,6 @@ const Manager = () => {
 
 	const closePopupPublic = () => {
 		setIsOpenPopupConfirmChangePublic(false);
-	};
-
-	// const openPopupSpoke = ProjectId => {
-	//   setExhibitionId(ProjectId);
-	//   setIsOpenPopupChangeMediaURLGuide(true);
-	// };
-
-	const handleChangeLanguage = (event) => {
-		const lang = event.target.value;
-		setLanguage(lang);
-		Language.setLanguage(lang);
-	};
-
-	const handleSignOut = () => {
-		Store.removeUser();
-		window.location.href = "/";
 	};
 
 	const handelSpoke = () => {
@@ -342,6 +319,14 @@ const Manager = () => {
 		setIsOpenPopupConfirmDeleteExhibition(true);
 	};
 
+	const closePopupCustomMedia = () => {
+		setIsOpenPopupMedia(false);
+		setMedias({
+			data: [],
+			pagination: {},
+		});
+	};
+
 	const openPopupCustomMedia = (exhibitionId) => {
 		setExhibitionId(exhibitionId);
 		if (exhibitionId) {
@@ -358,9 +343,9 @@ const Manager = () => {
 		setIsOpenPopupMedia(true);
 	};
 
-	const closePopupCustomMedia = () => {
-		setIsOpenPopupMedia(false);
-		setMedias({
+	const closePopupCustomObject = () => {
+		setIsOpenPopupObject(false);
+		setObjects({
 			data: [],
 			pagination: {},
 		});
@@ -370,7 +355,7 @@ const Manager = () => {
 		if (ProjectId) {
 			setProjectId(ProjectId);
 			ProjectService.getListObject(ProjectId).then((res) => {
-				if (res.result == "ok") {
+				if (res.result === "ok") {
 					setObjects(res.data);
 					setObjectLoaded(true);
 				} else {
@@ -382,14 +367,6 @@ const Manager = () => {
 		setIsOpenPopupObject(true);
 	};
 
-	const closePopupCustomObject = () => {
-		setIsOpenPopupObject(false);
-		setObjects({
-			data: [],
-			pagination: {},
-		});
-	};
-
 	const handelSaveMediaURL = () => {
 		setIconLoaded(true);
 		const data = medias.data.map((item) => ({
@@ -398,7 +375,7 @@ const Manager = () => {
 		}));
 		const dataString = JSON.stringify(data);
 		MediaService.updateMediaMany(dataString).then((res) => {
-			if (res.result == "ok") {
+			if (res.result === "ok") {
 				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
 				setIconLoaded(false);
 			} else {
@@ -409,27 +386,28 @@ const Manager = () => {
 
 	const handelOpenPopupChangeMediaURLGuide = () => {
 		setIconLoaded(true);
-		let list_uuid = [];
-		list_uuid = objects.data.map((item) => {
-			if (item?.changeable == true) {
+		let listUuid = [];
+		listUuid = objects.data.map((item) => {
+			if (item?.changeable === true) {
 				return item.uuid;
 			}
 			return false;
 		});
-		const dataString = JSON.stringify(list_uuid);
-		console.log(projectId);
-		ProjectService.updateChangeableObjects(projectId, dataString).then((res) => {
-			if (res.result == "ok") {
-				setIconLoaded(false);
-				closePopupCustomObject();
-				setIsOpenPopupChangeMediaURLGuide(true);
-				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-			} else {
-				toast.error(t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"), {
-					autoClose: 5000,
-				});
-			}
-		});
+		const dataString = JSON.stringify(listUuid);
+		ProjectService.updateChangeableObjects(projectId, dataString).then(
+			(res) => {
+				if (res.result == "ok") {
+					setIconLoaded(false);
+					closePopupCustomObject();
+					setIsOpenPopupChangeMediaURLGuide(true);
+					toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
+				} else {
+					toast.error(t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"), {
+						autoClose: 5000,
+					});
+				}
+			},
+		);
 	};
 
 	const deleteRoom = () => {
@@ -575,11 +553,14 @@ const Manager = () => {
 				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
 				setShouldActiveExhibitionForm(false);
 				// setExhibitions([...exhibitions, res.data]);
-				window.location.reload();
+				// window.location.reload();
 			} else {
-				toast.error(t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`), {
-					autoClose: 5000,
-				});
+				toast.error(
+					t(
+						`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`,
+					),
+					{ autoClose: 5000 },
+				);
 			}
 		});
 	};
@@ -596,9 +577,12 @@ const Manager = () => {
 					}
 				});
 			} else {
-				toast.error(t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`), {
-					autoClose: 5000,
-				});
+				toast.error(
+					t(
+						`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`,
+					),
+					{ autoClose: 5000 },
+				);
 			}
 		});
 	};
@@ -625,7 +609,9 @@ const Manager = () => {
 		ExhibitionsService.deleteOneExhibition(exhibitionId).then((res) => {
 			if (res.result == "ok") {
 				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-				setIsOpenPopupConfirmDeleteExhibition(!isOpenPopupConfirmDeleteExhibition);
+				setIsOpenPopupConfirmDeleteExhibition(
+					!isOpenPopupConfirmDeleteExhibition,
+				);
 				getAllExhibitions();
 			} else {
 				toast.error(t("manager.DELETE_EXHIBITION_ERROR"), { autoClose: 5000 });
@@ -642,7 +628,9 @@ const Manager = () => {
 						toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
 					}
 				});
-				setIsOpenPopupConfirmCloseExhibition(!isOpenPopupConfirmCloseExhibition);
+				setIsOpenPopupConfirmCloseExhibition(
+					!isOpenPopupConfirmCloseExhibition,
+				);
 			} else {
 				toast.error(t("manager.CLOSE_EXHIBITION_ERROR"), { autoClose: 5000 });
 			}
@@ -784,35 +772,259 @@ const Manager = () => {
 		if (parseInt(user?.type, 10) === 5) {
 			return (
 				<ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
-					<li className="mr-2">
-						<a
-							href="?tab=exhibition"
-							aria-current="page"
-							className="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500"
-						>
-							{t("manager.LIST_EXHIBITION")}
-						</a>
-					</li>
-					<li className="mr-2">
-						<a
-							href="?tab=project"
-							className="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"
-						>
-							{t("manager.LIST_PROJECT")}
-						</a>
-					</li>
+					<Link to="?tab=exhibition" className={
+                clsx(
+                  "inline-block p-4 rounded-t-lg",
+                  searchParams.get('tab') === 'exhibition' && "text-blue-600 bg-gray-100"
+                )
+              } >
+						{t("manager.LIST_EXHIBITION")}
+					</Link>
+					<Link to="?tab=project" className={
+                clsx("inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50", 
+                searchParams.get('tab') === 'project' && "text-blue-600 bg-gray-100"
+                )
+              }>
+						{t("manager.LIST_PROJECT")}
+					</Link>
 				</ul>
+
+				// <div className="tabs-Admin">
+				// 	<button
+				// 		className={isListRoom ? "active" : ""}
+				// 		onClick={ActionListRoom}
+				// 	>
+				// 		{t("manager.LIST_EXHIBITION")}
+				// 	</button>
+				// 	<button
+				// 		className={isListProject ? "active" : ""}
+				// 		onClick={ActionListProject}
+				// 	>
+				// 		{t("manager.LIST_PROJECT")}
+				// 	</button>
+				// </div>
 			);
 		}
 		return <div />;
 	};
 
+	const renderExhibitions = () => (
+		<>
+			{exhibitionsLoaded ? (
+				<>
+					<p className="text-center text-lg font-bold">
+						{t("manager.LIST_EXHIBITION")}
+					</p>
+					<button
+						className="btn btn-create"
+						onClick={() => {
+							openPopupExhibition();
+							setExhibitionType("create");
+						}}
+					>
+						<img src={AddIcon} />
+					</button>
+					<div className="flex flex-col gap-2">
+						{exhibitions.data.map((item, index) => {
+							const PublishButton = () => {
+								if (item.public == 1) {
+									return (
+										<Button
+											className="bg-red-100"
+											onClick={() => {
+												openPopupPublic(item.id);
+											}}
+										>
+											{t("manager.PRIVATE")}
+										</Button>
+									);
+								}
+								return (
+									<Button
+										className="bg-red-100"
+										onClick={() => {
+											openPopupPublic(item.id);
+										}}
+									>
+										{t("manager.PUBLIC")}
+									</Button>
+								);
+							};
+
+							const ClosedButton = () => {
+								if (item.closed == 1) {
+									return (
+										<Button
+											className="bg-purple-100"
+											onClick={() => {
+												openPopupOpenRoom(item.id);
+											}}
+										>
+											{t("manager.OPEN_EXHIBITION")}
+										</Button>
+									);
+								}
+								return (
+									<Button
+										className="bg-purple-100"
+										onClick={() => {
+											openPopupCloseRoom(item.id);
+										}}
+									>
+										{t("manager.CLOSE_EXHIBITION")}
+									</Button>
+								);
+							};
+
+							if (item.room) {
+								return (
+									<div
+										key={index}
+										className="grid grid-cols-12 gap-2 bg-gray-50 rounded-lg"
+									>
+										<div className="col-span-3 relative">
+											<img
+												className="h-full w-full rounded-lg"
+												src={getSceneThumnail(item ? item.sceneId : undefined)}
+												alt=""
+											/>
+											<FaTools
+												className="absolute top-4 left-4 text-white hover:scale-150 cursor-pointer"
+												onClick={() => {
+													openPopupCustomMedia(item.id);
+												}}
+											/>
+										</div>
+										<div className="col-span-6 p-2">
+											<p className="font-bold text-lg">{item?.room?.name}</p>
+											<div className="flex items-center gap-2">
+												<FaLink className="IconFa" />
+												<a
+													href={`${APP_ROOT}/${item.roomId}`}
+													target="_blank"
+													rel="noopener noreferrer"
+												>
+													{`${APP_ROOT}/${item.roomId}`}
+												</a>
+											</div>
+											<div className="flex items-center gap-2">
+												<FaUserFriends className="IconFa" />
+												<span>
+													{item.reservationCount}/{item.maxSize}
+												</span>
+											</div>
+											<div>
+												<div className="flex items-center gap-2">
+													<FaRegCalendarAlt className="IconFa" />
+													<span>
+														{item.startDate
+															? moment
+																	.utc(item.startDate)
+																	.local()
+																	.locale(getLanguage())
+																	.format("L LT")
+															: `<${t("manager.NOT_SET")}>`}
+														<span style={{ padding: "0 10px" }}>~</span>
+														{item.endDate
+															? moment
+																	.utc(item.endDate)
+																	.local()
+																	.locale(getLanguage())
+																	.format("L LT")
+															: `<${t("manager.NOT_SET")}>`}
+													</span>
+												</div>
+											</div>
+										</div>
+
+										<div className="col-span-3 p-4 flex flex-col gap-2 justify-between h-full">
+											<PublishButton />
+											<Button
+												className="bg-yellow-100"
+												onClick={() => {
+													openPopupExhibition(item);
+													setExhibitionType("edit");
+												}}
+												data-id-exhibition={item.id}
+											>
+												{t("manager.EDIT")}
+											</Button>
+											<ClosedButton />
+										</div>
+									</div>
+								);
+							}
+							return (
+								<div key={index} className="items">
+									<span className="name-tour">
+										{t("manager.EXHIBITION_UNAVAILABLE")}
+									</span>
+									<img src={defaultImage1} alt="" />
+									<div className="content">
+										<div>
+											<span className="text-bold">
+												{t("manager.EXHIBITION_UNAVAILABLE")}
+											</span>
+										</div>
+										<div className="d-flex">
+											<FaLink className="IconFa" /> :{" "}
+											<span className="ml-1">
+												<a href="#" target="_blank">
+													...
+												</a>
+											</span>
+										</div>
+										<div className="d-flex">
+											<FaUserFriends className="IconFa" /> :{" "}
+											<span className="ml-1">.src.</span>
+										</div>
+										<div>
+											<div className="d-flex">
+												<FaRegCalendarAlt className="IconFa" /> :
+												<span className="ml-1">
+													{moment
+														.utc(item.startDate)
+														.local()
+														.locale(getLanguage())
+														.format("L LT")}
+												</span>
+											</div>
+										</div>
+									</div>
+									<div className="btn-action">
+										<button
+											className="btn btn-delete"
+											onClick={() => {
+												openDeleteRoom(item.id);
+											}}
+											data-id-exhibition={item.id}
+										>
+											{t("manager.DELETE")}
+										</button>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				</>
+			) : (
+				<></>
+			)}
+			{/* {exhibitionsLoaded ? (
+          exhibitions.data.length > 0 ? (
+            <Pagination pagination={exhibitions.pagination} callFetchList={changePages} />
+          ) : null
+        ) : null} */}
+		</>
+	);
+
 	const renderProjects = () => (
 		<>
 			{projectsLoaded ? (
-				<>
-					{t("manager.LIST_PROJECT")}
-					{projects.data.map((item, index) => {
+				<div className="flex flex-col gap-2">
+					<p className="font-bold text-center text-lg">{t("manager.LIST_PROJECT")}</p>
+					<div className="flex flex-col gap-2">
+          {projects.data.map((item, index) => {
 						let count_Image = 0;
 						let count_Video = 0;
 						let count_Model = 0;
@@ -832,31 +1044,30 @@ const Manager = () => {
 								count_Model++;
 							});
 						return (
-							<div key={item.id} className="items">
-								<span className="name-tour">{item?.name}</span>
-								<img src={item?.thumbnail_url} alt="" />
-								<div className="content">
-									<div>
-										<span className="text-bold">{item?.name}</span>
-										<div className="d-flex-icon">
-											<span>
+							<div key={item.id} className="grid grid-cols-12 bg-gray-100 rounded-lg">
+								<div className="col-span-3 rounded-lg">
+                <img className="h-full w-full" src={item?.thumbnail_url} alt="" />
+                </div>
+								<div className="col-span-6 p-4 flex flex-col justify-around">
+                    <p className="font-bold text-lg">{item?.name}</p>
+										<div className="flex items-center gap-4">
+											<div className="flex items-center gap-2">
 												{count_Image}
-												<FaVideo className="icon" />
-											</span>
-											<span>
+												<FaVideo className="text-lg" />
+											</div>
+											<div className="flex items-center gap-2">
 												{count_Video}
-												<FaRegImage className="icon" />
-											</span>
-											<span>
+												<FaRegImage className="text-lg" />
+											</div>
+											<div className="flex items-center gap-2">
 												{count_Model}
-												<FaCodepen className="icon" />
-											</span>
+												<FaCodepen className="text-lg" />
+											</div>
 										</div>
-									</div>
 								</div>
-								<div className="btn-action">
+								<div className="col-span-3 flex items-center justify-center">
 									<FaListOl
-										className="btn-list-object"
+										className="text-lg"
 										onClick={() => {
 											openPopupCustomObject(item.id);
 										}}
@@ -865,7 +1076,8 @@ const Manager = () => {
 							</div>
 						);
 					})}
-				</>
+          </div>
+				</div>
 			) : (
 				<></>
 			)}
@@ -889,12 +1101,43 @@ const Manager = () => {
 				</div>
 			);
 		}
-		return <div />;
+		navigate('/')
+		return <></>;
 	};
+
+	useEffect(() => {
+		getAllExhibitions();
+		const user = Store.getUser();
+		if (user?.type === 5) {
+			getAllProjects();
+		}
+
+		setLanguage(getLanguage());
+	}, [filterExhibitionList.page]);
+
+	useEffect(() => {
+		const user = Store.getUser();
+		if (user?.type === 5) {
+			getAllProjects();
+		}
+	}, [filterProjectList.page]);
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if(tab === 'exhibition') {
+      ActionListRoom()
+    } else if(tab === 'project') {
+      ActionListProject()
+    }
+  }, [searchParams])
+
+  // useEffect(() => {
+  //   navigate('?tab=exhibition')
+  // }, [])
 
 	return (
 		<>
-			{/* {shouldActiveExhibitionForm && (
+			{shouldActiveExhibitionForm && (
 				<ExhibitionFormModal
 					isActive={shouldActiveExhibitionForm}
 					setIsActive={setShouldActiveExhibitionForm}
@@ -1169,9 +1412,11 @@ const Manager = () => {
 				/>
 			)} */}
 
-			<div className="flex flex-col gap-2">
-				{renderTabs()}
-				<AccountPermision />
+			<div className="manager-page">
+				<div className="row_2">
+					{renderTabs()}
+					<AccountPermision />
+				</div>
 			</div>
 		</>
 	);

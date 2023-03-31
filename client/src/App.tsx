@@ -1,31 +1,26 @@
 import { Suspense } from "react";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import "src/language";
 
-import { Loader, Modal } from "./components";
+import { RootState } from "./app/store";
+import { Loader, Modal, Toast } from "./components";
 import Router from "./routes";
-import store from "./store";
 
 import "./index.css";
 
-const App = () => (
-	<Provider store={store}>
-		<Suspense
-			fallback={
-				<div className="fixed inset-0 w-screen h-screen flex items-center justify-center fill-blue-600">
-					<Loader />
-				</div>
-			}
-		>
-			<BrowserRouter>
+const App = () => {
+	const isActiveLoader = useSelector((state: RootState) => state.loader.isActive);
+	return (
+		<>
+			<Suspense fallback={<Loader />}>
 				<Router />
-			</BrowserRouter>
-		</Suspense>
-
-		<Modal />
-	</Provider>
-);
+			</Suspense>
+			<Modal />
+			{isActiveLoader && <Loader />}
+			<Toast />
+		</>
+	);
+};
 
 export default App;

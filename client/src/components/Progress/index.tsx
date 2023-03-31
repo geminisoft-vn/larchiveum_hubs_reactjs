@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { RootState } from "src/store";
+import { RootState } from "src/app/hooks";
 
 type Props = {};
 

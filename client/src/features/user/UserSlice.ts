@@ -1,25 +1,21 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
+import { IUser } from "src/interfaces";
+
+import { login } from "./thunks";
 
 type TInitialState = {
-	data: {
-		avatar: null;
-		avatarId: string;
-		displayName: string;
-		email: string;
-		id: number;
-		type: number;
-	};
+	data: Partial<IUser>;
 	authentication: {
 		token: string;
-		expire: Date;
+		expire: number;
 		isAuthenticated: boolean;
 	};
 };
 
 const INITIAL_STATE: TInitialState = {
 	data: {
-		avatar: null,
-		avatarId: "",
+		avatar: "",
 		displayName: "",
 		email: "",
 		id: 0,
@@ -27,7 +23,7 @@ const INITIAL_STATE: TInitialState = {
 	},
 	authentication: {
 		token: "",
-		expire: new Date(),
+		expire: 0,
 		isAuthenticated: false,
 	},
 };
@@ -36,12 +32,15 @@ const userSlice = createSlice({
 	name: "user",
 	initialState: INITIAL_STATE,
 	reducers: {
-		updateUser: (state, action: PayloadAction<TInitialState>) => {
+		logout: () => INITIAL_STATE,
+	},
+	extraReducers: (builder) => {
+		builder.addCase(login.fulfilled, (state, action) => {
 			state.data = action.payload.data;
 			state.authentication = action.payload.authentication;
-		},
+		});
 	},
 });
 
-export const { updateUser } = userSlice.actions;
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;
