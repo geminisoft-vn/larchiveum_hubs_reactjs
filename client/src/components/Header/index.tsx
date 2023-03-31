@@ -10,6 +10,7 @@ import { getLanguage, setLanguage } from "src/language";
 import Store from "src/utilities/store";
 
 import "./Header.scss";
+import { Button } from 'src/components';
 
 const Header = () => {
 	const { t } = useTranslation();
@@ -78,17 +79,16 @@ const Header = () => {
 	];
 
 	return (
-		<nav className="bg-white border-gray-200 px-2 md:px-4 py-2.5">
+		<nav className="bg-gray-100 mt-4 rounded-lg border-gray-200 p-4">
 			<div className="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto">
-				<a href="/home/app" className="flex items-center">
+				<Link to="/home/app" className="flex items-center">
 					<img src={logo} alt="Larchiveum Logo" className="h-12" />
-				</a>
+				</Link>
 				<div className="flex items-center md:order-2">
 					<div className="relative">
-						<button
+						<Button
 							type="button"
 							id="mega-menu-dropdown-button"
-							data-dropdown-toggle="mega-menu-dropdown"
 							className="flex items-center justify-between w-full py-2 pl-3 pr-4 font-medium text-gray-700 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-gray-400 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
 							onClick={() => setShouldOpenLocaleDropdown((prev) => !prev)}
 						>
@@ -106,7 +106,7 @@ const Header = () => {
 									clipRule="evenodd"
 								/>
 							</svg>
-						</button>
+						</Button>
 						<div
 							id="mega-menu-dropdown"
 							className={clsx(
