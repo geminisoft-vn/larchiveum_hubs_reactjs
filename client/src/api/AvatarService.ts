@@ -1,7 +1,6 @@
 import apiRequest from "src/utilities/axiosInstance";
 import { API_ROOT } from "src/utilities/constants";
-
-import Store from "../store";
+import Store from "src/utilities/store";
 
 class AvatarService {
 	static create(data) {
