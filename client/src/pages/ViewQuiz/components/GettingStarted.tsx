@@ -2,13 +2,15 @@
 /* eslint-disable react/display-name */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
+// @ts-nocheck
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Col, Empty, Layout, Menu, Row, Spin } from "antd";
 
-import QuizResultService from "../../../utilities/apiServices/QuizResultService";
+import QuizResultService from "src/api/QuizResultService";
 
 const { Header, Content, Footer, Sider } = Layout;
 

@@ -466,7 +466,7 @@ const Manager = () => {
 				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
 				setShouldActiveExhibitionForm(false);
 				// setExhibitions([...exhibitions, res.data]);
-				window.location.reload();
+				// window.location.reload();
 			} else {
 				toast.error(
 					t(
@@ -1023,7 +1023,7 @@ const Manager = () => {
 				</div>
 			);
 		}
-		window.location.href = "/";
+		navigate('/')
 		return <></>;
 	};
 

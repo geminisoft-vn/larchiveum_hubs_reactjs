@@ -1,24 +1,22 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import axiosBaseQuery from "src/utilities/axiosBaseQuery";
+type TInitialState = {
+	percent: number;
+};
 
-export const quizSlice = createApi({
-	reducerPath: "quiz",
-	baseQuery: axiosBaseQuery(),
-	endpoints: (builder) => ({
-		getAll: builder.query({
-			query: (params) => ({ url: "/v1/auth/quizs", method: "GET", params }),
-		}),
-		getOne: builder.query({
-			query: (id) => ({ url: `/v1/auth/quizs/${id}`, method: "GET" }),
-		}),
-		// updateOne: builder.query({
-		//   query: (id) => ({ url: `/v1/auth/quizs/${id}`, method: "GET" }),
-		// }),
-		// getOne: builder.query({
-		//   query: (id) => ({ url: `/v1/auth/quizs/${id}`, method: "GET" }),
-		// }),
-	}),
+const INITIAL_STATE: TInitialState = {
+	percent: 0,
+};
+
+const quizSlice = createSlice({
+	name: "quiz",
+	initialState: INITIAL_STATE,
+	reducers: {
+		updateQuiz: (state, action: PayloadAction<number>) => {
+			state.percent = action.payload;
+		},
+	},
 });
 
-export const { useGetAllQuery, useGetOneQuery } = quizSlice;
+export const { updateQuiz } = quizSlice.actions;
+export default quizSlice.reducer;

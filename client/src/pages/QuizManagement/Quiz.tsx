@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { useTranslation } from "react-i18next";
 import {
 	DeleteOutlined,

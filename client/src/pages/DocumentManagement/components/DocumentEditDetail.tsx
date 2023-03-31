@@ -3,6 +3,8 @@
 /* eslint-disable react/display-name */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
+// @ts-nocheck
+/* eslint-disable */
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";

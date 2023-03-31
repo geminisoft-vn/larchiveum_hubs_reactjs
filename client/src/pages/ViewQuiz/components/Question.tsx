@@ -2,6 +2,8 @@
 /* eslint-disable react/display-name */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
+// @ts-nocheck
+/* eslint-disable */
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -19,8 +21,8 @@ import {
 	Spin,
 } from "antd";
 
-import QuestionService from "../../../utilities/apiServices/QuestionService";
-import QuizResultService from "../../../utilities/apiServices/QuizResultService";
+import QuestionService from "src/api/QuestionService";
+import QuizResultService from "src/api/QuizResultService";
 
 const { Header, Content, Footer, Sider } = Layout;
 

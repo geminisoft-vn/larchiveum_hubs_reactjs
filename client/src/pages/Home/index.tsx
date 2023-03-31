@@ -27,8 +27,11 @@ import Exhibitions from "./components/Exhibitions";
 import Filter from "./components/Filter";
 
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate()
+
 	const [exhibitionsLoaded, setExhibitionsLoaded] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isActiveSortASC, setIsActiveSortASC] = useState(true);
@@ -91,7 +94,7 @@ const HomePage = () => {
 
 	const handleSignOut = () => {
 		Store.removeUser();
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	const handleButtonVisit = (event) => {
@@ -145,7 +148,7 @@ const HomePage = () => {
 	};
 
 	const handleButtonLogin = (event) => {
-		window.location.href = "/?page=signin";
+		navigate(`/auth/signin`)
 	};
 
 	const changePages = (page) => {

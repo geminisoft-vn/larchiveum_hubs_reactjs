@@ -19,7 +19,7 @@ const App = () => (
 				</div>
 			}
 		>
-			<BrowserRouter basename="/larchiveum">
+			<BrowserRouter>
 				<Router />
 			</BrowserRouter>
 		</Suspense>
