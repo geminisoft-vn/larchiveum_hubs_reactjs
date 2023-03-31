@@ -16,3 +16,4 @@ export { default as Switch } from "./Form/Switch";
 export { default as Stack } from "./Stack";
 export { default as Loader } from "./Loader";
 export { default as Progress } from "./Progress";
+export { default as Icon } from "./Icon";

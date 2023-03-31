@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FaHome } from "react-icons/fa";
 
-import { getLanguage, setLanguage } from "src/language";
 // import Popup from "../../../../react-components/popup/popup";
 import UserService from "src/api/UserService";
+import { IUserAuthenticationForm } from "src/interfaces";
+import { getLanguage, setLanguage } from "src/language";
 import Store from "src/utilities/store";
 
-function ResetPasswordPage() {
-	const user = Store.getUser();
+const ResetPasswordPage = () => {
 	const { t } = useTranslation();
 
+	const { handleSubmit, register } = useForm<IUserAuthenticationForm>({
+		defaultValues: {
+			email: "",
+		},
+	});
+
 	const [data, setData] = useState({});
-	const [submitted, setSubmited] = useState(false);
 	const [error, setError] = useState(null);
 	const [isOpenPoupNotification, setIsOpenPoupNotification] = useState(false);
 
@@ -25,18 +31,9 @@ function ResetPasswordPage() {
 		setData({ ...data, [name]: value });
 	};
 
-	const handleChangeLanguage = (event) => {
-		const lang = event.target.value;
-		setLanguage(lang);
-		setLanguage(lang);
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		setSubmited(true);
-
+	const handleResetPassword = handleSubmit((data) => {
 		const access_token = new URL(window.location.href).searchParams.get(
-			"token"
+			"token",
 		);
 		data.access_token = access_token;
 
@@ -51,7 +48,7 @@ function ResetPasswordPage() {
 				setError(res.error);
 			}
 		});
-	};
+	});
 
 	return (
 		<div className="limiter">
@@ -147,6 +144,6 @@ function ResetPasswordPage() {
       )} */}
 		</div>
 	);
-}
+};
 
 export default ResetPasswordPage;

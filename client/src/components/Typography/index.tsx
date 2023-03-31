@@ -1,11 +1,7 @@
 import clsx from "clsx";
 
 type Props = {
-	children:
-		| JSX.Element
-		| JSX.Element[]
-		| string
-		| (JSX.Element | JSX.Element[] | string)[];
+	children: JSX.Element | JSX.Element[] | string | (JSX.Element | JSX.Element[] | string)[] | undefined;
 	className?: string;
 };
 

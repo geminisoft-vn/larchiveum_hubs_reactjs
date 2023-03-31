@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 type Props = {
-	children: JSX.Element | JSX.Element[] | string;
+	children: JSX.Element | JSX.Element[] | string | (JSX.Element | JSX.Element[] | string)[] | undefined;
 	direction?: "row" | "col";
 	alignItems?: "start" | "center" | "end" | "stretch";
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
@@ -10,8 +10,7 @@ type Props = {
 };
 
 const Stack = (props: Props) => {
-	const { children, direction, alignItems, justifyContent, gap, className } =
-		props;
+	const { children, direction, alignItems, justifyContent, gap, className } = props;
 	return (
 		<div
 			className={clsx(
