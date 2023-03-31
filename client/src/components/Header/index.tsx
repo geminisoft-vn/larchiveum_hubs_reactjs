@@ -1,4 +1,5 @@
-/* eslint-disable no-unused-vars */
+// @ts-nocheck
+/* eslint-disable */
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,7 +19,6 @@ const Header = () => {
 
 	const user = Store.getUser();
 
-	console.log({ user });
 
 	function checkCredentials() {
 		if (
@@ -51,7 +51,7 @@ const Header = () => {
 		{
 			key: "manager",
 			label: t("_header.TAB_ROOM_LABEL"),
-			href: "/home/manager",
+			href: "/home/manager?tab=exhibition",
 			requiredUserType: 4,
 		},
 

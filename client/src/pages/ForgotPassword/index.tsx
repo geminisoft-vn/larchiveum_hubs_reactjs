@@ -10,16 +10,16 @@ import {
 	Typography,
 } from "@mui/material";
 
+import UserService from "src/api/UserService";
 import logo from "src/assets/images/larchiveum_logo.png";
 import { Alert, Button, SigninSocialButton, TextInput } from "src/components";
 import { getLanguage, setLanguage } from "src/language";
-import UserService from "src/api/UserService";
 import Store from "src/utilities/store";
 
 // import Popup from "../../../../react-components/popup/popup";
 import "reactjs-popup/dist/index.css";
 
-function ForgotPasswordPage() {
+const ForgotPasswordPage = () => {
 	const user = Store.getUser();
 	const { t } = useTranslation();
 
@@ -202,6 +202,6 @@ function ForgotPasswordPage() {
 			</Container>
 		</Box>
 	);
-}
+};
 
 export default ForgotPasswordPage;
