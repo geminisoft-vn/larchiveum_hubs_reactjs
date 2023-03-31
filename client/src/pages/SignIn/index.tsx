@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { ErrorOption, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import UserService from "src/api/UserService";
 import logo from "src/assets/images/larchiveum_logo.png";
@@ -77,7 +77,7 @@ const SignIn = () => {
 					)}
 				</>
 				<Stack direction="row" justifyContent="center">
-					<a href="./">
+					<Link to="/">
 						<img
 							src={logo}
 							alt="logo"
@@ -85,7 +85,7 @@ const SignIn = () => {
 								width: "256px",
 							}}
 						/>
-					</a>
+					</Link>
 				</Stack>
 				<FormContainer onSubmit={handleLogin} className="flex flex-col gap-2">
 					<FormItem
@@ -115,14 +115,14 @@ const SignIn = () => {
 				</FormContainer>
 
 				<Typography>
-					Or register at <a href="/auth/signup">Sign up</a>
+					Or register at <Link to="/auth/signup">Sign up</Link>
 				</Typography>
 
 				<SigninSocialButton />
 
 				<Typography>
 					If you forgot your password{" "}
-					<a href="/auth/forgot_password">Reset password</a>
+					<Link to="/auth/forgot_password">Reset password</Link>
 				</Typography>
 			</Stack>
 		</div>

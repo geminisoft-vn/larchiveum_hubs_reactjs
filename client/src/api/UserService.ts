@@ -75,13 +75,13 @@ class UserService {
 		}).then((res) => res.json());
 	}
 
-	static requestResetPassword(email: string) {
+	static requestResetPassword(data: { email: string }) {
 		return fetch(`${API_ROOT}/v1/users/requestResetPassword`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(email),
+			body: JSON.stringify(data),
 		}).then((res) => res.json());
 	}
 

@@ -1,85 +1,109 @@
+import { Link } from "react-router-dom";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
 import PublicRoundedIcon from "@mui/icons-material/PublicRounded";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
-import {
-	Card,
-	CardActionArea,
-	CardActions,
-	CardContent,
-	CardMedia,
-	Stack,
-} from "@mui/material";
 import moment from "moment";
 
-import { Button, Typography } from "src/components";
+import { Stack, Typography } from "src/components";
 import { getLanguage } from "src/language";
+import { APP_ROOT } from "src/utilities/constants";
 
 const Exhibition = (props) => {
 	const { exhibition } = props;
 	return (
-		<Card>
-			<CardActionArea>
-				<CardMedia
-					component="img"
-					height={200}
+		<div className="relative">
+			<div
+				className="opacity-80"
+				style={{
+					height: "200px",
+				}}
+			>
+				<img
+					className="rounded-lg"
 					src={exhibition.room.thumbnailUrl}
 					alt={exhibition.room.name}
 				/>
-				<CardContent>
-					<Stack direction="column" spacing={1}>
-						<Stack direction="row" justifyContent="space-between">
-							<Stack direction="row" alignItems="center" spacing={1}>
-								{exhibition.public ? (
-									<PublicRoundedIcon />
-								) : (
-									<ShieldRoundedIcon />
-								)}
-								<Typography>{exhibition.name}</Typography>
-							</Stack>
-							<Stack direction="row" alignItems="center" spacing={1}>
-								<GroupRoundedIcon />
-								<Typography>
-									{exhibition.reservationCount}/{exhibition.maxSize}
-								</Typography>
-							</Stack>
-						</Stack>
-						<Stack direction="column" spacing={1}>
-							{exhibition.startDate && (
-								<Stack direction="row" alignItems="center" spacing={1}>
-									<CalendarMonthRoundedIcon />
-									<Typography>
-										{moment
-											.utc(exhibition.startDate)
-											.local()
-											.locale(getLanguage())
-											.format("L LT")}{" "}
-										{" (start)"}
-									</Typography>
-								</Stack>
-							)}
+			</div>
+			<Stack
+				className="absolute top-2 w-full px-4"
+				direction="row"
+				justifyContent="between"
+				alignItems="center"
+				gap={1}
+			>
+				{exhibition.public ? (
+					<PublicRoundedIcon
+						style={{
+							color: "#fff",
+						}}
+					/>
+				) : (
+					<ShieldRoundedIcon
+						style={{
+							color: "#fff",
+						}}
+					/>
+				)}
+				<Typography className="font-bold text-lg text-white">
+					{exhibition.name}
+				</Typography>
+			</Stack>
 
-							{exhibition.endDate && (
-								<Stack direction="row" alignItems="center" spacing={1}>
-									<CalendarMonthRoundedIcon />
-									<Typography>
-										{moment
-											.utc(exhibition.endDate)
-											.local()
-											.locale(getLanguage())
-											.format("L LT")}{" "}
-										{" (end)"}
-									</Typography>
-								</Stack>
-							)}
-						</Stack>
+			<Stack
+				className="absolute bottom-16 px-4 flex items-center gap-2"
+				direction="row"
+				alignItems="center"
+				gap={1}
+			>
+				<GroupRoundedIcon
+					style={{
+						color: "#fff",
+					}}
+				/>
+				<Typography className="text-white font-bold">
+					{exhibition.reservationCount}/{exhibition.maxSize}
+				</Typography>
+			</Stack>
+
+			<Stack className="bottom-4" direction="col" gap={1}>
+				{exhibition.startDate && (
+					<Stack direction="row" alignItems="center" gap={1}>
+						<CalendarMonthRoundedIcon />
+						<Typography>
+							{moment
+								.utc(exhibition.startDate)
+								.local()
+								.locale(getLanguage())
+								.format("L LT")}{" "}
+							{" (start)"}
+						</Typography>
 					</Stack>
-				</CardContent>
-			</CardActionArea>
-			<CardActions>
-				<Button variant="outlined">Enter</Button>
-			</CardActions>
-		</Card>
+				)}
+
+				{exhibition.endDate && (
+					<Stack direction="row" alignItems="center" gap={1}>
+						<CalendarMonthRoundedIcon />
+						<Typography>
+							{moment
+								.utc(exhibition.endDate)
+								.local()
+								.locale(getLanguage())
+								.format("L LT")}{" "}
+							{" (end)"}
+						</Typography>
+					</Stack>
+				)}
+			</Stack>
+
+			<Link
+				to={`${APP_ROOT}/${exhibition.roomId}`}
+				target="_blank"
+				className="text-white border rounded-lg p-2 absolute bottom-2 left-1/2 -translate-x-1/2"
+			>
+				Enter
+			</Link>
+		</div>
 	);
 };
 

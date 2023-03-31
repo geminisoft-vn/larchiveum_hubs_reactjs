@@ -3,7 +3,7 @@ import clsx from "clsx";
 type Props = {
 	onSubmit: () => void;
 	children: JSX.Element | JSX.Element[];
-	className: string;
+	className?: string;
 };
 
 const FormContainer = (props: Props) => {
@@ -21,6 +21,10 @@ const FormContainer = (props: Props) => {
 			{children}
 		</form>
 	);
+};
+
+FormContainer.defaultProps = {
+	className: "",
 };
 
 export default FormContainer;

@@ -14,6 +14,7 @@ export { default as DateTimePicker } from "./Form/DateTimePicker";
 export { default as AutoComplete } from "./Form/AutoComplete";
 export { default as Switch } from "./Form/Switch";
 export { default as Stack } from "./Stack";
+export { default as Box } from "./Box";
 export { default as Loader } from "./Loader";
 export { default as Progress } from "./Progress";
 

@@ -1,3 +1,5 @@
+// @ts-nocheck
+/* eslint-disable */
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // ICON
@@ -14,7 +16,7 @@ import moment from "moment-timezone";
 import ExhibitionsService from "src/api/ExhibitionsService";
 import ReserveService from "src/api/ReserveService";
 import UserService from "src/api/UserService";
-import { Pagination } from "src/components";
+import { Pagination, Popup } from "src/components";
 import { IParams } from "src/interfaces";
 import { getLanguage } from "src/language";
 // import Popup from "../../../../react-components/popup/popup";
@@ -364,7 +366,7 @@ const HomePage = () => {
 				p: 2,
 			}}
 		>
-			{/* {isOpen && (
+			{isOpen && (
         <Popup
           key="popup-confirm-reservation"
           size="sm"
@@ -396,9 +398,9 @@ const HomePage = () => {
           ]}
           handleClose={togglePopup}
         />
-      )} */}
+      )}
 
-			{/* {isOpenNotification && (
+			{isOpenNotification && (
         <Popup
           key="popup-exhibition-not-open-yet"
           size="lg"
@@ -421,7 +423,7 @@ const HomePage = () => {
           ]}
           handleClose={closePopupNotification}
         />
-      )} */}
+      )}
 
 			<Stack direction="column" alignItems="center" spacing={2}>
 				<Filter

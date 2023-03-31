@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ErrorOption, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import UserService from "src/api/UserService";
 import logo from "src/assets/images/larchiveum_logo.png";
@@ -151,7 +151,7 @@ const SignUpForm = () => {
 				</FormContainer>
 
 				<Typography>
-					Already have an account? <a href="/auth/signin">Sign in</a>
+					Already have an account? <Link to="/auth/signin">Sign in</Link>
 				</Typography>
 			</Stack>
 		</div>
