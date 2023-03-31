@@ -19,7 +19,7 @@ const Exhibition = (props) => {
 					height: "200px",
 				}}
 			>
-				<img className="rounded-lg" src={exhibition.room.thumbnailUrl} alt={exhibition.room.name} />
+				<img className="h-full w-full rounded-lg" src={exhibition.room.thumbnailUrl} alt={exhibition.room.name} />
 			</div>
 			<Stack
 				className="absolute top-2 w-full px-4"

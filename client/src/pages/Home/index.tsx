@@ -1,14 +1,7 @@
-// @ts-nocheck
-/* eslint-disable */
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-// ICON
-import {
-	MdCalendarToday,
-	MdOutlineCheckCircleOutline,
-	MdPeopleAlt,
-	MdPublic,
-} from "react-icons/md";
+import { MdCalendarToday, MdOutlineCheckCircleOutline, MdPeopleAlt, MdPublic } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Box, Stack } from "@mui/material";
 import moment from "moment-timezone";
@@ -16,10 +9,11 @@ import moment from "moment-timezone";
 import ExhibitionsService from "src/api/ExhibitionsService";
 import ReserveService from "src/api/ReserveService";
 import UserService from "src/api/UserService";
+import { useAppSelector } from "src/app/hooks";
 import { Pagination, Popup } from "src/components";
+import { getUserInfo } from "src/features/user/selectors";
 import { IParams } from "src/interfaces";
 import { getLanguage } from "src/language";
-// import Popup from "../../../../react-components/popup/popup";
 import { APP_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
 
@@ -27,10 +21,10 @@ import Exhibitions from "./components/Exhibitions";
 import Filter from "./components/Filter";
 
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-  const navigate = useNavigate()
+	const navigate = useNavigate();
+	const userInfo = useAppSelector(getUserInfo);
 
 	const [exhibitionsLoaded, setExhibitionsLoaded] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
@@ -43,24 +37,14 @@ const HomePage = () => {
 	const [exhibitionNoti, setExhibitionNoti] = useState(undefined);
 	const [params, setParams] = useState<IParams>({
 		page: 1,
-		perPage: 9,
+		pageSize: 9,
 		sort: "startDate|desc", // format <attribute>|<order type>,
 	});
 
 	const user = Store.getUser();
 	const { t } = useTranslation();
 
-	useEffect(() => {
-		getAllExhibitions();
-	}, [params.page, params.sort]);
-
-	const togglePopup = (exhibitionId) => {
-		setIsOpen(!isOpen);
-		setCurrentExhibitionId(exhibitionId);
-	};
-
 	const getAllExhibitions = () => {
-		const user = Store.getUser();
 		const data = params;
 		if (user) {
 			ExhibitionsService.getAllWithAuthExhibitions(data).then((res) => {
@@ -69,10 +53,7 @@ const HomePage = () => {
 					console.log({ res });
 					setExhibitions(data);
 					setExhibitionsLoaded(true);
-				} else if (
-					res.result == "fail" &&
-					res.error == "get_exhibitions_fail"
-				) {
+				} else if (res.result == "fail" && res.error == "get_exhibitions_fail") {
 					toast.error("Get Exhibitions fail !", { autoClose: 1000 });
 				}
 			});
@@ -82,14 +63,20 @@ const HomePage = () => {
 					const { data } = res.data;
 					setExhibitions(data);
 					setExhibitionsLoaded(true);
-				} else if (
-					res.result === "fail" &&
-					res.error === "get_exhibitions_fail"
-				) {
+				} else if (res.result === "fail" && res.error === "get_exhibitions_fail") {
 					toast.error("Get Exhibitions fail !", { autoClose: 1000 });
 				}
 			});
 		}
+	};
+
+	useEffect(() => {
+		getAllExhibitions();
+	}, [params.page, params.sort]);
+
+	const togglePopup = (exhibitionId) => {
+		setIsOpen(!isOpen);
+		setCurrentExhibitionId(exhibitionId);
 	};
 
 	const handleSignOut = () => {
@@ -101,7 +88,7 @@ const HomePage = () => {
 		const user = Store.getUser();
 		let url = APP_ROOT;
 		const roomId = event.currentTarget.getAttribute("data-roomid");
-		if (roomId && roomId != "") {
+		if (roomId && roomId !== "") {
 			if (APP_ROOT === "https://larchiveum.link") {
 				url += `/${roomId}`;
 			} else {
@@ -148,7 +135,7 @@ const HomePage = () => {
 	};
 
 	const handleButtonLogin = (event) => {
-		navigate(`/auth/signin`)
+		navigate(`/auth/signin`);
 	};
 
 	const changePages = (page) => {
@@ -190,12 +177,7 @@ const HomePage = () => {
 			);
 		}
 
-		if (
-			user &&
-			!item.reservated &&
-			!item.public &&
-			item.reservationCount < item.maxSize
-		) {
+		if (user && !item.reservated && !item.public && item.reservationCount < item.maxSize) {
 			return (
 				<button
 					key="reservation"
@@ -208,17 +190,9 @@ const HomePage = () => {
 			);
 		}
 
-		if (
-			!startDate ||
-			(startDate <= today && (item.public || item.reservated))
-		) {
+		if (!startDate || (startDate <= today && (item.public || item.reservated))) {
 			return (
-				<button
-					key="enter"
-					className="signin-up btn-visit"
-					onClick={handleButtonVisit}
-					data-roomid={item.roomId}
-				>
+				<button key="enter" className="signin-up btn-visit" onClick={handleButtonVisit} data-roomid={item.roomId}>
 					{t("home.ENTER")}
 				</button>
 			);
@@ -234,12 +208,7 @@ const HomePage = () => {
 
 		if (!user && !item.public) {
 			return (
-				<button
-					type=""
-					key="signin"
-					className="signin-up btn-visit signin"
-					onClick={handleButtonLogin}
-				>
+				<button type="" key="signin" className="signin-up btn-visit signin" onClick={handleButtonLogin}>
 					{t("home.SIGN_IN")}
 				</button>
 			);
@@ -286,32 +255,17 @@ const HomePage = () => {
 						{item.startDate && (
 							<p className="p-1">
 								<MdCalendarToday style={{ marginTop: "5px" }} />
-								{moment
-									.utc(item.startDate)
-									.local()
-									.locale(getLanguage())
-									.format("L LT")}{" "}
-								{" (start)"}
+								{moment.utc(item.startDate).local().locale(getLanguage()).format("L LT")} {" (start)"}
 							</p>
 						)}
 						{item.endDate && (
 							<p className="p-1">
 								<MdCalendarToday style={{ marginTop: "5px" }} />
-								{moment
-									.utc(item.endDate)
-									.local()
-									.locale(getLanguage())
-									.format("L LT")}{" "}
-								{" (end)"}
+								{moment.utc(item.endDate).local().locale(getLanguage()).format("L LT")} {" (end)"}
 							</p>
 						)}
 					</div>
-					<ActionButton
-						item={item}
-						startDate={startDate}
-						endDate={endDate}
-						today={today}
-					/>
+					<ActionButton item={item} startDate={startDate} endDate={endDate} today={today} />
 				</div>
 			);
 		});
@@ -370,78 +324,74 @@ const HomePage = () => {
 			}}
 		>
 			{isOpen && (
-        <Popup
-          key="popup-confirm-reservation"
-          size="sm"
-          title={<>{t("home.POPUP_CONFIRM_RESERVATION__TITLE")}</>}
-          content={
-            <>
-              <br />
-              <div style={{ textAlign: "center" }}>
-                {t("home.POPUP_CONFIRM_RESERVATION__MESSAGE")}
-              </div>
-              <br />
-            </>
-          }
-          actions={[
-            {
-              text: t("home.POPUP_CONFIRM_RESERVATION__YES"),
-              class: "btn1",
-              callback: () => {
-                handleReservate();
-              },
-            },
-            {
-              text: t("home.POPUP_CONFIRM_RESERVATION__CANCEL"),
-              class: "btn2",
-              callback: () => {
-                togglePopup();
-              },
-            },
-          ]}
-          handleClose={togglePopup}
-        />
-      )}
+				<Popup
+					key="popup-confirm-reservation"
+					size="sm"
+					title={<>{t("home.POPUP_CONFIRM_RESERVATION__TITLE")}</>}
+					content={
+						<>
+							<br />
+							<div style={{ textAlign: "center" }}>{t("home.POPUP_CONFIRM_RESERVATION__MESSAGE")}</div>
+							<br />
+						</>
+					}
+					actions={[
+						{
+							text: t("home.POPUP_CONFIRM_RESERVATION__YES"),
+							class: "btn1",
+							callback: () => {
+								handleReservate();
+							},
+						},
+						{
+							text: t("home.POPUP_CONFIRM_RESERVATION__CANCEL"),
+							class: "btn2",
+							callback: () => {
+								togglePopup();
+							},
+						},
+					]}
+					handleClose={togglePopup}
+				/>
+			)}
 
 			{isOpenNotification && (
-        <Popup
-          key="popup-exhibition-not-open-yet"
-          size="lg"
-          title={<>{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__TTILE")}</>}
-          content={
-            <div className="info-room">
-              <p className="noti-title">
-                {t("home.POPUP_EXHIBITION_NOT_OPEN_YET__MESSAGE")}
-              </p>
-            </div>
-          }
-          actions={[
-            {
-              text: t("home.POPUP_EXHIBITION_NOT_OPEN_YET__CLOSE"),
-              class: "btn2",
-              callback: () => {
-                closePopupNotification();
-              },
-            },
-          ]}
-          handleClose={closePopupNotification}
-        />
-      )}
+				<Popup
+					key="popup-exhibition-not-open-yet"
+					size="lg"
+					title={<>{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__TTILE")}</>}
+					content={
+						<div className="info-room">
+							<p className="noti-title">{t("home.POPUP_EXHIBITION_NOT_OPEN_YET__MESSAGE")}</p>
+						</div>
+					}
+					actions={[
+						{
+							text: t("home.POPUP_EXHIBITION_NOT_OPEN_YET__CLOSE"),
+							class: "btn2",
+							callback: () => {
+								closePopupNotification();
+							},
+						},
+					]}
+					handleClose={closePopupNotification}
+				/>
+			)}
 
 			<Stack direction="column" alignItems="center" spacing={2}>
-				<Filter
+				{/* <Filter
 					sortNewest={sortNewest}
 					sortOldest={sortOldest}
 					isActiveSortASC={isActiveSortASC}
 					isActiveSortDESC={isActiveSortDESC}
-				/>
+				/> */}
 
 				<Exhibitions exhibitions={exhibitions} />
 
 				<Pagination
 					totalItems={exhibitions.length}
 					page={params.page}
-					perPage={params.perPage}
+					perPage={params.pageSize}
 					setParams={setParams}
 				/>
 			</Stack>

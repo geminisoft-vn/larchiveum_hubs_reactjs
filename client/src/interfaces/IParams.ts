@@ -7,7 +7,7 @@ type TFilter = {
 export interface IParams {
 	page: number;
 	pageSize: number;
-	sort: string;
-	query: string;
-	filter: TFilter[];
+	sort?: string;
+	query?: string;
+	filter?: TFilter[] | null;
 }
