@@ -4,6 +4,4 @@ import App from "./App";
 
 import "./index.css";
 
-ReactDOM.createRoot(
-	document.getElementById("LARCHIVEUM__ROOT") as HTMLElement,
-).render(<App />);
+ReactDOM.createRoot(document.getElementById("LARCHIVEUM__ROOT") as HTMLElement).render(<App />);
