@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 
 import store from "src/app/store";
@@ -6,7 +6,7 @@ import { startLoading, stopLoading } from "src/features/loader/LoaderSlice";
 
 import { API_ROOT } from "./constants";
 
-const axiosInstance = axios.create({
+const request = axios.create({
 	baseURL: API_ROOT,
 	timeout: 20000,
 	maxContentLength: Infinity,
@@ -27,27 +27,38 @@ const getAccessToken = () => {
 	return "";
 };
 
-axiosInstance.interceptors.request.use(
-	(config) => {
-		store.dispatch(startLoading());
+const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+	store.dispatch(startLoading());
 
-		const accessToken = getAccessToken();
-		if (accessToken.length) {
-			config.headers.access_token = accessToken;
-		}
-		return config;
-	},
-	(error) => {
-		Promise.reject(error);
-	},
-);
+	const accessToken = getAccessToken();
+	if (accessToken.length) {
+		config.headers.access_token = accessToken;
+	}
+	return config;
+};
 
-axiosInstance.interceptors.response.use(
-	(response) => {
-		store.dispatch(stopLoading());
-		return response;
-	},
-	(error) => Promise.reject(error),
-);
+const onRequestError = (error: AxiosError): Promise<AxiosError> => {
+	console.error("🚀 ---------------------------------------------------------🚀");
+	console.error("🚀 ~ file: request.ts:43 ~ onRequestError ~ error:", error);
+	console.error("🚀 ---------------------------------------------------------🚀");
+	store.dispatch(startLoading());
+	return Promise.reject(error);
+};
 
-export default axiosInstance;
+const onResponse = (response: AxiosResponse): AxiosResponse => {
+	store.dispatch(stopLoading());
+	return response.data;
+};
+
+const onResponseError = (error: AxiosError): Promise<AxiosError> => {
+	console.error("🚀 ----------------------------------------------------------🚀");
+	console.error("🚀 ~ file: request.ts:57 ~ onResponseError ~ error:", error);
+	console.error("🚀 ----------------------------------------------------------🚀");
+	store.dispatch(startLoading());
+	return Promise.reject(error);
+};
+
+request.interceptors.request.use(onRequest, onRequestError);
+request.interceptors.response.use(onResponse, onResponseError);
+
+export default request;

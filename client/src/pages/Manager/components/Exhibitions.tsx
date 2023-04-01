@@ -1,35 +1,167 @@
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { AxiosResponse } from "axios";
 
 import ExhibitionsService from "src/api/ExhibitionsService";
-import { Button, Stack, Typography } from "src/components";
-import { IExhibition } from "src/interfaces";
+import { useAppDispatch, useAppSelector } from "src/app/hooks";
+import defaultImage from "src/assets/larchiveum/default-image.png";
+import { Button, Pagination, Stack, Typography } from "src/components";
+import { closeModal, openModal } from "src/features/modal/ModalSlice";
+import { showToast } from "src/features/toast/ToastSlice";
+import { getUserAuthenticationStatus } from "src/features/user/selectors";
+import { IAxiosResponse, IExhibition, IPagination, IParams, IScene } from "src/interfaces";
 import Store from "src/utilities/store";
 
 import Exhibition from "./Exhibition";
 
-type Props = {
-	exhibitions: IExhibition[];
-};
+type Props = {};
 
 const Exhibitions = (props: Props) => {
-	const { exhibitions } = props;
 	const { t } = useTranslation();
+	const dispatch = useAppDispatch();
+	const isAuthenticatedUser = useAppSelector(getUserAuthenticationStatus);
+
+	const [exhibitions, setExhibitions] = useState<IExhibition[]>([]);
+	const [params, setParams] = useState<IParams>({
+		page: 1,
+		pageSize: 4,
+	});
+	const [pages, setPages] = useState<IPagination>({});
+
+	const [scenes, setScenes] = useState<IScene[]>([]);
+
+	const loadExhibitions = useCallback(async () => {
+		try {
+			if (isAuthenticatedUser) {
+				const res = await ExhibitionsService.getAllWithAuthExhibitions({
+					...params,
+					sort: "id|desc", // format <attribute>|<order type>
+					isAdmin: 1,
+				});
+				if (res.result === "ok") {
+					setExhibitions(res.data);
+					setPages(res.pages);
+				}
+			}
+		} catch (err) {
+			dispatch(
+				showToast({
+					type: "error",
+					message: t("manage.GET_EXHIBITIONS_ERROR"),
+				}),
+			);
+		}
+	}, [params.page]);
+
+	const loadScenes = useCallback(async () => {
+		try {
+			const res = await ExhibitionsService.getAllScenes();
+			if (res.result === "ok") {
+				res.data = res.data.map((item) => ({
+					...item,
+					label: item.name,
+				}));
+				setScenes(res.data);
+			}
+		} catch (err) {
+			dispatch(
+				showToast({
+					type: "error",
+					message: t("manage.GET_SCENES_ERROR"),
+				}),
+			);
+		}
+	}, []);
 
 	const openPopupExhibition = () => {};
 
 	const openPopupCustomMedia = () => {};
 
-	const getSceneThumnail = () => "";
+	const getSceneThumnail = (sceneId) => {
+		if (!sceneId) return defaultImage;
+		return scenes.find((scene) => scene.id === sceneId)?.thumbnailUrl || "";
+	};
 
-	const openPopupPublic = () => {};
+	const handelTogglePublic = (exhibitionId) => {
+		ExhibitionsService.patchTogglePublic(exhibitionId)
+			.then((res) => {
+				if (res.result === "ok") {
+					exhibitions.forEach((exhibition) => {
+						if (exhibition.id === exhibitionId) {
+							exhibition.public = res.data.public;
+							dispatch(
+								showToast({
+									type: "success",
+									message: t("manager.MESSAGE_SUCCESS"),
+								}),
+							);
+						}
+					});
+				} else {
+					dispatch(
+						showToast({
+							type: "error",
+							message: t("manager.CHANGE_EXHIBITION_PUBLIC_ERROR"),
+						}),
+					);
+				}
+			})
+			.finally(() => {
+				dispatch(closeModal());
+			});
+	};
+
+	const openPopupPublic = (exhibitionId) => {
+		dispatch(
+			openModal({
+				isActive: true,
+				title: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__TITLE"),
+				body: (
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+						}}
+					>
+						{t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__MESSAGE")}
+					</div>
+				),
+				actions: [
+					{
+						text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CHANGE"),
+						className: "btn1",
+						callback: () => {
+							handelTogglePublic(exhibitionId);
+						},
+					},
+					{
+						text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CANCEL"),
+						className: "btn2",
+						callback: () => {
+							dispatch(closeModal());
+						},
+					},
+				],
+			}),
+		);
+	};
 	const setExhibitionType = () => {};
 	const openPopupCloseRoom = () => {};
 	const openPopupOpenRoom = () => {};
 	const openDeleteRoom = () => {};
 
+	useEffect(() => {
+		loadExhibitions();
+	}, [loadExhibitions]);
+
+	useEffect(() => {
+		loadScenes();
+	}, [loadScenes]);
+
 	return (
-		<Stack direction="col" gap={2}>
-			<Typography>{t("manager.LIST_EXHIBITION")}</Typography>
+		<Stack direction="col" alignItems="center" gap={2} className="my-4">
+			<Typography className="font-bold text-center text-lg">{t("manager.LIST_EXHIBITION")}</Typography>
 			{/* <Button
 				className="btn btn-create"
 				onClick={() => {
@@ -39,27 +171,30 @@ const Exhibitions = (props: Props) => {
 			>
 				<img src={AddIcon} />
 			</Button> */}
-			{exhibitions &&
-				exhibitions.map((exhibition) => {
-					console.log("🚀 ---------------------------------------------------------------🚀");
-					console.log("🚀 ~ file: index.tsx:803 ~ {exhibitions.data.map ~ exhibition: ", exhibition);
-					console.log("🚀 ---------------------------------------------------------------🚀");
-					return (
-						<Exhibition
-							key={exhibition.id}
-							isUnavailable={!!exhibition.room}
-							exhibition={exhibition}
-							openPopupCustomMedia={openPopupCustomMedia}
-							getSceneThumnail={getSceneThumnail}
-							openPopupPublic={openPopupPublic}
-							openPopupExhibition={openPopupExhibition}
-							setExhibitionType={setExhibitionType}
-							openPopupCloseRoom={openPopupCloseRoom}
-							openPopupOpenRoom={openPopupOpenRoom}
-							openDeleteRoom={openDeleteRoom}
-						/>
-					);
-				})}
+			<Stack direction="col" gap={2}>
+				{exhibitions &&
+					exhibitions.map((exhibition) => {
+						console.log("🚀 ---------------------------------------------------------------🚀");
+						console.log("🚀 ~ file: index.tsx:803 ~ {exhibitions.data.map ~ exhibition: ", exhibition);
+						console.log("🚀 ---------------------------------------------------------------🚀");
+						return (
+							<Exhibition
+								key={exhibition.id}
+								exhibition={exhibition}
+								openPopupCustomMedia={openPopupCustomMedia}
+								getSceneThumnail={getSceneThumnail}
+								openPopupPublic={openPopupPublic}
+								openPopupExhibition={openPopupExhibition}
+								setExhibitionType={setExhibitionType}
+								openPopupCloseRoom={openPopupCloseRoom}
+								openPopupOpenRoom={openPopupOpenRoom}
+								openDeleteRoom={openDeleteRoom}
+							/>
+						);
+					})}
+			</Stack>
+
+			<Pagination page={params.page} pageSize={params.pageSize} setParams={setParams} total={pages?.total} />
 		</Stack>
 	);
 };

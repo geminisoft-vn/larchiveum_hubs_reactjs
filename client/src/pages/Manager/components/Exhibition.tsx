@@ -8,7 +8,6 @@ import { getLanguage } from "src/language";
 import { APP_ROOT } from "src/utilities/constants";
 
 type Props = {
-	isUnavailable: boolean;
 	exhibition: Partial<IExhibition>;
 	openPopupCustomMedia: (_id?: number) => void;
 	getSceneThumnail: (_sceneId?: string) => string;
@@ -22,7 +21,6 @@ type Props = {
 
 const Exhibition = (props: Props) => {
 	const {
-		isUnavailable,
 		exhibition,
 		openPopupCustomMedia,
 		getSceneThumnail,
@@ -34,19 +32,28 @@ const Exhibition = (props: Props) => {
 		openDeleteRoom,
 	} = props;
 	const { t } = useTranslation();
-	return (
-		<div>
-			<span className="name-tour">{exhibition.name}</span>
-			<img src={isUnavailable ? defaultImage1 : getSceneThumnail(exhibition ? exhibition.sceneId : undefined)} alt="" />
-			<Button
-				onClick={() => {
-					openPopupCustomMedia(exhibition.id);
-				}}
-			>
-				<i className="fa-solid fa-screwdriver-wrench" />
-			</Button>
 
-			<div className="content">
+	const isUnavailable = Boolean(!exhibition.room);
+
+	return (
+		<div className="grid grid-cols-12 border rounded-lg">
+			<div className="col-span-3">
+				<img
+					className="w-full h-full rounded-lg"
+					src={isUnavailable ? defaultImage1 : getSceneThumnail(exhibition ? exhibition.sceneId : undefined)}
+					alt=""
+				/>
+
+				<Button
+					onClick={() => {
+						openPopupCustomMedia(exhibition.id);
+					}}
+				>
+					<i className="fa-solid fa-screwdriver-wrench" />
+				</Button>
+			</div>
+
+			<div className="col-span-6 p-4">
 				<div>
 					{isUnavailable ? (
 						<Typography>{t("manager.EXHIBITION_UNAVAILABLE")}</Typography>
@@ -95,10 +102,10 @@ const Exhibition = (props: Props) => {
 					)}
 				</div>
 			</div>
-			<div className="btn-action">
+			<div className="col-span-3 p-2 flex flex-col justify-around">
 				{isUnavailable ? (
 					<Button
-						className="btn btn-delete"
+						className="bg-red-500 text-white"
 						onClick={() => {
 							openDeleteRoom(exhibition.id);
 						}}
@@ -109,7 +116,7 @@ const Exhibition = (props: Props) => {
 					<>
 						{exhibition.public === 1 ? (
 							<Button
-								className="btn btn-unpublish"
+								className="bg-red-100"
 								onClick={() => {
 									openPopupPublic(exhibition.id);
 								}}
@@ -118,7 +125,7 @@ const Exhibition = (props: Props) => {
 							</Button>
 						) : (
 							<Button
-								className="btn btn-publish"
+								className="bg-blue-100"
 								onClick={() => {
 									openPopupPublic(exhibition.id);
 								}}
@@ -127,9 +134,9 @@ const Exhibition = (props: Props) => {
 							</Button>
 						)}
 						<Button
-							className="btn btn-edit"
+							className="bg-yellow-100"
 							onClick={() => {
-								openPopupExhibition(exhibition);
+								// openPopupExhibition(exhibition);
 								setExhibitionType("edit");
 							}}
 						>
@@ -137,7 +144,7 @@ const Exhibition = (props: Props) => {
 						</Button>
 						{exhibition.closed === 1 ? (
 							<Button
-								className="btn btn-open"
+								className="bg-purple-100"
 								onClick={() => {
 									openPopupOpenRoom(exhibition.id);
 								}}
@@ -146,7 +153,7 @@ const Exhibition = (props: Props) => {
 							</Button>
 						) : (
 							<Button
-								className="btn btn-close"
+								className="bg-purple-100"
 								onClick={() => {
 									openPopupCloseRoom(exhibition.id);
 								}}

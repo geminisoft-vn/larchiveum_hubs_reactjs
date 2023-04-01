@@ -54,6 +54,7 @@
     "import/no-extraneous-dependencies": "off",
     "react/jsx-no-useless-fragment": "off",
     "react/button-has-type": "off",
+    "react/no-array-index-key": "off",
     "no-param-reassign": [
       2,
       {

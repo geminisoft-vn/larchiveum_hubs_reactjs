@@ -21,7 +21,14 @@ const Toast = () => {
 			)}
 			role="alert"
 		>
-			<div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+			<div
+				className={clsx(
+					"inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg dark:bg-green-800 dark:text-green-200",
+					type === "default" && "text-gray-500 bg-gray-100",
+					type === "error" && "text-red-500 bg-red-100",
+					type === "success" && "text-green-500 bg-green-100",
+				)}
+			>
 				{type === "default" && (
 					<>
 						<svg

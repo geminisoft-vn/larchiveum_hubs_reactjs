@@ -388,12 +388,12 @@ const HomePage = () => {
 
 				<Exhibitions exhibitions={exhibitions} />
 
-				<Pagination
+				{/* <Pagination
 					totalItems={exhibitions.length}
 					page={params.page}
 					perPage={params.pageSize}
 					setParams={setParams}
-				/>
+				/> */}
 			</Stack>
 		</Box>
 	);

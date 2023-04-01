@@ -16,8 +16,8 @@ const Stack = (props: Props) => {
 			className={clsx(
 				`flex`,
 				direction === "row" ? "flex-row" : "flex-col",
-				`justify-${justifyContent || "start"}`,
-				`items-${alignItems || "start"}`,
+				`justify-${justifyContent}`,
+				`items-${alignItems}`,
 				`gap-${gap}`,
 				className,
 			)}
@@ -29,8 +29,8 @@ const Stack = (props: Props) => {
 
 Stack.defaultProps = {
 	direction: "row",
-	alignItems: "start",
-	justifyContent: "start",
+	alignItems: "",
+	justifyContent: "",
 	gap: 0,
 	className: "",
 };

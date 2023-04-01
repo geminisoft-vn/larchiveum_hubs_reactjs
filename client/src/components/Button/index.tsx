@@ -7,7 +7,7 @@ type Props = {
 	className?: string;
 	type?: "button" | "reset" | "submit";
 	variant?: "default" | "link";
-	children: JSX.Element | JSX.Element[] | string | (JSX.Element | JSX.Element[] | string)[];
+	children: JSX.Element | JSX.Element[] | string | number | (JSX.Element | JSX.Element[] | string)[];
 };
 
 const Button = (props: Props) => {

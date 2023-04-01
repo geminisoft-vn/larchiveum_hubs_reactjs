@@ -18,10 +18,10 @@ const Modal = () => {
 			tabIndex={-1}
 			aria-hidden="true"
 			className={clsx(
-				`justify-center items-center fixed top-0 left-0 z-[9999] w-${
+				`flex justify-center items-center transition-all duration-200 fixed top-0 left-0 z-50 w-${
 					width || "full"
 				} p-4 overflow-x-hidden overflow-y-auto inset-0 h-[calc(100%-1rem)] `,
-				isActive ? "flex" : "hidden",
+				isActive ? "visible opacity-1" : "invisible opacity-0",
 			)}
 		>
 			<div className="relative w-full h-full max-w-2xl md:h-auto border rounded-lg shadow-lg">
@@ -51,7 +51,7 @@ const Modal = () => {
 						</button>
 					</div>
 					<div className="p-6 space-y-6">{body}</div>
-					<div className="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+					<div className="flex items-center justify-end p-4 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
 						{actions &&
 							actions.length > 0 &&
 							actions.map((action: TModalAction) => (

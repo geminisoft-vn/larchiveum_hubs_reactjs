@@ -18,7 +18,7 @@ const toastSlice = createSlice({
 	name: "toast",
 	initialState: INITIAL_STATE,
 	reducers: {
-		showToast: (state, action: PayloadAction<TInitialState>) => {
+		showToast: (state, action: PayloadAction<Omit<TInitialState, "isActive">>) => {
 			state.isActive = true;
 			Object.assign(state, action.payload);
 		},

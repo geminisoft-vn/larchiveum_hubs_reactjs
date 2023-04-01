@@ -1,9 +1,11 @@
+import { AxiosResponse } from "axios";
 import moment from "moment-timezone";
 
+import { IAxiosResponse, IExhibition, IScene } from "src/interfaces";
 import request from "src/utilities/request";
 
 class ExhibitionsService {
-	static getAllExhibitions(data) {
+	static getAllExhibitions(data): Promise<IAxiosResponse<IExhibition[]>> {
 		return request({
 			method: "GET",
 			url: `/v1/exhibitions?page=${data.page ? data.page : 1}&pageSize=${data.pageSize ? data.pageSize : 15}&sort=${
@@ -12,7 +14,7 @@ class ExhibitionsService {
 		});
 	}
 
-	static getAllWithAuthExhibitions(data) {
+	static getAllWithAuthExhibitions(data): Promise<IAxiosResponse<IExhibition[]>> {
 		return request({
 			method: "GET",
 			url: `/v1/auth/exhibitions?page=${data.page ? data.page : 1}&pageSize=${
@@ -21,7 +23,7 @@ class ExhibitionsService {
 		});
 	}
 
-	static getAllScenes() {
+	static getAllScenes(): Promise<IAxiosResponse<IScene[]>> {
 		return request({
 			method: "GET",
 			url: `/v1/auth/exhibitions/getAllScenes`,
@@ -44,11 +46,11 @@ class ExhibitionsService {
 		});
 	}
 
-	static patchTogglePublic(id) {
+	static patchTogglePublic(id: number): Promise<IAxiosResponse<{ id: number; public: boolean }>> {
 		return request({
 			method: "PATCH",
 			url: `/v1/auth/exhibitions/${id}/togglePublic`,
-			data: id,
+			data: { id },
 		});
 	}
 
@@ -63,7 +65,7 @@ class ExhibitionsService {
 		return request({
 			method: "POST",
 			url: `/v1/auth/exhibitions/close`,
-			data: id,
+			data: { id },
 		});
 	}
 
@@ -71,7 +73,7 @@ class ExhibitionsService {
 		return request({
 			method: "POST",
 			url: `/v1/auth/exhibitions/open`,
-			data: id,
+			data: { id },
 		});
 	}
 }
