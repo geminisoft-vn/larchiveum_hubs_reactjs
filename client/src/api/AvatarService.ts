@@ -1,26 +1,15 @@
-import apiRequest from "src/utilities/request";
-import { API_ROOT } from "src/utilities/constants";
-import Store from "src/utilities/store";
+import request from "src/utilities/request";
 
 class AvatarService {
 	static create(data) {
-		return apiRequest
-			.post("v1/auth/avatars", data)
-			.then((response) => response.data);
+		return request.post("v1/auth/avatars", data);
 	}
 
 	static getListAvatar() {
-		return fetch(`${API_ROOT}/v1/avatars`, {
+		return request({
 			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/avatars`,
+		});
 	}
 }
 

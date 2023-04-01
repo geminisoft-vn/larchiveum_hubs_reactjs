@@ -4,93 +4,75 @@ import request from "src/utilities/request";
 
 class UserService {
 	static googleLogin(data: { ggtoken: string }) {
-		return fetch(`${API_ROOT}/v1/gglogin`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		}).then((res) => res.json());
+			url: `/v1/gglogin`,
+			data,
+		});
 	}
 
 	static facebookLogin(data: { fbtoken: string }) {
-		return fetch(`${API_ROOT}/v1/fblogin`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		}).then((res) => res.json());
+			url: `/v1/fblogin`,
+			data,
+		});
 	}
 
 	static naverLogin(data: { fbtoken: string }) {
-		return fetch(`${API_ROOT}/v1/nvlogin`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		}).then((res) => res.json());
+			url: `/v1/nvlogin`,
+			data,
+		});
 	}
 
 	static kakaoLogin(data: { kktoken: string }) {
-		return fetch(`${API_ROOT}/v1/kklogin`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		}).then((res) => res.json());
+			url: `/v1/kklogin`,
+			data,
+		});
 	}
 
 	static signupWithEmail(data: Partial<IUserAuthenticationForm>) {
-		return fetch(`${API_ROOT}/v1/users`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		}).then((res) => res.json());
+			url: `/v1/users`,
+			data,
+		});
 	}
 
 	static login(data: Partial<IUserAuthenticationForm>) {
 		return request({
 			method: "POST",
-			url: "/v1/login",
+			url: `/v1/login`,
 			data,
-		}).then((res) => res.data);
+		});
 	}
 
 	static checkToken(token: string) {
-		return fetch(`${API_ROOT}/v1/users/checkToken`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				token,
-			}),
-		}).then((res) => res.json());
+			url: `/v1/users/checkToken`,
+			data: { token },
+		});
 	}
 
 	static requestResetPassword(data: { email: string }) {
-		return fetch(`${API_ROOT}/v1/users/requestResetPassword`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		}).then((res) => res.json());
+			url: `/v1/users/requestResetPassword`,
+			data,
+		});
 	}
 
 	static resetPassword(data: { access_token: string; pasword: string }) {
-		return fetch(`${API_ROOT}/v1/users/resetPassword`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		}).then((res) => res.json());
+			url: `/v1/users/resetPassword`,
+			data,
+		});
 	}
 
 	static verifyUser(token: string) {
@@ -104,7 +86,7 @@ class UserService {
 	}
 
 	static update(id: number, data: Partial<IUserAuthenticationForm>) {
-		return request.patch(`v1/auth/users/${id}`, data).then((response) => response.data);
+		return request.patch(`v1/auth/users/${id}`, data);
 	}
 }
 

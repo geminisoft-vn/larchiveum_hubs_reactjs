@@ -1,78 +1,47 @@
 import { AxiosProgressEvent } from "axios";
 
 import request from "src/utilities/request";
-import { API_ROOT } from "src/utilities/constants";
-import Store from "src/utilities/store";
 
 class MediaService {
 	static getListMedia(id) {
-		return fetch(`${API_ROOT}/v1/auth/medias?exhibitionId=${id}`, {
+		return request({
 			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/auth/medias?exhibitionId=${id}`,
+		});
 	}
 
 	static proxyMedia(objectId) {
-		return fetch(`${API_ROOT}/v1/medias/proxy/${objectId}`, {
+		return request({
 			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: "",
-			},
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/medias/proxy/${objectId}`,
+		});
 	}
 
 	static updateMediaMany(data) {
-		return fetch(`${API_ROOT}/v1/auth/medias`, {
+		return request({
 			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-			body: JSON.stringify({
+			url: `/v1/auth/medias`,
+			data: {
 				medias: data,
-			}),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			},
+		});
 	}
 
-	static upload(
-		file: File,
-		onProgress: (percent: number) => void,
-		abortController: AbortController | null,
-	) {
+	static upload(file: File, onProgress: (percent: number) => void, abortController: AbortController | null) {
 		const data = new FormData();
 		data.append("file", file);
-		return request
-			.post("/v1/auth/medias/upload", data, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-				onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-					if (progressEvent?.loaded && progressEvent?.total) {
-						const percent = Math.round(
-							(progressEvent.loaded * 100) / progressEvent.total,
-						);
-						if (onProgress) onProgress(percent);
-					}
-				},
-				signal: abortController?.signal,
-			})
-			.then((res) => res.data);
+		return request.post("/v1/auth/medias/upload", data, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+			onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+				if (progressEvent?.loaded && progressEvent?.total) {
+					const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+					if (onProgress) onProgress(percent);
+				}
+			},
+			signal: abortController?.signal,
+		});
 	}
 }
 

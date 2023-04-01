@@ -1,158 +1,78 @@
 import moment from "moment-timezone";
 
-import { API_ROOT } from "src/utilities/constants";
-import Store from "src/utilities/store";
+import request from "src/utilities/request";
 
 class ExhibitionsService {
 	static getAllExhibitions(data) {
-		return fetch(
-			`${API_ROOT}/v1/exhibitions?page=${data.page ? data.page : 1}&pageSize=${
-				data.pageSize ? data.pageSize : 15
-			}&sort=${data.sort ? data.sort : ""}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					access_token: "",
-				},
-			},
-		)
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		return request({
+			method: "GET",
+			url: `/v1/exhibitions?page=${data.page ? data.page : 1}&pageSize=${data.pageSize ? data.pageSize : 15}&sort=${
+				data.sort ? data.sort : ""
+			}`,
+		});
 	}
 
 	static getAllWithAuthExhibitions(data) {
-		return fetch(
-			`${API_ROOT}/v1/auth/exhibitions?page=${
-				data.page ? data.page : 1
-			}&pageSize=${data.pageSize ? data.pageSize : 15}&sort=${
-				data.sort ? data.sort : ""
-			}&timezone=${moment.tz.guess()}&isAdmin=${
-				data.isAdmin ? data.isAdmin : ""
-			}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					access_token: Store.getUser()?.token,
-				},
-			},
-		)
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		return request({
+			method: "GET",
+			url: `/v1/auth/exhibitions?page=${data.page ? data.page : 1}&pageSize=${
+				data.pageSize ? data.pageSize : 15
+			}&sort=${data.sort ? data.sort : ""}&timezone=${moment.tz.guess()}&isAdmin=${data.isAdmin ? data.isAdmin : ""}`,
+		});
 	}
 
 	static getAllScenes() {
-		return fetch(`${API_ROOT}/v1/auth/exhibitions/getAllScenes`, {
+		return request({
 			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/auth/exhibitions/getAllScenes`,
+		});
 	}
 
 	static postCreateOne(data) {
-		return fetch(`${API_ROOT}/v1/auth/exhibitions`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/auth/exhibitions`,
+			data,
+		});
 	}
 
 	static putUpdateOne(data) {
-		return fetch(`${API_ROOT}/v1/auth/exhibitions/${data.id}`, {
+		return request({
 			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/auth/exhibitions/${data.id}`,
+			data,
+		});
 	}
 
 	static patchTogglePublic(id) {
-		return fetch(`${API_ROOT}/v1/auth/exhibitions/${id}/togglePublic`, {
+		return request({
 			method: "PATCH",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-			body: JSON.stringify({
-				id,
-			}),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/auth/exhibitions/${id}/togglePublic`,
+			data: id,
+		});
 	}
 
 	static deleteOneExhibition(id) {
-		return fetch(`${API_ROOT}/v1/auth/exhibitions/${id}`, {
+		return request({
 			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/auth/exhibitions/${id}`,
+		});
 	}
 
 	static closeOneExhibition(id) {
-		return fetch(`${API_ROOT}/v1/auth/exhibitions/close`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-			body: JSON.stringify({
-				id,
-			}),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/auth/exhibitions/close`,
+			data: id,
+		});
 	}
 
 	static openOneExhibition(id) {
-		return fetch(`${API_ROOT}/v1/auth/exhibitions/open`, {
+		return request({
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-			body: JSON.stringify({
-				id,
-			}),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/auth/exhibitions/open`,
+			data: id,
+		});
 	}
 }
 

@@ -1,78 +1,39 @@
-import { API_ROOT } from "src/utilities/constants";
-import Store from "src/utilities/store";
+import request from "src/utilities/request";
 
 class ProjectService {
 	static getListProject(data) {
-		return fetch(
-			`${API_ROOT}/v1/auth/projects?page=${
-				data.page ? data.page : 1
-			}&pageSize=${data.pageSize ? data.pageSize : 15}&sort=${
+		return request({
+			method: "GET",
+			url: `/v1/auth/projects?page=${data.page ? data.page : 1}&pageSize=${data.pageSize ? data.pageSize : 15}&sort=${
 				data.sort ? data.sort : ""
 			}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					access_token: Store.getUser()?.token,
-				},
-			},
-		)
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		});
 	}
 
 	static getListObject(id) {
-		return fetch(`${API_ROOT}/v1/auth/projects/${id}/objects?sort=type|desc`, {
+		return request({
 			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			url: `/v1/auth/projects/${id}/objects?sort=type|desc`,
+		});
 	}
 
 	static getListProjectWithObjects(data) {
-		return fetch(
-			`${API_ROOT}/v1/auth/projects/objects?page=${
-				data.page ? data.page : 1
-			}&pageSize=${data.pageSize ? data.pageSize : 15}&sort=${
-				data.sort ? data.sort : ""
-			}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					access_token: Store.getUser()?.token,
-				},
-			},
-		)
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+		return request({
+			method: "GET",
+			url: `/v1/auth/projects/objects?page=${data.page ? data.page : 1}&pageSize=${
+				data.pageSize ? data.pageSize : 15
+			}&sort=${data.sort ? data.sort : ""}`,
+		});
 	}
 
 	static updateChangeableObjects(projectId, data) {
-		return fetch(`${API_ROOT}/v1/auth/projects/${projectId}/objects`, {
+		return request({
 			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				access_token: Store.getUser()?.token,
-			},
-			body: JSON.stringify({
+			url: `/v1/auth/projects/${projectId}/objects`,
+			data: {
 				uuids: data,
-			}),
-		})
-			.then((res) => res.json())
-			.catch((error) => {
-				console.log(error);
-			});
+			},
+		});
 	}
 }
 
