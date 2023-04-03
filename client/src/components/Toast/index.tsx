@@ -1,23 +1,21 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import ReactDOM from "react-dom";
 import clsx from "clsx";
 
-import { useAppDispatch, useAppSelector } from "src/app/hooks";
-import { getToastInfo, hideToast } from "src/features/toast/ToastSlice";
+import { useAppDispatch } from "src/app/hooks";
+import { hideToast } from "src/features/toast/ToastSlice";
 
-const Toast = () => {
-	const { isActive, type, message } = useAppSelector(getToastInfo);
+const Toast = (props) => {
+	const { isActive, type, message } = props;
 	const dispatch = useAppDispatch();
 
-	const handleHideToast = () => {
+	const handleHideToast = useCallback(() => {
 		dispatch(hideToast());
-	};
+	}, [dispatch]);
 
 	useEffect(() => {
-		setTimeout(() => {
-			dispatch(hideToast());
-		}, 2000);
-	}, [dispatch]);
+		setTimeout(handleHideToast, 2000);
+	}, [handleHideToast]);
 
 	return ReactDOM.createPortal(
 		<div

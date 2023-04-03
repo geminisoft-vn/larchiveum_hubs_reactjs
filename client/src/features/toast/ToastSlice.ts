@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { RootState } from "src/app/hooks";
+import { RootState } from "src/app/store";
 
 type TInitialState = {
 	isActive: boolean;
@@ -18,7 +18,10 @@ const toastSlice = createSlice({
 	name: "toast",
 	initialState: INITIAL_STATE,
 	reducers: {
-		showToast: (state, action: PayloadAction<Omit<TInitialState, "isActive">>) => {
+		showToast: (
+			state,
+			action: PayloadAction<Omit<TInitialState, "isActive">>,
+		) => {
 			state.isActive = true;
 			Object.assign(state, action.payload);
 		},
