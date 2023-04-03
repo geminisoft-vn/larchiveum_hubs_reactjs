@@ -1,41 +1,51 @@
 import React, { useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Pagination as MUIPagination } from "@mui/material";
+import clsx from "clsx";
 
 import { IParams } from "src/interfaces";
 
 import Button from "../Button";
 
 type Props = {
-	total?: number | undefined;
-	pageSize: number;
+	pageCount?: number;
 	page: number;
+	hasNext: boolean | undefined;
+	hasPrev: boolean | undefined;
 	setParams: React.Dispatch<React.SetStateAction<IParams>>;
 };
 
 const Pagination = (props: Props) => {
-	const { total, pageSize, page, setParams } = props;
-
-	const pageCount = useMemo(() => {
-		if (!total) return 0;
-		return Math.ceil(total / pageSize);
-	}, [total, pageSize]);
+	const { page, pageCount, hasNext, hasPrev, setParams } = props;
 
 	const handleChange = (_page: number) => {
 		setParams((prev: IParams) => ({ ...prev, page: _page }));
 	};
 
-	console.log(window.location);
+	const handleGoToNextPage = () => {
+		if (hasNext) {
+			setParams((prev: IParams) => ({ ...prev, page: prev.page + 1 }));
+		}
+	};
+
+	const handleGoToPrevPage = () => {
+		if (hasPrev) {
+			setParams((prev: IParams) => ({ ...prev, page: prev.page - 1 }));
+		}
+	};
 
 	return (
 		<nav aria-label="Pagination">
-			<ul className="inline-flex items-center -space-x-px">
+			<ul className="inline-flex items-center gap-4 -space-x-px">
 				<li>
-					<Button className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+					<button
+						className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100"
+						onClick={handleGoToPrevPage}
+					>
 						<span className="sr-only">Previous</span>
 						<svg
 							aria-hidden="true"
-							className="w-5 h-5"
+							className="h-4 w-4"
 							fill="currentColor"
 							viewBox="0 0 20 20"
 							xmlns="http://www.w3.org/2000/svg"
@@ -46,27 +56,35 @@ const Pagination = (props: Props) => {
 								clipRule="evenodd"
 							/>
 						</svg>
-					</Button>
+					</button>
 				</li>
 
 				{pageCount &&
 					new Array(pageCount).fill(0).map((_, index) => (
 						<li key={index}>
-							<Button
+							<button
+								className={clsx(
+									"h-8 w-8 rounded-full",
+									page === index + 1
+										? "bg-blue-500 text-white"
+										: "hover:bg-gray-100",
+								)}
 								onClick={() => handleChange(index + 1)}
-								className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
 							>
 								{index + 1}
-							</Button>
+							</button>
 						</li>
 					))}
 
 				<li>
-					<Button className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+					<button
+						className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100"
+						onClick={handleGoToNextPage}
+					>
 						<span className="sr-only">Next</span>
 						<svg
 							aria-hidden="true"
-							className="w-5 h-5"
+							className="h-4 w-4"
 							fill="currentColor"
 							viewBox="0 0 20 20"
 							xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +95,7 @@ const Pagination = (props: Props) => {
 								clipRule="evenodd"
 							/>
 						</svg>
-					</Button>
+					</button>
 				</li>
 			</ul>
 		</nav>
@@ -85,7 +103,7 @@ const Pagination = (props: Props) => {
 };
 
 Pagination.defaultProps = {
-	total: 0,
+	pageCount: 0
 };
 
 export default Pagination;
