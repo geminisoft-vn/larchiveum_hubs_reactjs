@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, {
+	AxiosError,
+	AxiosResponse,
+	InternalAxiosRequestConfig,
+} from "axios";
 import Cookies from "js-cookie";
 
 import store from "src/app/store";
@@ -17,7 +21,10 @@ const request = axios.create({
 });
 
 const getAccessToken = () => {
-	if (Cookies.get("__LARCHIVEUM__USER") && Cookies.get("__LARCHIVEUM__USER") !== "") {
+	if (
+		Cookies.get("__LARCHIVEUM__USER") &&
+		Cookies.get("__LARCHIVEUM__USER") !== ""
+	) {
 		const str = Cookies.get("__LARCHIVEUM__USER");
 		const user = JSON.parse(str || "{}");
 		if (user) {
@@ -27,7 +34,9 @@ const getAccessToken = () => {
 	return "";
 };
 
-const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+const onRequest = (
+	config: InternalAxiosRequestConfig,
+): InternalAxiosRequestConfig => {
 	store.dispatch(startLoading());
 
 	const accessToken = getAccessToken();
@@ -38,10 +47,7 @@ const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConf
 };
 
 const onRequestError = (error: AxiosError): Promise<AxiosError> => {
-	console.error("🚀 ---------------------------------------------------------🚀");
-	console.error("🚀 ~ file: request.ts:43 ~ onRequestError ~ error:", error);
-	console.error("🚀 ---------------------------------------------------------🚀");
-	store.dispatch(startLoading());
+	store.dispatch(stopLoading());
 	return Promise.reject(error);
 };
 
@@ -51,10 +57,22 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 };
 
 const onResponseError = (error: AxiosError): Promise<AxiosError> => {
-	console.error("🚀 ----------------------------------------------------------🚀");
-	console.error("🚀 ~ file: request.ts:57 ~ onResponseError ~ error:", error);
-	console.error("🚀 ----------------------------------------------------------🚀");
-	store.dispatch(startLoading());
+	if (error.response) {
+		// The request was made and the server responded with a status code
+		// that falls out of the range of 2xx
+		console.log(error.response.data);
+		console.log(error.response.status);
+		console.log(error.response.headers);
+	} else if (error.request) {
+		// The request was made but no response was received
+		// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+		// http.ClientRequest in node.js
+		console.log(error.request);
+	} else {
+		// Something happened in setting up the request that triggered an Error
+		console.log("Error", error.message);
+	}
+	store.dispatch(stopLoading());
 	return Promise.reject(error);
 };
 
