@@ -1,7 +1,7 @@
 export interface IPagination {
 	current?: number;
 	prev?: number;
-	hasPrevious?: boolean;
+	hasPrev?: boolean;
 	next?: number;
 	hasNext?: boolean;
 	total?: number;
