@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import clsx from "clsx";
 
@@ -12,28 +13,34 @@ const Toast = () => {
 		dispatch(hideToast());
 	};
 
+	useEffect(() => {
+		setTimeout(() => {
+			dispatch(hideToast());
+		}, 2000);
+	}, [dispatch]);
+
 	return ReactDOM.createPortal(
 		<div
 			id="__LARCHIVEUM__COMPONENT__TOAST__"
 			className={clsx(
-				"fixed top-8 left-1/2 -translate-x-1/2 transition-all duration-200 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800",
-				isActive ? "visible opacity-1" : "invisible opacity-0",
+				"fixed top-8 left-1/2 mb-4 flex w-full max-w-xs -translate-x-1/2 items-center rounded-lg bg-white p-4 text-gray-500 shadow transition-all duration-200 dark:bg-gray-800 dark:text-gray-400",
+				isActive ? "opacity-1 visible" : "invisible opacity-0",
 			)}
 			role="alert"
 		>
 			<div
 				className={clsx(
-					"inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg dark:bg-green-800 dark:text-green-200",
-					type === "default" && "text-gray-500 bg-gray-100",
-					type === "error" && "text-red-500 bg-red-100",
-					type === "success" && "text-green-500 bg-green-100",
+					"inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg dark:bg-green-800 dark:text-green-200",
+					type === "default" && "bg-gray-100 text-gray-500",
+					type === "error" && "bg-red-100 text-red-500",
+					type === "success" && "bg-green-100 text-green-500",
 				)}
 			>
 				{type === "default" && (
 					<>
 						<svg
 							aria-hidden="true"
-							className="w-5 h-5"
+							className="h-5 w-5"
 							fill="currentColor"
 							viewBox="0 0 20 20"
 							xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +59,7 @@ const Toast = () => {
 					<>
 						<svg
 							aria-hidden="true"
-							className="w-5 h-5"
+							className="h-5 w-5"
 							fill="currentColor"
 							viewBox="0 0 20 20"
 							xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +78,7 @@ const Toast = () => {
 					<>
 						<svg
 							aria-hidden="true"
-							className="w-5 h-5"
+							className="h-5 w-5"
 							fill="currentColor"
 							viewBox="0 0 20 20"
 							xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +96,7 @@ const Toast = () => {
 			<div className="ml-3 text-sm font-normal">{message}</div>
 			<button
 				type="button"
-				className="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+				className="-mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 rounded-lg bg-white p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-white"
 				data-dismiss-target="#toast-success"
 				aria-label="Close"
 				onClick={handleHideToast}
@@ -97,7 +104,7 @@ const Toast = () => {
 				<span className="sr-only">Close</span>
 				<svg
 					aria-hidden="true"
-					className="w-5 h-5"
+					className="h-5 w-5"
 					fill="currentColor"
 					viewBox="0 0 20 20"
 					xmlns="http://www.w3.org/2000/svg"
