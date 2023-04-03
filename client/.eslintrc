@@ -32,7 +32,7 @@
   "extends": [
     "airbnb",
     "airbnb/hooks",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -124,18 +124,7 @@
         "tsx": "never"
       }
     ],
-    "prettier/prettier": [
-      "warn",
-      {
-        "tabWidth": 2,
-        "semi": true,
-        "singleQuote": false,
-        "trailingComma": "all",
-        "printWidth": 120,
-        "useTabs": true,
-        "endOfLine": "auto"
-      }
-    ]
+    "prettier/prettier": ["warn"]
   },
   "globals": {
     "React": true,
