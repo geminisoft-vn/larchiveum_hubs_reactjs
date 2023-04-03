@@ -3,13 +3,20 @@ import { useTranslation } from "react-i18next";
 import { AxiosResponse } from "axios";
 
 import ExhibitionsService from "src/api/ExhibitionsService";
+import MediaService from "src/api/MediaService";
 import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import defaultImage from "src/assets/larchiveum/default-image.png";
 import { Button, Pagination, Stack, Typography } from "src/components";
 import { closeModal, openModal } from "src/features/modal/ModalSlice";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserAuthenticationStatus } from "src/features/user/selectors";
-import { IAxiosResponse, IExhibition, IPagination, IParams, IScene } from "src/interfaces";
+import {
+	IAxiosResponse,
+	IExhibition,
+	IPagination,
+	IParams,
+	IScene,
+} from "src/interfaces";
 import Store from "src/utilities/store";
 
 import Exhibition from "./Exhibition";
@@ -47,7 +54,7 @@ const Exhibitions = (props: Props) => {
 			dispatch(
 				showToast({
 					type: "error",
-					message: t("manage.GET_EXHIBITIONS_ERROR"),
+					message: t("manager.GET_EXHIBITIONS_ERROR"),
 				}),
 			);
 		}
@@ -67,7 +74,7 @@ const Exhibitions = (props: Props) => {
 			dispatch(
 				showToast({
 					type: "error",
-					message: t("manage.GET_SCENES_ERROR"),
+					message: t("manager.GET_SCENES_ERROR"),
 				}),
 			);
 		}
@@ -75,7 +82,22 @@ const Exhibitions = (props: Props) => {
 
 	const openPopupExhibition = () => {};
 
-	const openPopupCustomMedia = () => {};
+	const openPopupCustomMedia = (exhibitionId) => {
+		if (exhibitionId) {
+			MediaService.getListMedia(exhibitionId)
+				.then((res) => {
+					if (res.result === "ok") {
+						console.log({ res });
+					}
+				})
+				.catch((err) => {
+					console.log({ err });
+				})
+				.finally(() => {
+					dispatch(closeModal());
+				});
+		}
+	};
 
 	const getSceneThumnail = (sceneId) => {
 		if (!sceneId) return defaultImage;
@@ -161,7 +183,9 @@ const Exhibitions = (props: Props) => {
 
 	return (
 		<Stack direction="col" alignItems="center" gap={2} className="my-4">
-			<Typography className="font-bold text-center text-lg">{t("manager.LIST_EXHIBITION")}</Typography>
+			<Typography className="text-center text-lg font-bold">
+				{t("manager.LIST_EXHIBITION")}
+			</Typography>
 			{/* <Button
 				className="btn btn-create"
 				onClick={() => {
@@ -174,9 +198,6 @@ const Exhibitions = (props: Props) => {
 			<Stack direction="col" gap={2}>
 				{exhibitions &&
 					exhibitions.map((exhibition) => {
-						console.log("🚀 ---------------------------------------------------------------🚀");
-						console.log("🚀 ~ file: index.tsx:803 ~ {exhibitions.data.map ~ exhibition: ", exhibition);
-						console.log("🚀 ---------------------------------------------------------------🚀");
 						return (
 							<Exhibition
 								key={exhibition.id}
@@ -194,7 +215,13 @@ const Exhibitions = (props: Props) => {
 					})}
 			</Stack>
 
-			<Pagination page={params.page} pageSize={params.pageSize} setParams={setParams} total={pages?.total} />
+			<Pagination
+				page={params.page}
+				pageCount={pages.total}
+				setParams={setParams}
+				hasNext={pages.hasNext}
+				hasPrev={pages.hasPrev}
+			/>
 		</Stack>
 	);
 };
