@@ -59,14 +59,16 @@ const Exhibition = (props: Props) => {
 					alt=""
 				/>
 
-				<Button
-					className="absolute top-2 left-2 border-none"
-					onClick={() => {
-						openPopupCustomMedia(exhibition.id);
-					}}
-				>
-					<FaTools className="text-lg text-white hover:scale-150" />
-				</Button>
+				{!isUnavailable && (
+					<Button
+						className="absolute top-2 left-2 border-none"
+						onClick={() => {
+							openPopupCustomMedia(exhibition.id);
+						}}
+					>
+						<FaTools className="text-lg text-white hover:scale-150" />
+					</Button>
+				)}
 			</div>
 
 			<div className="col-span-8 p-4">
@@ -148,7 +150,7 @@ const Exhibition = (props: Props) => {
 					<>
 						{exhibition.public ? (
 							<Button
-								className="bg-red-100"
+								className="bg-red-500 text-white"
 								onClick={() => {
 									openPopupPublic(exhibition.id);
 								}}
@@ -157,7 +159,7 @@ const Exhibition = (props: Props) => {
 							</Button>
 						) : (
 							<Button
-								className="bg-blue-100"
+								className="bg-blue-500 text-white"
 								onClick={() => {
 									openPopupPublic(exhibition.id);
 								}}
@@ -166,7 +168,7 @@ const Exhibition = (props: Props) => {
 							</Button>
 						)}
 						<Button
-							className="bg-yellow-100"
+							className="bg-yellow-500 text-white"
 							onClick={() => {
 								openPopupExhibition("edit", exhibition.id);
 							}}
@@ -175,7 +177,7 @@ const Exhibition = (props: Props) => {
 						</Button>
 						{exhibition.closed ? (
 							<Button
-								className="bg-purple-100"
+								className="bg-green-500 text-white"
 								onClick={() => {
 									openPopupOpenRoom(exhibition.id);
 								}}
@@ -184,7 +186,7 @@ const Exhibition = (props: Props) => {
 							</Button>
 						) : (
 							<Button
-								className="bg-purple-100"
+								className="bg-purple-500 text-white"
 								onClick={() => {
 									openPopupCloseRoom(exhibition.id);
 								}}

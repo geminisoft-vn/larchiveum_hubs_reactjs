@@ -62,7 +62,9 @@ class ExhibitionsService {
 		});
 	}
 
-	static deleteOneExhibition(id) {
+	static deleteOneExhibition(
+		id,
+	): Promise<IAxiosResponse<Partial<IExhibition>>> {
 		return request({
 			method: "DELETE",
 			url: `/v1/auth/exhibitions/${id}`,

@@ -236,7 +236,68 @@ const Exhibitions = (props: Props) => {
 	};
 
 	const openPopupOpenRoom = () => {};
-	const openDeleteRoom = () => {};
+
+	const handelToggleDeleteRoom = (id) => {
+		ExhibitionsService.deleteOneExhibition(id)
+			.then((res) => {
+				if (res.result === "ok") {
+					dispatch(
+						showToast({
+							type: "success",
+							message: t("manager.MESSAGE_SUCCESS"),
+						}),
+					);
+
+					dispatch(
+						updateExhibition({
+							id,
+							dataToUpdate: {
+								deleted: res.data.deleted,
+							},
+						}),
+					);
+				}
+			})
+			.catch((err) => {
+				if (err.response) {
+					dispatch(
+						showToast({
+							type: "error",
+							message: "manager.DELETE_EXHIBITION_ERROR",
+						}),
+					);
+				}
+			})
+			.finally(() => {
+				handleCloseModal();
+			});
+	};
+
+	const openDeleteRoom = (id) => {
+		dispatch(
+			openModal({
+				isActive: true,
+				title: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__TITLE"),
+				content: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__MESSAGE"),
+				actions: [
+					{
+						text: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__DELETE"),
+						className: "btn1",
+						callback: () => {
+							handelToggleDeleteRoom(id);
+						},
+					},
+					{
+						text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CANCEL"),
+						className: "",
+						callback: () => {
+							handleCloseModal();
+						},
+					},
+				],
+			}),
+		);
+	};
 
 	useEffect(() => {
 		loadExhibitions();
