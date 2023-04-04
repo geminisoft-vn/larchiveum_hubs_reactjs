@@ -180,17 +180,20 @@ const Exhibitions = (props: Props) => {
 		ExhibitionsService.closeOneExhibition(id)
 			.then((res) => {
 				if (res.result === "ok") {
-					exhibitions.forEach((exhibition) => {
-						if (exhibition.id === id) {
-							exhibition.closed = res.data.closed;
-							dispatch(
-								showToast({
-									type: "success",
-									message: t("manager.MESSAGE_SUCCESS"),
-								}),
-							);
-						}
-					});
+					dispatch(
+						showToast({
+							type: "success",
+							message: t("manager.MESSAGE_SUCCESS"),
+						}),
+					);
+					dispatch(
+						updateExhibition({
+							id,
+							dataToUpdate: {
+								closed: res.data.closed,
+							},
+						}),
+					);
 				}
 			})
 			.catch(() => {
