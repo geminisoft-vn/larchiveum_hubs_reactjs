@@ -4,10 +4,8 @@ import {
 	FaLink,
 	FaListOl,
 	FaRegCalendarAlt,
-	FaRegImage,
 	FaTools,
 	FaUserFriends,
-	FaVideo,
 } from "react-icons/fa";
 import moment from "moment";
 
@@ -22,8 +20,7 @@ type Props = {
 	openPopupCustomMedia: (_id?: number) => void;
 	getSceneThumnail: (_sceneId?: string) => string;
 	openPopupPublic: (_id?: number) => void;
-	openPopupExhibition: (_exhibition?: IExhibition) => void;
-	setExhibitionType: (_type?: string) => void;
+	openPopupExhibition: (_type: "create" | "edit", _id?: number) => void;
 	openPopupCloseRoom: (_id?: number) => void;
 	openPopupOpenRoom: (_id?: number) => void;
 	openDeleteRoom: (_id?: number) => void;
@@ -36,7 +33,6 @@ const Exhibition = (props: Props) => {
 		getSceneThumnail,
 		openPopupPublic,
 		openPopupExhibition,
-		setExhibitionType,
 		openPopupCloseRoom,
 		openPopupOpenRoom,
 		openDeleteRoom,
@@ -48,7 +44,7 @@ const Exhibition = (props: Props) => {
 	return (
 		<div className="grid grid-cols-12 rounded-lg border">
 			<div
-				className="relative col-span-3"
+				className="relative col-span-2"
 				style={{
 					maxHeight: 164,
 				}}
@@ -73,7 +69,7 @@ const Exhibition = (props: Props) => {
 				</Button>
 			</div>
 
-			<div className="col-span-6 p-4">
+			<div className="col-span-8 p-4">
 				<div>
 					{isUnavailable ? (
 						<Typography className="font-bold">
@@ -138,7 +134,7 @@ const Exhibition = (props: Props) => {
 					)}
 				</div>
 			</div>
-			<div className="col-span-3 flex flex-col justify-around p-2">
+			<div className="col-span-2 flex flex-col justify-around gap-2 p-2">
 				{isUnavailable ? (
 					<Button
 						className="bg-red-500 text-white"
@@ -150,7 +146,7 @@ const Exhibition = (props: Props) => {
 					</Button>
 				) : (
 					<>
-						{exhibition.public === 1 ? (
+						{exhibition.public ? (
 							<Button
 								className="bg-red-100"
 								onClick={() => {
@@ -172,13 +168,12 @@ const Exhibition = (props: Props) => {
 						<Button
 							className="bg-yellow-100"
 							onClick={() => {
-								// openPopupExhibition(exhibition);
-								setExhibitionType("edit");
+								openPopupExhibition("edit", exhibition.id);
 							}}
 						>
 							{t("manager.EDIT")}
 						</Button>
-						{exhibition.closed === 1 ? (
+						{exhibition.closed ? (
 							<Button
 								className="bg-purple-100"
 								onClick={() => {

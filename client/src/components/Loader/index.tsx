@@ -3,11 +3,16 @@ import clsx from "clsx";
 
 const Loader = () =>
 	ReactDOM.createPortal(
-		<div className="fixed z-[9999] inset-0 w-screen h-screen backdrop-blur-sm bg-white/8">
-			<div className="relative h-full w-full flex items-center justify-center" role="status">
+		<div className="bg-white/8 fixed inset-0 z-[9999] h-screen w-screen backdrop-blur-sm">
+			<div
+				className="relative flex h-full w-full items-center justify-center"
+				role="status"
+			>
 				<svg
 					aria-hidden="true"
-					className={clsx("w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600")}
+					className={clsx(
+						"h-12 w-12 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600",
+					)}
 					viewBox="0 0 100 101"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"

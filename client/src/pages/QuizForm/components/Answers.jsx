@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -6,11 +5,11 @@ import { Button } from "src/components";
 
 import Answer from "./Answer";
 
-function Answers(props) {
+const Answers = (props) => {
 	const { questionIndex } = props;
 	const { t } = useTranslation();
 
-	const { control, watch, getValues, setValue } = useFormContext();
+	const { control, getValues } = useFormContext();
 
 	const { fields, append, remove, update } = useFieldArray({
 		control,
@@ -24,10 +23,6 @@ function Answers(props) {
 		if (getValues(name)) {
 			const answers = getValues(`questions.${questionIndex}.answers`);
 			answers.forEach((_, index) => {
-				console.log(
-					name,
-					`questions.${questionIndex}.answers.${index}.isCorrectAnswer`
-				);
 				if (
 					name === `questions.${questionIndex}.answers.${index}.isCorrectAnswer`
 				)
@@ -65,6 +60,6 @@ function Answers(props) {
 			</Button>
 		</>
 	);
-}
+};
 
 export default Answers;

@@ -55,6 +55,8 @@
     "react/jsx-no-useless-fragment": "off",
     "react/button-has-type": "off",
     "react/no-array-index-key": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "func-names": "off",
     "no-param-reassign": [
       2,
       {
@@ -124,7 +126,9 @@
         "tsx": "never"
       }
     ],
-    "prettier/prettier": ["warn"]
+    "prettier/prettier": [
+      "warn"
+    ]
   },
   "globals": {
     "React": true,

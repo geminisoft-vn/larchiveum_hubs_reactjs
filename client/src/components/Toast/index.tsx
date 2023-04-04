@@ -14,7 +14,7 @@ const Toast = (props) => {
 	}, [dispatch]);
 
 	useEffect(() => {
-		setTimeout(handleHideToast, 2000);
+		setTimeout(handleHideToast, 5000);
 	}, [handleHideToast]);
 
 	return ReactDOM.createPortal(

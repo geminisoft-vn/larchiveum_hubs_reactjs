@@ -4,11 +4,10 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
 
+import AnswerService from "src/api/AnswerService";
 import { Button, Switch, TextInput } from "src/components";
 
-import AnswerService from "src/api/AnswerService";
-
-function Answer(props) {
+const Answer = (props) => {
 	const {
 		questionIndex,
 		answerIndex,
@@ -93,6 +92,6 @@ function Answer(props) {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Answer;

@@ -1,127 +1,449 @@
-// @ts-nocheck
-/* eslint-disable */
-
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 // import "./ExhibitionFormModal.style.scss";
 import { useTranslation } from "react-i18next";
-import { Grid, Stack } from "@mui/material";
-import PropTypes from "prop-types";
+import { yupResolver } from "@hookform/resolvers/yup";
+import _transform from "lodash/transform";
+import moment from "moment";
+import * as yup from "yup";
 
+import ExhibitionsService from "src/api/ExhibitionsService";
+import { useAppDispatch } from "src/app/hooks";
 import defaultImage from "src/assets/larchiveum/default-image.png";
 import {
 	AutoComplete,
 	DateTimePicker,
+	FormContainer,
+	FormItem,
 	Modal,
+	Stack,
 	Switch,
+	Textarea,
 	TextInput,
 } from "src/components";
+import { showToast } from "src/features/toast/ToastSlice";
+import { IExhibition, IScene } from "src/interfaces";
 
-function ExhibitionFormModal(props) {
-	const { isActive, setIsActive, data, exhibitionType, scenes } = props;
+type Props = {
+	isActive: boolean;
+	setIsActive(value: boolean): void;
+	type: "edit" | "create";
+	scenes: IScene[];
+};
+
+const ExhibitionFormModal = (props: Props) => {
+	const { isActive, setIsActive, type, scenes } = props;
 
 	const { t } = useTranslation();
+	const dispatch = useAppDispatch();
 
-	const [formData, setFormData] = useState(() => {
-		if (data) return data;
-		return {};
+	const [sceneThumnail, setSceneThumbnail] = useState("");
+
+	const schema = yup.object().shape({
+		name: yup
+			.string()
+			.min(4, t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_NAME`))
+			.max(255, t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_NAME`))
+			.required(t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_NAME`)),
+		description: yup
+			.string()
+			.min(
+				1,
+				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_DESCRIPTION`),
+			)
+			.max(
+				1000,
+				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_DESCRIPTION`),
+			)
+			.required(
+				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_DESCRIPTION`),
+			),
+		startDate: yup
+			.string()
+			.required(
+				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_START_DATE`),
+			),
+		endDate: yup
+			.string()
+			.test(
+				"is-valid-end-date",
+				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_DATE`),
+				function (value) {
+					const _this: yup.TestContext = this;
+					return moment(value).isAfter(_this.parent?.startDate);
+				},
+			)
+			.required(
+				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_END_DATE`),
+			),
+	});
+
+	const {
+		handleSubmit,
+		register,
+		setValue,
+		getValues,
+		control,
+		watch,
+		clearErrors,
+		formState: { errors },
+	} = useForm({
+		reValidateMode: "onSubmit",
+		defaultValues: {
+			name: "",
+			description: "",
+			public: false,
+			maxSize: 0,
+			startDate: "",
+			endDate: "",
+			sceneId: "",
+			enableSpawnAndMoveMedia: false,
+			enableSpawnCamera: false,
+			enablePinObjects: false,
+			enableSpawnDrawing: false,
+			enableSpawnEmoji: false,
+			enableFly: false,
+		},
+		resolver: yupResolver(schema),
 	});
 
 	const getSceneThumnail = (sceneId) => {
-		let thumbnailUrl = null;
-		for (const scene of scenes) {
-			if (scene.id === sceneId) {
-				thumbnailUrl = scene.thumbnailUrl;
-				break;
-			} else if (sceneId === undefined) {
-				thumbnailUrl = defaultImage;
-			}
-		}
-		return thumbnailUrl;
+		if (!sceneId) return defaultImage;
+		return scenes.find((scene) => scene.id === sceneId)?.thumbnailUrl || "";
 	};
 
-	const handleChange = (e, name) => {
-		if (e.target.checked) {
-			setFormData((prev) => ({ ...prev, [name]: e.target.checked }));
-		} else {
-			setFormData((prev) => ({ ...prev, [name]: e.target.value }));
-		}
+	const handleSaveForm = handleSubmit((data) => {
+		const dataToSend = {};
+
+		console.log(moment(data.startDate));
+		// if (type === "create") {
+		// 	dataToSend = _transform(
+		// 		data,
+		// 		(result, value, key) => {
+		// 			if (typeof value === "boolean") {
+		// 				if (data[key]) result[key] = 1;
+		// 				if (!data[key]) result[key] = 0;
+		// 			}
+		// 			if (key === "maxSize" && typeof value === "string")
+		// 				result[key] = parseInt(value, 10);
+		// 		},
+		// 		data,
+		// 	);
+		// 	ExhibitionsService.postCreateOne(dataToSend)
+		// 		.then((res) => {
+		// 			if (res.result === "ok") {
+		// 				dispatch(
+		// 					showToast({
+		// 						type: "success",
+		// 						message: t("manager.MESSAGE_SUCCESS"),
+		// 					}),
+		// 				);
+		// 				setIsActive(false);
+		// 			}
+		// 		})
+		// 		.catch((err) => {
+		// 			dispatch(
+		// 				showToast({
+		// 					type: "error",
+		// 					message: t(
+		// 						`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${err.response.data.error.toUpperCase()}`,
+		// 					),
+		// 				}),
+		// 			);
+		// 		});
+		// }
+	});
+
+	const handleCloseModal = () => {
+		setIsActive(false);
 	};
+
+	useEffect(() => {
+		const subscription = watch((value, { name, type: _type }) => {
+			clearErrors();
+			if (_type === "change") {
+				if (name && name === "enableSpawnAndMoveMedia" && !value[name]) {
+					setValue("enableSpawnCamera", false);
+					setValue("enablePinObjects", false);
+				}
+			}
+		});
+		return () => subscription.unsubscribe();
+	}, [watch]);
 
 	return (
-		<Modal
-			width={1024}
-			isActive={isActive}
-			setIsActive={setIsActive}
-			title={
-				exhibitionType == "edit" ? (
-					<> {t("manager.POPUP_EXHIBITION__EDIT_TITLE")} </>
-				) : (
-					<> {t("manager.POPUP_EXHIBITION__CREATE_TITLE")}</>
-				)
-			}
-		>
-			<Grid container spacing={2}>
-				<Grid item lg={4} xl={4}>
-					<TextInput
-						label={t("manager.POPUP_EXHIBITION__NAME_LABEL")}
-						placehodler={t("manager.POPUP_EXHIBITION__NAME_PLACEHOLDER")}
-						value={formData.name}
-						onChange={(e) => handleChange(e, "name")}
-					/>
-				</Grid>
-
-				<Grid item lg={4} xl={4}>
-					<DateTimePicker
-						label={t("manager.POPUP_EXHIBITION__START_DATE_LABEL")}
-					/>
-				</Grid>
-				<Grid item lg={4} xl={4}>
-					<DateTimePicker
-						label={t("manager.POPUP_EXHIBITION__END_DATE_LABEL")}
-					/>
-				</Grid>
-				<Grid item lg={6} xl={6}>
-					<Stack direction="column" spacing={2}>
-						<TextInput
-							multiline
-							rows={4}
-							placeholder={t(
-								"manager.POPUP_EXHIBITION__DESCRIPTION_PLACEHOLDER"
-							)}
-							label={t("manager.POPUP_EXHIBITION__DESCRIPTION_LABEL")}
-							value={formData.description}
-							onChange={(e) => handleChange(e, "description")}
+		<FormContainer onSubmit={handleSaveForm}>
+			<Modal
+				isActive={isActive}
+				setIsActive={setIsActive}
+				title={
+					type === "edit"
+						? t("manager.POPUP_EXHIBITION__EDIT_TITLE")
+						: t("manager.POPUP_EXHIBITION__CREATE_TITLE")
+				}
+				actions={[
+					{
+						text:
+							type === "edit"
+								? t("manager.POPUP_EXHIBITION__EDIT")
+								: t("manager.POPUP_EXHIBITION__CREATE"),
+						className: "",
+						callback: handleSaveForm,
+					},
+					{
+						text: t("__BUTTON__.CLOSE"),
+						className: "",
+						callback: () => handleCloseModal(),
+					},
+				]}
+			>
+				<div className="grid grid-cols-12 gap-2">
+					<div className="col-span-4">
+						<FormItem
+							label={t("manager.POPUP_EXHIBITION__NAME_LABEL")}
+							error={errors.name?.message}
+							renderInput={() => {
+								return (
+									<TextInput
+										placeholder={t(
+											"manager.POPUP_EXHIBITION__NAME_PLACEHOLDER",
+										)}
+										{...register("name")}
+									/>
+								);
+							}}
 						/>
+					</div>
 
-						<Stack direction="row" justifyContent="space-between">
-							<Switch
-								label={t("manager.POPUP_EXHIBITION__PUBLIC")}
-								placement="top"
-								checked={formData.public}
-								onChange={(e) => handleChange(e, "public")}
+					<div className="col-span-4">
+						<FormItem
+							label={t("manager.POPUP_EXHIBITION__START_DATE_LABEL")}
+							error={errors.startDate?.message}
+							renderInput={() => {
+								return (
+									<DateTimePicker
+										{...register("startDate")}
+										date={moment(getValues("startDate"))}
+										handleChangeDate={(newDate) =>
+											setValue("startDate", newDate)
+										}
+									/>
+								);
+							}}
+						/>
+					</div>
+					<div className="col-span-4">
+						<FormItem
+							label={t("manager.POPUP_EXHIBITION__END_DATE_LABEL")}
+							error={errors.endDate?.message}
+							renderInput={() => {
+								return (
+									<DateTimePicker
+										{...register("endDate")}
+										date={moment(getValues("endDate"))}
+										handleChangeDate={(newDate) => setValue("endDate", newDate)}
+									/>
+								);
+							}}
+						/>
+					</div>
+					<div className="col-span-6">
+						<Stack
+							direction="col"
+							justifyContent="between"
+							gap={2}
+							className="h-full"
+						>
+							<FormItem
+								label={t("manager.POPUP_EXHIBITION__DESCRIPTION_LABEL")}
+								error={errors.description?.message}
+								renderInput={() => {
+									return (
+										<Textarea
+											rows={7}
+											placeholder={t(
+												"manager.POPUP_EXHIBITION__DESCRIPTION_PLACEHOLDER",
+											)}
+											{...register("description")}
+										/>
+									);
+								}}
 							/>
-							<TextInput
-								label={t("manager.POPUP_EXHIBITION__MAX_SIZE")}
-								value={formData.maxSize}
-								onChange={(e) => handleChange(e, "maxSize")}
+
+							<Stack direction="row" justifyContent="between">
+								<FormItem
+									label={t("manager.POPUP_EXHIBITION__PUBLIC")}
+									renderInput={() => {
+										return (
+											<Controller
+												control={control}
+												name="public"
+												render={({ field }) => {
+													return <Switch {...field} />;
+												}}
+											/>
+										);
+									}}
+								/>
+
+								<FormItem
+									label={t("manager.POPUP_EXHIBITION__MAX_SIZE")}
+									error={errors.maxSize?.message}
+									renderInput={() => {
+										return <TextInput type="number" {...register("maxSize")} />;
+									}}
+								/>
+							</Stack>
+						</Stack>
+					</div>
+					<div className="col-span-6">
+						<Stack direction="col" gap={2}>
+							{scenes && scenes.length > 0 && (
+								<Controller
+									name="sceneId"
+									control={control}
+									render={() => {
+										return (
+											<AutoComplete
+												label={t("manager.POPUP_EXHIBITION__LIST_SCENE_LABEL")}
+												{...register("sceneId")}
+												options={scenes}
+												handleChange={(sceneId) => {
+													setValue("sceneId", sceneId || "");
+													setSceneThumbnail(getSceneThumnail(sceneId));
+												}}
+											/>
+										);
+									}}
+								/>
+							)}
+							<img
+								className="rounded-lg object-cover"
+								src={sceneThumnail || defaultImage}
+								alt=""
 							/>
 						</Stack>
-					</Stack>
-				</Grid>
-				<Grid item lg={6} xl={6}>
-					<Stack direction="column">
-						{scenes && scenes.length > 0 && (
-							<AutoComplete
-								label={t("manager.POPUP_EXHIBITION__LIST_SCENE_LABEL")}
-								options={scenes}
-								fullWidth
+					</div>
+
+					<div className="col-span-12">
+						<Stack
+							direction="col"
+							alignItems="start"
+							justifyContent="start"
+							gap={2}
+						>
+							<FormItem
+								label={t("manager.POPUP_EXHIBITION__CREATE_AND_MOVE_OBJECTS")}
+								placement="right"
+								renderInput={() => {
+									return (
+										<Controller
+											control={control}
+											name="enableSpawnAndMoveMedia"
+											render={({ field }) => {
+												return <Switch {...field} />;
+											}}
+										/>
+									);
+								}}
 							/>
-						)}
-						<img className="" src={getSceneThumnail(formData.sceneId)} alt="" />
-					</Stack>
-				</Grid>
-			</Grid>
-		</Modal>
+
+							<Stack className="ml-12" direction="col" gap={2}>
+								<FormItem
+									label={t("manager.POPUP_EXHIBITION__CREATE_CAMERAS")}
+									placement="right"
+									renderInput={() => {
+										return (
+											<Controller
+												control={control}
+												name="enableSpawnCamera"
+												render={({ field }) => {
+													return (
+														<Switch
+															{...field}
+															disabled={!watch("enableSpawnAndMoveMedia")}
+														/>
+													);
+												}}
+											/>
+										);
+									}}
+								/>
+
+								<FormItem
+									label={t("manager.POPUP_EXHIBITION__PIN_OBJECTS")}
+									placement="right"
+									renderInput={() => {
+										return (
+											<Controller
+												control={control}
+												name="enablePinObjects"
+												render={({ field }) => {
+													return (
+														<Switch
+															{...field}
+															disabled={!watch("enableSpawnAndMoveMedia")}
+														/>
+													);
+												}}
+											/>
+										);
+									}}
+								/>
+							</Stack>
+
+							<FormItem
+								label={t("manager.POPUP_EXHIBITION__CREATE_DRAWINGS")}
+								placement="right"
+								renderInput={() => {
+									return (
+										<Controller
+											control={control}
+											name="enableSpawnDrawing"
+											render={({ field }) => {
+												return <Switch {...field} />;
+											}}
+										/>
+									);
+								}}
+							/>
+
+							<FormItem
+								label={t("manager.POPUP_EXHIBITION__CREATE_EMOJI")}
+								placement="right"
+								renderInput={() => {
+									return (
+										<Controller
+											control={control}
+											name="enableSpawnEmoji"
+											render={({ field }) => {
+												return <Switch {...field} />;
+											}}
+										/>
+									);
+								}}
+							/>
+
+							<FormItem
+								label={t("manager.POPUP_EXHIBITION__ALLOW_FLY")}
+								placement="right"
+								renderInput={() => {
+									return (
+										<Controller
+											control={control}
+											name="enableFly"
+											render={({ field }) => {
+												return <Switch {...field} />;
+											}}
+										/>
+									);
+								}}
+							/>
+						</Stack>
+					</div>
+				</div>
+			</Modal>
+		</FormContainer>
 
 		// <Popup
 		//   size={"xl"}
@@ -442,10 +764,6 @@ function ExhibitionFormModal(props) {
 		//   }}
 		// />
 	);
-}
-
-ExhibitionFormModal.propTypes = {
-	scenes: PropTypes.array,
 };
 
 export default ExhibitionFormModal;

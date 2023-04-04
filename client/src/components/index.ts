@@ -11,6 +11,7 @@ export { default as Pagination } from "./Pagination";
 export { default as FormContainer } from "./Form";
 export { default as FormItem } from "./Form/FormItem";
 export { default as TextInput } from "./Form/TextInput";
+export { default as Textarea } from "./Form/Textarea";
 export { default as DateTimePicker } from "./Form/DateTimePicker";
 export { default as AutoComplete } from "./Form/AutoComplete";
 export { default as Switch } from "./Form/Switch";

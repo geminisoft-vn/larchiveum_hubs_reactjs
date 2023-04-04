@@ -45,12 +45,24 @@ const Manager = () => {
 	const [objectLoaded, setObjectLoaded] = useState(false);
 	const [mediaLoaded, setMediaLoaded] = useState(false);
 	const [iconLoaded, setIconLoaded] = useState(false);
-	const [shouldActiveExhibitionForm, setShouldActiveExhibitionForm] = useState(false);
-	const [isOpenPopupConfirmCloseExhibition, setIsOpenPopupConfirmCloseExhibition] = useState(false);
-	const [isOpenPopupConfirmOpenExhibition, setIsOpenPopupConfirmOpenExhibition] = useState(false);
-	const [isOpenPopupConfirmDeleteExhibition, setIsOpenPopupConfirmDeleteExhibition] = useState(false);
-	const [isOpenPopupConfirmChangePublic, setIsOpenPopupConfirmChangePublic] = useState(false);
-	const [isOpenPopupChangeMediaURLGuide, setIsOpenPopupChangeMediaURLGuide] = useState(false);
+	const [shouldActiveExhibitionForm, setShouldActiveExhibitionForm] =
+		useState(false);
+	const [
+		isOpenPopupConfirmCloseExhibition,
+		setIsOpenPopupConfirmCloseExhibition,
+	] = useState(false);
+	const [
+		isOpenPopupConfirmOpenExhibition,
+		setIsOpenPopupConfirmOpenExhibition,
+	] = useState(false);
+	const [
+		isOpenPopupConfirmDeleteExhibition,
+		setIsOpenPopupConfirmDeleteExhibition,
+	] = useState(false);
+	const [isOpenPopupConfirmChangePublic, setIsOpenPopupConfirmChangePublic] =
+		useState(false);
+	const [isOpenPopupChangeMediaURLGuide, setIsOpenPopupChangeMediaURLGuide] =
+		useState(false);
 	const [isOpenPopupMedia, setIsOpenPopupMedia] = useState(false);
 	const [isOpenPopupObject, setIsOpenPopupObject] = useState(false);
 	const [exhibition, setExhibition] = useState(undefined);
@@ -327,18 +339,20 @@ const Manager = () => {
 			return false;
 		});
 		const dataString = JSON.stringify(listUuid);
-		ProjectService.updateChangeableObjects(projectId, dataString).then((res) => {
-			if (res.result == "ok") {
-				setIconLoaded(false);
-				closePopupCustomObject();
-				setIsOpenPopupChangeMediaURLGuide(true);
-				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-			} else {
-				toast.error(t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"), {
-					autoClose: 5000,
-				});
-			}
-		});
+		ProjectService.updateChangeableObjects(projectId, dataString).then(
+			(res) => {
+				if (res.result == "ok") {
+					setIconLoaded(false);
+					closePopupCustomObject();
+					setIsOpenPopupChangeMediaURLGuide(true);
+					toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
+				} else {
+					toast.error(t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"), {
+						autoClose: 5000,
+					});
+				}
+			},
+		);
 	};
 
 	const deleteRoom = () => {
@@ -367,7 +381,8 @@ const Manager = () => {
 
 	const handleChange = (evt) => {
 		const { name } = evt.target;
-		const value = evt.target.type === "checkbox" ? evt.target.checked : evt.target.value;
+		const value =
+			evt.target.type === "checkbox" ? evt.target.checked : evt.target.value;
 
 		if (name === "enableSpawnAndMoveMedia" && value === false) {
 			exhibition.enableSpawnCamera = false;
@@ -449,7 +464,9 @@ const Manager = () => {
 						value={exhibition ? exhibition.sceneId : undefined}
 						onChange={handleChangeSceneThubmnail}
 					>
-						<option>---{t("manager.POPUP_EXHIBITION__LIST_SCENE_DEFAULT_OPTION")}---</option>
+						<option>
+							---{t("manager.POPUP_EXHIBITION__LIST_SCENE_DEFAULT_OPTION")}---
+						</option>
 						{scenes.map((item, index) => (
 							<option key={index} value={item.id}>
 								{item.name}
@@ -459,9 +476,15 @@ const Manager = () => {
 					<span className="focus-input100" />
 				</div>
 				<div className="p-t-13 p-b-9">
-					<span className="txt1">{t("manager.POPUP_EXHIBITION__SCENE_THUMBNAIL")}</span>
+					<span className="txt1">
+						{t("manager.POPUP_EXHIBITION__SCENE_THUMBNAIL")}
+					</span>
 				</div>
-				<img className="f-image-thumbnail" src={getSceneThumnail(exhibition ? exhibition.sceneId : undefined)} alt="" />
+				<img
+					className="f-image-thumbnail"
+					src={getSceneThumnail(exhibition ? exhibition.sceneId : undefined)}
+					alt=""
+				/>
 			</>
 		);
 	};
@@ -475,7 +498,12 @@ const Manager = () => {
 				// setExhibitions([...exhibitions, res.data]);
 				// window.location.reload();
 			} else {
-				toast.error(t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`), { autoClose: 5000 });
+				toast.error(
+					t(
+						`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`,
+					),
+					{ autoClose: 5000 },
+				);
 			}
 		});
 	};
@@ -492,7 +520,12 @@ const Manager = () => {
 					}
 				});
 			} else {
-				toast.error(t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`), { autoClose: 5000 });
+				toast.error(
+					t(
+						`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`,
+					),
+					{ autoClose: 5000 },
+				);
 			}
 		});
 	};
@@ -519,7 +552,9 @@ const Manager = () => {
 		ExhibitionsService.deleteOneExhibition(exhibitionId).then((res) => {
 			if (res.result == "ok") {
 				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-				setIsOpenPopupConfirmDeleteExhibition(!isOpenPopupConfirmDeleteExhibition);
+				setIsOpenPopupConfirmDeleteExhibition(
+					!isOpenPopupConfirmDeleteExhibition,
+				);
 				// getAllExhibitions();
 			} else {
 				toast.error(t("manager.DELETE_EXHIBITION_ERROR"), { autoClose: 5000 });
@@ -536,7 +571,9 @@ const Manager = () => {
 						toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
 					}
 				});
-				setIsOpenPopupConfirmCloseExhibition(!isOpenPopupConfirmCloseExhibition);
+				setIsOpenPopupConfirmCloseExhibition(
+					!isOpenPopupConfirmCloseExhibition,
+				);
 			} else {
 				toast.error(t("manager.CLOSE_EXHIBITION_ERROR"), { autoClose: 5000 });
 			}
@@ -600,8 +637,16 @@ const Manager = () => {
 											/>
 											<span className="focus-input100" />
 										</div>
-										{item?.check != "cheking" ? "" : <span>{t("manager.POPUP_MEDIA__URL_CORRECT")}</span>}
-										{item?.check != "fail" ? "" : <span>{t("manager.POPUP_MEDIA__URL_INCORRECT")}</span>}
+										{item?.check != "cheking" ? (
+											""
+										) : (
+											<span>{t("manager.POPUP_MEDIA__URL_CORRECT")}</span>
+										)}
+										{item?.check != "fail" ? (
+											""
+										) : (
+											<span>{t("manager.POPUP_MEDIA__URL_INCORRECT")}</span>
+										)}
 									</div>
 								</div>
 							);
@@ -659,7 +704,9 @@ const Manager = () => {
 												checked={item?.changeable}
 												onChange={(e) => handleChangeable(item, e)}
 											/>
-											<span className="textCheckbox">{t("manager.POPUP_OBJECT__URL_CHANEABLE")}</span>
+											<span className="textCheckbox">
+												{t("manager.POPUP_OBJECT__URL_CHANEABLE")}
+											</span>
 										</label>
 									</div>
 								</div>
@@ -677,12 +724,13 @@ const Manager = () => {
 		const user = Store.getUser();
 		if (parseInt(user?.type, 10) === 5) {
 			return (
-				<ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+				<ul className="flex flex-wrap border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
 					<Link
 						to="?tab=exhibition"
 						className={clsx(
-							"inline-block p-4 rounded-t-lg",
-							searchParams.get("tab") === "exhibition" && "text-blue-600 bg-gray-100",
+							"inline-block rounded-t-lg p-4",
+							searchParams.get("tab") === "exhibition" &&
+								"bg-gray-100 text-blue-600",
 						)}
 					>
 						{t("manager.LIST_EXHIBITION")}
@@ -690,8 +738,9 @@ const Manager = () => {
 					<Link
 						to="?tab=project"
 						className={clsx(
-							"inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50",
-							searchParams.get("tab") === "project" && "text-blue-600 bg-gray-100",
+							"inline-block rounded-t-lg p-4 hover:bg-gray-50 hover:text-gray-600",
+							searchParams.get("tab") === "project" &&
+								"bg-gray-100 text-blue-600",
 						)}
 					>
 						{t("manager.LIST_PROJECT")}
@@ -721,7 +770,9 @@ const Manager = () => {
 		<>
 			{projectsLoaded ? (
 				<div className="flex flex-col gap-2">
-					<p className="font-bold text-center text-lg">{t("manager.LIST_PROJECT")}</p>
+					<p className="text-center text-lg font-bold">
+						{t("manager.LIST_PROJECT")}
+					</p>
 					<div className="flex flex-col gap-2">
 						{projects.data.map((item, index) => {
 							let countImage = 0;
@@ -743,12 +794,19 @@ const Manager = () => {
 									countModel++;
 								});
 							return (
-								<div key={item.id} className="grid grid-cols-12 bg-gray-100 rounded-lg">
+								<div
+									key={item.id}
+									className="grid grid-cols-12 rounded-lg bg-gray-100"
+								>
 									<div className="col-span-3 rounded-lg">
-										<img className="h-full w-full" src={item?.thumbnail_url} alt="" />
+										<img
+											className="h-full w-full"
+											src={item?.thumbnail_url}
+											alt=""
+										/>
 									</div>
-									<div className="col-span-6 p-4 flex flex-col justify-around">
-										<p className="font-bold text-lg">{item?.name}</p>
+									<div className="col-span-6 flex flex-col justify-around p-4">
+										<p className="text-lg font-bold">{item?.name}</p>
 										<div className="flex items-center gap-4">
 											<div className="flex items-center gap-2">
 												{count_Image}
@@ -872,11 +930,21 @@ const Manager = () => {
 						<>
 							{t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT")}
 							<ul>
-								<li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_1")}</li>
-								<li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_2")}</li>
-								<li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_3")}</li>
-								<li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_4")}</li>
-								<li>- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_5")}</li>
+								<li>
+									- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_1")}
+								</li>
+								<li>
+									- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_2")}
+								</li>
+								<li>
+									- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_3")}
+								</li>
+								<li>
+									- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_4")}
+								</li>
+								<li>
+									- {t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__CONTENT_STEP_5")}
+								</li>
 							</ul>
 						</>
 					}
@@ -1010,7 +1078,10 @@ const Manager = () => {
 					size="xl"
 					title={t("manager.POPUP_MEDIA__TITLE")}
 					content={
-						<form className="create100-form validate-form d-flex form-custom-media" name="form">
+						<form
+							className="create100-form validate-form d-flex form-custom-media"
+							name="form"
+						>
 							<div className="w-100">
 								<div className="p-t-13 p-b-9">{renderListMedia()}</div>
 							</div>
@@ -1018,7 +1089,11 @@ const Manager = () => {
 					}
 					actions={[
 						{
-							text: iconLoaded ? <div className="lds-dual-ring" /> : <span> {t("manager.POPUP_MEDIA__SAVE")} </span>,
+							text: iconLoaded ? (
+								<div className="lds-dual-ring" />
+							) : (
+								<span> {t("manager.POPUP_MEDIA__SAVE")} </span>
+							),
 							class: "btn-handle",
 							callback: () => {
 								handelSaveMediaURL();
@@ -1043,7 +1118,10 @@ const Manager = () => {
 					size="xl"
 					title="List Object"
 					content={
-						<form className="create100-form validate-form d-flex form-custom-media" name="form">
+						<form
+							className="create100-form validate-form d-flex form-custom-media"
+							name="form"
+						>
 							<div className="w-100">
 								<div className="p-t-13 p-b-9">{renderListObject()}</div>
 							</div>
@@ -1051,7 +1129,11 @@ const Manager = () => {
 					}
 					actions={[
 						{
-							text: iconLoaded ? <div className="lds-dual-ring" /> : <span>{t("manager.POPUP_OBJECT__SAVE")}</span>,
+							text: iconLoaded ? (
+								<div className="lds-dual-ring" />
+							) : (
+								<span>{t("manager.POPUP_OBJECT__SAVE")}</span>
+							),
 							class: "btn-handle",
 							callback: () => {
 								handelOpenPopupChangeMediaURLGuide();
@@ -1071,11 +1153,11 @@ const Manager = () => {
 				/>
 			)}
 
-			<div className="manager-page">
+			<section className="w-full">
 				{renderTabs()}
 				{searchParams.get("tab") === "exhibition" && <Exhibitions />}
 				{searchParams.get("tab") === "project" && renderProjects()}
-			</div>
+			</section>
 		</>
 	);
 };

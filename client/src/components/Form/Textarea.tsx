@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import clsx from "clsx";
 
 type Props = {
@@ -10,12 +10,11 @@ type Props = {
 	placeholder?: string;
 	required?: boolean;
 	disabled?: boolean;
-	readOnly?: boolean;
 	className?: string;
-	type?: "text" | "password" | "number";
+	rows?: number;
 };
 
-const TextInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
+const Textarea = forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
 	const {
 		name,
 		onChange,
@@ -25,15 +24,19 @@ const TextInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
 		placeholder,
 		required,
 		disabled,
-		readOnly,
 		className,
-		type,
+		rows,
 	} = props;
 
 	return (
-		<input
+		<textarea
 			ref={ref}
-			type={type}
+			rows={rows}
+			className={clsx(
+				"block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-df text-gray-900 outline-0 focus:border-blue-500",
+				className,
+			)}
+			placeholder={placeholder}
 			name={name}
 			onChange={(e) => {
 				if (onChange) onChange(e);
@@ -47,28 +50,21 @@ const TextInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
 			onMouseDown={(e) => {
 				if (onMouseDown) onMouseDown(e);
 			}}
-			placeholder={placeholder}
-			className={clsx(
-				"block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-df text-gray-900 outline-0 focus:border-blue-500",
-				className,
-			)}
 			required={required}
 			disabled={disabled}
-			readOnly={readOnly}
 		/>
 	);
 });
 
-TextInput.defaultProps = {
+Textarea.defaultProps = {
 	disabled: false,
 	required: false,
-	readOnly: false,
 	className: "",
 	placeholder: "",
 	onBlur: undefined,
 	onFocus: undefined,
 	onMouseDown: undefined,
-	type: "text",
+	rows: 4,
 };
 
-export default TextInput;
+export default Textarea;

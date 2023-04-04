@@ -8,18 +8,24 @@ class ExhibitionsService {
 	static getAllExhibitions(data): Promise<IAxiosResponse<IExhibition[]>> {
 		return request({
 			method: "GET",
-			url: `/v1/exhibitions?page=${data.page ? data.page : 1}&pageSize=${data.pageSize ? data.pageSize : 15}&sort=${
-				data.sort ? data.sort : ""
-			}`,
+			url: `/v1/exhibitions?page=${data.page ? data.page : 1}&pageSize=${
+				data.pageSize ? data.pageSize : 15
+			}&sort=${data.sort ? data.sort : ""}`,
 		});
 	}
 
-	static getAllWithAuthExhibitions(data): Promise<IAxiosResponse<IExhibition[]>> {
+	static getAllWithAuthExhibitions(
+		data,
+	): Promise<IAxiosResponse<IExhibition[]>> {
 		return request({
 			method: "GET",
 			url: `/v1/auth/exhibitions?page=${data.page ? data.page : 1}&pageSize=${
 				data.pageSize ? data.pageSize : 15
-			}&sort=${data.sort ? data.sort : ""}&timezone=${moment.tz.guess()}&isAdmin=${data.isAdmin ? data.isAdmin : ""}`,
+			}&sort=${
+				data.sort ? data.sort : ""
+			}&timezone=${moment.tz.guess()}&isAdmin=${
+				data.isAdmin ? data.isAdmin : ""
+			}`,
 		});
 	}
 
@@ -30,7 +36,7 @@ class ExhibitionsService {
 		});
 	}
 
-	static postCreateOne(data) {
+	static postCreateOne(data): Promise<IAxiosResponse<IExhibition>> {
 		return request({
 			method: "POST",
 			url: `/v1/auth/exhibitions`,
@@ -46,7 +52,9 @@ class ExhibitionsService {
 		});
 	}
 
-	static patchTogglePublic(id: number): Promise<IAxiosResponse<{ id: number; public: boolean }>> {
+	static patchTogglePublic(
+		id: number,
+	): Promise<IAxiosResponse<{ id: number; public: boolean }>> {
 		return request({
 			method: "PATCH",
 			url: `/v1/auth/exhibitions/${id}/togglePublic`,
@@ -61,7 +69,7 @@ class ExhibitionsService {
 		});
 	}
 
-	static closeOneExhibition(id) {
+	static closeOneExhibition(id: number): Promise<IAxiosResponse<IExhibition>> {
 		return request({
 			method: "POST",
 			url: `/v1/auth/exhibitions/close`,

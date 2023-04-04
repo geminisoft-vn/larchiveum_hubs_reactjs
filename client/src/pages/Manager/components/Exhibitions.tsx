@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AxiosResponse } from "axios";
 
 import ExhibitionsService from "src/api/ExhibitionsService";
 import MediaService from "src/api/MediaService";
@@ -10,16 +9,10 @@ import { Button, Pagination, Stack, Typography } from "src/components";
 import { closeModal, openModal } from "src/features/modal/ModalSlice";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserAuthenticationStatus } from "src/features/user/selectors";
-import {
-	IAxiosResponse,
-	IExhibition,
-	IPagination,
-	IParams,
-	IScene,
-} from "src/interfaces";
-import Store from "src/utilities/store";
+import { IExhibition, IPagination, IParams, IScene } from "src/interfaces";
 
 import Exhibition from "./Exhibition";
+import ExhibitionFormModal from "./ExhibitionFormModal";
 
 type Props = {};
 
@@ -34,8 +27,12 @@ const Exhibitions = (props: Props) => {
 		pageSize: 4,
 	});
 	const [pages, setPages] = useState<IPagination>({});
-
 	const [scenes, setScenes] = useState<IScene[]>([]);
+	const [shouldActiveExhibitionForm, setShouldActiveExhibitionForm] =
+		useState(false);
+	const [exhibitionType, setExhibitionType] = useState<"create" | "edit">(
+		"create",
+	);
 
 	const loadExhibitions = useCallback(async () => {
 		try {
@@ -80,7 +77,14 @@ const Exhibitions = (props: Props) => {
 		}
 	}, []);
 
-	const openPopupExhibition = () => {};
+	const handleCloseModal = () => {
+		dispatch(closeModal());
+	};
+
+	const openPopupExhibition = (type, _id) => {
+		setShouldActiveExhibitionForm(true);
+		setExhibitionType(type);
+	};
 
 	const openPopupCustomMedia = (exhibitionId) => {
 		if (exhibitionId) {
@@ -94,7 +98,7 @@ const Exhibitions = (props: Props) => {
 					console.log({ err });
 				})
 				.finally(() => {
-					dispatch(closeModal());
+					handleCloseModal();
 				});
 		}
 	};
@@ -129,7 +133,7 @@ const Exhibitions = (props: Props) => {
 				}
 			})
 			.finally(() => {
-				dispatch(closeModal());
+				handleCloseModal();
 			});
 	};
 
@@ -161,15 +165,80 @@ const Exhibitions = (props: Props) => {
 						text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CANCEL"),
 						className: "btn2",
 						callback: () => {
-							dispatch(closeModal());
+							handleCloseModal();
 						},
 					},
 				],
 			}),
 		);
 	};
-	const setExhibitionType = () => {};
-	const openPopupCloseRoom = () => {};
+
+	const handelCloseRoom = (exhibitionId) => {
+		ExhibitionsService.closeOneExhibition(exhibitionId)
+			.then((res) => {
+				if (res.result === "ok") {
+					exhibitions.forEach((exhibition) => {
+						if (exhibition.id === exhibitionId) {
+							exhibition.closed = res.data.closed;
+							dispatch(
+								showToast({
+									type: "success",
+									message: t("manager.MESSAGE_SUCCESS"),
+								}),
+							);
+						}
+					});
+				}
+			})
+			.catch(() => {
+				dispatch(
+					showToast({
+						type: "error",
+						message: t("manager.CLOSE_EXHIBITION_ERROR"),
+					}),
+				);
+			})
+			.finally(() => {
+				handleCloseModal();
+			});
+	};
+
+	const openPopupCloseRoom = (exhibitionId) => {
+		dispatch(
+			openModal({
+				isActive: true,
+				title: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__TITLE"),
+				body: (
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+						}}
+					>
+						{t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__MESSAGE")}
+					</div>
+				),
+				actions: [
+					{
+						text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CLOSE"),
+						className: "",
+						callback: () => {
+							handelCloseRoom(exhibitionId);
+						},
+					},
+					{
+						text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CANCEL"),
+						className: "",
+						callback: () => {
+							handleCloseModal();
+						},
+					},
+				],
+			}),
+		);
+	};
+
 	const openPopupOpenRoom = () => {};
 	const openDeleteRoom = () => {};
 
@@ -182,48 +251,69 @@ const Exhibitions = (props: Props) => {
 	}, [loadScenes]);
 
 	return (
-		<Stack direction="col" alignItems="center" gap={2} className="my-4">
-			<Typography className="text-center text-lg font-bold">
-				{t("manager.LIST_EXHIBITION")}
-			</Typography>
-			{/* <Button
-				className="btn btn-create"
-				onClick={() => {
-					// openPopupExhibition();
-					// setExhibitionType("create");
-				}}
-			>
-				<img src={AddIcon} />
-			</Button> */}
-			<Stack direction="col" gap={2}>
-				{exhibitions &&
-					exhibitions.map((exhibition) => {
-						return (
-							<Exhibition
-								key={exhibition.id}
-								exhibition={exhibition}
-								openPopupCustomMedia={openPopupCustomMedia}
-								getSceneThumnail={getSceneThumnail}
-								openPopupPublic={openPopupPublic}
-								openPopupExhibition={openPopupExhibition}
-								setExhibitionType={setExhibitionType}
-								openPopupCloseRoom={openPopupCloseRoom}
-								openPopupOpenRoom={openPopupOpenRoom}
-								openDeleteRoom={openDeleteRoom}
-							/>
-						);
-					})}
+		<section className="w-full">
+			<Stack direction="col" alignItems="center" gap={2} className="my-4">
+				<Typography className="text-center text-lg font-bold">
+					{t("manager.LIST_EXHIBITION")}
+				</Typography>
+				<Button
+					className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-blue-500 p-4 text-lg text-white shadow-lg"
+					onClick={() => {
+						openPopupExhibition("create", "");
+					}}
+				>
+					+
+				</Button>
+				<Stack direction="col" gap={2} className="w-full">
+					{exhibitions &&
+						exhibitions.map((exhibition) => {
+							return (
+								<Exhibition
+									key={exhibition.id}
+									exhibition={exhibition}
+									openPopupCustomMedia={openPopupCustomMedia}
+									getSceneThumnail={getSceneThumnail}
+									openPopupPublic={openPopupPublic}
+									openPopupExhibition={openPopupExhibition}
+									openPopupCloseRoom={openPopupCloseRoom}
+									openPopupOpenRoom={openPopupOpenRoom}
+									openDeleteRoom={openDeleteRoom}
+								/>
+							);
+						})}
+				</Stack>
+
+				<Pagination
+					page={params.page}
+					pageCount={pages.total}
+					setParams={setParams}
+					hasNext={pages.hasNext}
+					hasPrev={pages.hasPrev}
+				/>
 			</Stack>
 
-			<Pagination
-				page={params.page}
-				pageCount={pages.total}
-				setParams={setParams}
-				hasNext={pages.hasNext}
-				hasPrev={pages.hasPrev}
+			<ExhibitionFormModal
+				isActive={shouldActiveExhibitionForm}
+				setIsActive={setShouldActiveExhibitionForm}
+				type={exhibitionType}
+				scenes={scenes}
 			/>
-		</Stack>
+		</section>
 	);
 };
+
+("dasdsadasd");
+0;
+0;
+1;
+0;
+0;
+0;
+("06/04/2023 00:00:00");
+20;
+("dsad");
+1;
+("AoKTb9H");
+("05/04/2023 00:00:00");
 
 export default Exhibitions;
