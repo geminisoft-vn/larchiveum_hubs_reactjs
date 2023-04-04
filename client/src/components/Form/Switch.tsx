@@ -6,7 +6,7 @@ type Props = {
 	disabled?: boolean;
 	onChange: (_e: React.SyntheticEvent) => void;
 	onBlur: (_e: React.SyntheticEvent) => void;
-	value: boolean;
+	value?: boolean;
 };
 
 const Switch = forwardRef<HTMLInputElement, Props>((props, ref) => {
@@ -50,6 +50,7 @@ const Switch = forwardRef<HTMLInputElement, Props>((props, ref) => {
 Switch.defaultProps = {
 	className: "",
 	disabled: false,
+	value: false,
 };
 
 export default Switch;

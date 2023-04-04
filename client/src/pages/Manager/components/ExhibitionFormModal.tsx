@@ -3,12 +3,13 @@ import { Controller, useForm } from "react-hook-form";
 // import "./ExhibitionFormModal.style.scss";
 import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
+import _pick from "lodash/pick";
 import _transform from "lodash/transform";
 import moment from "moment";
 import * as yup from "yup";
 
 import ExhibitionsService from "src/api/ExhibitionsService";
-import { useAppDispatch } from "src/app/hooks";
+import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import defaultImage from "src/assets/larchiveum/default-image.png";
 import {
 	AutoComplete,
@@ -21,21 +22,79 @@ import {
 	Textarea,
 	TextInput,
 } from "src/components";
+import {
+	getExhibition,
+	updateExhibition,
+} from "src/features/exhibition/ExhibitionSlide";
 import { showToast } from "src/features/toast/ToastSlice";
 import { IExhibition, IScene } from "src/interfaces";
+import { DATE_TIME_FORMAT } from "src/utilities/constants";
 
 type Props = {
 	isActive: boolean;
 	setIsActive(value: boolean): void;
 	type: "edit" | "create";
+	exhibitionId: number;
 	scenes: IScene[];
 };
 
 const ExhibitionFormModal = (props: Props) => {
-	const { isActive, setIsActive, type, scenes } = props;
+	const { isActive, setIsActive, type, exhibitionId, scenes } = props;
 
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
+	const exhibition = useAppSelector(getExhibition(exhibitionId));
+	const transformedDefaultValues = useMemo(() => {
+		if (exhibitionId) {
+			const fields = _pick(exhibition, [
+				"name",
+				"description",
+				"public",
+				"maxSize",
+				"startDate",
+				"endDate",
+				"sceneId",
+				"enableSpawnAndMoveMedia",
+				"enableSpawnCamera",
+				"enablePinObjects",
+				"enableSpawnDrawing",
+				"enableSpawnEmoji",
+				"enableFly",
+			]);
+
+			return _transform(
+				fields,
+				(result, value, key) => {
+					if (key.startsWith("enable") || key === "public") {
+						if (value === 1) result[key] = true;
+						if (value === 0) result[key] = false;
+					}
+					if (
+						typeof value === "string" &&
+						(key === "startDate" || key === "endDate")
+					) {
+						result[key] = moment(value).format(DATE_TIME_FORMAT);
+					}
+				},
+				fields,
+			);
+		}
+		return {
+			name: "",
+			description: "",
+			public: false,
+			maxSize: 0,
+			startDate: "",
+			endDate: "",
+			sceneId: "",
+			enableSpawnAndMoveMedia: false,
+			enableSpawnCamera: false,
+			enablePinObjects: false,
+			enableSpawnDrawing: false,
+			enableSpawnEmoji: false,
+			enableFly: false,
+		};
+	}, [exhibitionId, exhibition]);
 
 	const [sceneThumnail, setSceneThumbnail] = useState("");
 
@@ -58,24 +117,6 @@ const ExhibitionFormModal = (props: Props) => {
 			.required(
 				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_DESCRIPTION`),
 			),
-		startDate: yup
-			.string()
-			.required(
-				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_START_DATE`),
-			),
-		endDate: yup
-			.string()
-			.test(
-				"is-valid-end-date",
-				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_DATE`),
-				function (value) {
-					const _this: yup.TestContext = this;
-					return moment(value).isAfter(_this.parent?.startDate);
-				},
-			)
-			.required(
-				t(`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__INVALID_END_DATE`),
-			),
 	});
 
 	const {
@@ -87,23 +128,9 @@ const ExhibitionFormModal = (props: Props) => {
 		watch,
 		clearErrors,
 		formState: { errors },
-	} = useForm({
+	} = useForm<Partial<IExhibition>>({
 		reValidateMode: "onSubmit",
-		defaultValues: {
-			name: "",
-			description: "",
-			public: false,
-			maxSize: 0,
-			startDate: "",
-			endDate: "",
-			sceneId: "",
-			enableSpawnAndMoveMedia: false,
-			enableSpawnCamera: false,
-			enablePinObjects: false,
-			enableSpawnDrawing: false,
-			enableSpawnEmoji: false,
-			enableFly: false,
-		},
+		defaultValues: transformedDefaultValues,
 		resolver: yupResolver(schema),
 	});
 
@@ -113,45 +140,74 @@ const ExhibitionFormModal = (props: Props) => {
 	};
 
 	const handleSaveForm = handleSubmit((data) => {
-		const dataToSend = {};
+		const dataToSend = _transform(
+			data,
+			(result, value, key) => {
+				if (typeof value === "boolean") {
+					if (data[key]) result[key] = 1;
+					if (!data[key]) result[key] = 0;
+				}
+				if (key === "maxSize" && typeof value === "string")
+					result[key] = parseInt(value, 10);
+			},
+			data,
+		);
 
-		console.log(moment(data.startDate));
-		// if (type === "create") {
-		// 	dataToSend = _transform(
-		// 		data,
-		// 		(result, value, key) => {
-		// 			if (typeof value === "boolean") {
-		// 				if (data[key]) result[key] = 1;
-		// 				if (!data[key]) result[key] = 0;
-		// 			}
-		// 			if (key === "maxSize" && typeof value === "string")
-		// 				result[key] = parseInt(value, 10);
-		// 		},
-		// 		data,
-		// 	);
-		// 	ExhibitionsService.postCreateOne(dataToSend)
-		// 		.then((res) => {
-		// 			if (res.result === "ok") {
-		// 				dispatch(
-		// 					showToast({
-		// 						type: "success",
-		// 						message: t("manager.MESSAGE_SUCCESS"),
-		// 					}),
-		// 				);
-		// 				setIsActive(false);
-		// 			}
-		// 		})
-		// 		.catch((err) => {
-		// 			dispatch(
-		// 				showToast({
-		// 					type: "error",
-		// 					message: t(
-		// 						`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${err.response.data.error.toUpperCase()}`,
-		// 					),
-		// 				}),
-		// 			);
-		// 		});
-		// }
+		if (type === "create") {
+			ExhibitionsService.postCreateOne(dataToSend)
+				.then((res) => {
+					if (res.result === "ok") {
+						dispatch(
+							showToast({
+								type: "success",
+								message: t("manager.MESSAGE_SUCCESS"),
+							}),
+						);
+						setIsActive(false);
+					}
+				})
+				.catch((err) => {
+					dispatch(
+						showToast({
+							type: "error",
+							message: t(
+								`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${err.response.data.error.toUpperCase()}`,
+							),
+						}),
+					);
+				});
+		} else if (type === "edit") {
+			ExhibitionsService.putUpdateOne(exhibitionId, dataToSend)
+				.then((res) => {
+					if (res.result === "ok") {
+						dispatch(
+							showToast({
+								type: "success",
+								message: t("manager.MESSAGE_SUCCESS"),
+							}),
+						);
+						dispatch(
+							updateExhibition({
+								id: exhibitionId,
+								dataToUpdate: dataToSend,
+							}),
+						);
+						setIsActive(false);
+					}
+				})
+				.catch((err) => {
+					if (err.response) {
+						dispatch(
+							showToast({
+								type: "error",
+								message: t(
+									`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${err.response.data.error.toUpperCase()}`,
+								),
+							}),
+						);
+					}
+				});
+		}
 	});
 
 	const handleCloseModal = () => {
@@ -170,6 +226,10 @@ const ExhibitionFormModal = (props: Props) => {
 		});
 		return () => subscription.unsubscribe();
 	}, [watch]);
+
+	useEffect(() => {
+		setSceneThumbnail(getSceneThumnail(getValues("sceneId")));
+	}, []);
 
 	return (
 		<FormContainer onSubmit={handleSaveForm}>
@@ -306,10 +366,11 @@ const ExhibitionFormModal = (props: Props) => {
 										return (
 											<AutoComplete
 												label={t("manager.POPUP_EXHIBITION__LIST_SCENE_LABEL")}
+												defaultValue={getValues("sceneId") || ""}
 												{...register("sceneId")}
 												options={scenes}
 												handleChange={(sceneId) => {
-													setValue("sceneId", sceneId || "");
+													setValue("sceneId", sceneId || "af7NxRw");
 													setSceneThumbnail(getSceneThumnail(sceneId));
 												}}
 											/>
@@ -444,325 +505,6 @@ const ExhibitionFormModal = (props: Props) => {
 				</div>
 			</Modal>
 		</FormContainer>
-
-		// <Popup
-		//   size={"xl"}
-		//   title={
-		//     exhibitionType == "edit" ? (
-		//       <> {t("manager.POPUP_EXHIBITION__EDIT_TITLE")} </>
-		//     ) : (
-		//       <> {t("manager.POPUP_EXHIBITION__CREATE_TITLE")}</>
-		//     )
-		//   }
-		//   content={
-		//     <>
-		//       <form className="create100-form validate-form" name="form" style={{ maxHeight: "60vh", overflowY: "scroll" }}>
-		//         <div className="d-flex">
-		//           <div style={{ width: "40%", padding: "10px" }}>
-		//             <div className="p-t-13 p-b-9">
-		//               <span className="txt1">{t("manager.POPUP_EXHIBITION__NAME_LABEL")}</span>
-		//             </div>
-		//             <div className="wrap-input100 validate-input">
-		//               <input
-		//                 className="input100"
-		//                 type="text"
-		//                 name="name"
-		//                 value={exhibition ? exhibition.name : undefined}
-		//                 onChange={handleChange}
-		//                 placeholder={t("manager.POPUP_EXHIBITION__NAME_PLACEHOLDER")}
-		//               />
-		//               <span className="focus-input100" />
-		//             </div>
-		//             <div className="p-t-13 p-b-9">
-		//               <span className="txt1">{t("manager.POPUP_EXHIBITION__DESCRIPTION_LABEL")}</span>
-		//             </div>
-		//             <div className="wrap-input100 validate-input">
-		//               <textarea
-		//                 className="textarea100"
-		//                 name="description"
-		//                 value={exhibition ? exhibition.description : undefined}
-		//                 onChange={handleChange}
-		//                 placeholder={t("manager.POPUP_EXHIBITION__DESCRIPTION_PLACEHOLDER")}
-		//                 rows="10"
-		//                 style={{ height: "205px" }}
-		//               />
-		//               <span className="focus-input100" />
-		//             </div>
-		//             <div style={{ display: "flex", justifyContent: "space-between" }}>
-		//               <div style={{ width: "40%" }}>
-		//                 <div className="p-t-13 p-b-9">
-		//                   <span className="txt1" style={{ fontSize: "13px" }}>
-		//                     {t("manager.POPUP_EXHIBITION__PUBLIC")}
-		//                   </span>
-		//                 </div>
-		//                 <label className="switch">
-		//                   <input
-		//                     type="checkbox"
-		//                     name="public"
-		//                     checked={exhibition ? exhibition.public : undefined}
-		//                     onChange={handleChange}
-		//                   />
-		//                   <span className="slider round" />
-		//                 </label>
-		//               </div>
-		//               <div style={{ width: "60%", paddingTop: "10px" }}>
-		//                 <div
-		//                   style={{
-		//                     float: "left",
-		//                     height: "50px",
-		//                     width: "40%",
-		//                     display: "flex",
-		//                     alignItems: "center",
-		//                     justifyContent: "right",
-		//                     paddingRight: "10px"
-		//                   }}
-		//                 >
-		//                   <span className="txt1">{t("manager.POPUP_EXHIBITION__MAX_SIZE")}</span>
-		//                 </div>
-		//                 <div className="wrap-input100 validate-input" style={{ float: "left", width: "60%" }}>
-		//                   <input
-		//                     className="input100"
-		//                     type="number"
-		//                     min={0}
-		//                     max={50}
-		//                     name="maxSize"
-		//                     value={exhibition ? exhibition.maxSize : 5}
-		//                     onChange={handleChange}
-		//                   />
-		//                   <span className="focus-input100" />
-		//                 </div>
-		//               </div>
-		//             </div>
-		//           </div>
-		//           <div style={{ width: "60%", padding: "10px" }}>
-		//             <div style={{ display: "flex", justifyContent: "space-between" }}>
-		//               <div className="item-input" style={{ width: "48%" }}>
-		//                 <div className="p-t-13 p-b-9">
-		//                   <span className="txt1">{t("manager.POPUP_EXHIBITION__START_DATE_LABEL")}</span>
-		//                 </div>
-		//                 <div className="wrap-input100 validate-input">
-		//                   <Datetime
-		//                     key={"input-start-date"}
-		//                     value={
-		//                       exhibition?.startDate
-		//                         ? moment
-		//                             .utc(exhibition.startDate)
-		//                             .local()
-		//                             .format("MM/DD/YYYY hh:mm a")
-		//                         : undefined
-		//                     }
-		//                     onChange={value => {
-		//                       handleChangeDatetime({
-		//                         name: "startDate",
-		//                         value: value
-		//                       });
-		//                     }}
-		//                     timeFormat={true}
-		//                     displayTimeZone={moment.tz.guess()}
-		//                     closeOnSelect={true}
-		//                     inputProps={{
-		//                       placeholder: "MM/DD/YYYY hh:mm a",
-		//                       className: "input100",
-		//                       name: "startDate"
-		//                     }}
-		//                   />
-		//                   <span className="focus-input100" />
-		//                 </div>
-		//               </div>
-		//               <div className="item-input" style={{ width: "48%" }}>
-		//                 <div className="p-t-13 p-b-9">
-		//                   <span className="txt1">{t("manager.POPUP_EXHIBITION__END_DATE_LABEL")}</span>
-		//                 </div>
-		//                 <div className="wrap-input100 validate-input">
-		//                   <Datetime
-		//                     key={"input-end-date"}
-		//                     value={
-		//                       exhibition?.endDate
-		//                         ? moment
-		//                             .utc(exhibition.endDate)
-		//                             .local()
-		//                             .format("MM/DD/YYYY hh:mm a")
-		//                         : undefined
-		//                     }
-		//                     onChange={value => {
-		//                       handleChangeDatetime({
-		//                         name: "endDate",
-		//                         value: value
-		//                       });
-		//                     }}
-		//                     timeFormat={true}
-		//                     displayTimeZone={moment.tz.guess()}
-		//                     closeOnSelect={true}
-		//                     inputProps={{
-		//                       placeholder: "MM/DD/YYYY hh:mm a",
-		//                       className: "input100",
-		//                       name: "endDate"
-		//                     }}
-		//                   />
-		//                   <span className="focus-input100" />
-		//                 </div>
-		//               </div>
-		//             </div>
-		//             <div className="p-t-13 p-b-9">
-		//               <span className="txt1">{t("manager.POPUP_EXHIBITION__LIST_SCENE_LABEL")}</span>
-		//             </div>
-		//             <ListScenes />
-		//           </div>
-		//         </div>
-		//         <div style={{ width: "100%", padding: "10px" }}>
-		//           <span className="txt1">{t("manager.POPUP_EXHIBITION__ROOM_MEMBER_PERMISSIONS")}</span>
-		//           <div style={{ position: "relative", width: "100%", height: "40px", marginTop: "10px" }}>
-		//             <div style={{ width: "150px", float: "left" }}>
-		//               {/* <ToggleInput
-		//               checked={exhibition?.enableSpawnAndMoveMedia}
-		//               name="enableSpawnAndMoveMedia"
-		//               onChange={handleChange}
-		//             /> */}
-		//               <label className="switch">
-		//                 <input
-		//                   type="checkbox"
-		//                   name="enableSpawnAndMoveMedia"
-		//                   checked={exhibition ? exhibition.enableSpawnAndMoveMedia : false}
-		//                   onChange={handleChange}
-		//                 />
-		//                 <span className="slider round" />
-		//               </label>
-		//             </div>
-		//             <div style={{ float: "left" }}>
-		//               <span>{t("manager.POPUP_EXHIBITION__CREATE_AND_MOVE_OBJECTS")}</span>
-		//             </div>
-		//           </div>
-		//           <div style={{ position: "relative", width: "100%", height: "40px" }}>
-		//             <div style={{ width: "150px", float: "left", paddingLeft: "50px" }}>
-		//               {/* <ToggleInput
-		//               checked={exhibition?.enableSpawnCamera}
-		//               name="enableSpawnCamera"
-		//               onChange={handleChange}
-		//             /> */}
-		//               <label className="switch">
-		//                 <input
-		//                   type="checkbox"
-		//                   name="enableSpawnCamera"
-		//                   disabled={!exhibition?.enableSpawnAndMoveMedia}
-		//                   checked={exhibition ? exhibition.enableSpawnCamera : false}
-		//                   onChange={handleChange}
-		//                 />
-		//                 <span className="slider round" />
-		//               </label>
-		//             </div>
-		//             <div style={{ float: "left" }}>
-		//               <span>{t("manager.POPUP_EXHIBITION__CREATE_CAMERAS")}</span>
-		//             </div>
-		//           </div>
-		//           <div style={{ position: "relative", width: "100%", height: "40px" }}>
-		//             <div style={{ width: "150px", float: "left", paddingLeft: "50px" }}>
-		//               {/* <ToggleInput
-		//               checked={exhibition?.enablePinObjects}
-		//               name="enablePinObjects"
-		//               onChange={handleChange}
-		//             /> */}
-		//               <label className="switch">
-		//                 <input
-		//                   type="checkbox"
-		//                   name="enablePinObjects"
-		//                   disabled={!exhibition?.enableSpawnAndMoveMedia}
-		//                   checked={exhibition ? exhibition.enablePinObjects : false}
-		//                   onChange={handleChange}
-		//                 />
-		//                 <span className="slider round" />
-		//               </label>
-		//             </div>
-		//             <div style={{ float: "left" }}>
-		//               <span>{t("manager.POPUP_EXHIBITION__PIN_OBJECTS")}</span>
-		//             </div>
-		//           </div>
-		//           <div style={{ position: "relative", width: "100%", height: "40px" }}>
-		//             <div style={{ width: "150px", float: "left" }}>
-		//               {/* <ToggleInput
-		//               checked={exhibition?.enableSpawnDrawing}
-		//               name="enableSpawnDrawing"
-		//               onChange={handleChange}
-		//             /> */}
-		//               <label className="switch">
-		//                 <input
-		//                   type="checkbox"
-		//                   name="enableSpawnDrawing"
-		//                   checked={exhibition ? exhibition.enableSpawnDrawing : false}
-		//                   onChange={handleChange}
-		//                 />
-		//                 <span className="slider round" />
-		//               </label>
-		//             </div>
-		//             <div style={{ float: "left" }}>
-		//               <span>{t("manager.POPUP_EXHIBITION__CREATE_DRAWINGS")}</span>
-		//             </div>
-		//           </div>
-		//           <div style={{ position: "relative", width: "100%", height: "40px" }}>
-		//             <div style={{ width: "150px", float: "left" }}>
-		//               {/* <ToggleInput
-		//               checked={exhibition?.enableSpawnEmoji}
-		//               name="enableSpawnEmoji"
-		//               onChange={handleChange}
-		//             /> */}
-		//               <label className="switch">
-		//                 <input
-		//                   type="checkbox"
-		//                   name="enableSpawnEmoji"
-		//                   checked={exhibition ? exhibition.enableSpawnEmoji : false}
-		//                   onChange={handleChange}
-		//                 />
-		//                 <span className="slider round" />
-		//               </label>
-		//             </div>
-		//             <div style={{ float: "left" }}>
-		//               <span>{t("manager.POPUP_EXHIBITION__CREATE_EMOJI")}</span>
-		//             </div>
-		//           </div>
-		//           <div style={{ position: "relative", width: "100%", height: "40px" }}>
-		//             <div style={{ width: "150px", float: "left" }}>
-		//               {/* <ToggleInput
-		//               checked={exhibition?.enableFly}
-		//               name="enableFly"
-		//               onChange={handleChange}
-		//             /> */}
-		//               <label className="switch">
-		//                 <input
-		//                   type="checkbox"
-		//                   name="enableFly"
-		//                   checked={exhibition ? exhibition.enableFly : false}
-		//                   onChange={handleChange}
-		//                 />
-		//                 <span className="slider round" />
-		//               </label>
-		//             </div>
-		//             <div style={{ float: "left" }}>
-		//               <span>{t("manager.POPUP_EXHIBITION__ALLOW_FLY")}</span>
-		//             </div>
-		//           </div>
-		//         </div>
-		//       </form>
-		//     </>
-		//   }
-		//   actions={[
-		//     {
-		//       text: exhibitionType == "edit" ? t("manager.POPUP_EXHIBITION__EDIT") : t("manager.POPUP_EXHIBITION__CREATE"),
-		//       class: "btn-handle",
-		//       callback: () => {
-		//         exhibitionType == "edit" ? handleEdit() : handleCreate();
-		//       }
-		//     },
-		//     {
-		//       text: t("manager.POPUP_EXHIBITION__CANCEL"),
-		//       class: "btn-cancle",
-		//       callback: () => {
-		//         closePopupExhibition();
-		//       }
-		//     }
-		//   ]}
-		//   handleClose={() => {
-		//     closePopupExhibition();
-		//   }}
-		// />
 	);
 };
 

@@ -11,7 +11,7 @@ export interface IExhibition {
 	endDate: string;
 	reservationCount: number;
 	maxSize: number;
-	public: boolean | string | undefined;
+	public: boolean;
 	deleted: boolean;
 	closed: boolean;
 	enableFly: boolean;

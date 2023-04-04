@@ -1,13 +1,13 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { RootState } from "src/app/hooks";
+import { RootState } from "src/app/store";
 import { TModalAction } from "src/types";
 
 type TInitialState = {
 	isActive: boolean;
 	width?: number;
 	title?: string;
-	body?: JSX.Element | JSX.Element[] | null;
+	content?: string;
 	actions?: TModalAction[];
 };
 
@@ -15,7 +15,7 @@ const INITIAL_STATE: TInitialState = {
 	isActive: false,
 	width: 0,
 	title: "",
-	body: null,
+	content: "",
 	actions: [],
 };
 
@@ -31,11 +31,10 @@ const modalSlice = createSlice({
 				isActive: false,
 				width: 0,
 				title: "",
-				body: null,
+				content: null,
 				actions: [],
 			});
 		},
-		// increment: (state, action: PayloadAction<number>) => state + action.payload,
 	},
 });
 

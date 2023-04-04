@@ -6,10 +6,15 @@ import MediaService from "src/api/MediaService";
 import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import defaultImage from "src/assets/larchiveum/default-image.png";
 import { Button, Pagination, Stack, Typography } from "src/components";
+import {
+	getExhibitions,
+	setExhibitions,
+	updateExhibition,
+} from "src/features/exhibition/ExhibitionSlide";
 import { closeModal, openModal } from "src/features/modal/ModalSlice";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserAuthenticationStatus } from "src/features/user/selectors";
-import { IExhibition, IPagination, IParams, IScene } from "src/interfaces";
+import { IParams, IScene } from "src/interfaces";
 
 import Exhibition from "./Exhibition";
 import ExhibitionFormModal from "./ExhibitionFormModal";
@@ -20,19 +25,19 @@ const Exhibitions = (props: Props) => {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 	const isAuthenticatedUser = useAppSelector(getUserAuthenticationStatus);
+	const { data: exhibitions, pages } = useAppSelector(getExhibitions);
 
-	const [exhibitions, setExhibitions] = useState<IExhibition[]>([]);
 	const [params, setParams] = useState<IParams>({
 		page: 1,
 		pageSize: 4,
 	});
-	const [pages, setPages] = useState<IPagination>({});
 	const [scenes, setScenes] = useState<IScene[]>([]);
 	const [shouldActiveExhibitionForm, setShouldActiveExhibitionForm] =
 		useState(false);
 	const [exhibitionType, setExhibitionType] = useState<"create" | "edit">(
 		"create",
 	);
+	const [exhibitionId, setExhibitionId] = useState<number>(0);
 
 	const loadExhibitions = useCallback(async () => {
 		try {
@@ -43,8 +48,13 @@ const Exhibitions = (props: Props) => {
 					isAdmin: 1,
 				});
 				if (res.result === "ok") {
-					setExhibitions(res.data);
-					setPages(res.pages);
+					dispatch(
+						setExhibitions({
+							data: res.data,
+							items: res.items,
+							pages: res.pages,
+						}),
+					);
 				}
 			}
 		} catch (err) {
@@ -84,11 +94,12 @@ const Exhibitions = (props: Props) => {
 	const openPopupExhibition = (type, _id) => {
 		setShouldActiveExhibitionForm(true);
 		setExhibitionType(type);
+		setExhibitionId(_id);
 	};
 
-	const openPopupCustomMedia = (exhibitionId) => {
-		if (exhibitionId) {
-			MediaService.getListMedia(exhibitionId)
+	const openPopupCustomMedia = (id) => {
+		if (id) {
+			MediaService.getListMedia(id)
 				.then((res) => {
 					if (res.result === "ok") {
 						console.log({ res });
@@ -107,22 +118,24 @@ const Exhibitions = (props: Props) => {
 		if (!sceneId) return defaultImage;
 		return scenes.find((scene) => scene.id === sceneId)?.thumbnailUrl || "";
 	};
-
-	const handelTogglePublic = (exhibitionId) => {
-		ExhibitionsService.patchTogglePublic(exhibitionId)
+	const handelTogglePublic = (id) => {
+		ExhibitionsService.patchTogglePublic(id)
 			.then((res) => {
 				if (res.result === "ok") {
-					exhibitions.forEach((exhibition) => {
-						if (exhibition.id === exhibitionId) {
-							exhibition.public = res.data.public;
-							dispatch(
-								showToast({
-									type: "success",
-									message: t("manager.MESSAGE_SUCCESS"),
-								}),
-							);
-						}
-					});
+					dispatch(
+						showToast({
+							type: "success",
+							message: t("manager.MESSAGE_SUCCESS"),
+						}),
+					);
+					dispatch(
+						updateExhibition({
+							id: exhibitionId,
+							dataToUpdate: {
+								public: res.data.public,
+							},
+						}),
+					);
 				} else {
 					dispatch(
 						showToast({
@@ -137,28 +150,18 @@ const Exhibitions = (props: Props) => {
 			});
 	};
 
-	const openPopupPublic = (exhibitionId) => {
+	const openPopupPublic = (id) => {
 		dispatch(
 			openModal({
 				isActive: true,
 				title: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__TITLE"),
-				body: (
-					<div
-						style={{
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-						}}
-					>
-						{t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__MESSAGE")}
-					</div>
-				),
+				content: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__MESSAGE"),
 				actions: [
 					{
 						text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CHANGE"),
 						className: "btn1",
 						callback: () => {
-							handelTogglePublic(exhibitionId);
+							handelTogglePublic(id);
 						},
 					},
 					{
@@ -173,12 +176,12 @@ const Exhibitions = (props: Props) => {
 		);
 	};
 
-	const handelCloseRoom = (exhibitionId) => {
-		ExhibitionsService.closeOneExhibition(exhibitionId)
+	const handelCloseRoom = (id) => {
+		ExhibitionsService.closeOneExhibition(id)
 			.then((res) => {
 				if (res.result === "ok") {
 					exhibitions.forEach((exhibition) => {
-						if (exhibition.id === exhibitionId) {
+						if (exhibition.id === id) {
 							exhibition.closed = res.data.closed;
 							dispatch(
 								showToast({
@@ -203,28 +206,18 @@ const Exhibitions = (props: Props) => {
 			});
 	};
 
-	const openPopupCloseRoom = (exhibitionId) => {
+	const openPopupCloseRoom = (id) => {
 		dispatch(
 			openModal({
 				isActive: true,
 				title: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__TITLE"),
-				body: (
-					<div
-						style={{
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-						}}
-					>
-						{t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__MESSAGE")}
-					</div>
-				),
+				content: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__MESSAGE"),
 				actions: [
 					{
 						text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CLOSE"),
 						className: "",
 						callback: () => {
-							handelCloseRoom(exhibitionId);
+							handelCloseRoom(id);
 						},
 					},
 					{
@@ -292,28 +285,17 @@ const Exhibitions = (props: Props) => {
 				/>
 			</Stack>
 
-			<ExhibitionFormModal
-				isActive={shouldActiveExhibitionForm}
-				setIsActive={setShouldActiveExhibitionForm}
-				type={exhibitionType}
-				scenes={scenes}
-			/>
+			{shouldActiveExhibitionForm && (
+				<ExhibitionFormModal
+					isActive={shouldActiveExhibitionForm}
+					setIsActive={setShouldActiveExhibitionForm}
+					type={exhibitionType}
+					exhibitionId={exhibitionId}
+					scenes={scenes}
+				/>
+			)}
 		</section>
 	);
 };
-
-("dasdsadasd");
-0;
-0;
-1;
-0;
-0;
-0;
-("06/04/2023 00:00:00");
-20;
-("dsad");
-1;
-("AoKTb9H");
-("05/04/2023 00:00:00");
 
 export default Exhibitions;

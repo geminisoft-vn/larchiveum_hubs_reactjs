@@ -6,6 +6,7 @@ import { closeModal } from "src/features/modal/ModalSlice";
 import { TModalAction } from "src/types";
 
 import Button from "../Button";
+import Stack from "../Stack";
 
 type Props = {
 	isActive: boolean;
@@ -95,7 +96,9 @@ const ModalText = (props: ModalTextProps) => {
 	const { isActive, width, title, content, actions } = props;
 	return (
 		<Modal isActive={isActive} width={width} title={title} actions={actions}>
-			{content}
+			<Stack direction="row" justifyContent="center">
+				{content}
+			</Stack>
 		</Modal>
 	);
 };

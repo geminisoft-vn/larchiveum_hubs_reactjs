@@ -44,10 +44,10 @@ class ExhibitionsService {
 		});
 	}
 
-	static putUpdateOne(data) {
+	static putUpdateOne(id, data): Promise<IAxiosResponse<IExhibition>> {
 		return request({
 			method: "PUT",
-			url: `/v1/auth/exhibitions/${data.id}`,
+			url: `/v1/auth/exhibitions/${id}`,
 			data,
 		});
 	}

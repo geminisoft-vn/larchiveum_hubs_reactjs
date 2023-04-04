@@ -7,6 +7,7 @@ import moment, { Moment } from "moment";
 
 import { IExhibition } from "src/interfaces";
 import { IRoom } from "src/interfaces/IRoom";
+import { DATE_TIME_FORMAT } from "src/utilities/constants";
 
 import TextInput from "./TextInput";
 
@@ -55,7 +56,7 @@ const DateTimePicker = forwardRef<HTMLInputElement, Props>((props, ref) => {
 						if (onBlur) onBlur(e);
 					}}
 					readOnly
-					placeholder="DD/MM/YYYY HH:mm:SS"
+					placeholder={DATE_TIME_FORMAT}
 				/>
 
 				<div
@@ -70,7 +71,7 @@ const DateTimePicker = forwardRef<HTMLInputElement, Props>((props, ref) => {
 						orientation="landscape"
 						value={date}
 						onChange={(newDate: Moment | null) => {
-							handleChangeDate(newDate?.format("DD/MM/YYYY HH:mm:SS") || "");
+							handleChangeDate(newDate?.format(DATE_TIME_FORMAT) || "");
 						}}
 						onError={() => setEnabled(false)}
 						onAccept={() => setEnabled(false)}
