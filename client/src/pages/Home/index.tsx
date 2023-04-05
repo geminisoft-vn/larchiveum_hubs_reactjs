@@ -82,6 +82,7 @@ const HomePage = () => {
 				alignItems="center"
 				justifyContent="between"
 				gap={2}
+				className="h-full"
 			>
 				{/* <Filter
 					sortNewest={sortNewest}

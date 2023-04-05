@@ -76,7 +76,7 @@ const ExhibitionAction = (props) => {
 					},
 					{
 						text: t("home.POPUP_CONFIRM_RESERVATION__CANCEL"),
-						className: "btn2",
+						className: "",
 						callback: () => {
 							handleClosePopup();
 						},
@@ -113,7 +113,7 @@ const ExhibitionAction = (props) => {
 		return (
 			<button
 				key="will-open-on"
-				className="rounded-lg border bg-yellow-600 p-2 text-white"
+				className="rounded-lg bg-yellow-600 p-2 text-white"
 				onClick={openPopupNotification}
 			>
 				{t("home.WILL_OPEN_ON")}{" "}
@@ -131,7 +131,7 @@ const ExhibitionAction = (props) => {
 		return (
 			<button
 				key="reservation"
-				className="rounded-lg border bg-yellow-600 p-2 text-white"
+				className="rounded-lg bg-yellow-600 p-2 text-white"
 				onClick={openPopupReservation}
 			>
 				{t("home.MAKE_RESERVATION")}
@@ -147,7 +147,7 @@ const ExhibitionAction = (props) => {
 		return (
 			<button
 				key="enter"
-				className="rounded-lg border bg-blue-600 p-2 text-white"
+				className="rounded-lg bg-blue-600 p-2 text-white"
 				onClick={() => {
 					window.open(`${APP_ROOT}/${exhibition.roomId}`, "_blank");
 				}}
@@ -165,7 +165,7 @@ const ExhibitionAction = (props) => {
 		return (
 			<button
 				key="exhibition-full"
-				className="rounded-lg border bg-red-600 p-2 text-white"
+				className="rounded-lg bg-red-600 p-2 text-white"
 			>
 				{t("home.EXHIBITION_FULL")}
 			</button>
@@ -176,7 +176,7 @@ const ExhibitionAction = (props) => {
 		return (
 			<button
 				key="signin"
-				className="rounded-lg border bg-purple-600 p-2 text-white"
+				className="rounded-lg bg-purple-600 p-2 text-white"
 				onClick={() => navigate("/auth/signin")}
 			>
 				{t("home.SIGN_IN")}

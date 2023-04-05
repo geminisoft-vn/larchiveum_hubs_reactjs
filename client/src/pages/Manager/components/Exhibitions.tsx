@@ -376,7 +376,7 @@ const Exhibitions = (props: Props) => {
 				>
 					+
 				</Button>
-				<Stack direction="col" gap={2} className="w-full">
+				<Stack direction="col" gap={4} className="w-full">
 					{exhibitions &&
 						exhibitions.map((exhibition) => {
 							return (
