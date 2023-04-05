@@ -130,7 +130,7 @@ const Exhibitions = (props: Props) => {
 					);
 					dispatch(
 						updateExhibition({
-							id: exhibitionId,
+							id,
 							dataToUpdate: {
 								public: res.data.public,
 							},
@@ -159,14 +159,14 @@ const Exhibitions = (props: Props) => {
 				actions: [
 					{
 						text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CHANGE"),
-						className: "btn1",
+						className: "",
 						callback: () => {
 							handelTogglePublic(id);
 						},
 					},
 					{
 						text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CANCEL"),
-						className: "btn2",
+						className: "",
 						callback: handleClosePopup,
 					},
 				],
@@ -233,7 +233,64 @@ const Exhibitions = (props: Props) => {
 		);
 	};
 
-	const openPopupOpenRoom = () => {};
+	const handelOpenRoom = (id) => {
+		ExhibitionsService.openOneExhibition(id)
+			.then((res) => {
+				if (res.result === "ok") {
+					dispatch(
+						showToast({
+							type: "success",
+							message: t("manager.MESSAGE_SUCCESS"),
+						}),
+					);
+					dispatch(
+						updateExhibition({
+							id,
+							dataToUpdate: {
+								closed: res.data.closed,
+							},
+						}),
+					);
+				}
+			})
+			.catch(() => {
+				dispatch(
+					showToast({
+						type: "error",
+						message: t("manager.OPEN_EXHIBITION_ERROR"),
+					}),
+				);
+			})
+			.finally(() => {
+				handleClosePopup();
+			});
+	};
+
+	const openPopupOpenRoom = (id) => {
+		dispatch(
+			openPopup({
+				isActive: true,
+				title: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__TITLE"),
+				content: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__MESSAGE"),
+				actions: [
+					{
+						text: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__CLOSE"),
+						className: "",
+						callback: () => {
+							handelOpenRoom(id);
+						},
+					},
+					{
+						text: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__CANCEL"),
+						className: "",
+						callback: () => {
+							handleClosePopup();
+						},
+					},
+				],
+			}),
+		);
+	};
 
 	const handelToggleDeleteRoom = (id) => {
 		ExhibitionsService.deleteOneExhibition(id)

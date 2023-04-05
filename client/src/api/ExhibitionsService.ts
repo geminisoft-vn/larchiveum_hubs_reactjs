@@ -79,7 +79,7 @@ class ExhibitionsService {
 		});
 	}
 
-	static openOneExhibition(id) {
+	static openOneExhibition(id): Promise<IAxiosResponse<{ closed: boolean }>> {
 		return request({
 			method: "POST",
 			url: `/v1/auth/exhibitions/open`,

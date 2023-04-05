@@ -18,7 +18,7 @@ const Popup = (props) => {
 	return ReactDOM.createPortal(
 		<div
 			className={clsx(
-				"fixed top-1/2 left-1/2 right-0 z-[999] flex h-[calc(100%-1rem)] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-y-auto overflow-x-hidden p-4 transition-all duration-200",
+				"fixed top-1/2 left-1/2 right-0 z-[999] flex h-[calc(100%-1rem)] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-y-auto overflow-x-hidden p-4 drop-shadow-2xl transition-all duration-200",
 				isActive ? "opacity-1 visible" : "invisible opacity-0",
 			)}
 			style={{
@@ -26,7 +26,7 @@ const Popup = (props) => {
 			}}
 		>
 			<div className="relative flex h-full w-full flex-1 items-center justify-center">
-				<div className="relative flex-1 rounded-lg bg-white shadow-lg dark:bg-gray-700">
+				<div className="relative flex-1 rounded-lg bg-white dark:bg-gray-700">
 					<button
 						type="button"
 						className="absolute top-3 right-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 "

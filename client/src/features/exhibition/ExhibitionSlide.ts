@@ -24,7 +24,6 @@ const exhibitionSlice = createSlice({
 		updateExhibition: (state, action) => {
 			const { id, dataToUpdate } = action.payload;
 			const idx = state.data.findIndex((obj) => obj.id === id);
-			console.log({ idx });
 			if (idx > -1) {
 				state.data[idx] = { ...state.data[idx], ...dataToUpdate };
 			}
@@ -37,7 +36,7 @@ export const getExhibitions = createSelector(
 	(exhibition) => exhibition,
 );
 
-export const getExhibition = (exhibitionId) =>
+export const getExhibition = (exhibitionId: number) =>
 	createSelector(
 		(state: RootState) => state.exhibition.data,
 		(data) => {

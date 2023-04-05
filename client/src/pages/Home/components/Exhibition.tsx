@@ -61,49 +61,57 @@ const Exhibition = (props) => {
 			</Stack>
 
 			<Stack
-				className="absolute bottom-16 flex items-center gap-2 px-4"
-				direction="row"
-				alignItems="center"
+				className="absolute bottom-16 flex items-start gap-2 px-4"
+				direction="col"
+				alignItems="start"
+				justifyContent="start"
 				gap={1}
 			>
-				<GroupRoundedIcon
-					style={{
-						color: "#fff",
-					}}
-				/>
-				<Typography className="font-bold text-white">
-					{exhibition.reservationCount}/{exhibition.maxSize}
-				</Typography>
-			</Stack>
+				<Stack
+					direction="row"
+					alignItems="center"
+					justifyContent="start"
+					gap={2}
+				>
+					<GroupRoundedIcon
+						style={{
+							color: "#fff",
+						}}
+					/>
+					<Typography className="font-bold text-white">
+						{exhibition.reservationCount}/{exhibition.maxSize}
+					</Typography>
+				</Stack>
 
-			<Stack className="bottom-4" direction="col" gap={1}>
-				{exhibition.startDate && (
-					<Stack direction="row" alignItems="center" gap={1}>
-						<CalendarMonthRoundedIcon />
-						<Typography>
-							{moment
-								.utc(exhibition.startDate)
-								.local()
-								.locale(getLanguage())
-								.format("L LT")}{" "}
-							{" (start)"}
-						</Typography>
-					</Stack>
-				)}
+				<Stack className="" direction="col" gap={1}>
+					{exhibition.startDate && (
+						<Stack direction="row" alignItems="center" gap={1}>
+							<CalendarMonthRoundedIcon className="text-white" />
+							<Typography className="font-bold text-white shadow-md">
+								{moment
+									.utc(exhibition.startDate)
+									.local()
+									.locale(getLanguage())
+									.format("L LT")}{" "}
+								{" (start)"}
+							</Typography>
+						</Stack>
+					)}
 
-				{exhibition.endDate && (
-					<Stack direction="row" alignItems="center" gap={1}>
-						<CalendarMonthRoundedIcon />
-						<Typography>
-							{moment
-								.utc(exhibition.endDate)
-								.local()
-								.locale(getLanguage())
-								.format("L LT")}{" "}
-							{" (end)"}
-						</Typography>
-					</Stack>
-				)}
+					{exhibition.endDate && (
+						<Stack direction="row" alignItems="center" gap={1}>
+							<CalendarMonthRoundedIcon className="text-white" />
+							<Typography className="font-bold text-white shadow-md">
+								{moment
+									.utc(exhibition.endDate)
+									.local()
+									.locale(getLanguage())
+									.format("L LT")}{" "}
+								{" (end)"}
+							</Typography>
+						</Stack>
+					)}
+				</Stack>
 			</Stack>
 
 			<div className="absolute bottom-2 left-1/2 -translate-x-1/2">

@@ -5,8 +5,7 @@ import moment from "moment";
 import ReserveService from "src/api/ReserveService";
 import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import { updateExhibition } from "src/features/exhibition/ExhibitionSlide";
-import { closeModal } from "src/features/modal/ModalSlice";
-import { openPopup } from "src/features/popup/PopupSlide";
+import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserInfo } from "src/features/user/selectors";
 import { APP_ROOT } from "src/utilities/constants";
@@ -22,7 +21,7 @@ const ExhibitionAction = (props) => {
 	const user = useAppSelector(getUserInfo);
 
 	const handleClosePopup = () => {
-		dispatch(closeModal());
+		dispatch(closePopup());
 	};
 
 	const handleReservate = () => {
@@ -108,15 +107,14 @@ const ExhibitionAction = (props) => {
 
 	if (
 		exhibition.startDate &&
-		exhibition.startDate > new Date() &&
+		moment(exhibition.startDate).isAfter(moment()) &&
 		(exhibition.public || exhibition.reservated)
 	) {
 		return (
 			<button
 				key="will-open-on"
-				className="rounded-lg border bg-yellow-500 p-2 text-white"
+				className="rounded-lg border bg-yellow-600 p-2 text-white"
 				onClick={openPopupNotification}
-				data-id-exhibition={exhibition.id}
 			>
 				{t("home.WILL_OPEN_ON")}{" "}
 				{moment(exhibition.startDate).format("MMMM DD")}
@@ -133,9 +131,8 @@ const ExhibitionAction = (props) => {
 		return (
 			<button
 				key="reservation"
-				className="rounded-lg border bg-yellow-500 p-2 text-white"
+				className="rounded-lg border bg-yellow-600 p-2 text-white"
 				onClick={openPopupReservation}
-				data-id-exhibition={exhibition.id}
 			>
 				{t("home.MAKE_RESERVATION")}
 			</button>
@@ -144,13 +141,13 @@ const ExhibitionAction = (props) => {
 
 	if (
 		!exhibition.startDate ||
-		(exhibition.startDate <= new Date() &&
+		(moment(exhibition.startDate).isBefore(moment()) &&
 			(exhibition.public || exhibition.reservated))
 	) {
 		return (
 			<button
 				key="enter"
-				className="rounded-lg border bg-blue-500 p-2 text-white"
+				className="rounded-lg border bg-blue-600 p-2 text-white"
 				onClick={() => {
 					window.open(`${APP_ROOT}/${exhibition.roomId}`, "_blank");
 				}}
@@ -168,7 +165,7 @@ const ExhibitionAction = (props) => {
 		return (
 			<button
 				key="exhibition-full"
-				className="rounded-lg border bg-red-500 p-2 text-white"
+				className="rounded-lg border bg-red-600 p-2 text-white"
 			>
 				{t("home.EXHIBITION_FULL")}
 			</button>
@@ -179,7 +176,7 @@ const ExhibitionAction = (props) => {
 		return (
 			<button
 				key="signin"
-				className="rounded-lg border bg-purple-500 p-2 text-white"
+				className="rounded-lg border bg-purple-600 p-2 text-white"
 				onClick={() => navigate("/auth/signin")}
 			>
 				{t("home.SIGN_IN")}
