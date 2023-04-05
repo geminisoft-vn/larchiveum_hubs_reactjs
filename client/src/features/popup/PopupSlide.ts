@@ -19,14 +19,14 @@ const INITIAL_STATE: TInitialState = {
 	actions: [],
 };
 
-const modalSlice = createSlice({
-	name: "modal",
+const popupSlice = createSlice({
+	name: "popup",
 	initialState: INITIAL_STATE,
 	reducers: {
-		openModal: (state, action: PayloadAction<TInitialState>) => {
+		openPopup: (state, action: PayloadAction<TInitialState>) => {
 			Object.assign(state, action.payload);
 		},
-		closeModal: (state) => {
+		closePopup: (state) => {
 			Object.assign(state, {
 				isActive: false,
 				width: 0,
@@ -38,10 +38,10 @@ const modalSlice = createSlice({
 	},
 });
 
-export const getModalInfo = createSelector(
-	(state: RootState) => state.modal,
-	(modal) => modal,
+export const getPopupInfo = createSelector(
+	(state: RootState) => state.popup,
+	(popup) => popup,
 );
 
-export const { openModal, closeModal } = modalSlice.actions;
-export default modalSlice.reducer;
+export const { openPopup, closePopup } = popupSlice.actions;
+export default popupSlice.reducer;

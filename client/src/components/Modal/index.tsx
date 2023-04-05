@@ -6,14 +6,13 @@ import { closeModal } from "src/features/modal/ModalSlice";
 import { TModalAction } from "src/types";
 
 import Button from "../Button";
-import Stack from "../Stack";
 
 type Props = {
 	isActive: boolean;
 	setIsActive?: (_v: boolean) => void;
-	width?: number;
+	width?: number | string;
 	minHeight?: number;
-	maxHeight?: number;
+	maxHeight?: number | "max-content";
 	title?: string;
 	children: JSX.Element | JSX.Element[] | string | null;
 	actions?: TModalAction[];
@@ -49,7 +48,7 @@ const Modal = (props: Props) => {
 			)}
 		>
 			<div
-				className="relative h-full rounded-lg border bg-white shadow-lg"
+				className="relative rounded-lg border bg-white shadow-lg"
 				style={{
 					width: `${width}px`,
 					minHeight: `${minHeight}px`,
@@ -93,7 +92,7 @@ const Modal = (props: Props) => {
 									onClick={() => {
 										if (action.callback) action.callback();
 									}}
-									form={action.form}
+									important={action.important}
 									className={action.className}
 								>
 									{action.text}
@@ -112,33 +111,5 @@ Modal.defaultProps = {
 	minHeight: 512,
 	maxHeight: 512,
 };
-
-type ModalTextProps = {
-	isActive: boolean;
-	width?: number;
-	title?: string;
-	content: string;
-	actions?: TModalAction[];
-};
-
-const ModalText = (props: ModalTextProps) => {
-	const { isActive, width, title, content, actions } = props;
-	return (
-		<Modal isActive={isActive} width={width} title={title} actions={actions}>
-			<Stack direction="row" justifyContent="center">
-				{content}
-			</Stack>
-		</Modal>
-	);
-};
-
-ModalText.defaultProps = {
-	width: 512,
-
-	title: "",
-	actions: [],
-};
-
-Modal.Text = ModalText;
 
 export default Modal;
