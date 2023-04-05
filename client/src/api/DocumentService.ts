@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { IAxiosResponse, IDocument } from "src/interfaces";
 import request from "src/utilities/request";
 
 class DocumentService {
@@ -6,7 +7,7 @@ class DocumentService {
 		return request.get("/v1/auth/documents", { params });
 	}
 
-	static getOne(id) {
+	static getOne(id): Promise<IAxiosResponse<IDocument>> {
 		return request.get(`/v1/auth/documents/${id}`);
 	}
 

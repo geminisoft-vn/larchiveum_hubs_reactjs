@@ -1,8 +1,6 @@
 import { useTranslation } from "react-i18next";
 import {
-	FaCodepen,
 	FaLink,
-	FaListOl,
 	FaRegCalendarAlt,
 	FaTools,
 	FaUserFriends,

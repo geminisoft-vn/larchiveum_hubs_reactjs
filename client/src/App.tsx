@@ -5,9 +5,9 @@ import "src/language";
 
 import { useAppSelector } from "./app/hooks";
 import { RootState } from "./app/store";
-import { getModalInfo } from "./features/modal/ModalSlice";
+import { getPopupInfo } from "./features/popup/PopupSlide";
 import { getToastInfo } from "./features/toast/ToastSlice";
-import { Loader, Modal, Toast } from "./components";
+import { Loader, Popup, Toast } from "./components";
 import Router from "./routes";
 
 import "./index.css";
@@ -18,7 +18,7 @@ const App = () => {
 	);
 
 	const { isActive, width, title, content, actions } =
-		useAppSelector(getModalInfo);
+		useAppSelector(getPopupInfo);
 	const {
 		isActive: shouldShowToast,
 		type,
@@ -29,15 +29,13 @@ const App = () => {
 			<Suspense fallback={<Loader />}>
 				<Router />
 			</Suspense>
-			{isActive && (
-				<Modal.Text
-					isActive={isActive}
-					content={content}
-					width={width}
-					title={title}
-					actions={actions}
-				/>
-			)}
+			<Popup
+				isActive={isActive}
+				content={content || ""}
+				width={width || 512}
+				title={title}
+				actions={actions}
+			/>
 			{isActiveLoader && <Loader />}
 			{shouldShowToast && (
 				<Toast isActive={shouldShowToast} type={type} message={message} />

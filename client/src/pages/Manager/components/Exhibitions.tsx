@@ -11,7 +11,7 @@ import {
 	setExhibitions,
 	updateExhibition,
 } from "src/features/exhibition/ExhibitionSlide";
-import { closeModal, openModal } from "src/features/modal/ModalSlice";
+import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserAuthenticationStatus } from "src/features/user/selectors";
 import { IParams, IScene } from "src/interfaces";
@@ -87,8 +87,8 @@ const Exhibitions = (props: Props) => {
 		}
 	}, []);
 
-	const handleCloseModal = () => {
-		dispatch(closeModal());
+	const handleClosePopup = () => {
+		dispatch(closePopup());
 	};
 
 	const openPopupExhibition = (type, _id) => {
@@ -109,7 +109,7 @@ const Exhibitions = (props: Props) => {
 					console.log({ err });
 				})
 				.finally(() => {
-					handleCloseModal();
+					handleClosePopup();
 				});
 		}
 	};
@@ -146,13 +146,13 @@ const Exhibitions = (props: Props) => {
 				}
 			})
 			.finally(() => {
-				handleCloseModal();
+				handleClosePopup();
 			});
 	};
 
 	const openPopupPublic = (id) => {
 		dispatch(
-			openModal({
+			openPopup({
 				isActive: true,
 				title: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__TITLE"),
 				content: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__MESSAGE"),
@@ -167,9 +167,7 @@ const Exhibitions = (props: Props) => {
 					{
 						text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CANCEL"),
 						className: "btn2",
-						callback: () => {
-							handleCloseModal();
-						},
+						callback: handleClosePopup,
 					},
 				],
 			}),
@@ -205,13 +203,13 @@ const Exhibitions = (props: Props) => {
 				);
 			})
 			.finally(() => {
-				handleCloseModal();
+				handleClosePopup();
 			});
 	};
 
 	const openPopupCloseRoom = (id) => {
 		dispatch(
-			openModal({
+			openPopup({
 				isActive: true,
 				title: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__TITLE"),
 				content: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__MESSAGE"),
@@ -227,7 +225,7 @@ const Exhibitions = (props: Props) => {
 						text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CANCEL"),
 						className: "",
 						callback: () => {
-							handleCloseModal();
+							handleClosePopup();
 						},
 					},
 				],
@@ -269,13 +267,13 @@ const Exhibitions = (props: Props) => {
 				}
 			})
 			.finally(() => {
-				handleCloseModal();
+				handleClosePopup();
 			});
 	};
 
 	const openDeleteRoom = (id) => {
 		dispatch(
-			openModal({
+			openPopup({
 				isActive: true,
 				title: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__TITLE"),
 				content: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__MESSAGE"),
@@ -291,7 +289,7 @@ const Exhibitions = (props: Props) => {
 						text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CANCEL"),
 						className: "",
 						callback: () => {
-							handleCloseModal();
+							handleClosePopup();
 						},
 					},
 				],
@@ -349,15 +347,13 @@ const Exhibitions = (props: Props) => {
 				/>
 			</Stack>
 
-			{shouldActiveExhibitionForm && (
-				<ExhibitionFormModal
-					isActive={shouldActiveExhibitionForm}
-					setIsActive={setShouldActiveExhibitionForm}
-					type={exhibitionType}
-					exhibitionId={exhibitionId}
-					scenes={scenes}
-				/>
-			)}
+			<ExhibitionFormModal
+				isActive={shouldActiveExhibitionForm}
+				setIsActive={setShouldActiveExhibitionForm}
+				type={exhibitionType}
+				exhibitionId={exhibitionId}
+				scenes={scenes}
+			/>
 		</section>
 	);
 };

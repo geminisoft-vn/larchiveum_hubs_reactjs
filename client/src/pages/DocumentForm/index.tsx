@@ -1,6 +1,3 @@
-// @ts-nocheck
-/* eslint-disable */
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -9,6 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
 import { Editor } from "@tinymce/tinymce-react";
 
+import DocumentService from "src/api/DocumentService";
+import MediaService from "src/api/MediaService";
 import {
 	Button,
 	FormContainer,
@@ -17,10 +16,10 @@ import {
 	Stack,
 	TextInput,
 } from "src/components";
-import { closeModal, openModal } from "src/features/modal/ModalSlice";
+import { closeModal } from "src/features/modal/ModalSlice";
+import { openPopup } from "src/features/popup/PopupSlide";
 import { updateProgress } from "src/features/progress/ProgressSlice";
-import DocumentService from "src/api/DocumentService";
-import MediaService from "src/api/MediaService";
+import { IDocument } from "src/interfaces";
 import { tinyApp } from "src/utilities/constants";
 
 const DocumentForm = () => {
@@ -32,7 +31,7 @@ const DocumentForm = () => {
 
 	const [editorData, setEditorData] = useState<string>("");
 
-	const { handleSubmit, register } = useForm({
+	const { handleSubmit, register } = useForm<Partial<IDocument>>({
 		defaultValues: async () => {
 			const res = await DocumentService.getOne(documentId);
 			if (res.result === "ok") {
@@ -78,13 +77,13 @@ const DocumentForm = () => {
 		input.addEventListener("change", (e) => {
 			const { files } = e.target as HTMLInputElement;
 			if (files) {
-				dispatch(
-					openModal({
-						isActive: true,
-						title: files[0].name,
-						body: <Progress />,
-					}),
-				);
+				// dispatch(
+				// 	openPopup({
+				// 		isActive: true,
+				// 		title: files[0].name,
+				// 		content: <Progress />,
+				// 	}),
+				// );
 				MediaService.upload(
 					files[0],
 					(progress) => {
@@ -112,7 +111,7 @@ const DocumentForm = () => {
 				<Stack
 					direction="row"
 					alignItems="center"
-					justfyContent="between"
+					justifyContent="between"
 					className="w-full"
 				>
 					<Button beforeIcon={<LeftOutlined />} onClick={handleGoBack}>

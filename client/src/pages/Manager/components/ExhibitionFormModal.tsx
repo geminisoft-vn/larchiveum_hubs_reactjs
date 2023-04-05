@@ -232,279 +232,276 @@ const ExhibitionFormModal = (props: Props) => {
 	}, []);
 
 	return (
-		<FormContainer onSubmit={handleSaveForm}>
-			<Modal
-				isActive={isActive}
-				setIsActive={setIsActive}
-				title={
-					type === "edit"
-						? t("manager.POPUP_EXHIBITION__EDIT_TITLE")
-						: t("manager.POPUP_EXHIBITION__CREATE_TITLE")
-				}
-				actions={[
-					{
-						text:
-							type === "edit"
-								? t("manager.POPUP_EXHIBITION__EDIT")
-								: t("manager.POPUP_EXHIBITION__CREATE"),
-						className: "",
-						callback: handleSaveForm,
-					},
-					{
-						text: t("__BUTTON__.CLOSE"),
-						className: "",
-						callback: () => handleCloseModal(),
-					},
-				]}
-			>
-				<div className="grid grid-cols-12 gap-2">
-					<div className="col-span-4">
-						<FormItem
-							label={t("manager.POPUP_EXHIBITION__NAME_LABEL")}
-							error={errors.name?.message}
-							renderInput={() => {
-								return (
-									<TextInput
-										placeholder={t(
-											"manager.POPUP_EXHIBITION__NAME_PLACEHOLDER",
-										)}
-										{...register("name")}
-									/>
-								);
-							}}
-						/>
-					</div>
-
-					<div className="col-span-4">
-						<FormItem
-							label={t("manager.POPUP_EXHIBITION__START_DATE_LABEL")}
-							error={errors.startDate?.message}
-							renderInput={() => {
-								return (
-									<DateTimePicker
-										{...register("startDate")}
-										date={moment(getValues("startDate"))}
-										handleChangeDate={(newDate) =>
-											setValue("startDate", newDate)
-										}
-									/>
-								);
-							}}
-						/>
-					</div>
-					<div className="col-span-4">
-						<FormItem
-							label={t("manager.POPUP_EXHIBITION__END_DATE_LABEL")}
-							error={errors.endDate?.message}
-							renderInput={() => {
-								return (
-									<DateTimePicker
-										{...register("endDate")}
-										date={moment(getValues("endDate"))}
-										handleChangeDate={(newDate) => setValue("endDate", newDate)}
-									/>
-								);
-							}}
-						/>
-					</div>
-					<div className="col-span-6">
-						<Stack
-							direction="col"
-							justifyContent="between"
-							gap={2}
-							className="h-full"
-						>
-							<FormItem
-								label={t("manager.POPUP_EXHIBITION__DESCRIPTION_LABEL")}
-								error={errors.description?.message}
-								renderInput={() => {
-									return (
-										<Textarea
-											rows={7}
-											placeholder={t(
-												"manager.POPUP_EXHIBITION__DESCRIPTION_PLACEHOLDER",
-											)}
-											{...register("description")}
-										/>
-									);
-								}}
-							/>
-
-							<Stack direction="row" justifyContent="between">
-								<FormItem
-									label={t("manager.POPUP_EXHIBITION__PUBLIC")}
-									renderInput={() => {
-										return (
-											<Controller
-												control={control}
-												name="public"
-												render={({ field }) => {
-													return <Switch {...field} />;
-												}}
-											/>
-										);
-									}}
+		<Modal
+			isActive={isActive}
+			setIsActive={setIsActive}
+			width={1024}
+			maxHeight="max-content"
+			title={
+				type === "edit"
+					? t("manager.POPUP_EXHIBITION__EDIT_TITLE")
+					: t("manager.POPUP_EXHIBITION__CREATE_TITLE")
+			}
+			actions={[
+				{
+					text:
+						type === "edit"
+							? t("manager.POPUP_EXHIBITION__EDIT")
+							: t("manager.POPUP_EXHIBITION__CREATE"),
+					className: "",
+					callback: handleSaveForm,
+				},
+				{
+					text: t("__BUTTON__.CLOSE"),
+					className: "",
+					callback: () => handleCloseModal(),
+				},
+			]}
+		>
+			<div className="grid grid-cols-12 gap-2 p-4">
+				<div className="col-span-4">
+					<FormItem
+						label={t("manager.POPUP_EXHIBITION__NAME_LABEL")}
+						error={errors.name?.message}
+						renderInput={() => {
+							return (
+								<TextInput
+									placeholder={t("manager.POPUP_EXHIBITION__NAME_PLACEHOLDER")}
+									{...register("name")}
 								/>
-
-								<FormItem
-									label={t("manager.POPUP_EXHIBITION__MAX_SIZE")}
-									error={errors.maxSize?.message}
-									renderInput={() => {
-										return <TextInput type="number" {...register("maxSize")} />;
-									}}
-								/>
-							</Stack>
-						</Stack>
-					</div>
-					<div className="col-span-6">
-						<Stack direction="col" gap={2}>
-							{scenes && scenes.length > 0 && (
-								<Controller
-									name="sceneId"
-									control={control}
-									render={() => {
-										return (
-											<AutoComplete
-												label={t("manager.POPUP_EXHIBITION__LIST_SCENE_LABEL")}
-												defaultValue={getValues("sceneId") || ""}
-												{...register("sceneId")}
-												options={scenes}
-												handleChange={(sceneId) => {
-													setValue("sceneId", sceneId || "af7NxRw");
-													setSceneThumbnail(getSceneThumnail(sceneId));
-												}}
-											/>
-										);
-									}}
-								/>
-							)}
-							<img
-								className="rounded-lg object-cover"
-								src={sceneThumnail || defaultImage}
-								alt=""
-							/>
-						</Stack>
-					</div>
-
-					<div className="col-span-12">
-						<Stack
-							direction="col"
-							alignItems="start"
-							justifyContent="start"
-							gap={2}
-						>
-							<FormItem
-								label={t("manager.POPUP_EXHIBITION__CREATE_AND_MOVE_OBJECTS")}
-								placement="right"
-								renderInput={() => {
-									return (
-										<Controller
-											control={control}
-											name="enableSpawnAndMoveMedia"
-											render={({ field }) => {
-												return <Switch {...field} />;
-											}}
-										/>
-									);
-								}}
-							/>
-
-							<Stack className="ml-12" direction="col" gap={2}>
-								<FormItem
-									label={t("manager.POPUP_EXHIBITION__CREATE_CAMERAS")}
-									placement="right"
-									renderInput={() => {
-										return (
-											<Controller
-												control={control}
-												name="enableSpawnCamera"
-												render={({ field }) => {
-													return (
-														<Switch
-															{...field}
-															disabled={!watch("enableSpawnAndMoveMedia")}
-														/>
-													);
-												}}
-											/>
-										);
-									}}
-								/>
-
-								<FormItem
-									label={t("manager.POPUP_EXHIBITION__PIN_OBJECTS")}
-									placement="right"
-									renderInput={() => {
-										return (
-											<Controller
-												control={control}
-												name="enablePinObjects"
-												render={({ field }) => {
-													return (
-														<Switch
-															{...field}
-															disabled={!watch("enableSpawnAndMoveMedia")}
-														/>
-													);
-												}}
-											/>
-										);
-									}}
-								/>
-							</Stack>
-
-							<FormItem
-								label={t("manager.POPUP_EXHIBITION__CREATE_DRAWINGS")}
-								placement="right"
-								renderInput={() => {
-									return (
-										<Controller
-											control={control}
-											name="enableSpawnDrawing"
-											render={({ field }) => {
-												return <Switch {...field} />;
-											}}
-										/>
-									);
-								}}
-							/>
-
-							<FormItem
-								label={t("manager.POPUP_EXHIBITION__CREATE_EMOJI")}
-								placement="right"
-								renderInput={() => {
-									return (
-										<Controller
-											control={control}
-											name="enableSpawnEmoji"
-											render={({ field }) => {
-												return <Switch {...field} />;
-											}}
-										/>
-									);
-								}}
-							/>
-
-							<FormItem
-								label={t("manager.POPUP_EXHIBITION__ALLOW_FLY")}
-								placement="right"
-								renderInput={() => {
-									return (
-										<Controller
-											control={control}
-											name="enableFly"
-											render={({ field }) => {
-												return <Switch {...field} />;
-											}}
-										/>
-									);
-								}}
-							/>
-						</Stack>
-					</div>
+							);
+						}}
+					/>
 				</div>
-			</Modal>
-		</FormContainer>
+
+				<div className="col-span-4">
+					<FormItem
+						label={t("manager.POPUP_EXHIBITION__START_DATE_LABEL")}
+						error={errors.startDate?.message}
+						renderInput={() => {
+							return (
+								<DateTimePicker
+									{...register("startDate")}
+									date={moment(getValues("startDate"))}
+									handleChangeDate={(newDate) => setValue("startDate", newDate)}
+								/>
+							);
+						}}
+					/>
+				</div>
+				<div className="col-span-4">
+					<FormItem
+						label={t("manager.POPUP_EXHIBITION__END_DATE_LABEL")}
+						error={errors.endDate?.message}
+						renderInput={() => {
+							return (
+								<DateTimePicker
+									{...register("endDate")}
+									date={moment(getValues("endDate"))}
+									handleChangeDate={(newDate) => setValue("endDate", newDate)}
+								/>
+							);
+						}}
+					/>
+				</div>
+				<div className="col-span-6 h-full">
+					<Stack
+						direction="col"
+						justifyContent="between"
+						gap={2}
+						className="h-full"
+					>
+						<FormItem
+							label={t("manager.POPUP_EXHIBITION__DESCRIPTION_LABEL")}
+							error={errors.description?.message}
+							renderInput={() => {
+								return (
+									<Textarea
+										rows={7}
+										className="h-full"
+										placeholder={t(
+											"manager.POPUP_EXHIBITION__DESCRIPTION_PLACEHOLDER",
+										)}
+										{...register("description")}
+									/>
+								);
+							}}
+						/>
+
+						<Stack direction="row" justifyContent="between">
+							<FormItem
+								label={t("manager.POPUP_EXHIBITION__PUBLIC")}
+								renderInput={() => {
+									return (
+										<Controller
+											control={control}
+											name="public"
+											render={({ field }) => {
+												return <Switch {...field} />;
+											}}
+										/>
+									);
+								}}
+							/>
+
+							<FormItem
+								label={t("manager.POPUP_EXHIBITION__MAX_SIZE")}
+								error={errors.maxSize?.message}
+								renderInput={() => {
+									return <TextInput type="number" {...register("maxSize")} />;
+								}}
+							/>
+						</Stack>
+					</Stack>
+				</div>
+				<div className="col-span-6">
+					<Stack direction="col" gap={2}>
+						{scenes && scenes.length > 0 && (
+							<Controller
+								name="sceneId"
+								control={control}
+								render={() => {
+									return (
+										<AutoComplete
+											label={t("manager.POPUP_EXHIBITION__LIST_SCENE_LABEL")}
+											defaultValue={getValues("sceneId") || ""}
+											{...register("sceneId")}
+											options={scenes}
+											handleChange={(sceneId) => {
+												setValue("sceneId", sceneId || "af7NxRw");
+												setSceneThumbnail(getSceneThumnail(sceneId));
+											}}
+										/>
+									);
+								}}
+							/>
+						)}
+						<img
+							className="rounded-lg object-cover"
+							src={sceneThumnail || defaultImage}
+							alt=""
+						/>
+					</Stack>
+				</div>
+
+				<div className="col-span-12">
+					<Stack
+						direction="col"
+						alignItems="start"
+						justifyContent="start"
+						gap={2}
+					>
+						<FormItem
+							label={t("manager.POPUP_EXHIBITION__CREATE_AND_MOVE_OBJECTS")}
+							placement="right"
+							renderInput={() => {
+								return (
+									<Controller
+										control={control}
+										name="enableSpawnAndMoveMedia"
+										render={({ field }) => {
+											return <Switch {...field} />;
+										}}
+									/>
+								);
+							}}
+						/>
+
+						<Stack className="ml-12" direction="col" gap={2}>
+							<FormItem
+								label={t("manager.POPUP_EXHIBITION__CREATE_CAMERAS")}
+								placement="right"
+								renderInput={() => {
+									return (
+										<Controller
+											control={control}
+											name="enableSpawnCamera"
+											render={({ field }) => {
+												return (
+													<Switch
+														{...field}
+														disabled={!watch("enableSpawnAndMoveMedia")}
+													/>
+												);
+											}}
+										/>
+									);
+								}}
+							/>
+
+							<FormItem
+								label={t("manager.POPUP_EXHIBITION__PIN_OBJECTS")}
+								placement="right"
+								renderInput={() => {
+									return (
+										<Controller
+											control={control}
+											name="enablePinObjects"
+											render={({ field }) => {
+												return (
+													<Switch
+														{...field}
+														disabled={!watch("enableSpawnAndMoveMedia")}
+													/>
+												);
+											}}
+										/>
+									);
+								}}
+							/>
+						</Stack>
+
+						<FormItem
+							label={t("manager.POPUP_EXHIBITION__CREATE_DRAWINGS")}
+							placement="right"
+							renderInput={() => {
+								return (
+									<Controller
+										control={control}
+										name="enableSpawnDrawing"
+										render={({ field }) => {
+											return <Switch {...field} />;
+										}}
+									/>
+								);
+							}}
+						/>
+
+						<FormItem
+							label={t("manager.POPUP_EXHIBITION__CREATE_EMOJI")}
+							placement="right"
+							renderInput={() => {
+								return (
+									<Controller
+										control={control}
+										name="enableSpawnEmoji"
+										render={({ field }) => {
+											return <Switch {...field} />;
+										}}
+									/>
+								);
+							}}
+						/>
+
+						<FormItem
+							label={t("manager.POPUP_EXHIBITION__ALLOW_FLY")}
+							placement="right"
+							renderInput={() => {
+								return (
+									<Controller
+										control={control}
+										name="enableFly"
+										render={({ field }) => {
+											return <Switch {...field} />;
+										}}
+									/>
+								);
+							}}
+						/>
+					</Stack>
+				</div>
+			</div>
+		</Modal>
 	);
 };
 

@@ -6,6 +6,7 @@ import storage from "redux-persist/lib/storage";
 import ExhibitionSlide from "src/features/exhibition/ExhibitionSlide";
 import LoaderSlice from "src/features/loader/LoaderSlice";
 import ModalSlice from "src/features/modal/ModalSlice";
+import PopupSlide from "src/features/popup/PopupSlide";
 import ProgressSlice from "src/features/progress/ProgressSlice";
 import ToastSlice from "src/features/toast/ToastSlice";
 import UserSlice from "src/features/user/UserSlice";
@@ -17,6 +18,7 @@ const reducers = combineReducers({
 	loader: LoaderSlice,
 	toast: ToastSlice,
 	exhibition: ExhibitionSlide,
+	popup: PopupSlide,
 });
 
 const persistConfig = {

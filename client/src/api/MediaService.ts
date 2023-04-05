@@ -32,7 +32,7 @@ class MediaService {
 		file: File,
 		onProgress: (percent: number) => void,
 		abortController: AbortController | null,
-	) {
+	): Promise<IAxiosResponse> {
 		const data = new FormData();
 		data.append("file", file);
 		return request.post("/v1/auth/media/upload", data, {

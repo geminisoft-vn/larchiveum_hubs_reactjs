@@ -25,6 +25,7 @@ import defaultImage from "src/assets/larchiveum/default-image.png";
 import defaultModel from "src/assets/larchiveum/model-default.png";
 import defaultImage1 from "src/assets/larchiveum/siri.gif";
 import { Button, Popup } from "src/components";
+import { openPopup } from "src/features/popup/PopupSlide";
 import { getLanguage } from "src/language";
 import { APP_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
@@ -144,20 +145,10 @@ const Manager = () => {
 
 	const openPopupCloseRoom = (exhibitionId) => {
 		dispatch(
-			openModal({
+			openPopup({
 				isActive: true,
 				title: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__TITLE"),
-				body: (
-					<div
-						style={{
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-						}}
-					>
-						{t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__MESSAGE")}
-					</div>
-				),
+				content: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__MESSAGE"),
 				actions: [
 					{
 						text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CLOSE"),
@@ -186,20 +177,10 @@ const Manager = () => {
 
 	const openPopupOpenRoom = (exhibitionId) => {
 		dispatch(
-			openModal({
+			openPopup({
 				isActive: true,
 				title: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__TITLE"),
-				body: (
-					<div
-						style={{
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-						}}
-					>
-						{t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__MESSAGE")}
-					</div>
-				),
+				content: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__MESSAGE"),
 				actions: [
 					{
 						text: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__CLOSE"),
@@ -228,20 +209,10 @@ const Manager = () => {
 
 	const openDeleteRoom = (exhibitionId) => {
 		dispatch(
-			openModal({
+			openPopup({
 				isActive: true,
 				title: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__TITLE"),
-				body: (
-					<div
-						style={{
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-						}}
-					>
-						{t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__MESSAGE")}
-					</div>
-				),
+				content: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__MESSAGE"),
 				actions: [
 					{
 						text: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__DELETE"),
