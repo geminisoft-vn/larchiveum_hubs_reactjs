@@ -1,3 +1,4 @@
+import { IAvatar, IAxiosResponse } from "src/interfaces";
 import request from "src/utilities/request";
 
 class AvatarService {
@@ -5,7 +6,14 @@ class AvatarService {
 		return request.post("v1/auth/avatars", data);
 	}
 
-	static getListAvatar() {
+	static getOne(id): Promise<IAxiosResponse<IAvatar>> {
+		return request({
+			method: "GET",
+			url: `/v1/auth/avatars/${id}`,
+		});
+	}
+
+	static getListAvatar(): Promise<IAxiosResponse<IAvatar[]>> {
 		return request({
 			method: "GET",
 			url: `/v1/avatars`,

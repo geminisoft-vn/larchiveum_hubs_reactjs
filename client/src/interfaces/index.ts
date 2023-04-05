@@ -9,3 +9,4 @@ export { type IUserAuthenticationForm } from "./IUser";
 export { type IScene } from "./IScene";
 export { type IAxiosResponse } from "./IAxiosResponse";
 export { type IPagination } from "./IPagination";
+export { type IAvatar } from "./IAvatar";

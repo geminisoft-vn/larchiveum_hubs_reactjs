@@ -1,140 +1,60 @@
-// @ts-nocheck
-/* eslint-disable */
-
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
-// import Popup from "../../../../react-components/popup/popup";
-import { Button, Header, Stack } from "src/components";
-import { getLanguage, setLanguage } from "src/language";
 import AvatarService from "src/api/AvatarService";
 import UserService from "src/api/UserService";
-import Store from "src/utilities/store";
-import Validator from "src/utilities/validator";
+import { useAppSelector } from "src/app/hooks";
+import { Button, Header, Stack } from "src/components";
+import { getUserInfo } from "src/features/user/selectors";
+import { IAvatar } from "src/interfaces";
+import { getLanguage, setLanguage } from "src/language";
 
+import AvatarPickingModal from "./components/AvatarPickingModal";
 import AvatarPreview from "./components/AvatarPreview";
 import GeneralPreview from "./components/GeneralPreview";
 
 const ProfilePage = () => {
-	const user = Store.getUser();
+	const user = useAppSelector(getUserInfo);
 	const { t } = useTranslation();
 
 	const navigate = useNavigate();
 
 	const [avatars, setAvatars] = useState([]);
-	const [avatar, setAvatar] = useState(null);
+	const [avatar, setAvatar] = useState<IAvatar>();
 	const [displayName, setDisplayName] = useState(null);
 
-	const [isLoading, setIsLoading] = useState(true);
-	const [isOpenPopupChangeAvatar, setIsOpenPopupChangeAvatar] = useState(false);
+	const [shouldOpenAvatarPickingModal, setShouldOpenAvatarPickingModal] =
+		useState(false);
 	const [isOpenPopupCreateAvatar, setIsOpenPopupCreateAvatar] = useState(false);
 	// const [isOpenPopupChangeDisplayName, setIsOpenPopupChangeDisplayName] = useState(false);
 
-	useEffect(() => {
-		AvatarService.getListAvatar().then((response) => {
-			if (response.result == "ok") {
-				const avatars = response.data;
-				loadFromLocalStorage(avatars);
-				setLanguage(getLanguage());
-				setIsLoading(false);
-			} else {
-				alert("Get list avatar fail");
+	// useEffect(() => {
+	// 	AvatarService.getListAvatar().then((response) => {
+	// 		if (response.result === "ok") {
+	// 			console.log({ response });
+	// 			// const avatars = response.data;
+	// 			// setLanguage(getLanguage());
+	// 			// setIsLoading(false);
+	// 		} else {
+	// 			alert("Get list avatar fail");
+	// 		}
+	// 	});
+	// }, []);
+
+	const loadAvatar = () => {
+		AvatarService.getOne(user.avatarId).then((json) => {
+			if (json.result === "ok") {
+				setAvatar(json.data);
 			}
 		});
-	}, []);
-
-	function loadFromLocalStorage(avatars) {
-		const store = JSON.parse(
-			window.localStorage.getItem("___hubs_store") || "",
-		);
-		const user = Store.getUser();
-
-		if (user) {
-			// if don't have user
-			// + displayName
-			//    -> set displayName by displayName of user -> save to local
-			// + avatar
-			//    -> check user avatar
-			//    + if user has avatar -> set avatar by avatar of user
-			//    + else -> check user.avatarId
-			//        + if user.avatarId not null -> get avatar is avatar in list ( which has avatarId = user.avatarId )
-			//        + else -> set avatar is default (first avatar in list)
-			//    -> save to local
-
-			// + displayName
-			if (user.displayName) {
-				// -> set displayName by displayName of user -> save to local
-				store.profile.displayName = user.displayName;
-				setDisplayName(store.profile.displayName);
-			}
-
-			// + avatar
-			if (user.avatar) {
-				// -> if user has avatar -> set avatar by avatar of user
-				const { avatar } = user;
-				setAvatar({ ...avatar });
-			} else {
-				// check user.avatarId
-				let avatar;
-				if (user.avatarId) {
-					// -> get avatar is avatar in list ( which has avatarId = user.avatarId )
-					avatar = avatars.find((avt) => avt.id == user.avatarId);
-				} else {
-					// -> set avatar is default (first avatar in list)
-					avatar = avatars[0];
-				}
-				setAvatar({ ...avatar });
-			}
-		} else {
-			// if don't have user
-			// + displayName
-			//    -> if have displayName in local -> set displayName by displayName in local
-			//    -> else -> set default displayName -> save to local
-			// + avatar
-			//    -> if have avatar in local -> set avatar by avatar in local
-			//    -> else -> set default avatar (first avatar in avatars) -> save to local
-
-			// + displayName
-			if (store.profile.displayName) {
-				// -> if have displayName in local -> set displayName by displayName in local
-				setDisplayName(store.profile.displayName);
-			} else {
-				// -> else -> set default displayName -> save to local
-				store.profile.displayName = `Visitor-${moment().format(
-					"YYYYMMDDhhmmss",
-				)}`;
-				setDisplayName(store.profile.displayName);
-			}
-
-			// + avatar
-			if (store.profile.avatarId) {
-				// -> if have avatar in local -> set avatar by avatar in local
-				let avatar = avatars.find((avt) => avt.id == store.profile.avatarId);
-				if (!avatar) {
-					avatar = {
-						isCustomAvatar: true,
-						url: store.profile.avatarId,
-					};
-				}
-				setAvatar({ ...avatar });
-			} else {
-				// -> else -> set default avatar (first avatar in avatars) -> save to local
-				const avatar = avatars[0];
-				setAvatar({ ...avatar });
-			}
-		}
-
-		localStorage.setItem("___hubs_store", JSON.stringify(store));
-	}
-
-	const handleResultAvatar = (avatar) => {
-		setAvatar({ ...avatar });
 	};
 
-	const handleResultDisplayName = (displayName) => {
-		setDisplayName(displayName);
+	console.log({ avatar });
+
+	const handleResultDisplayName = (_displayName) => {
+		setDisplayName(_displayName);
 	};
 
 	const handleChangeLanguage = (event) => {
@@ -143,31 +63,38 @@ const ProfilePage = () => {
 		setLanguage(lang);
 	};
 
+	const handleOpenAvatarPickingModal = () => {
+		setShouldOpenAvatarPickingModal(true);
+	};
+
+	const handleOpenPopupCreateAvatar = () => {
+		setIsOpenPopupCreateAvatar(true);
+	};
+
+	useEffect(() => {
+		loadAvatar();
+	}, [user]);
+
 	return (
-		<Stack direction="col" gap={2}>
-			<div>
-				<Button onClick={() => navigate(-1)}>{t("profile.BACK")}</Button>
-			</div>
-			<Stack direction="row" alignItems="stretch" gap={2} className="w-full">
-				<AvatarPreview
-					props={{
-						avatar,
-						handleOpenPopupChooseAvatar: () => {
-							setIsOpenPopupChangeAvatar(true);
-						},
-						handleOpenPopupCreateAvatar: () => {
-							setIsOpenPopupCreateAvatar(true);
-						},
-					}}
-				/>
-				<GeneralPreview
-					props={{
-						displayName,
-						handleChange: handleResultDisplayName,
-					}}
-				/>
-			</Stack>
-			{/* {isOpenPopupChangeAvatar && (
+		<>
+			<Stack direction="col" gap={2}>
+				<div>
+					<Button onClick={() => navigate(-1)}>{t("profile.BACK")}</Button>
+				</div>
+				<Stack direction="row" alignItems="stretch" gap={2} className="w-full">
+					<AvatarPreview
+						avatar={avatar}
+						handleOpenAvatarPickingModal={handleOpenAvatarPickingModal}
+						handleOpenPopupCreateAvatar={handleOpenPopupCreateAvatar}
+					/>
+					<GeneralPreview
+						props={{
+							displayName,
+							handleChange: handleResultDisplayName,
+						}}
+					/>
+				</Stack>
+				{/* {isOpenPopupChangeAvatar && (
 				<PopupChangeAvatar
 					props={{
 						avatars,
@@ -179,7 +106,7 @@ const ProfilePage = () => {
 					}}
 				/>
 			)} */}
-			{/* {isOpenPopupCreateAvatar && (
+				{/* {isOpenPopupCreateAvatar && (
 				<PopupCreateAvatar
 					props={{
 						handleClose: () => {
@@ -192,7 +119,7 @@ const ProfilePage = () => {
 					}}
 				/>
 			)} */}
-			{/* {isOpenPopupChangeDisplayName && (
+				{/* {isOpenPopupChangeDisplayName && (
                         <PopupChangeDisplayName props={{
                             displayName: displayName,
                             handleClose: ()=>{
@@ -204,7 +131,16 @@ const ProfilePage = () => {
                             },
                         }}/>
                     )} */}
-		</Stack>
+			</Stack>
+			{shouldOpenAvatarPickingModal && (
+				<AvatarPickingModal
+					isActive={shouldOpenAvatarPickingModal}
+					setIsActive={setShouldOpenAvatarPickingModal}
+					defaultAvatar={avatar}
+					setAvatar={setAvatar}
+				/>
+			)}
+		</>
 	);
 };
 

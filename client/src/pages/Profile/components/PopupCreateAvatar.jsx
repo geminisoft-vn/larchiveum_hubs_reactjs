@@ -48,6 +48,7 @@ const PopupCreateAvatar = (props) => {
 			content={
 				<div style={{ position: "relative", width: "100%", height: "60vh" }}>
 					<iframe
+						title="Create avatar"
 						src="https://larchiveum.readyplayer.me/avatar?frameApi"
 						width="100%"
 						height="100%"

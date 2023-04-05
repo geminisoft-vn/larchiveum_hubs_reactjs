@@ -12,13 +12,24 @@ type Props = {
 	isActive: boolean;
 	setIsActive?: (_v: boolean) => void;
 	width?: number;
+	minHeight?: number;
+	maxHeight?: number;
 	title?: string;
 	children: JSX.Element | JSX.Element[] | string | null;
 	actions?: TModalAction[];
 };
 
 const Modal = (props: Props) => {
-	const { isActive, setIsActive, width, title, children, actions } = props;
+	const {
+		isActive,
+		setIsActive,
+		width,
+		minHeight,
+		maxHeight,
+		title,
+		children,
+		actions,
+	} = props;
 
 	const dispatch = useAppDispatch();
 
@@ -33,14 +44,19 @@ const Modal = (props: Props) => {
 			tabIndex={-1}
 			aria-hidden="true"
 			className={clsx(
-				`fixed top-0 left-0 z-50 flex items-center justify-center transition-all duration-200 w-${
-					width || "full"
-				} inset-0 h-[calc(100%-1rem)] overflow-y-auto overflow-x-hidden p-4 `,
+				`fixed inset-0 top-0 left-0 z-50 flex h-[calc(100%-1rem)] items-center justify-center overflow-y-auto overflow-x-hidden p-4 transition-all duration-200 `,
 				isActive ? "opacity-1 visible" : "invisible opacity-0",
 			)}
 		>
-			<div className="relative h-full w-full max-w-2xl rounded-lg border shadow-lg md:h-auto">
-				<div className="relative rounded-lg bg-white shadow dark:bg-gray-700">
+			<div
+				className="relative h-full rounded-lg border bg-white shadow-lg"
+				style={{
+					width: `${width}px`,
+					minHeight: `${minHeight}px`,
+					maxHeight: `${maxHeight}px`,
+				}}
+			>
+				<div className="relative flex h-full max-h-full flex-1 flex-col rounded-lg dark:bg-gray-700">
 					<div className="flex items-start justify-between rounded-t border-b p-4 dark:border-gray-600">
 						<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
 							{title}
@@ -67,7 +83,7 @@ const Modal = (props: Props) => {
 							<span className="sr-only">Close modal</span>
 						</button>
 					</div>
-					<div className="space-y-6 p-6">{children}</div>
+					<div className="h-full flex-1 overflow-hidden p-2">{children}</div>
 					<div className="flex items-center justify-end space-x-2 rounded-b border-t border-gray-200 p-4 dark:border-gray-600">
 						{actions &&
 							actions.length > 0 &&
@@ -82,6 +98,12 @@ const Modal = (props: Props) => {
 		</div>,
 		document.querySelector("body") as HTMLElement,
 	);
+};
+
+Modal.defaultProps = {
+	width: 512,
+	minHeight: 512,
+	maxHeight: 512,
 };
 
 type ModalTextProps = {
@@ -105,6 +127,7 @@ const ModalText = (props: ModalTextProps) => {
 
 ModalText.defaultProps = {
 	width: 512,
+
 	title: "",
 	actions: [],
 };
