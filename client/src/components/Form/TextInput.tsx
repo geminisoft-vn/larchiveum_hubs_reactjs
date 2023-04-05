@@ -3,7 +3,6 @@ import clsx from "clsx";
 
 type Props = {
 	name: string;
-	defaultValue?: string;
 	onChange: (_e: React.SyntheticEvent) => void;
 	onBlur?: (_e: React.SyntheticEvent) => void;
 	onFocus?: (_e: React.SyntheticEvent) => void;
@@ -19,7 +18,6 @@ type Props = {
 const TextInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
 	const {
 		name,
-		defaultValue,
 		onChange,
 		onBlur,
 		onFocus,
@@ -37,7 +35,6 @@ const TextInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
 			ref={ref}
 			type={type}
 			name={name}
-			defaultValue={defaultValue}
 			onChange={(e) => {
 				if (onChange) onChange(e);
 			}}
@@ -72,7 +69,6 @@ TextInput.defaultProps = {
 	onFocus: undefined,
 	onMouseDown: undefined,
 	type: "text",
-	defaultValue: "",
 };
 
 export default TextInput;

@@ -347,13 +347,15 @@ const Exhibitions = (props: Props) => {
 				/>
 			</Stack>
 
-			<ExhibitionFormModal
-				isActive={shouldActiveExhibitionForm}
-				setIsActive={setShouldActiveExhibitionForm}
-				type={exhibitionType}
-				exhibitionId={exhibitionId}
-				scenes={scenes}
-			/>
+			{shouldActiveExhibitionForm && (
+				<ExhibitionFormModal
+					isActive={shouldActiveExhibitionForm}
+					setIsActive={setShouldActiveExhibitionForm}
+					type={exhibitionType}
+					exhibitionId={exhibitionId}
+					scenes={scenes}
+				/>
+			)}
 		</section>
 	);
 };

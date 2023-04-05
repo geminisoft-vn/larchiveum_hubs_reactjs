@@ -14,7 +14,6 @@ import defaultImage from "src/assets/larchiveum/default-image.png";
 import {
 	AutoComplete,
 	DateTimePicker,
-	FormContainer,
 	FormItem,
 	Modal,
 	Stack,
@@ -42,8 +41,10 @@ const ExhibitionFormModal = (props: Props) => {
 	const { isActive, setIsActive, type, exhibitionId, scenes } = props;
 
 	const { t } = useTranslation();
+
 	const dispatch = useAppDispatch();
 	const exhibition = useAppSelector(getExhibition(exhibitionId));
+
 	const transformedDefaultValues = useMemo(() => {
 		if (exhibitionId) {
 			const fields = _pick(exhibition, [
@@ -225,7 +226,7 @@ const ExhibitionFormModal = (props: Props) => {
 			}
 		});
 		return () => subscription.unsubscribe();
-	}, [watch]);
+	}, [watch, clearErrors, setValue]);
 
 	useEffect(() => {
 		setSceneThumbnail(getSceneThumnail(getValues("sceneId")));

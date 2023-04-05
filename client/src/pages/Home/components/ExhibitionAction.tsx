@@ -127,7 +127,7 @@ const ExhibitionAction = (props) => {
 	if (
 		user &&
 		!exhibition.reservated &&
-		exhibition.public === 0 &&
+		!exhibition.public &&
 		exhibition.reservationCount < exhibition.maxSize
 	) {
 		return (
