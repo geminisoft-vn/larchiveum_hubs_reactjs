@@ -4,12 +4,13 @@ import clsx from "clsx";
 type Props = {
 	name: string;
 	value: string;
+	defaultValue?: number | string;
 	onChange: (_e: React.SyntheticEvent) => void;
 	options: { label: string; value: string }[];
 };
 
 const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
-	const { name, value, onChange, options } = props;
+	const { name, value, defaultValue, onChange, options } = props;
 
 	return (
 		<select
@@ -18,6 +19,7 @@ const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
 			className={clsx(
 				"block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 outline-0 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500",
 			)}
+			defaultValue={defaultValue}
 			value={value}
 			onChange={onChange}
 		>
@@ -30,5 +32,9 @@ const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
 		</select>
 	);
 });
+
+Select.defaultProps = {
+	defaultValue: 0,
+};
 
 export default Select;

@@ -1,15 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
+import { LeftOutlined } from "@ant-design/icons";
 
 import AvatarService from "src/api/AvatarService";
-import UserService from "src/api/UserService";
 import { useAppSelector } from "src/app/hooks";
-import { Button, Header, Stack } from "src/components";
+import { Button, Stack } from "src/components";
 import { getUserInfo } from "src/features/user/selectors";
 import { IAvatar } from "src/interfaces";
-import { getLanguage, setLanguage } from "src/language";
 
 import AvatarPickingModal from "./components/AvatarPickingModal";
 import AvatarPreview from "./components/AvatarPreview";
@@ -48,14 +46,16 @@ const ProfilePage = () => {
 		<>
 			<Stack direction="col" gap={2}>
 				<div>
-					<Button onClick={() => navigate(-1)}>{t("profile.BACK")}</Button>
+					<Button beforeIcon={<LeftOutlined />} onClick={() => navigate(-1)}>
+						{t("profile.BACK")}
+					</Button>
 				</div>
 				<Stack direction="row" alignItems="stretch" gap={2} className="w-full">
 					<AvatarPreview
 						avatar={avatar}
 						handleOpenAvatarPickingModal={handleOpenAvatarPickingModal}
 					/>
-					<GeneralPreview defaultDisplayName={user.displayName} />
+					<GeneralPreview />
 				</Stack>
 			</Stack>
 			{shouldOpenAvatarPickingModal && (

@@ -4,7 +4,7 @@ export interface IQuestion {
 	text: string;
 	mediaUrl: string;
 	order: number;
-	multiple: number;
+	multiple: number | string;
 	activated: number;
 	deleted: number;
 	createdBy: number;

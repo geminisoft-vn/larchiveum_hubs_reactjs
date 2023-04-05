@@ -27,7 +27,10 @@ const Answers = (props) => {
 					name === `questions.${questionIndex}.answers.${index}.isCorrectAnswer`
 				)
 					return;
-				update(index, { isCorrectAnswer: "0" });
+				update(index, {
+					isCorrectAnswer: false,
+					text: getValues(`questions.${questionIndex}.answers.${index}.text`),
+				});
 			});
 		}
 	};

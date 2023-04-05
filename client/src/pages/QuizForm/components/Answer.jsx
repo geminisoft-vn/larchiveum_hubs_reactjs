@@ -1,8 +1,7 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
-import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 
 import AnswerService from "src/api/AnswerService";
 import { Button, Switch, TextInput } from "src/components";
@@ -18,15 +17,12 @@ const Answer = (props) => {
 	const { register, control, watch, getValues } = useFormContext();
 
 	const { t } = useTranslation();
-	const [isLoading, setIsLoading] = useState(false);
-	const [isSaveAnswerSubmiting, setIsSaveAnswerSubmiting] = useState(false);
-	const [isDeleteAnswerSubmiting, setIsDeleteAnswerSubmiting] = useState(false);
-	const [answer, setAnswer] = useState(props.answer || {});
 
 	useEffect(() => {
 		const subscription = watch((value, { name, type }) => {
 			if (
 				type === "change" &&
+				name.includes("isCorrectAnswer") &&
 				getValues(`questions.${questionIndex}.multiple`) === "0"
 			) {
 				handleChangeCorrectAnswer(name);
@@ -34,38 +30,6 @@ const Answer = (props) => {
 		});
 		return () => subscription.unsubscribe();
 	}, [watch]);
-
-	useLayoutEffect(() => {
-		setAnswer(props.answer);
-	}, [props.answer]);
-
-	function handleSaveAnswer(answer) {
-		setIsSaveAnswerSubmiting(true);
-		AnswerService.update(answer.id, answer)
-			.then((res) => {
-				setAnswer({
-					...res.data,
-				});
-				setIsSaveAnswerSubmiting(false);
-			})
-			.catch((error) => {
-				setIsSaveAnswerSubmiting(false);
-			});
-	}
-
-	// function handleDeleteAnswer() {
-	//   setIsDeleteAnswerSubmiting(true);
-	//   AnswerService.delete(answer.id)
-	//     .then((res) => {
-	//       setIsDeleteAnswerSubmiting(false);
-	//       if (onDelete) {
-	//         onDelete(answer);
-	//       }
-	//     })
-	//     .catch((error) => {
-	//       setIsDeleteAnswerSubmiting(false);
-	//     });
-	// }
 
 	return (
 		<div className="grid w-full grid-cols-12 items-center gap-2">

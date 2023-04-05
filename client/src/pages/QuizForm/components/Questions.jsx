@@ -8,8 +8,6 @@ import Question from "./Question";
 const MAX_QUESTION = 10;
 
 const Questions = (props) => {
-	const {} = props;
-
 	const { control } = useFormContext();
 
 	const { t } = useTranslation();

@@ -1,3 +1,5 @@
+import { IQuestion } from "./IQuestion";
+
 export interface IQuiz {
 	id: number;
 	title: string;
@@ -10,4 +12,5 @@ export interface IQuiz {
 	updatedBy: number;
 	createdAt: Date;
 	updatedAt: Date;
+	questions?: IQuestion[];
 }

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { IParams } from "src/interfaces";
+import { IAxiosResponse, IParams, IQuestion } from "src/interfaces";
 import request from "src/utilities/request";
 
 class QuestionService {
@@ -7,7 +7,7 @@ class QuestionService {
 		return request.get("/v1/auth/questions", { params });
 	}
 
-	static getOne(id: number) {
+	static getOne(id: number): Promise<IAxiosResponse<IQuestion>> {
 		return request.get(`/v1/auth/questions/${id}`);
 	}
 
