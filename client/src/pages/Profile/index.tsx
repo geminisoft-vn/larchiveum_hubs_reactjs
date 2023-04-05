@@ -21,27 +21,10 @@ const ProfilePage = () => {
 
 	const navigate = useNavigate();
 
-	const [avatars, setAvatars] = useState([]);
 	const [avatar, setAvatar] = useState<IAvatar>();
-	const [displayName, setDisplayName] = useState(null);
 
 	const [shouldOpenAvatarPickingModal, setShouldOpenAvatarPickingModal] =
 		useState(false);
-	const [isOpenPopupCreateAvatar, setIsOpenPopupCreateAvatar] = useState(false);
-	// const [isOpenPopupChangeDisplayName, setIsOpenPopupChangeDisplayName] = useState(false);
-
-	// useEffect(() => {
-	// 	AvatarService.getListAvatar().then((response) => {
-	// 		if (response.result === "ok") {
-	// 			console.log({ response });
-	// 			// const avatars = response.data;
-	// 			// setLanguage(getLanguage());
-	// 			// setIsLoading(false);
-	// 		} else {
-	// 			alert("Get list avatar fail");
-	// 		}
-	// 	});
-	// }, []);
 
 	const loadAvatar = () => {
 		AvatarService.getOne(user.avatarId).then((json) => {
@@ -53,22 +36,8 @@ const ProfilePage = () => {
 
 	console.log({ avatar });
 
-	const handleResultDisplayName = (_displayName) => {
-		setDisplayName(_displayName);
-	};
-
-	const handleChangeLanguage = (event) => {
-		const lang = event.target.value;
-		setLanguage(lang);
-		setLanguage(lang);
-	};
-
 	const handleOpenAvatarPickingModal = () => {
 		setShouldOpenAvatarPickingModal(true);
-	};
-
-	const handleOpenPopupCreateAvatar = () => {
-		setIsOpenPopupCreateAvatar(true);
 	};
 
 	useEffect(() => {
@@ -85,52 +54,9 @@ const ProfilePage = () => {
 					<AvatarPreview
 						avatar={avatar}
 						handleOpenAvatarPickingModal={handleOpenAvatarPickingModal}
-						handleOpenPopupCreateAvatar={handleOpenPopupCreateAvatar}
 					/>
-					<GeneralPreview
-						props={{
-							displayName,
-							handleChange: handleResultDisplayName,
-						}}
-					/>
+					<GeneralPreview defaultDisplayName={user.displayName} />
 				</Stack>
-				{/* {isOpenPopupChangeAvatar && (
-				<PopupChangeAvatar
-					props={{
-						avatars,
-						avatar,
-						handleClose: () => {
-							setIsOpenPopupChangeAvatar(false);
-						},
-						handleResult: handleResultAvatar,
-					}}
-				/>
-			)} */}
-				{/* {isOpenPopupCreateAvatar && (
-				<PopupCreateAvatar
-					props={{
-						handleClose: () => {
-							setIsOpenPopupCreateAvatar(false);
-						},
-						handleResult: (avatar) => {
-							handleResultAvatar(avatar);
-							setIsOpenPopupCreateAvatar(false);
-						},
-					}}
-				/>
-			)} */}
-				{/* {isOpenPopupChangeDisplayName && (
-                        <PopupChangeDisplayName props={{
-                            displayName: displayName,
-                            handleClose: ()=>{
-                                setIsOpenPopupChangeDisplayName(false);
-                            },
-                            handleResult: (displayName)=>{
-                                handleResultDisplayName(displayName);
-                                setIsOpenPopupChangeDisplayName(false);
-                            },
-                        }}/>
-                    )} */}
 			</Stack>
 			{shouldOpenAvatarPickingModal && (
 				<AvatarPickingModal

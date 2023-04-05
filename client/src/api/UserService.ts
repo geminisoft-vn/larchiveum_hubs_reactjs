@@ -1,4 +1,4 @@
-import { IUserAuthenticationForm } from "src/interfaces";
+import { IAxiosResponse, IUserAuthenticationForm } from "src/interfaces";
 import { API_ROOT } from "src/utilities/constants";
 import request from "src/utilities/request";
 
@@ -85,7 +85,10 @@ class UserService {
 		return request.post("v1/users/reSendVerifyMail", { email });
 	}
 
-	static update(id: number, data: Partial<IUserAuthenticationForm>) {
+	static update(
+		id: number,
+		data: Partial<IUserAuthenticationForm>,
+	): Promise<IAxiosResponse<IUserAuthenticationForm>> {
 		return request.patch(`v1/auth/users/${id}`, data);
 	}
 }

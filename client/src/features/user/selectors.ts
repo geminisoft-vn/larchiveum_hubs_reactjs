@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-import { RootState } from "src/app/hooks";
+import { RootState } from "src/app/store";
 
 export const getUserTokenExpiration = createSelector(
 	(state: RootState) => state.user.authentication,

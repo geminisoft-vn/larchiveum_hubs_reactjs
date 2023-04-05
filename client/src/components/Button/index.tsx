@@ -7,22 +7,39 @@ type Props = {
 	className?: string;
 	type?: "button" | "reset" | "submit";
 	variant?: "default" | "link";
-	children: JSX.Element | JSX.Element[] | string | number | (JSX.Element | JSX.Element[] | string)[];
+	form?: string;
+	children:
+		| JSX.Element
+		| JSX.Element[]
+		| string
+		| number
+		| (JSX.Element | JSX.Element[] | string)[];
 };
 
 const Button = (props: Props) => {
-	const { beforeIcon, afterIcon, onClick, className, type, variant, children } = props;
+	const {
+		beforeIcon,
+		afterIcon,
+		onClick,
+		className,
+		type,
+		variant,
+		children,
+		form,
+	} = props;
 
 	return (
 		<button
 			className={clsx(
-				"flex justify-center items-center gap-2",
-				variant === "default" && "rounded border border-gra border-gray-200 p-2",
+				"flex items-center justify-center gap-2",
+				variant === "default" &&
+					"border-gra rounded border border-gray-200 p-2",
 				variant === "link" && "font-bold text-blue-500",
 				className,
 			)}
 			onClick={onClick}
 			type={type || "button"}
+			form={form}
 		>
 			{beforeIcon}
 			{children}
@@ -38,6 +55,7 @@ Button.defaultProps = {
 	type: "button",
 	variant: "default",
 	onClick: undefined,
+	form: "",
 };
 
 export default Button;

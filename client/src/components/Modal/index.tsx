@@ -88,7 +88,14 @@ const Modal = (props: Props) => {
 						{actions &&
 							actions.length > 0 &&
 							actions.map((action: TModalAction) => (
-								<Button key={action.text} onClick={() => action.callback()}>
+								<Button
+									key={action.text}
+									onClick={() => {
+										if (action.callback) action.callback();
+									}}
+									form={action.form}
+									className={action.className}
+								>
 									{action.text}
 								</Button>
 							))}

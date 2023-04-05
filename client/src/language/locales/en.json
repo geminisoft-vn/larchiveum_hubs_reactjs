@@ -8,7 +8,8 @@
   "__BUTTON__": {
     "BACK": "Back",
     "SAVE": "Save",
-    "CLOSE": "Close"
+    "CLOSE": "Close",
+    "CHANGE": "Change"
   },
   "home": {
     "SIGN_IN": "Log in",

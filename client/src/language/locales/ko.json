@@ -5,10 +5,11 @@
     "TAB_SPOKE_LABEL": "Spoke",
     "TAB_ADMIN_LABEL": "Admin"
   },
-  "_button": {
+  "__BUTTON__": {
     "BACK": "뒤로가기",
     "SAVE": "저장",
-    "CLOSE": "확인"
+    "CLOSE": "확인",
+    "CHANGE": "저장"
   },
   "home": {
     "SIGN_IN": "로그인",
