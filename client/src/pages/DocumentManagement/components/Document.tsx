@@ -7,11 +7,11 @@ const Document = (props) => {
 		document,
 		handleGotoViewDocument,
 		handleGoToDocumentForm,
-		handleDeleteDocument,
+		openDeleteDocumentPopup,
 	} = props;
 	const { t } = useTranslation();
 	return (
-		<div className="flex items-center justify-between border rounded-lg p-4">
+		<div className="flex items-center justify-between rounded-lg border p-4">
 			<div>
 				<div>
 					<div>{document.title}</div>
@@ -39,7 +39,7 @@ const Document = (props) => {
 				</Button>
 				<Button
 					onClick={() => {
-						handleDeleteDocument(document.id);
+						openDeleteDocumentPopup(document.id);
 					}}
 				>
 					{t("content.DOCUMENT_TAB__DOCUMENT_LIST__DELETE_BUTTON_LABEL")}

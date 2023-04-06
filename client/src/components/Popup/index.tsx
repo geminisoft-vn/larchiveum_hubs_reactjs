@@ -64,6 +64,7 @@ const Popup = (props) => {
 												if (action.callback) action.callback();
 											}}
 											important={action.important}
+											danger={action.danger}
 											className={action.className}
 										>
 											{action.text}

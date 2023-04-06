@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Empty } from "antd";
 
 // import PopupCreateDocument from "./PopupCreateDocument";
 import DocumentService from "src/api/DocumentService";
+import { useAppDispatch } from "src/app/hooks";
+import { closePopup, openPopup } from "src/features/popup/PopupSlide";
+import { showToast } from "src/features/toast/ToastSlice";
 import { IDocument } from "src/interfaces";
 import { CONTENT_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
@@ -12,6 +16,9 @@ import Document from "./Document";
 
 const Documents = () => {
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
+
+	const { t } = useTranslation();
 
 	const [listDocument, setListDocument] = useState<Partial<IDocument>[]>([]);
 
@@ -33,12 +40,56 @@ const Documents = () => {
 			.catch((error) => {});
 	}
 
-	useEffect(() => {
-		loadDocuments();
-	}, []);
+	const handleClosePopup = () => {
+		dispatch(closePopup());
+	};
 
-	const handleDeleteDocument = useCallback((documentId) => {
-		// handleDeleteDocument(documentId);
+	const handleDeleteDocument = (id) => {
+		DocumentService.delete(id)
+			.then(() => {
+				dispatch(
+					showToast({
+						type: "success",
+						message: t(`__TOAST__.SUCCESS`),
+					}),
+				);
+			})
+			.catch(() => {
+				dispatch(
+					showToast({
+						type: "error",
+						message: t(`__TOAST__.ERROR`),
+					}),
+				);
+			})
+			.finally(() => {
+				handleClosePopup();
+			});
+	};
+
+	const openDeleteDocumentPopup = useCallback((id) => {
+		dispatch(
+			openPopup({
+				isActive: true,
+				title: "Delete Document",
+				content: "Are you sure you want to delete this document?",
+				actions: [
+					{
+						text: t(`__BUTTON__.DELETE`),
+						danger: true,
+						callback: () => {
+							handleDeleteDocument(id);
+						},
+					},
+					{
+						text: t(`__BUTTON__.CLOSE`),
+						callback: () => {
+							handleClosePopup();
+						},
+					},
+				],
+			}),
+		);
 	}, []);
 
 	const handleGoToDocumentForm = useCallback((documentId) => {
@@ -47,6 +98,10 @@ const Documents = () => {
 
 	const handleGotoViewDocument = useCallback((documentId) => {
 		window.open(`${CONTENT_ROOT}/document?id=${documentId}`);
+	}, []);
+
+	useEffect(() => {
+		loadDocuments();
 	}, []);
 
 	return (
@@ -64,7 +119,7 @@ const Documents = () => {
 							document={document}
 							handleGotoViewDocument={handleGotoViewDocument}
 							handleGoToDocumentForm={handleGoToDocumentForm}
-							handleDeleteDocument={handleDeleteDocument}
+							openDeleteDocumentPopup={openDeleteDocumentPopup}
 						/>
 					))}
 				</div>

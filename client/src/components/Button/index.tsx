@@ -8,6 +8,7 @@ type Props = {
 	type?: "button" | "reset" | "submit";
 	variant?: "default" | "link";
 	important?: boolean;
+	danger?: boolean;
 	children:
 		| JSX.Element
 		| JSX.Element[]
@@ -26,6 +27,7 @@ const Button = (props: Props) => {
 		variant,
 		children,
 		important,
+		danger,
 	} = props;
 
 	return (
@@ -36,6 +38,7 @@ const Button = (props: Props) => {
 					"border-gra rounded border border-gray-200 p-2",
 				variant === "link" && "font-bold text-blue-500",
 				important && "bg-blue-800 text-white",
+				danger && "bg-red-500 text-white",
 				className,
 			)}
 			onClick={onClick}
@@ -56,6 +59,7 @@ Button.defaultProps = {
 	variant: "default",
 	onClick: undefined,
 	important: false,
+	danger: false,
 };
 
 export default Button;

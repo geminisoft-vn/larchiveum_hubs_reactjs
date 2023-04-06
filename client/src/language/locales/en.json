@@ -11,7 +11,8 @@
     "CLOSE": "Close",
     "CHANGE": "Change",
     "CREATE": "Create",
-    "EDIT": "Edit"
+    "EDIT": "Edit",
+    "DELETE": "Delete"
   },
   "__TOAST__": {
     "SUCCESS": "Success",
