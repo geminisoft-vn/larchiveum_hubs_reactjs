@@ -73,8 +73,8 @@ const Header = () => {
 	];
 
 	return (
-		<header className="sticky top-0 w-full">
-			<nav className="mt-4 rounded-lg border-gray-200 bg-gray-100 p-4">
+		<header className="sticky top-0 z-[99] w-full">
+			<nav className="rounded-lg border-gray-50 bg-gray-100 p-4">
 				<div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between">
 					<Link to="/home/app" className="flex items-center">
 						<img src={logo} alt="Larchiveum Logo" className="h-12" />

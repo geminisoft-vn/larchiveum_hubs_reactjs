@@ -1,29 +1,19 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-unused-vars */
-// @ts-nocheck
-/* eslint-disable */
 import React, { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Empty } from "antd";
 
 // import PopupCreateDocument from "./PopupCreateDocument";
 import DocumentService from "src/api/DocumentService";
+import { IDocument } from "src/interfaces";
 import { CONTENT_ROOT } from "src/utilities/constants";
 import Store from "src/utilities/store";
 
 import Document from "./Document";
 
-const Documents = (props) => {
+const Documents = () => {
 	const navigate = useNavigate();
 
-	const [listDocument, setListDocument] = useState([]);
-
-	useEffect(() => {
-		loadDocuments();
-	}, []);
+	const [listDocument, setListDocument] = useState<Partial<IDocument>[]>([]);
 
 	function loadDocuments() {
 		DocumentService.getAll({
@@ -43,24 +33,17 @@ const Documents = (props) => {
 			.catch((error) => {});
 	}
 
+	useEffect(() => {
+		loadDocuments();
+	}, []);
+
 	const handleDeleteDocument = useCallback((documentId) => {
 		// handleDeleteDocument(documentId);
 	}, []);
 
 	const handleGoToDocumentForm = useCallback((documentId) => {
-		navigate(`/home/content/document-form/${documentId}`);
+		navigate(`/home/content/document/form/${documentId}`);
 	}, []);
-
-	// function handleDeleteDocument(documentId) {
-	// 	// DocumentService.delete(documentId)
-	// 	// 	.then((document) => {
-	// 	// 		setListDocument(listDocument.filter((q) => q.id != documentId));
-	// 	// 		setDeletingDocumentId(null);
-	// 	// 	})
-	// 	// 	.catch((error) => {
-	// 	// 		setDeletingDocumentId(null);
-	// 	// 	});
-	// }
 
 	const handleGotoViewDocument = useCallback((documentId) => {
 		window.open(`${CONTENT_ROOT}/document?id=${documentId}`);

@@ -27,8 +27,7 @@ const DocumentManagement = (props) => {
 	const [document, setDocument] = useState(null);
 
 	const handleOpenDocumentCreateDetail = () => {
-		// setIsVisiableDocumentCreateDetail(true);
-		navigate("/home/content/document-form");
+		navigate("/home/content/document/form");
 	};
 
 	const handleOpenDocumentEditDetail = function (document) {

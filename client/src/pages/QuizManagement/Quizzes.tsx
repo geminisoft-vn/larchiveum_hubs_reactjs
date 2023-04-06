@@ -38,10 +38,10 @@ const Quizzes = (props) => {
 
 	const handleGoToQuizForm = (quizId) => {
 		if (quizId) {
-			navigate(`/home/content/quiz-form/${quizId}`);
+			navigate(`/home/content/quiz/form/${quizId}`);
 			return;
 		}
-		navigate("/home/content/quiz-form");
+		navigate("/home/content/quiz/form");
 	};
 
 	function load() {

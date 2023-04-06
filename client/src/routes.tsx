@@ -56,33 +56,34 @@ export default function Router() {
 							<ContentPage />
 						</ProtectedRoute>
 					),
+
 					children: [
 						{
-							element: <Navigate to="/home/content/quiz" />,
+							element: <Navigate to="/home/content/quiz/management" />,
 							index: true,
 						},
 						{
-							path: "quiz",
+							path: "quiz/management",
 							element: <QuizManagementPage />,
 						},
 						{
-							path: "quiz-form",
+							path: "quiz/form",
 							element: <QuizFormPage />,
 						},
 						{
-							path: "quiz-form/:quizId",
+							path: "quiz/form/:quizId",
 							element: <QuizFormPage />,
 						},
 						{
-							path: "document",
+							path: "document/management",
 							element: <DocumentManagementPage />,
 						},
 						{
-							path: "document-form",
+							path: "document/form",
 							element: <DocumentFormPage />,
 						},
 						{
-							path: "document-form/:documentId",
+							path: "document/form/:documentId",
 							element: <DocumentFormPage />,
 						},
 					],

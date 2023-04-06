@@ -1,3 +1,5 @@
+import { IAnswer } from "./IAnswer";
+
 export interface IQuestion {
 	id: number;
 	quizId: number;
@@ -7,8 +9,9 @@ export interface IQuestion {
 	multiple: number | string;
 	activated: number;
 	deleted: number;
+	answers: IAnswer[];
 	createdBy: number;
 	updatedBy: number;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: number;
+	updatedAt: number;
 }

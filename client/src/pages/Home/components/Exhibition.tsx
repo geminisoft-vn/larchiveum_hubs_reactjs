@@ -13,19 +13,22 @@ const Exhibition = (props) => {
 	const { exhibition } = props;
 
 	return (
-		<div className="relative ">
+		<div className="relative">
 			<div>
 				<img
 					className="h-full w-full rounded-lg brightness-50"
 					src={exhibition?.room?.thumbnailUrl}
 					alt={exhibition?.room?.name}
+					style={{
+						minHeight: 200,
+					}}
 				/>
 			</div>
 			<Stack
 				direction="col"
 				alignItems="start"
 				justifyContent="between"
-				className="absolute top-2 h-full w-full p-4 "
+				className="absolute top-2 h-full w-full max-w-full p-4"
 			>
 				<Stack
 					direction="row"
@@ -56,6 +59,7 @@ const Exhibition = (props) => {
 					alignItems="start"
 					justifyContent="start"
 					gap={1}
+					className="max-w-full"
 				>
 					<Stack
 						direction="row"
@@ -73,11 +77,11 @@ const Exhibition = (props) => {
 						</Typography>
 					</Stack>
 
-					<Stack className="" direction="col" gap={1}>
+					<Stack className="max-w-full" direction="col" gap={1}>
 						{exhibition.startDate && (
 							<Stack direction="row" alignItems="center" gap={1}>
 								<CalendarMonthRoundedIcon className="text-white" />
-								<Typography className="font-bold text-white shadow-md">
+								<Typography className="font-bold text-white shadow-md" ellipsis>
 									{moment
 										.utc(exhibition.startDate)
 										.local()
@@ -91,7 +95,7 @@ const Exhibition = (props) => {
 						{exhibition.endDate && (
 							<Stack direction="row" alignItems="center" gap={1}>
 								<CalendarMonthRoundedIcon className="text-white" />
-								<Typography className="font-bold text-white shadow-md">
+								<Typography className="font-bold text-white shadow-md" ellipsis>
 									{moment
 										.utc(exhibition.endDate)
 										.local()

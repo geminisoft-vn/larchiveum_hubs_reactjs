@@ -14,23 +14,20 @@ const ContentPage = () => {
 		{
 			key: "quiz",
 			label: t("content.LEFT_MENU__QUIZ_LABEL"),
-			onClick: () => {
-				navigate("/home/content/quiz");
-			},
+			path: "/home/content/quiz/management",
+			regexMatchPath: "/home/content/quiz/*",
 		},
 		{
 			key: "document",
 			label: t("content.LEFT_MENU__DOCUMENT_LABEL"),
-			onClick: () => {
-				navigate("/home/content/document");
-			},
+			path: "/home/content/document/management",
+			regexMatchPath: "/home/content/document/*",
 		},
 		{
 			key: "map",
 			label: t("content.LEFT_MENU__MAP_LABEL"),
-			onClick: () => {
-				navigate("/home/content/map");
-			},
+			path: "/home/content/map/management",
+			regexMatchPath: "/home/content/map/*",
 		},
 	];
 

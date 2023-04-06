@@ -11,6 +11,10 @@
     "CLOSE": "Close",
     "CHANGE": "Change"
   },
+  "__TOAST__": {
+    "SUCCESS": "Success",
+    "ERROR": "Error"
+  },
   "home": {
     "SIGN_IN": "Log in",
     "SIGN_UP": "Sign up",

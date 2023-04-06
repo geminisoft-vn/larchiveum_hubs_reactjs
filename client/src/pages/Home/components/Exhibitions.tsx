@@ -6,7 +6,10 @@ const Exhibitions = (props) => {
 		<div className="grid w-full grid-cols-12 gap-2">
 			{exhibitions &&
 				exhibitions.map((exhibition) => (
-					<div className="col-span-4" key={exhibition.id}>
+					<div
+						className="max-sm:col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-4"
+						key={exhibition.id}
+					>
 						<Exhibition exhibition={exhibition} />
 					</div>
 				))}

@@ -8,6 +8,7 @@ import _transform from "lodash/transform";
 import AnswerService from "src/api/AnswerService";
 import QuestionService from "src/api/QuestionService";
 import QuizService from "src/api/QuizService";
+import { useAppDispatch } from "src/app/hooks";
 import {
 	Button,
 	FormContainer,
@@ -16,12 +17,15 @@ import {
 	TextInput,
 	Typography,
 } from "src/components";
+import { showToast } from "src/features/toast/ToastSlice";
 import { IQuiz } from "src/interfaces";
 
 import Questions from "./components/Questions";
 
-const QuizForm = (props) => {
+const QuizForm = () => {
 	const { t } = useTranslation();
+
+	const dispatch = useAppDispatch();
 
 	const { quizId } = useParams();
 	const navigate = useNavigate();
@@ -61,7 +65,7 @@ const QuizForm = (props) => {
 	};
 
 	const handleSaveQuiz = (data) => {
-		const dataToSend = _transform(
+		const transformedData = _transform(
 			data,
 			(result, value, key) => {
 				if (key === "questions") {
@@ -75,26 +79,88 @@ const QuizForm = (props) => {
 		);
 
 		if (quizId) {
-			// const { dirtyFields } = methods.formState;
-			// ["title", "introduction", "description"].forEach((item) => {
-			// 	if (dirtyFields[item]) {
-			// 		Object.assign(dataToSend, {
-			// 			...data,
-			// 			[item]: data[item],
-			// 		});
-			// 	}
-			// });
-			// QuizService.create(dataToSend)
-			// 	.then(() => {})
-			// 	.catch((err) => console.error(err));
+			// edit
+			const { dirtyFields } = methods.formState;
+			const dataToUpdate = {};
+			["title", "introduction", "description"].forEach((item) => {
+				if (dirtyFields[item]) {
+					dataToUpdate[item] = transformedData[item];
+				}
+			});
+
+			if (
+				dirtyFields.title ||
+				dirtyFields.introduction ||
+				dirtyFields.description
+			) {
+				QuizService.update(quizId, dataToUpdate)
+					.then((res) => {
+						if (res.result === "ok") {
+							dispatch(
+								showToast({
+									type: "success",
+									message: t(`__TOAST__.SUCCESS`),
+								}),
+							);
+						}
+					})
+					.catch(() => {
+						dispatch(
+							showToast({
+								type: "error",
+								message: t(`__TOAST__.ERROR`),
+							}),
+						);
+					});
+			}
+
+			if (dirtyFields.questions) {
+				Promise.all(
+					transformedData.questions.map((question) =>
+						QuestionService.update(question.id, {
+							text: question.text,
+							multiple: question.multiple,
+						}),
+					),
+				);
+			}
+			if (dirtyFields.questions?.some((obj) => obj.answers)) {
+				Promise.all(
+					transformedData.questions.map((question) =>
+						question.answers.map((ans) => {
+							return AnswerService.update(ans.id, {
+								text: ans.text,
+								isCorrectAnswer: ans.isCorrectAnswer,
+							});
+						}),
+					),
+				)
+					.then(() => {
+						dispatch(
+							showToast({
+								type: "success",
+								message: t(`__TOAST__.SUCCESS`),
+							}),
+						);
+					})
+					.catch(() => {
+						dispatch(
+							showToast({
+								type: "error",
+								message: t(`__TOAST__.ERROR`),
+							}),
+						);
+					});
+			}
 		} else {
+			// create
 			QuizService.create(
-				_pick(dataToSend, ["title", "introduction", "description"]),
+				_pick(transformedData, ["title", "introduction", "description"]),
 			)
 				.then((res) => {
 					const { id } = res.data;
 					Promise.all(
-						dataToSend.questions.map((question) => {
+						transformedData.questions.map((question) => {
 							return QuestionService.create({
 								quizId: id,
 								text: question.text,
@@ -116,7 +182,14 @@ const QuizForm = (props) => {
 						);
 					});
 				})
-				.catch((err) => console.error(err));
+				.catch(() => {
+					dispatch(
+						showToast({
+							type: "error",
+							message: t(`__TOAST__.ERROR`),
+						}),
+					);
+				});
 		}
 	};
 

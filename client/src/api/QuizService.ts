@@ -15,7 +15,7 @@ class QuizService {
 		return request.post("/v1/auth/quizzes", data);
 	}
 
-	static update(id, data) {
+	static update(id, data): Promise<IAxiosResponse<IQuiz>> {
 		return request.put(`/v1/auth/quizzes/${id}`, data);
 	}
 
