@@ -3,7 +3,9 @@ import { API_ROOT } from "src/utilities/constants";
 import request from "src/utilities/request";
 
 class UserService {
-	static googleLogin(data: { ggtoken: string }) {
+	static googleLogin(data: {
+		ggtoken: string;
+	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
 			url: `/v1/gglogin`,
@@ -11,7 +13,9 @@ class UserService {
 		});
 	}
 
-	static facebookLogin(data: { fbtoken: string }) {
+	static facebookLogin(data: {
+		fbtoken: string;
+	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
 			url: `/v1/fblogin`,
@@ -19,7 +23,9 @@ class UserService {
 		});
 	}
 
-	static naverLogin(data: { fbtoken: string }) {
+	static naverLogin(data: {
+		fbtoken: string;
+	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
 			url: `/v1/nvlogin`,
@@ -27,7 +33,9 @@ class UserService {
 		});
 	}
 
-	static kakaoLogin(data: { kktoken: string }) {
+	static kakaoLogin(data: {
+		kktoken: string;
+	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
 			url: `/v1/kklogin`,
@@ -35,7 +43,9 @@ class UserService {
 		});
 	}
 
-	static signupWithEmail(data: Partial<IUserAuthenticationForm>) {
+	static signupWithEmail(
+		data: Partial<IUserAuthenticationForm>,
+	): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
 			url: `/v1/users`,
@@ -69,7 +79,10 @@ class UserService {
 		});
 	}
 
-	static resetPassword(data: { access_token: string; pasword: string }) {
+	static resetPassword(data: {
+		access_token?: string;
+		pasword?: string;
+	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
 			url: `/v1/users/resetPassword`,

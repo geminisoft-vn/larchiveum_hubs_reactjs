@@ -98,7 +98,7 @@ const AvatarPickingModal = (props) => {
 						<button
 							key={avt.id}
 							className={clsx(
-								"col-span-4 w-full rounded-lg border bg-gray-100",
+								"col-span-3 w-full rounded-lg border bg-gray-100",
 								selectedAvatar &&
 									avt.id === selectedAvatar.id &&
 									"border-blue-500",

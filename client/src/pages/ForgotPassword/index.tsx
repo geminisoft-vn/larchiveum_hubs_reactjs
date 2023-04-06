@@ -1,23 +1,18 @@
-import { ErrorOption, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 import UserService from "src/api/UserService";
-import logo from "src/assets/images/larchiveum_logo.png";
 import {
 	Alert,
 	Button,
 	FormContainer,
 	FormItem,
-	SigninSocialButton,
 	Stack,
 	TextInput,
 	Typography,
 } from "src/components";
-import { getLanguage, setLanguage } from "src/language";
-import Store from "src/utilities/store";
 
-// import Popup from "../../../../react-components/popup/popup";
 import "reactjs-popup/dist/index.css";
 
 const ForgotPasswordPage = () => {
@@ -60,7 +55,7 @@ const ForgotPasswordPage = () => {
 		>
 			<FormContainer
 				onSubmit={handleRetrievePassword}
-				className="flex flex-col items-center gap-2"
+				className="flex flex-col gap-2"
 			>
 				<Stack direction="col" justifyContent="start" gap={4}>
 					<Typography className="text-center text-lg font-bold">
@@ -81,7 +76,12 @@ const ForgotPasswordPage = () => {
 					</Stack>
 				</Stack>
 
-				<Button type="submit">{t("forgot_password.SEND_BUTTON")}</Button>
+				<Button
+					type="submit"
+					className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white"
+				>
+					{t("forgot_password.SEND_BUTTON")}
+				</Button>
 			</FormContainer>
 
 			<Link to="/auth/signin" className="text-center">

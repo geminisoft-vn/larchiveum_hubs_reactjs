@@ -1,11 +1,6 @@
-// @ts-nocheck
-/* eslint-disable */
-
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 import UserService from "src/api/UserService";
-import Store from "src/utilities/store";
 
 const CallbackNaverOAuthPage = (props) => {
 	const [error, setError] = useState(null);
@@ -28,7 +23,6 @@ const CallbackNaverOAuthPage = (props) => {
 			UserService.naverLogin(data)
 				.then((response) => {
 					if (response.result == "ok") {
-						Store.setUser(response.data);
 						window.opener.window.location.href = "/";
 						window.close();
 					} else {

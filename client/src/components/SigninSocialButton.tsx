@@ -1,6 +1,3 @@
-// @ts-nocheck
-/* eslint-disable */
-
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import GoogleLogin from "react-google-login";
 import KakaoLogin from "react-kakao-login";
@@ -14,13 +11,11 @@ import google from "src/assets/images/google.png";
 import kakaotalk from "src/assets/images/kakao-talk.png";
 import naver from "src/assets/images/naver.png";
 import {
-	APP_ROOT,
 	facebookApp,
 	googleApp,
 	kakaoApp,
 	naverApp,
 } from "src/utilities/constants";
-import Store from "src/utilities/store";
 
 const SigninSocialButton = () => {
 	// useEffect(() => {
@@ -38,9 +33,8 @@ const SigninSocialButton = () => {
 		try {
 			const data = { ggtoken: response.tokenId };
 			UserService.googleLogin(data)
-				.then((response) => {
-					if (response.result === "ok") {
-						Store.setUser(response.data);
+				.then((res) => {
+					if (res.result === "ok") {
 						navigate("/");
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
@@ -58,9 +52,8 @@ const SigninSocialButton = () => {
 		try {
 			const data = { fbtoken: response.accessToken };
 			UserService.facebookLogin(data)
-				.then((response) => {
-					if (response.result === "ok") {
-						Store.setUser(response.data);
+				.then((res) => {
+					if (res.result === "ok") {
 						navigate("/");
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
@@ -78,9 +71,8 @@ const SigninSocialButton = () => {
 		try {
 			const data = { kktoken: response.response.access_token };
 			UserService.kakaoLogin(data)
-				.then((response) => {
-					if (response.result === "ok") {
-						Store.setUser(response.data);
+				.then((res) => {
+					if (res.result === "ok") {
 						navigate("/");
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
@@ -102,9 +94,8 @@ const SigninSocialButton = () => {
 		try {
 			const data = { fbtoken: response.accessToken };
 			UserService.naverLogin(data)
-				.then((response) => {
-					if (response.result === "ok") {
-						Store.setUser(response.data);
+				.then((res) => {
+					if (res.result === "ok") {
 						navigate("/");
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
@@ -126,11 +117,11 @@ const SigninSocialButton = () => {
 			<KakaoLogin
 				token={kakaoApp.jsKey}
 				onSuccess={signupWithKakao}
-				onFailure={(err) => {
+				onFail={(err) => {
 					console.log("Kakao Login Error: ", err);
 				}}
 				render={(props) => (
-					<a onClick={props.onClick}>
+					<button onClick={props.onClick}>
 						<img
 							src={kakaotalk}
 							alt=""
@@ -138,8 +129,9 @@ const SigninSocialButton = () => {
 								width: "48px",
 								height: "48px",
 							}}
+							className="cursor-pointer"
 						/>
-					</a>
+					</button>
 				)}
 			/>
 
@@ -151,9 +143,17 @@ const SigninSocialButton = () => {
 					console.log("Naver Login Error: ", err);
 				}}
 				render={(props) => (
-					<a onClick={props.onClick} className="naver-btn">
-						<img src={naver} />
-					</a>
+					<button onClick={props.onClick} className="naver-btn">
+						<img
+							src={naver}
+							alt=""
+							style={{
+								width: "48px",
+								height: "48px",
+							}}
+							className="cursor-pointer"
+						/>
+					</button>
 				)}
 			/> */}
 
@@ -163,7 +163,7 @@ const SigninSocialButton = () => {
 				fields="name,email,picture"
 				callback={signupWithFacebook}
 				render={(renderProps) => (
-					<a onClick={renderProps.onClick}>
+					<button onClick={renderProps.onClick}>
 						<img
 							src={facebook}
 							alt=""
@@ -171,8 +171,9 @@ const SigninSocialButton = () => {
 								width: "48px",
 								height: "48px",
 							}}
+							className="cursor-pointer"
 						/>
-					</a>
+					</button>
 				)}
 			/>
 
@@ -183,7 +184,7 @@ const SigninSocialButton = () => {
 					console.log("Google Login Error: ", err);
 				}}
 				render={(props) => (
-					<a onClick={props.onClick}>
+					<button onClick={props.onClick}>
 						<img
 							src={google}
 							alt=""
@@ -191,8 +192,9 @@ const SigninSocialButton = () => {
 								width: "48px",
 								height: "48px",
 							}}
+							className="cursor-pointer"
 						/>
-					</a>
+					</button>
 				)}
 				cookiePolicy="single_host_origin"
 				// isSignedIn={true}

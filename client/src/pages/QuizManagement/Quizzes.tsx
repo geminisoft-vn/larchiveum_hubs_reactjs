@@ -1,42 +1,45 @@
-// @ts-nocheck
-/* eslint-disable */
-
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Empty } from "antd";
 
-import { Button } from "src/components";
 import QuizService from "src/api/QuizService";
+import { useAppDispatch, useAppSelector } from "src/app/hooks";
+import { Button } from "src/components";
+import { showToast } from "src/features/toast/ToastSlice";
+import { getUserInfo } from "src/features/user/selectors";
+import { IQuiz } from "src/interfaces";
 import { CONTENT_ROOT } from "src/utilities/constants";
-import Store from "src/utilities/store";
 
-import PopupCreateQuiz from "./PopupCreateQuiz";
 import Quiz from "./Quiz";
 
 const Quizzes = (props) => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const [isOpenPopupCreate, setIsOpenPopupCreate] = useState(false);
-	const [deletingQuizId, setDeletingQuizId] = useState(null);
-	const [isLoading, setIsLoading] = useState(false);
-	const [listQuiz, setListQuiz] = useState([]);
-	const [params, setParams] = useState({
-		sort: "-createdAt",
-		filter: JSON.stringify([
-			{
-				operator: "=",
-				key: "createdBy",
-				value: Store.getUser()?.id,
-			},
-		]),
-	});
 
-	useEffect(() => {
-		load();
-	}, []);
+	const dispatch = useAppDispatch();
 
-	const handleGoToQuizForm = (quizId) => {
+	const user = useAppSelector(getUserInfo);
+
+	const [listQuiz, setListQuiz] = useState<IQuiz[]>([]);
+
+	function load() {
+		QuizService.getAll({
+			sort: "-createdAt",
+			filter: JSON.stringify([
+				{
+					operator: "=",
+					key: "createdBy",
+					value: user.id,
+				},
+			]),
+		}).then((res) => {
+			const quizs = res.data.items;
+			setListQuiz(quizs);
+		});
+	}
+
+	const handleGoToQuizForm = (quizId?) => {
 		if (quizId) {
 			navigate(`/home/content/quiz/form/${quizId}`);
 			return;
@@ -44,47 +47,45 @@ const Quizzes = (props) => {
 		navigate("/home/content/quiz/form");
 	};
 
-	function load() {
-		setIsLoading(true);
-		QuizService.getAll(params)
-			.then((res) => {
-				const quizs = res.data.items;
-				setListQuiz(quizs);
-				setIsLoading(false);
-			})
-			.catch((error) => {
-				setIsLoading(false);
-			});
-	}
-
-	function handleOpenPopupCreate() {
-		console.log(isOpenPopupCreate);
-		setIsOpenPopupCreate(true);
-	}
-
-	function handleDeleteQuiz(quizId) {
-		setDeletingQuizId(quizId);
+	const handleDeleteQuiz = (quizId) => {
 		QuizService.delete(quizId)
-			.then((quiz) => {
-				setListQuiz(listQuiz.filter((q) => q.id != quizId));
-				setDeletingQuizId(null);
+			.then(() => {
+				dispatch(
+					showToast({
+						type: "success",
+						message: t(`__TOAST__.SUCCESS`),
+					}),
+				);
 			})
-			.catch((error) => {
-				setDeletingQuizId(null);
+			.catch(() => {
+				dispatch(
+					showToast({
+						type: "error",
+						message: t(`__TOAST__.ERROR`),
+					}),
+				);
 			});
-	}
+	};
 
-	function handleGotoViewQuiz(quizId) {
+	const handleGotoViewQuiz = (quizId) => {
 		window.open(`${CONTENT_ROOT}/quiz?id=${quizId}`);
-	}
+	};
+
+	useEffect(() => {
+		load();
+	}, []);
 
 	return (
-		<div className="flex flex-col justify-start items-start gap-2">
-			<Button onClick={() => handleGoToQuizForm()}>
+		<div className="flex flex-col items-center justify-start gap-2">
+			<Button
+				onClick={handleGoToQuizForm}
+				className="self-start bg-blue-700 text-white"
+			>
 				{t("content.QUIZ_TAB__QUIZ_LIST__QUIZ_TAB__ADD_QUIZ_BUTTON_LABEL")}
 			</Button>
 			{listQuiz.length === 0 ? (
 				<Empty
+					className="self-center"
 					image={Empty.PRESENTED_IMAGE_SIMPLE}
 					style={{ marginTop: "100px" }}
 				/>

@@ -13,6 +13,7 @@ type Props = {
 	width?: number | string;
 	minHeight?: number;
 	maxHeight?: number | "max-content";
+	height?: number;
 	title?: string;
 	children: JSX.Element | JSX.Element[] | string | null;
 	actions?: TModalAction[];
@@ -25,6 +26,7 @@ const Modal = (props: Props) => {
 		width,
 		minHeight,
 		maxHeight,
+		height,
 		title,
 		children,
 		actions,
@@ -48,14 +50,15 @@ const Modal = (props: Props) => {
 			)}
 		>
 			<div
-				className="relative rounded-lg border bg-white shadow-lg"
+				className="flex rounded-lg border bg-white shadow-lg"
 				style={{
 					width: `${width}px`,
 					minHeight: `${minHeight}px`,
 					maxHeight: `${maxHeight}px`,
+					height: `${height}px`,
 				}}
 			>
-				<div className="relative flex h-full max-h-full flex-1 flex-col rounded-lg dark:bg-gray-700">
+				<div className="flex h-full max-h-full flex-1 flex-col rounded-lg dark:bg-gray-700">
 					<div className="flex items-start justify-between rounded-t border-b p-4 dark:border-gray-600">
 						<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
 							{title}
@@ -110,6 +113,7 @@ Modal.defaultProps = {
 	width: 512,
 	minHeight: 512,
 	maxHeight: 512,
+	height: 512,
 };
 
 export default Modal;

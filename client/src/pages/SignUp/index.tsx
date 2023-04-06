@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 import UserService from "src/api/UserService";
+import { useAppDispatch } from "src/app/hooks";
 import logo from "src/assets/images/larchiveum_logo.png";
 import {
 	Alert,
@@ -14,6 +15,7 @@ import {
 	TextInput,
 	Typography,
 } from "src/components";
+import { showToast } from "src/features/toast/ToastSlice";
 import { IUserAuthenticationForm } from "src/interfaces";
 import { getLanguage, setLanguage } from "src/language";
 import Store from "src/utilities/store";
@@ -21,6 +23,8 @@ import Store from "src/utilities/store";
 const SignUpForm = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+
+	const dispatch = useAppDispatch();
 
 	const {
 		handleSubmit,
@@ -47,17 +51,23 @@ const SignUpForm = () => {
 			return;
 		}
 
-		UserService.signupWithEmail(data).then((res) => {
-			if (res.result === "ok") {
-				Store.removeUser();
-				navigate(`/auth/warning_verify&email=${res.data.email}`);
-			} else if (res.result === "fail") {
-				setError(
-					"email",
-					t(`signup.SIGN_UP_ERROR__${res.error.toUpperCase()}`) as ErrorOption,
-				);
-			}
-		});
+		UserService.signupWithEmail(data)
+			.then((res) => {
+				if (res.result === "ok") {
+					Store.removeUser();
+					navigate(`/auth/warning_verify&email=${res.data.email}`);
+				}
+			})
+			.catch((error) => {
+				if (error.response) {
+					setError("email", {
+						type: "error",
+						message: t(
+							`signup.SIGN_UP_ERROR__${error.response.data.error.toUpperCase()}`,
+						),
+					});
+				}
+			});
 	});
 
 	return (
@@ -130,7 +140,7 @@ const SignUpForm = () => {
 
 				<Button
 					type="submit"
-					className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-df font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
+					className="w-full rounded-lg  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-5 py-2.5 text-df font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
 				>
 					{t("signup.SIGN_UP_BUTTON")}
 				</Button>

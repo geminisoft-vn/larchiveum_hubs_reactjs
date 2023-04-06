@@ -19,7 +19,7 @@ class QuizService {
 		return request.put(`/v1/auth/quizzes/${id}`, data);
 	}
 
-	static delete(id) {
+	static delete(id): Promise<IAxiosResponse<IQuiz>> {
 		return request.delete(`/v1/auth/quizzes/${id}`);
 	}
 }

@@ -5,7 +5,7 @@ import axios, {
 } from "axios";
 import Cookies from "js-cookie";
 
-import store from "src/app/store";
+import store, { RootState } from "src/app/store";
 import { startLoading, stopLoading } from "src/features/loader/LoaderSlice";
 
 import { API_ROOT } from "./constants";
@@ -21,16 +21,9 @@ const request = axios.create({
 });
 
 const getAccessToken = () => {
-	if (
-		Cookies.get("__LARCHIVEUM__USER") &&
-		Cookies.get("__LARCHIVEUM__USER") !== ""
-	) {
-		const str = Cookies.get("__LARCHIVEUM__USER");
-		const user = JSON.parse(str || "{}");
-		if (user) {
-			if (user.token) return user.token;
-		}
-	}
+	const state = store.getState();
+	const { token } = state.user.authentication;
+	if (token) return token;
 	return "";
 };
 
