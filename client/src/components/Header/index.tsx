@@ -73,7 +73,7 @@ const Header = () => {
 	];
 
 	return (
-		<header className="w-full">
+		<header className="sticky top-0 w-full">
 			<nav className="mt-4 rounded-lg border-gray-200 bg-gray-100 p-4">
 				<div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between">
 					<Link to="/home/app" className="flex items-center">
