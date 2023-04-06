@@ -15,10 +15,12 @@ import {
 	Progress,
 	Stack,
 	TextInput,
+	Typography,
 } from "src/components";
 import { closeModal } from "src/features/modal/ModalSlice";
 import { openPopup } from "src/features/popup/PopupSlide";
 import { updateProgress } from "src/features/progress/ProgressSlice";
+import { showToast } from "src/features/toast/ToastSlice";
 import { IDocument } from "src/interfaces";
 import { tinyApp } from "src/utilities/constants";
 
@@ -57,11 +59,55 @@ const DocumentForm = () => {
 			description: data.description,
 			content: editorData,
 		};
-		DocumentService.create(dataToSend)
-			.then((res) => {
-				handleGoBack();
+		if (documentId) {
+			// edit
+			DocumentService.update(documentId, {
+				title: data.title,
+				description: data.description,
+				content: editorData,
 			})
-			.catch((error) => {});
+				.then(() => {
+					dispatch(
+						showToast({
+							type: "success",
+							message: t(`__TOAST__.SUCCESS`),
+						}),
+					);
+				})
+				.then(() => {
+					handleGoBack();
+				})
+				.catch(() => {
+					dispatch(
+						showToast({
+							type: "error",
+							message: t(`__TOAST__.ERROR`),
+						}),
+					);
+				});
+		} else {
+			// create
+			DocumentService.create(dataToSend)
+				.then(() => {
+					dispatch(
+						showToast({
+							type: "success",
+							message: t(`__TOAST__.SUCCESS`),
+						}),
+					);
+				})
+				.then(() => {
+					handleGoBack();
+				})
+				.catch(() => {
+					dispatch(
+						showToast({
+							type: "error",
+							message: t(`__TOAST__.ERROR`),
+						}),
+					);
+				});
+		}
 	});
 
 	function onPickFile(callback, value, meta) {
@@ -107,6 +153,9 @@ const DocumentForm = () => {
 
 	return (
 		<FormContainer onSubmit={handleSaveDocument}>
+			<Typography className="text-bold text-center font-bold">
+				{documentId ? "Edit Document" : "Create Document"}
+			</Typography>
 			<Stack direction="col" gap={2}>
 				<Stack
 					direction="row"
@@ -120,9 +169,7 @@ const DocumentForm = () => {
 						)}
 					</Button>
 					<Button type="submit" onClick={() => {}}>
-						{t(
-							"content.DOCUMENT_TAB__DOCUMENT_CREATE_DETAIL__CREATE_BUTTON_LABEL",
-						)}
+						{documentId ? t("__BUTTON__.EDIT") : t("__BUTTON__.CREATE")}
 					</Button>
 				</Stack>
 				<Stack direction="col" gap={2} className="w-full">
@@ -196,7 +243,6 @@ const DocumentForm = () => {
 							"bullist numlist checklist outdent indent | removeformat | code table help",
 					}}
 				/>
-				{/* <UploadFileModal ref={uploadRef} /> */}
 			</Stack>
 		</FormContainer>
 	);

@@ -9,7 +9,9 @@
     "BACK": "Back",
     "SAVE": "Save",
     "CLOSE": "Close",
-    "CHANGE": "Change"
+    "CHANGE": "Change",
+    "CREATE": "Create",
+    "EDIT": "Edit"
   },
   "__TOAST__": {
     "SUCCESS": "Success",

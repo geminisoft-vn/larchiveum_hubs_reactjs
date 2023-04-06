@@ -9,7 +9,9 @@
     "BACK": "뒤로가기",
     "SAVE": "저장",
     "CLOSE": "확인",
-    "CHANGE": "저장"
+    "CHANGE": "저장",
+    "CREATE": "생성",
+    "EDIT": "확인"
   },
   "__TOAST__": {
     "SUCCESS": "성공",
