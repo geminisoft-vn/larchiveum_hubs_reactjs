@@ -46,7 +46,7 @@ const SignIn = () => {
 
 	return (
 		<div
-			className="w-full h-full flex items-center justify-center"
+			className="flex h-full w-full items-center justify-center"
 			style={{
 				backgroundImage: `url(https://hubs-dev-01-assets.larchiveum.link/hubs/assets/login/background-da651ea8f8f4db5bec199e614ba84843.jpg)`,
 				backgroundRepeat: "no-repeat",
@@ -54,10 +54,17 @@ const SignIn = () => {
 				backgroundSize: "cover",
 			}}
 		>
-			<Stack direction="col" alignItems="center" gap={2} className="bg-white p-16 shadow-lg border rounded-lg ">
+			<Stack
+				direction="col"
+				alignItems="center"
+				gap={2}
+				className="rounded-lg border bg-white p-16 shadow-lg "
+			>
 				<>
 					{errors.email && <Alert type="error" error={errors.email?.message} />}
-					{errors.password && <Alert type="error" error={errors.password?.message} />}
+					{errors.password && (
+						<Alert type="error" error={errors.password?.message} />
+					)}
 				</>
 				<Stack direction="row" justifyContent="center">
 					<Link to="/">
@@ -73,16 +80,25 @@ const SignIn = () => {
 				<FormContainer onSubmit={handleLogin} className="flex flex-col gap-2">
 					<FormItem
 						label={t("signin.EMAIL_LABEL")}
-						renderInput={() => <TextInput {...register("email")} placeholder="" className="" />}
+						renderInput={() => (
+							<TextInput {...register("email")} placeholder="" className="" />
+						)}
 					/>
 					<FormItem
 						label={t("signin.PASSWORD_LABEL")}
-						renderInput={() => <TextInput {...register("password")} type="password" placeholder="" className="" />}
+						renderInput={() => (
+							<TextInput
+								{...register("password")}
+								type="password"
+								placeholder=""
+								className=""
+							/>
+						)}
 					/>
 
 					<Button
 						type="submit"
-						className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-df w-full sm:w-auto px-5 py-2.5"
+						className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-df font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
 					>
 						{t("signin.SIGN_IN_BUTTON")}
 					</Button>
@@ -95,7 +111,8 @@ const SignIn = () => {
 				<SigninSocialButton />
 
 				<Typography>
-					If you forgot your password <Link to="/auth/forgot_password">Reset password</Link>
+					If you forgot your password{" "}
+					<Link to="/auth/forgot_password">Reset password</Link>
 				</Typography>
 			</Stack>
 		</div>

@@ -3,20 +3,17 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 import UserService from "src/api/UserService";
+import logo from "src/assets/images/larchiveum_logo.png";
 import {
 	Alert,
-	Box,
 	Button,
 	FormContainer,
 	FormItem,
+	SigninSocialButton,
 	Stack,
 	TextInput,
 	Typography,
-} from "@mui/material";
-
-import UserService from "src/api/UserService";
-import logo from "src/assets/images/larchiveum_logo.png";
-import { Alert, Button, SigninSocialButton, TextInput } from "src/components";
+} from "src/components";
 import { getLanguage, setLanguage } from "src/language";
 import Store from "src/utilities/store";
 
@@ -37,78 +34,61 @@ const ForgotPasswordPage = () => {
 	});
 
 	const handleRetrievePassword = handleSubmit((data) => {
-		UserService.requestResetPassword(data).then((res) => {
-			if (res.result === "ok") {
-				// setIsOpenPoupEmailSentNotification(true);
-				navigate("/auth/signin");
-			} else if (res.result === "fail") {
-				setError("email", {
-					type: res.code,
-					message: t(
-						`forgot_password.FORGOT_PASSWORD_ERROR__${res.error.toUpperCase()}`,
-					),
-				});
-			}
-		});
+		UserService.requestResetPassword(data)
+			.then((res) => {
+				if (res.result === "ok") {
+					navigate("/auth/signin");
+				}
+			})
+			.catch((error) => {
+				if (error.response) {
+					setError("email", {
+						type: error.response.data.error,
+						message: t(
+							`forgot_password.FORGOT_PASSWORD_ERROR__${error.response.data.error.toUpperCase()}`,
+						),
+					});
+				}
+			});
 	});
 
-	console.log({ errors });
-
 	return (
-		<div
-			sx={{
-				backgroundImage: `url(https://hubs-dev-01-assets.larchiveum.link/hubs/assets/login/background-da651ea8f8f4db5bec199e614ba84843.jpg)`,
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center",
-				backgroundSize: "cover",
-
-				width: "100%",
-				height: "100%",
-			}}
+		<Stack
+			direction="col"
+			gap={2}
+			className="rounded-lg border bg-white p-16 shadow-lg"
 		>
-			<Container
-				sx={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-
-					width: "100%",
-					height: "100%",
-				}}
+			<FormContainer
+				onSubmit={handleRetrievePassword}
+				className="flex flex-col items-center gap-2"
 			>
-				<Paper
-					elevation={4}
-					sx={{ p: 2, width: "512px" }}
-					component="form"
-					onSubmit={handleSubmit}
-				>
-					<Stack direction="column" justifyContent="flex-start" spacing={4}>
-						<Typography
-							component="h5"
-							variant="h5"
-							sx={{ textAlign: "center", fontWeight: 700 }}
-						>
-							{t("forgot_password.FORGOT_PASSWORD")}
-						</Typography>
-						<Stack direction="column" spacing={2}>
-							{error && <Alert type="error" message={error} />}
-							<TextInput
-								name="email"
-								label={t("signin.EMAIL_LABEL")}
-								fullWidth
-								value={email}
-								onChange={handleChangeEmail}
-							/>
+				<Stack direction="col" justifyContent="start" gap={4}>
+					<Typography className="text-center text-lg font-bold">
+						{t("forgot_password.FORGOT_PASSWORD")}
+					</Typography>
+					<Stack direction="col" gap={2}>
+						<>
+							{errors.email && (
+								<Alert type="error" error={errors.email.message} />
+							)}
+						</>
+						<FormItem
+							label={t("signin.EMAIL_LABEL")}
+							renderInput={() => {
+								return <TextInput {...register("email")} />;
+							}}
+						/>
+					</Stack>
+				</Stack>
 
-					<Button type="submit">{t("forgot_password.SEND_BUTTON")}</Button>
-				</FormContainer>
+				<Button type="submit">{t("forgot_password.SEND_BUTTON")}</Button>
+			</FormContainer>
 
-				<Link to="/auth/signin" className="text-center">
-					Sign in
-				</Link>
-			</Stack>
-		</div>
+			<Link to="/auth/signin" className="text-center">
+				Sign in
+			</Link>
+		</Stack>
 	);
-}
+};
 
 export default ForgotPasswordPage;

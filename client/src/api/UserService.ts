@@ -1,4 +1,4 @@
-import { IAxiosResponse, IUserAuthenticationForm } from "src/interfaces";
+import { IAxiosResponse, IUser, IUserAuthenticationForm } from "src/interfaces";
 import { API_ROOT } from "src/utilities/constants";
 import request from "src/utilities/request";
 
@@ -59,7 +59,9 @@ class UserService {
 		});
 	}
 
-	static requestResetPassword(data: { email: string }) {
+	static requestResetPassword(data: {
+		email: string;
+	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
 			url: `/v1/users/requestResetPassword`,
