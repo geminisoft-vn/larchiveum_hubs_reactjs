@@ -1,495 +1,340 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import {
-	FaCodepen,
-	FaLink,
-	FaListOl,
-	FaRegCalendarAlt,
-	FaRegImage,
-	FaTools,
-	FaUserFriends,
-	FaVideo,
-} from "react-icons/fa";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import clsx from "clsx";
-import moment from "moment-timezone";
-
-import ExhibitionsService from "src/api/ExhibitionsService";
-import MediaService from "src/api/MediaService";
-import ProjectService from "src/api/ProjectService";
-import UserService from "src/api/UserService";
-import { useAppDispatch, useAppSelector } from "src/app/hooks";
-import AddIcon from "src/assets/larchiveum/add_black_24dp.svg";
-import defaultImage from "src/assets/larchiveum/default-image.png";
-import defaultModel from "src/assets/larchiveum/model-default.png";
-import defaultImage1 from "src/assets/larchiveum/siri.gif";
-import { Button, Popup } from "src/components";
-import { openPopup } from "src/features/popup/PopupSlide";
-import { getUserInfo } from "src/features/user/selectors";
-import { getLanguage } from "src/language";
-import { APP_ROOT } from "src/utilities/constants";
-
-import Exhibition from "./components/Exhibition";
-import ExhibitionFormModal from "./components/ExhibitionFormModal";
 import Exhibitions from "./components/Exhibitions";
 
 const Manager = () => {
-	const { t } = useTranslation();
-	const navigate = useNavigate();
-	const [searchParams] = useSearchParams();
-	const dispatch = useAppDispatch();
+	// const getAllProjects = () => {
+	// 	ProjectService.getListProjectWithObjects({
+	// 		page: 1,
+	// 		pageSize: 4,
+	// 		sort: "id|desc", // format <attribute>|<order type>
+	// 	}).then((res) => {
+	// 		if (res.result === "ok") {
+	// 			setProjects(res.data);
+	// 			setProjectsLoaded(true);
+	// 			setIsLoading(false);
+	// 		} else {
+	// 			toast.error(t("manage.GET_PROJECTS_ERROR"), { autoClose: 1000 });
+	// 			setIsLoading(false);
+	// 		}
+	// 	});
+	// };
 
-	const user = useAppSelector(getUserInfo);
+	// const handleSpoke = () => {
+	// 	window.open(`${APP_ROOT}/spoke/projects/${projectId}`, "_blank");
+	// 	setIsOpenPopupChangeMediaURLGuide(false);
+	// };
 
-	const [scenes, setScenes] = useState([]);
-	const [exhibitionsLoaded, setExhibitionsLoaded] = useState(false);
-	const [projectsLoaded, setProjectsLoaded] = useState(true);
-	const [objectLoaded, setObjectLoaded] = useState(false);
-	const [mediaLoaded, setMediaLoaded] = useState(false);
-	const [iconLoaded, setIconLoaded] = useState(false);
-	const [shouldActiveExhibitionForm, setShouldActiveExhibitionForm] =
-		useState(false);
-	const [
-		isOpenPopupConfirmCloseExhibition,
-		setIsOpenPopupConfirmCloseExhibition,
-	] = useState(false);
-	const [
-		isOpenPopupConfirmOpenExhibition,
-		setIsOpenPopupConfirmOpenExhibition,
-	] = useState(false);
-	const [
-		isOpenPopupConfirmDeleteExhibition,
-		setIsOpenPopupConfirmDeleteExhibition,
-	] = useState(false);
-	const [isOpenPopupConfirmChangePublic, setIsOpenPopupConfirmChangePublic] =
-		useState(false);
-	const [isOpenPopupChangeMediaURLGuide, setIsOpenPopupChangeMediaURLGuide] =
-		useState(false);
-	const [isOpenPopupMedia, setIsOpenPopupMedia] = useState(false);
-	const [isOpenPopupObject, setIsOpenPopupObject] = useState(false);
-	const [exhibition, setExhibition] = useState(undefined);
-	const [exhibitionType, setExhibitionType] = useState("create");
-	const [exhibitionId, setExhibitionId] = useState(undefined);
-	const [projectId, setProjectId] = useState(undefined);
-	const [isLoadingF, setIsLoadingF] = useState(true);
-	const [isLoading, setIsLoading] = useState(false);
-	const [isListRoom, setIsListRoom] = useState(true);
-	const [isListProject, setIsListProject] = useState(false);
-	const [language, setLanguage] = useState("en");
-
-	const [exhibitions, setExhibitions] = useState({
-		data: [],
-		pagination: {},
-	});
-
-	const [projects, setProjects] = useState({
-		data: [],
-		pagination: {},
-	});
-
-	const [medias, setMedias] = useState({
-		data: [],
-		pagination: {},
-	});
-
-	const [objects, setObjects] = useState({
-		data: [],
-		pagination: {},
-	});
-
-	const [filterExhibitionList, setfilterExhibitionList] = useState({
-		page: 1,
-		pageSize: 4,
-		sort: "id|desc", // format <attribute>|<order type>
-		isAdmin: 1,
-	});
-
-	const [filterProjectList, setfilterProjectList] = useState({
-		page: 1,
-		pageSize: 4,
-		sort: "id|desc", // format <attribute>|<order type>
-	});
-
-	const getAllProjects = () => {
-		ProjectService.getListProjectWithObjects({
-			page: 1,
-			pageSize: 4,
-			sort: "id|desc", // format <attribute>|<order type>
-		}).then((res) => {
-			if (res.result === "ok") {
-				setProjects(res.data);
-				setProjectsLoaded(true);
-				setIsLoading(false);
-			} else {
-				toast.error(t("manage.GET_PROJECTS_ERROR"), { autoClose: 1000 });
-				setIsLoading(false);
-			}
-		});
-	};
-
-	const handleSpoke = () => {
-		window.open(`${APP_ROOT}/spoke/projects/${projectId}`, "_blank");
-		setIsOpenPopupChangeMediaURLGuide(false);
-	};
-
-	const closePopupSpoke = () => {
-		setIsOpenPopupChangeMediaURLGuide(false);
-	};
-
-	const closePopupCloseRoom = () => {
-		setIsOpenPopupConfirmCloseExhibition(false);
-	};
-
-	const closePopupOpenRoom = () => {
-		setIsOpenPopupConfirmOpenExhibition(false);
-	};
-
-	const closePopupCustomMedia = () => {
-		setIsOpenPopupMedia(false);
-		setMedias({
-			data: [],
-			pagination: {},
-		});
-	};
-
-	const closePopupCustomObject = () => {
-		setIsOpenPopupObject(false);
-		setObjects({
-			data: [],
-			pagination: {},
-		});
-	};
-
-	const openPopupCustomObject = (ProjectId) => {
-		if (ProjectId) {
-			setProjectId(ProjectId);
-			ProjectService.getListObject(ProjectId).then((res) => {
-				if (res.result === "ok") {
-					setObjects(res.data);
-					setObjectLoaded(true);
-				} else {
-					toast.error(t("manager.GET_OBJECTS_ERROR"), { autoClose: 1000 });
-					closePopupCustomObject();
-				}
-			});
-		}
-		setIsOpenPopupObject(true);
-	};
-
-	const handelSaveMediaURL = () => {
-		setIconLoaded(true);
-		const data = medias.data.map((item) => ({
-			id: item.uuid,
-			url: item.url,
-		}));
-		const dataString = JSON.stringify(data);
-		MediaService.updateMediaMany(dataString).then((res) => {
-			if (res.result === "ok") {
-				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-				setIconLoaded(false);
-			} else {
-				toast.error(t("manager.UPDATE_MEDIAS_ERROR"), { autoClose: 5000 });
-			}
-		});
-	};
-
-	const handelOpenPopupChangeMediaURLGuide = () => {
-		setIconLoaded(true);
-		let listUuid = [];
-		listUuid = objects.data.map((item) => {
-			if (item?.changeable === true) {
-				return item.uuid;
-			}
-			return false;
-		});
-		const dataString = JSON.stringify(listUuid);
-		ProjectService.updateChangeableObjects(projectId, dataString).then(
-			(res) => {
-				if (res.result == "ok") {
-					setIconLoaded(false);
-					closePopupCustomObject();
-					setIsOpenPopupChangeMediaURLGuide(true);
-					toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-				} else {
-					toast.error(t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"), {
-						autoClose: 5000,
-					});
-				}
-			},
-		);
-	};
-
-	const deleteRoom = () => {
-		setIsOpenPopupConfirmDeleteExhibition(false);
-	};
-
-	const handleChangeable = (object, evt) => {
-		if (object.changeable == true) {
-			object.changeable = false;
-		} else {
-			object.changeable = true;
-		}
-		setObjects({ ...objects });
-	};
-
-	const handleChangeURL = (media, evt) => {
-		const { value } = evt.target;
-		media.url = value;
-		media.check = "checking";
-		setMedias({ ...medias });
-		fetch(media.url)
-			.then((response) => {
-				const contentType = response.headers.get("content-type");
-				const type = contentType.split("/")[0];
-				if (media.type.includes(type)) {
-					media.check = "ok";
-				} else {
-					media.check = "fail";
-				}
-				setMedias({ ...medias });
-			})
-			.catch((error) => {
-				media.check = "fail";
-				setMedias({ ...medias });
-			});
-	};
-
-	const renderListMedia = () => (
-		<>
-			{mediaLoaded ? (
-				<>
-					{medias.data.map((item, index) => {
-						if (item) {
-							const Thubmnail = () => {
-								if (item.type == "video") {
-									return <video src={item?.url} />;
-								}
-								if (item.type == "image") {
-									return <img src={item?.url} />;
-								}
-								return <></>;
-							};
-							const icon_type = () => {
-								if (item.type == "video") {
-									return <FaVideo className="icon_type" />;
-								}
-								if (item.type == "image") {
-									return <FaRegImage className="icon_type" />;
-								}
-							};
-
-							return (
-								<div key={index} className="items">
-									<div className="w-30">{Thubmnail()}</div>
-									<div className="w-70">
-										<h3 className="mb-3">{item?.name}</h3>
-										{icon_type()}
-										<div className="wrap-input100 validate-input">
-											<input
-												className="input100"
-												type="text"
-												name="src"
-												placeholder="URL"
-												onChange={(e) => handleChangeURL(item, e)}
-												value={item?.url}
-											/>
-											<span className="focus-input100" />
-										</div>
-										{item?.check != "cheking" ? (
-											""
-										) : (
-											<span>{t("manager.POPUP_MEDIA__URL_CORRECT")}</span>
-										)}
-										{item?.check != "fail" ? (
-											""
-										) : (
-											<span>{t("manager.POPUP_MEDIA__URL_INCORRECT")}</span>
-										)}
-									</div>
-								</div>
-							);
-						}
-					})}
-				</>
-			) : (
-				<></>
-			)}
-		</>
-	);
-
-	const renderListObject = () => (
-		<>
-			{objectLoaded ? (
-				<>
-					{objects.data.map((item, index) => {
-						if (item) {
-							const Thubmnail = () => {
-								if (item.type == "video") {
-									return <video src={item?.src} />;
-								}
-								if (item.type == "image") {
-									return <img src={item?.src} />;
-								}
-								return <model-viewer poster={defaultModel} src={item?.src} />;
-							};
-							if (item?.changeable == undefined) {
-								if (item.src.includes(item.uuid)) {
-									item.changeable = true;
-								} else {
-									item.changeable = false;
-								}
-							}
-							const icon_type = () => {
-								if (item.type == "video") {
-									return <FaVideo className="icon_type" />;
-								}
-								if (item.type == "image") {
-									return <FaRegImage className="icon_type" />;
-								}
-								return <FaCodepen className="icon_type" />;
-							};
-							return (
-								<div key={index} className="items list_obj">
-									<div className="w-30">{Thubmnail()}</div>
-									<div className="w-70">
-										<h3 className="mb-3">{item?.name}</h3>
-										{icon_type()}
-										<label className="checkbox_Url_change">
-											<input
-												className="largerCheckbox"
-												type="checkbox"
-												name="public"
-												checked={item?.changeable}
-												onChange={(e) => handleChangeable(item, e)}
-											/>
-											<span className="textCheckbox">
-												{t("manager.POPUP_OBJECT__URL_CHANEABLE")}
-											</span>
-										</label>
-									</div>
-								</div>
-							);
-						}
-					})}
-				</>
-			) : (
-				<></>
-			)}
-		</>
-	);
-
-	const renderProjects = () => (
-		<>
-			{projectsLoaded ? (
-				<div className="flex flex-col gap-2">
-					<p className="text-center text-lg font-bold">
-						{t("manager.LIST_PROJECT")}
-					</p>
-					<div className="flex flex-col gap-2">
-						{projects.data.map((item, index) => {
-							let countImage = 0;
-							let countVideo = 0;
-							let countModel = 0;
-							item?.objects
-								.filter((item) => item.type === "image")
-								.map((item) => {
-									countImage++;
-								});
-							item?.objects
-								.filter((item) => item.type === "video")
-								.map((item) => {
-									countVideo++;
-								});
-							item?.objects
-								.filter((item) => item.type.includes("model"))
-								.map((item) => {
-									countModel++;
-								});
-							return (
-								<div
-									key={item.id}
-									className="grid grid-cols-12 rounded-lg bg-gray-100"
-								>
-									<div className="col-span-3 rounded-lg">
-										<img
-											className="h-full w-full"
-											src={item?.thumbnail_url}
-											alt=""
-										/>
-									</div>
-									<div className="col-span-6 flex flex-col justify-around p-4">
-										<p className="text-lg font-bold">{item?.name}</p>
-										<div className="flex items-center gap-4">
-											<div className="flex items-center gap-2">
-												{count_Image}
-												<FaVideo className="text-lg" />
-											</div>
-											<div className="flex items-center gap-2">
-												{count_Video}
-												<FaRegImage className="text-lg" />
-											</div>
-											<div className="flex items-center gap-2">
-												{count_Model}
-												<FaCodepen className="text-lg" />
-											</div>
-										</div>
-									</div>
-									<div className="col-span-3 flex items-center justify-center">
-										<FaListOl
-											className="text-lg"
-											onClick={() => {
-												openPopupCustomObject(item.id);
-											}}
-										/>
-									</div>
-								</div>
-							);
-						})}
-					</div>
-				</div>
-			) : (
-				<></>
-			)}
-			{/* {projectsLoaded ? (
-          projects.data.length > 0 ? (
-            <Pagination pagination={projects.pagination} callFetchList={changePagesProject} />
-          ) : null
-        ) : null} */}
-		</>
-	);
-
-	useEffect(() => {
-		// getAllExhibitions();
-		if (user?.type === 5) {
-			getAllProjects();
-		}
-
-		setLanguage(getLanguage());
-	}, [filterExhibitionList.page]);
-
-	useEffect(() => {
-		if (user?.type === 5) {
-			getAllProjects();
-		}
-	}, [filterProjectList.page]);
-
-	// useEffect(() => {
-	// 	const tab = searchParams.get("tab");
-	// 	if (tab === "exhibition") {
-	// 		// ActionListRoom();
-	// 	} else if (tab === "project") {
-	// 		ActionListProject();
+	// const openPopupCustomObject = (ProjectId) => {
+	// 	if (ProjectId) {
+	// 		setProjectId(ProjectId);
+	// 		ProjectService.getListObject(ProjectId).then((res) => {
+	// 			if (res.result === "ok") {
+	// 				setObjects(res.data);
+	// 				setObjectLoaded(true);
+	// 			} else {
+	// 				toast.error(t("manager.GET_OBJECTS_ERROR"), { autoClose: 1000 });
+	// 				closePopupCustomObject();
+	// 			}
+	// 		});
 	// 	}
-	// }, [searchParams]);
+	// 	setIsOpenPopupObject(true);
+	// };
+
+	// const handelSaveMediaURL = () => {
+	// 	setIconLoaded(true);
+	// 	const data = medias.data.map((item) => ({
+	// 		id: item.uuid,
+	// 		url: item.url,
+	// 	}));
+	// 	const dataString = JSON.stringify(data);
+	// 	MediaService.updateMediaMany(dataString).then((res) => {
+	// 		if (res.result === "ok") {
+	// 			toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
+	// 			setIconLoaded(false);
+	// 		} else {
+	// 			toast.error(t("manager.UPDATE_MEDIAS_ERROR"), { autoClose: 5000 });
+	// 		}
+	// 	});
+	// };
+
+	// const handelOpenPopupChangeMediaURLGuide = () => {
+	// 	setIconLoaded(true);
+	// 	let listUuid = [];
+	// 	listUuid = objects.data.map((item) => {
+	// 		if (item?.changeable === true) {
+	// 			return item.uuid;
+	// 		}
+	// 		return false;
+	// 	});
+	// 	const dataString = JSON.stringify(listUuid);
+	// 	ProjectService.updateChangeableObjects(projectId, dataString).then(
+	// 		(res) => {
+	// 			if (res.result == "ok") {
+	// 				setIconLoaded(false);
+	// 				closePopupCustomObject();
+	// 				setIsOpenPopupChangeMediaURLGuide(true);
+	// 				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
+	// 			} else {
+	// 				toast.error(t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"), {
+	// 					autoClose: 5000,
+	// 				});
+	// 			}
+	// 		},
+	// 	);
+	// };
+
+	// const handleChangeable = (object, evt) => {
+	// 	if (object.changeable == true) {
+	// 		object.changeable = false;
+	// 	} else {
+	// 		object.changeable = true;
+	// 	}
+	// 	setObjects({ ...objects });
+	// };
+
+	// const handleChangeURL = (media, evt) => {
+	// 	const { value } = evt.target;
+	// 	media.url = value;
+	// 	media.check = "checking";
+	// 	setMedias({ ...medias });
+	// 	fetch(media.url)
+	// 		.then((response) => {
+	// 			const contentType = response.headers.get("content-type");
+	// 			const type = contentType.split("/")[0];
+	// 			if (media.type.includes(type)) {
+	// 				media.check = "ok";
+	// 			} else {
+	// 				media.check = "fail";
+	// 			}
+	// 			setMedias({ ...medias });
+	// 		})
+	// 		.catch((error) => {
+	// 			media.check = "fail";
+	// 			setMedias({ ...medias });
+	// 		});
+	// };
+
+	// const renderListMedia = () => (
+	// 	<>
+	// 		{mediaLoaded ? (
+	// 			<>
+	// 				{medias.data.map((item, index) => {
+	// 					if (item) {
+	// 						const Thubmnail = () => {
+	// 							if (item.type == "video") {
+	// 								return <video src={item?.url} />;
+	// 							}
+	// 							if (item.type == "image") {
+	// 								return <img src={item?.url} />;
+	// 							}
+	// 							return <></>;
+	// 						};
+	// 						const icon_type = () => {
+	// 							if (item.type == "video") {
+	// 								return <FaVideo className="icon_type" />;
+	// 							}
+	// 							if (item.type == "image") {
+	// 								return <FaRegImage className="icon_type" />;
+	// 							}
+	// 						};
+
+	// 						return (
+	// 							<div key={index} className="items">
+	// 								<div className="w-30">{Thubmnail()}</div>
+	// 								<div className="w-70">
+	// 									<h3 className="mb-3">{item?.name}</h3>
+	// 									{icon_type()}
+	// 									<div className="wrap-input100 validate-input">
+	// 										<input
+	// 											className="input100"
+	// 											type="text"
+	// 											name="src"
+	// 											placeholder="URL"
+	// 											onChange={(e) => handleChangeURL(item, e)}
+	// 											value={item?.url}
+	// 										/>
+	// 										<span className="focus-input100" />
+	// 									</div>
+	// 									{item?.check != "cheking" ? (
+	// 										""
+	// 									) : (
+	// 										<span>{t("manager.POPUP_MEDIA__URL_CORRECT")}</span>
+	// 									)}
+	// 									{item?.check != "fail" ? (
+	// 										""
+	// 									) : (
+	// 										<span>{t("manager.POPUP_MEDIA__URL_INCORRECT")}</span>
+	// 									)}
+	// 								</div>
+	// 							</div>
+	// 						);
+	// 					}
+	// 				})}
+	// 			</>
+	// 		) : (
+	// 			<></>
+	// 		)}
+	// 	</>
+	// );
+
+	// const renderListObject = () => (
+	// 	<>
+	// 		{objectLoaded ? (
+	// 			<>
+	// 				{objects.data.map((item, index) => {
+	// 					if (item) {
+	// 						const Thubmnail = () => {
+	// 							if (item.type == "video") {
+	// 								return <video src={item?.src} />;
+	// 							}
+	// 							if (item.type == "image") {
+	// 								return <img src={item?.src} />;
+	// 							}
+	// 							return <model-viewer poster={defaultModel} src={item?.src} />;
+	// 						};
+	// 						if (item?.changeable == undefined) {
+	// 							if (item.src.includes(item.uuid)) {
+	// 								item.changeable = true;
+	// 							} else {
+	// 								item.changeable = false;
+	// 							}
+	// 						}
+	// 						const icon_type = () => {
+	// 							if (item.type == "video") {
+	// 								return <FaVideo className="icon_type" />;
+	// 							}
+	// 							if (item.type == "image") {
+	// 								return <FaRegImage className="icon_type" />;
+	// 							}
+	// 							return <FaCodepen className="icon_type" />;
+	// 						};
+	// 						return (
+	// 							<div key={index} className="items list_obj">
+	// 								<div className="w-30">{Thubmnail()}</div>
+	// 								<div className="w-70">
+	// 									<h3 className="mb-3">{item?.name}</h3>
+	// 									{icon_type()}
+	// 									<label className="checkbox_Url_change">
+	// 										<input
+	// 											className="largerCheckbox"
+	// 											type="checkbox"
+	// 											name="public"
+	// 											checked={item?.changeable}
+	// 											onChange={(e) => handleChangeable(item, e)}
+	// 										/>
+	// 										<span className="textCheckbox">
+	// 											{t("manager.POPUP_OBJECT__URL_CHANEABLE")}
+	// 										</span>
+	// 									</label>
+	// 								</div>
+	// 							</div>
+	// 						);
+	// 					}
+	// 				})}
+	// 			</>
+	// 		) : (
+	// 			<></>
+	// 		)}
+	// 	</>
+	// );
+
+	// const renderProjects = () => (
+	// 	<>
+	// 		{projectsLoaded ? (
+	// 			<div className="flex flex-col gap-2">
+	// 				<p className="text-center text-lg font-bold">
+	// 					{t("manager.LIST_PROJECT")}
+	// 				</p>
+	// 				<div className="flex flex-col gap-2">
+	// 					{projects.data.map((item, index) => {
+	// 						let countImage = 0;
+	// 						let countVideo = 0;
+	// 						let countModel = 0;
+	// 						item?.objects
+	// 							.filter((item) => item.type === "image")
+	// 							.map((item) => {
+	// 								countImage++;
+	// 							});
+	// 						item?.objects
+	// 							.filter((item) => item.type === "video")
+	// 							.map((item) => {
+	// 								countVideo++;
+	// 							});
+	// 						item?.objects
+	// 							.filter((item) => item.type.includes("model"))
+	// 							.map((item) => {
+	// 								countModel++;
+	// 							});
+	// 						return (
+	// 							<div
+	// 								key={item.id}
+	// 								className="grid grid-cols-12 rounded-lg bg-gray-100"
+	// 							>
+	// 								<div className="col-span-3 rounded-lg">
+	// 									<img
+	// 										className="h-full w-full"
+	// 										src={item?.thumbnail_url}
+	// 										alt=""
+	// 									/>
+	// 								</div>
+	// 								<div className="col-span-6 flex flex-col justify-around p-4">
+	// 									<p className="text-lg font-bold">{item?.name}</p>
+	// 									<div className="flex items-center gap-4">
+	// 										<div className="flex items-center gap-2">
+	// 											{count_Image}
+	// 											<FaVideo className="text-lg" />
+	// 										</div>
+	// 										<div className="flex items-center gap-2">
+	// 											{count_Video}
+	// 											<FaRegImage className="text-lg" />
+	// 										</div>
+	// 										<div className="flex items-center gap-2">
+	// 											{count_Model}
+	// 											<FaCodepen className="text-lg" />
+	// 										</div>
+	// 									</div>
+	// 								</div>
+	// 								<div className="col-span-3 flex items-center justify-center">
+	// 									<FaListOl
+	// 										className="text-lg"
+	// 										onClick={() => {
+	// 											openPopupCustomObject(item.id);
+	// 										}}
+	// 									/>
+	// 								</div>
+	// 							</div>
+	// 						);
+	// 					})}
+	// 				</div>
+	// 			</div>
+	// 		) : (
+	// 			<></>
+	// 		)}
+	// 		{/* {projectsLoaded ? (
+	//         projects.data.length > 0 ? (
+	//           <Pagination pagination={projects.pagination} callFetchList={changePagesProject} />
+	//         ) : null
+	//       ) : null} */}
+	// 	</>
+	// );
 
 	// useEffect(() => {
-	//   navigate('?tab=exhibition')
-	// }, [])
+	// 	// getAllExhibitions();
+	// 	if (user?.type === 5) {
+	// 		getAllProjects();
+	// 	}
+
+	// 	setLanguage(getLanguage());
+	// }, [filterExhibitionList.page]);
+
+	// useEffect(() => {
+	// 	if (user?.type === 5) {
+	// 		getAllProjects();
+	// 	}
+	// }, [filterProjectList.page]);
 
 	return (
 		<>
-			{isOpenPopupChangeMediaURLGuide && (
+			{/* {isOpenPopupChangeMediaURLGuide && (
 				<Popup
 					title={<>{t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__TITLE")}</>}
 					size="sm"
@@ -613,33 +458,10 @@ const Manager = () => {
 						closePopupCustomObject();
 					}}
 				/>
-			)}
+			)} */}
 
 			<section className="w-full">
-				<ul className="flex flex-wrap border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
-					<Link
-						to="?tab=exhibition"
-						className={clsx(
-							"inline-block rounded-t-lg p-4",
-							searchParams.get("tab") === "exhibition" &&
-								"bg-gray-100 text-blue-600",
-						)}
-					>
-						{t("manager.LIST_EXHIBITION")}
-					</Link>
-					<Link
-						to="?tab=project"
-						className={clsx(
-							"inline-block rounded-t-lg p-4 hover:bg-gray-50 hover:text-gray-600",
-							searchParams.get("tab") === "project" &&
-								"bg-gray-100 text-blue-600",
-						)}
-					>
-						{t("manager.LIST_PROJECT")}
-					</Link>
-				</ul>
-				{searchParams.get("tab") === "exhibition" && <Exhibitions />}
-				{searchParams.get("tab") === "project" && renderProjects()}
+				<Exhibitions />
 			</section>
 		</>
 	);

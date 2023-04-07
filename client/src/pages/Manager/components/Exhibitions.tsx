@@ -365,9 +365,6 @@ const Exhibitions = (props: Props) => {
 	return (
 		<section className="w-full">
 			<Stack direction="col" alignItems="center" gap={2} className="my-4">
-				<Typography className="text-center text-lg font-bold">
-					{t("manager.LIST_EXHIBITION")}
-				</Typography>
 				<Button
 					className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-blue-500 p-4 text-lg text-white shadow-lg"
 					onClick={() => {
