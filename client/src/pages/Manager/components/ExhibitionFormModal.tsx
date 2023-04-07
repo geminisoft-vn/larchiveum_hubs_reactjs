@@ -238,6 +238,7 @@ const ExhibitionFormModal = (props: Props) => {
 			setIsActive={setIsActive}
 			width={1024}
 			maxHeight="max-content"
+			height={700}
 			title={
 				type === "edit"
 					? t("manager.POPUP_EXHIBITION__EDIT_TITLE")

@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 import UserService from "src/api/UserService";
-import { useAppDispatch } from "src/app/hooks";
 import logo from "src/assets/images/larchiveum_logo.png";
 import {
 	Alert,
@@ -15,16 +14,12 @@ import {
 	TextInput,
 	Typography,
 } from "src/components";
-import { showToast } from "src/features/toast/ToastSlice";
 import { IUserAuthenticationForm } from "src/interfaces";
 import { getLanguage, setLanguage } from "src/language";
-import Store from "src/utilities/store";
 
 const SignUpForm = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-
-	const dispatch = useAppDispatch();
 
 	const {
 		handleSubmit,
@@ -54,7 +49,6 @@ const SignUpForm = () => {
 		UserService.signupWithEmail(data)
 			.then((res) => {
 				if (res.result === "ok") {
-					Store.removeUser();
 					navigate(`/auth/warning_verify&email=${res.data.email}`);
 				}
 			})

@@ -5,18 +5,20 @@ import { Empty } from "antd";
 
 // import PopupCreateDocument from "./PopupCreateDocument";
 import DocumentService from "src/api/DocumentService";
-import { useAppDispatch } from "src/app/hooks";
+import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import { showToast } from "src/features/toast/ToastSlice";
+import { getUserInfo } from "src/features/user/selectors";
 import { IDocument } from "src/interfaces";
 import { CONTENT_ROOT } from "src/utilities/constants";
-import Store from "src/utilities/store";
 
 import Document from "./Document";
 
 const Documents = () => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
+
+	const user = useAppSelector(getUserInfo);
 
 	const { t } = useTranslation();
 
@@ -29,7 +31,7 @@ const Documents = () => {
 				{
 					operator: "=",
 					key: "createdBy",
-					value: Store.getUser()?.id,
+					value: user.id,
 				},
 			]),
 		})

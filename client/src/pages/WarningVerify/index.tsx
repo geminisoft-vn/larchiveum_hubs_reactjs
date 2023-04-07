@@ -1,99 +1,80 @@
-// @ts-nocheck
-/* eslint-disable */
-
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import UserService from "src/api/UserService";
+import { useAppSelector } from "src/app/hooks";
 import logo from "src/assets/images/larchiveum_logo.png";
-import Store from "src/utilities/store";
+import { Button, Stack, Typography } from "src/components";
+import { getUserInfo } from "src/features/user/selectors";
 
 const WarningVerifyPage = () => {
 	const navigate = useNavigate();
 
+	const [searchParams] = useSearchParams();
+
+	const user = useAppSelector(getUserInfo);
+
 	const [sending, setSending] = useState(false);
 	const [sendingMessage, setSendingMessage] = useState("");
 
-	function auth() {
-		const removeToken = () => {
-			Store.removeUser();
-		};
+	const email = searchParams.get("email");
 
-		const token = Store.getUser()?.token;
-		return UserService.checkToken(token)
-			.then((res) => {
-				if (res.result === "ok") {
-					navigate("/");
-				} else {
-					removeToken();
-				}
-			})
-			.catch((error) => {
-				console.log("catch");
-			});
-	}
-
-	const email =
-		new URLSearchParams(location.href).get("email") || Store.getUser()?.email;
-	const sendEmail = () => {
+	const sendEmail = (_email) => {
 		setSending(true);
-		UserService.reSendVerifyMail(email)
+		UserService.reSendVerifyMail(_email)
 			.then((response) => {
-				if (response.data.result == "ok") {
+				if (response.data.result === "ok") {
 					setSending(false);
-					sendingMessage("Send email success");
+					setSendingMessage("Send email success");
 				} else {
 					setSending(false);
-					sendingMessage("Send email fail!");
+					setSendingMessage("Send email fail!");
 				}
 			})
 			.catch((error) => {
 				setSending(false);
-				sendingMessage("Send email fail!");
+				setSendingMessage("Send email fail!");
 			});
 	};
 
-	const ResendButton = () => {
-		if (!sending) {
-			return (
-				<div className="d-flex center-flex">
-					<a className="btn btn-backhome" onClick={sendEmail}>
-						Re-send Email
-					</a>
-				</div>
-			);
-		}
-		return (
-			<div className="d-flex center-flex">
-				<a className="btn btn-backhome">Sending</a>
-			</div>
-		);
-	};
-
-	useEffect(() => {
-		auth();
-	}, []);
-
 	return (
-		<div className="manager-page height-100vh">
-			<div className="row_1">
-				<a href="/" style={{ float: "left", height: "100%" }}>
-					<img src={logo} style={{ height: "100%" }} />
-				</a>
-			</div>
-			<div className="row_2">
-				<b className="warning-content">
-					<p className="margintop30vh"> You need to verify your account</p>
-					<p>Please go to your email and verify your account</p>
-					<div className="d-flex center-flex">
-						<a className="btn btn-backhome" href="/">
-							Back Home
-						</a>
-					</div>
-					<ResendButton />
-				</b>
-			</div>
-		</div>
+		<Stack
+			direction="col"
+			alignItems="center"
+			gap={2}
+			className="rounded-lg border bg-white p-16 shadow-lg"
+		>
+			<Stack direction="row" justifyContent="center">
+				<Link to="/">
+					<img
+						src={logo}
+						alt="logo"
+						style={{
+							width: "256px",
+						}}
+					/>
+				</Link>
+			</Stack>
+			<Stack direction="col" gap={2}>
+				<Typography className="text-center">
+					{" "}
+					You need to verify your account
+				</Typography>
+				<Typography className="text-center">
+					Please go to your email and verify your account
+				</Typography>
+
+				<Button
+					onClick={sendEmail}
+					className="w-full rounded-lg  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-5 py-2.5 text-df font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
+				>
+					Resend Email
+				</Button>
+			</Stack>
+			<Link className="" to="/auth/signin">
+				Back Home
+			</Link>
+		</Stack>
 	);
 };
 

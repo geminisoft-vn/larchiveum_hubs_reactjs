@@ -19,16 +19,16 @@ import ExhibitionsService from "src/api/ExhibitionsService";
 import MediaService from "src/api/MediaService";
 import ProjectService from "src/api/ProjectService";
 import UserService from "src/api/UserService";
-import { useAppDispatch } from "src/app/hooks";
+import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import AddIcon from "src/assets/larchiveum/add_black_24dp.svg";
 import defaultImage from "src/assets/larchiveum/default-image.png";
 import defaultModel from "src/assets/larchiveum/model-default.png";
 import defaultImage1 from "src/assets/larchiveum/siri.gif";
 import { Button, Popup } from "src/components";
 import { openPopup } from "src/features/popup/PopupSlide";
+import { getUserInfo } from "src/features/user/selectors";
 import { getLanguage } from "src/language";
 import { APP_ROOT } from "src/utilities/constants";
-import Store from "src/utilities/store";
 
 import Exhibition from "./components/Exhibition";
 import ExhibitionFormModal from "./components/ExhibitionFormModal";
@@ -39,6 +39,8 @@ const Manager = () => {
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const dispatch = useAppDispatch();
+
+	const user = useAppSelector(getUserInfo);
 
 	const [scenes, setScenes] = useState([]);
 	const [exhibitionsLoaded, setExhibitionsLoaded] = useState(false);
@@ -110,31 +112,23 @@ const Manager = () => {
 	});
 
 	const getAllProjects = () => {
-		const Auth = Store.getUser();
-		const data = filterProjectList;
-		if (Auth) {
-			ProjectService.getListProjectWithObjects(data).then((res) => {
-				if (res.result === "ok") {
-					setProjects(res.data);
-					setProjectsLoaded(true);
-					setIsLoading(false);
-				} else {
-					toast.error(t("manage.GET_PROJECTS_ERROR"), { autoClose: 1000 });
-					setIsLoading(false);
-				}
-			});
-		}
+		ProjectService.getListProjectWithObjects({
+			page: 1,
+			pageSize: 4,
+			sort: "id|desc", // format <attribute>|<order type>
+		}).then((res) => {
+			if (res.result === "ok") {
+				setProjects(res.data);
+				setProjectsLoaded(true);
+				setIsLoading(false);
+			} else {
+				toast.error(t("manage.GET_PROJECTS_ERROR"), { autoClose: 1000 });
+				setIsLoading(false);
+			}
+		});
 	};
 
-	const closePopupExhibition = () => {
-		setShouldActiveExhibitionForm(false);
-	};
-
-	const closePopupPublic = () => {
-		setIsOpenPopupConfirmChangePublic(false);
-	};
-
-	const handelSpoke = () => {
+	const handleSpoke = () => {
 		window.open(`${APP_ROOT}/spoke/projects/${projectId}`, "_blank");
 		setIsOpenPopupChangeMediaURLGuide(false);
 	};
@@ -143,96 +137,12 @@ const Manager = () => {
 		setIsOpenPopupChangeMediaURLGuide(false);
 	};
 
-	const openPopupCloseRoom = (exhibitionId) => {
-		dispatch(
-			openPopup({
-				isActive: true,
-				title: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__TITLE"),
-				content: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__MESSAGE"),
-				actions: [
-					{
-						text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CLOSE"),
-						className: "",
-						callback: () => {
-							handelCloseRoom(exhibitionId);
-						},
-					},
-					{
-						text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CANCEL"),
-						className: "",
-						callback: () => {
-							closePopupCloseRoom();
-						},
-					},
-				],
-			}),
-		);
-		setExhibitionId(exhibitionId);
-		setIsOpenPopupConfirmCloseExhibition(true);
-	};
-
 	const closePopupCloseRoom = () => {
 		setIsOpenPopupConfirmCloseExhibition(false);
 	};
 
-	const openPopupOpenRoom = (exhibitionId) => {
-		dispatch(
-			openPopup({
-				isActive: true,
-				title: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__TITLE"),
-				content: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__MESSAGE"),
-				actions: [
-					{
-						text: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__CLOSE"),
-						className: "btn1",
-						callback: () => {
-							handelOpenRoom(exhibitionId);
-						},
-					},
-					{
-						text: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__CANCEL"),
-						className: "btn2",
-						callback: () => {
-							closePopupOpenRoom();
-						},
-					},
-				],
-			}),
-		);
-		setExhibitionId(exhibitionId);
-		setIsOpenPopupConfirmOpenExhibition(true);
-	};
-
 	const closePopupOpenRoom = () => {
 		setIsOpenPopupConfirmOpenExhibition(false);
-	};
-
-	const openDeleteRoom = (exhibitionId) => {
-		dispatch(
-			openPopup({
-				isActive: true,
-				title: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__TITLE"),
-				content: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__MESSAGE"),
-				actions: [
-					{
-						text: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__DELETE"),
-						className: "btn1",
-						callback: () => {
-							handelToggleDeleteRoom(exhibitionId);
-						},
-					},
-					{
-						text: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__CANCEL"),
-						className: "btn2",
-						callback: () => {
-							deleteRoom();
-						},
-					},
-				],
-			}),
-		);
-		setExhibitionId(exhibitionId);
-		setIsOpenPopupConfirmDeleteExhibition(true);
 	};
 
 	const closePopupCustomMedia = () => {
@@ -241,22 +151,6 @@ const Manager = () => {
 			data: [],
 			pagination: {},
 		});
-	};
-
-	const openPopupCustomMedia = (exhibitionId) => {
-		setExhibitionId(exhibitionId);
-		if (exhibitionId) {
-			MediaService.getListMedia(exhibitionId).then((res) => {
-				if (res.result == "ok") {
-					setMedias(res.data);
-					setMediaLoaded(true);
-				} else {
-					toast.error(t("manage.GET_MEDIAS_ERROR"), { autoClose: 3000 });
-					closePopupCustomMedia();
-				}
-			});
-		}
-		setIsOpenPopupMedia(true);
 	};
 
 	const closePopupCustomObject = () => {
@@ -330,48 +224,6 @@ const Manager = () => {
 		setIsOpenPopupConfirmDeleteExhibition(false);
 	};
 
-	const ActionListProject = () => {
-		getAllProjects();
-	};
-
-	const changePages = (page) => {
-		setIsLoading(true);
-		setfilterExhibitionList({
-			...filterExhibitionList,
-			page,
-		});
-	};
-
-	const changePagesProject = (page) => {
-		setIsLoading(true);
-		setfilterProjectList({
-			...filterProjectList,
-			page,
-		});
-	};
-
-	const handleChange = (evt) => {
-		const { name } = evt.target;
-		const value =
-			evt.target.type === "checkbox" ? evt.target.checked : evt.target.value;
-
-		if (name === "enableSpawnAndMoveMedia" && value === false) {
-			exhibition.enableSpawnCamera = false;
-			exhibition.enablePinObjects = false;
-		}
-		setExhibition({ ...exhibition, [name]: value });
-	};
-
-	const handleChangeDatetime = (evt) => {
-		const { name } = evt;
-		const { value } = evt;
-		let utc;
-		if (value) {
-			utc = moment(value).tz(moment.tz.guess()).utc().format();
-		}
-		setExhibition({ ...exhibition, [name]: utc });
-	};
-
 	const handleChangeable = (object, evt) => {
 		if (object.changeable == true) {
 			object.changeable = false;
@@ -401,170 +253,6 @@ const Manager = () => {
 				media.check = "fail";
 				setMedias({ ...medias });
 			});
-	};
-
-	const getSceneThumnail = (sceneId) => {
-		let thumbnailUrl = null;
-		for (const scene of scenes) {
-			if (scene.id === sceneId) {
-				thumbnailUrl = scene.thumbnailUrl;
-				break;
-			} else if (sceneId === undefined) {
-				thumbnailUrl = defaultImage;
-			}
-		}
-		return thumbnailUrl;
-	};
-
-	const ListScenes = () => {
-		const handleChangeSceneThubmnail = (e) => {
-			for (const scene of scenes) {
-				if (scene.id === e.target.value) {
-					setExhibition({ ...exhibition, [e.target.name]: e.target.value });
-				}
-			}
-		};
-
-		return (
-			<>
-				<div className="wrap-input100 validate-input">
-					<select
-						id="sceneSelection"
-						className="input100"
-						name="sceneId"
-						value={exhibition ? exhibition.sceneId : undefined}
-						onChange={handleChangeSceneThubmnail}
-					>
-						<option>
-							---{t("manager.POPUP_EXHIBITION__LIST_SCENE_DEFAULT_OPTION")}---
-						</option>
-						{scenes.map((item, index) => (
-							<option key={index} value={item.id}>
-								{item.name}
-							</option>
-						))}
-					</select>
-					<span className="focus-input100" />
-				</div>
-				<div className="p-t-13 p-b-9">
-					<span className="txt1">
-						{t("manager.POPUP_EXHIBITION__SCENE_THUMBNAIL")}
-					</span>
-				</div>
-				<img
-					className="f-image-thumbnail"
-					src={getSceneThumnail(exhibition ? exhibition.sceneId : undefined)}
-					alt=""
-				/>
-			</>
-		);
-	};
-
-	const handleCreate = () => {
-		const data = exhibition;
-		ExhibitionsService.postCreateOne(data).then((res) => {
-			if (res.result == "ok") {
-				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-				setShouldActiveExhibitionForm(false);
-				// setExhibitions([...exhibitions, res.data]);
-				// window.location.reload();
-			} else {
-				toast.error(
-					t(
-						`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`,
-					),
-					{ autoClose: 5000 },
-				);
-			}
-		});
-	};
-
-	const handleEdit = () => {
-		const data = exhibition;
-		ExhibitionsService.putUpdateOne(data).then((res) => {
-			if (res.result == "ok") {
-				exhibitions.data.forEach((exhibition) => {
-					if (exhibition.id == res.data.id) {
-						toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-						setShouldActiveExhibitionForm(false);
-						// getAllExhibitions();
-					}
-				});
-			} else {
-				toast.error(
-					t(
-						`manager.CREATE_OR_UPDATE_EXHIBITION_ERROR__${res.error.toUpperCase()}`,
-					),
-					{ autoClose: 5000 },
-				);
-			}
-		});
-	};
-
-	const handelTogglePublic = (exhibitionId) => {
-		ExhibitionsService.patchTogglePublic(exhibitionId).then((res) => {
-			if (res.result == "ok") {
-				exhibitions.data.forEach((exhibition) => {
-					if (exhibition.id == exhibitionId) {
-						exhibition.public = res.data.public;
-						toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-					}
-				});
-				setIsOpenPopupConfirmChangePublic(!isOpenPopupConfirmChangePublic);
-			} else {
-				toast.error(t("manager.CHANGE_EXHIBITION_PUBLIC_ERROR"), {
-					autoClose: 5000,
-				});
-			}
-		});
-	};
-
-	const handelToggleDeleteRoom = (exhibitionId) => {
-		ExhibitionsService.deleteOneExhibition(exhibitionId).then((res) => {
-			if (res.result == "ok") {
-				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-				setIsOpenPopupConfirmDeleteExhibition(
-					!isOpenPopupConfirmDeleteExhibition,
-				);
-				// getAllExhibitions();
-			} else {
-				toast.error(t("manager.DELETE_EXHIBITION_ERROR"), { autoClose: 5000 });
-			}
-		});
-	};
-
-	const handelCloseRoom = (exhibitionId) => {
-		ExhibitionsService.closeOneExhibition(exhibitionId).then((res) => {
-			if (res.result == "ok") {
-				exhibitions.data.forEach((exhibition) => {
-					if (exhibition.id == exhibitionId) {
-						exhibition.closed = res.data.closed;
-						toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-					}
-				});
-				setIsOpenPopupConfirmCloseExhibition(
-					!isOpenPopupConfirmCloseExhibition,
-				);
-			} else {
-				toast.error(t("manager.CLOSE_EXHIBITION_ERROR"), { autoClose: 5000 });
-			}
-		});
-	};
-
-	const handelOpenRoom = (exhibitionId) => {
-		ExhibitionsService.openOneExhibition(exhibitionId).then((res) => {
-			if (res.result == "ok") {
-				exhibitions.data.forEach((exhibition) => {
-					if (exhibition.id == exhibitionId) {
-						exhibition.closed = res.data.closed;
-						toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-					}
-				});
-				setIsOpenPopupConfirmOpenExhibition(!isOpenPopupConfirmOpenExhibition);
-			} else {
-				toast.error(t("manager.OPEN_EXHIBITION_ERROR"), { autoClose: 5000 });
-			}
-		});
 	};
 
 	const renderListMedia = () => (
@@ -691,52 +379,6 @@ const Manager = () => {
 		</>
 	);
 
-	const renderTabs = () => {
-		const user = Store.getUser();
-		if (parseInt(user?.type, 10) === 5) {
-			return (
-				<ul className="flex flex-wrap border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
-					<Link
-						to="?tab=exhibition"
-						className={clsx(
-							"inline-block rounded-t-lg p-4",
-							searchParams.get("tab") === "exhibition" &&
-								"bg-gray-100 text-blue-600",
-						)}
-					>
-						{t("manager.LIST_EXHIBITION")}
-					</Link>
-					<Link
-						to="?tab=project"
-						className={clsx(
-							"inline-block rounded-t-lg p-4 hover:bg-gray-50 hover:text-gray-600",
-							searchParams.get("tab") === "project" &&
-								"bg-gray-100 text-blue-600",
-						)}
-					>
-						{t("manager.LIST_PROJECT")}
-					</Link>
-				</ul>
-
-				// <div className="tabs-Admin">
-				// 	<button
-				// 		className={isListRoom ? "active" : ""}
-				// 		onClick={ActionListRoom}
-				// 	>
-				// 		{t("manager.LIST_EXHIBITION")}
-				// 	</button>
-				// 	<button
-				// 		className={isListProject ? "active" : ""}
-				// 		onClick={ActionListProject}
-				// 	>
-				// 		{t("manager.LIST_PROJECT")}
-				// 	</button>
-				// </div>
-			);
-		}
-		return <div />;
-	};
-
 	const renderProjects = () => (
 		<>
 			{projectsLoaded ? (
@@ -819,7 +461,6 @@ const Manager = () => {
 
 	useEffect(() => {
 		// getAllExhibitions();
-		const user = Store.getUser();
 		if (user?.type === 5) {
 			getAllProjects();
 		}
@@ -828,7 +469,6 @@ const Manager = () => {
 	}, [filterExhibitionList.page]);
 
 	useEffect(() => {
-		const user = Store.getUser();
 		if (user?.type === 5) {
 			getAllProjects();
 		}
@@ -849,50 +489,6 @@ const Manager = () => {
 
 	return (
 		<>
-			{shouldActiveExhibitionForm && (
-				<ExhibitionFormModal
-					isActive={shouldActiveExhibitionForm}
-					setIsActive={setShouldActiveExhibitionForm}
-					exhibitionType={exhibitionType}
-					scenes={scenes}
-				/>
-			)}
-
-			{isOpenPopupConfirmChangePublic && (
-				<Popup
-					title={<>{t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__TITLE")}</>}
-					size="sm"
-					content={
-						<div
-							style={{
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-						>
-							{t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__MESSAGE")}
-						</div>
-					}
-					actions={[
-						{
-							text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CHANGE"),
-							class: "btn1",
-							callback: () => {
-								handelTogglePublic(exhibitionId);
-							},
-						},
-						{
-							text: t("manager.POPUP_CONFRIM_CHANGE_PUBLIC__CANCEL"),
-							class: "btn2",
-							callback: () => {
-								closePopupPublic();
-							},
-						},
-					]}
-					handleClose={closePopupPublic}
-				/>
-			)}
-
 			{isOpenPopupChangeMediaURLGuide && (
 				<Popup
 					title={<>{t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__TITLE")}</>}
@@ -924,7 +520,7 @@ const Manager = () => {
 							text: t("manager.POPUP_CHANGE_MEDIA_URL_GUIDE__GO_TO_SPOKE"),
 							class: "btn1",
 							callback: () => {
-								handelSpoke(projectId);
+								// handleSpoke(projectId);
 							},
 						},
 						{
@@ -936,111 +532,6 @@ const Manager = () => {
 						},
 					]}
 					handleClose={closePopupSpoke}
-				/>
-			)}
-
-			{isOpenPopupConfirmCloseExhibition && (
-				<Popup
-					title={<>{t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__TITLE")}</>}
-					size="sm"
-					content={
-						<div
-							style={{
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-						>
-							{t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__MESSAGE")}
-						</div>
-					}
-					actions={[
-						{
-							text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CLOSE"),
-							class: "btn1",
-							callback: () => {
-								handelCloseRoom(exhibitionId);
-							},
-						},
-						{
-							text: t("manager.POPUP_CONFRIM_CLOSE_EXHIBITION__CANCEL"),
-							class: "btn2",
-							callback: () => {
-								closePopupCloseRoom();
-							},
-						},
-					]}
-					handleClose={closePopupCloseRoom}
-				/>
-			)}
-
-			{isOpenPopupConfirmOpenExhibition && (
-				<Popup
-					title={<>{t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__TITLE")}</>}
-					size="sm"
-					content={
-						<div
-							style={{
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-						>
-							{t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__MESSAGE")}
-						</div>
-					}
-					actions={[
-						{
-							text: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__CLOSE"),
-							class: "btn1",
-							callback: () => {
-								handelOpenRoom(exhibitionId);
-							},
-						},
-						{
-							text: t("manager.POPUP_CONFRIM_OPEN_EXHIBITION__CANCEL"),
-							class: "btn2",
-							callback: () => {
-								closePopupOpenRoom();
-							},
-						},
-					]}
-					handleClose={closePopupOpenRoom}
-				/>
-			)}
-
-			{isOpenPopupConfirmDeleteExhibition && (
-				<Popup
-					title={<>{t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__TITLE")}</>}
-					size="sm"
-					content={
-						<div
-							style={{
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-						>
-							{t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__MESSAGE")}
-						</div>
-					}
-					actions={[
-						{
-							text: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__DELETE"),
-							class: "btn1",
-							callback: () => {
-								handelToggleDeleteRoom(exhibitionId);
-							},
-						},
-						{
-							text: t("manager.POPUP_CONFRIM_DELETE_EXHIBITION__CANCEL"),
-							class: "btn2",
-							callback: () => {
-								deleteRoom();
-							},
-						},
-					]}
-					handleClose={deleteRoom}
 				/>
 			)}
 
@@ -1125,7 +616,28 @@ const Manager = () => {
 			)}
 
 			<section className="w-full">
-				{renderTabs()}
+				<ul className="flex flex-wrap border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
+					<Link
+						to="?tab=exhibition"
+						className={clsx(
+							"inline-block rounded-t-lg p-4",
+							searchParams.get("tab") === "exhibition" &&
+								"bg-gray-100 text-blue-600",
+						)}
+					>
+						{t("manager.LIST_EXHIBITION")}
+					</Link>
+					<Link
+						to="?tab=project"
+						className={clsx(
+							"inline-block rounded-t-lg p-4 hover:bg-gray-50 hover:text-gray-600",
+							searchParams.get("tab") === "project" &&
+								"bg-gray-100 text-blue-600",
+						)}
+					>
+						{t("manager.LIST_PROJECT")}
+					</Link>
+				</ul>
 				{searchParams.get("tab") === "exhibition" && <Exhibitions />}
 				{searchParams.get("tab") === "project" && renderProjects()}
 			</section>

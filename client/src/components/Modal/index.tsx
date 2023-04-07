@@ -85,7 +85,9 @@ const Modal = (props: Props) => {
 							<span className="sr-only">Close modal</span>
 						</button>
 					</div>
-					<div className="h-full flex-1 overflow-hidden p-2">{children}</div>
+					<div className="h-full flex-1 overflow-y-auto overflow-x-hidden p-2">
+						{children}
+					</div>
 					<div className="flex items-center justify-end space-x-2 rounded-b border-t border-gray-200 p-4 dark:border-gray-600">
 						{actions &&
 							actions.length > 0 &&
