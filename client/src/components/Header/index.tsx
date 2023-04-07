@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
 import { useAppDispatch, useAppSelector } from "src/app/hooks";
@@ -19,6 +19,9 @@ const Header = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
+
+	const { pathname } = useLocation();
+
 	const [shouldOpenLocaleDropdown, setShouldOpenLocaleDropdown] =
 		useState(false);
 
@@ -192,7 +195,12 @@ const Header = () => {
 										<li key={btn.key}>
 											<Link
 												to={btn.href}
-												className="block border-b border-gray-100 py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-600 md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
+												className={clsx(
+													"block py-2 pl-3 pr-4",
+													pathname.includes(btn.href)
+														? "border-b border-blue-500 text-blue-500"
+														: "border-gray-100 text-gray-700",
+												)}
 											>
 												{btn.label}
 											</Link>
