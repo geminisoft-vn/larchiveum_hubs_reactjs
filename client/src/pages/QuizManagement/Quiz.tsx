@@ -23,7 +23,7 @@ const Quiz = (props: Props) => {
 	return (
 		<div className="flex w-full justify-between rounded-lg border border-gray-200 p-4">
 			<div className="flex flex-col gap-2">
-				<h3>{quiz.title}</h3>
+				<h3 className="text-2xl font-bold">{quiz.title}</h3>
 				<p>{quiz.description}</p>
 			</div>
 
