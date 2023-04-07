@@ -45,7 +45,7 @@ const Modal = (props: Props) => {
 			tabIndex={-1}
 			aria-hidden="true"
 			className={clsx(
-				`fixed inset-0 top-0 left-0 z-50 flex h-[calc(100%-1rem)] items-center justify-center overflow-y-auto overflow-x-hidden p-4 transition-all duration-200 `,
+				`fixed inset-0 top-0 left-0 z-[9999] flex h-[calc(100%-1rem)] items-center justify-center overflow-y-auto overflow-x-hidden p-4 transition-all duration-200 `,
 				isActive ? "opacity-1 visible" : "invisible opacity-0",
 			)}
 		>

@@ -46,7 +46,7 @@ const Header = () => {
 		{
 			key: "manager",
 			label: t("_header.TAB_ROOM_LABEL"),
-			href: "/home/manager?tab=exhibition",
+			href: "/home/manager",
 			requiredUserType: 4,
 		},
 
