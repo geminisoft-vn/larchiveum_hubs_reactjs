@@ -23,7 +23,10 @@ const DocumentManagement = (props) => {
 
 	return (
 		<Stack direction="col" gap={2}>
-			<Button onClick={handleOpenDocumentCreateDetail}>
+			<Button
+				onClick={handleOpenDocumentCreateDetail}
+				className="self-start bg-blue-500 text-white"
+			>
 				{`+ ${t(
 					"content.DOCUMENT_TAB__DOCUMENT_LIST__DOCUMENT_TAB__ADD_DOCUMENT_BUTTON_LABEL",
 				)}`}
