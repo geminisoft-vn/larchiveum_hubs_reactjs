@@ -191,22 +191,28 @@ const Header = () => {
 					>
 						{isAuthenticated && (
 							<ul className="mt-4 flex flex-col font-medium md:mt-0 md:flex-row md:space-x-8">
-								{btns &&
-									btns.map((btn) => (
-										<li key={btn.key}>
-											<Link
-												to={btn.href}
-												className={clsx(
-													"block py-2 pl-3 pr-4",
-													pathname.includes(btn.href)
-														? "border-b border-blue-500 text-blue-500"
-														: "border-gray-100 text-gray-700",
-												)}
-											>
-												{btn.label}
-											</Link>
-										</li>
-									))}
+								{userInfo &&
+									btns &&
+									btns.map((btn) => {
+										if (!userInfo || !userInfo.type) return null;
+										return (
+											userInfo.type >= btn.requiredUserType && (
+												<li key={btn.key}>
+													<Link
+														to={btn.href}
+														className={clsx(
+															"block py-2 pl-3 pr-4",
+															pathname.includes(btn.href)
+																? "border-b border-blue-500 text-blue-500"
+																: "border-gray-100 text-gray-700",
+														)}
+													>
+														{btn.label}
+													</Link>
+												</li>
+											)
+										);
+									})}
 							</ul>
 						)}
 					</div>

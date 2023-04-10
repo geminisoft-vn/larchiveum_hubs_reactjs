@@ -11,6 +11,11 @@ export default defineConfig({
 	plugins: [react()],
 	build: {
 		outDir: "./www",
+    rollupOptions: {
+      output: {
+        
+      }
+    }
 	},
 	resolve: {
 		alias: [

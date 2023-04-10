@@ -25,14 +25,14 @@ const ProfilePage = () => {
 		useState(false);
 
 	const loadAvatar = () => {
-		AvatarService.getOne(user.avatarId).then((json) => {
-			if (json.result === "ok") {
-				setAvatar(json.data);
-			}
-		});
+		if (user && user.avatarId) {
+			AvatarService.getOne(user.avatarId).then((json) => {
+				if (json.result === "ok") {
+					setAvatar(json.data);
+				}
+			});
+		}
 	};
-
-	console.log({ avatar });
 
 	const handleOpenAvatarPickingModal = () => {
 		setShouldOpenAvatarPickingModal(true);
