@@ -3,9 +3,8 @@ import axios, {
 	AxiosResponse,
 	InternalAxiosRequestConfig,
 } from "axios";
-import Cookies from "js-cookie";
 
-import store, { RootState } from "src/app/store";
+import store from "src/app/store";
 import { startLoading, stopLoading } from "src/features/loader/LoaderSlice";
 
 import { API_ROOT } from "./constants";

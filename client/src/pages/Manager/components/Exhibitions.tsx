@@ -18,6 +18,7 @@ import { IParams, IScene } from "src/interfaces";
 
 import Exhibition from "./Exhibition";
 import ExhibitionFormModal from "./ExhibitionFormModal";
+import ObjectListModal from "./ObjectListModal";
 
 type Props = {};
 
@@ -67,7 +68,7 @@ const Exhibitions = (props: Props) => {
 		}
 	}, [params.page]);
 
-	const loadScenes = useCallback(async () => {
+	const loadScenes = async () => {
 		try {
 			const res = await ExhibitionsService.getAllScenes();
 			if (res.result === "ok") {
@@ -85,7 +86,7 @@ const Exhibitions = (props: Props) => {
 				}),
 			);
 		}
-	}, []);
+	};
 
 	const handleClosePopup = () => {
 		dispatch(closePopup());
@@ -360,7 +361,7 @@ const Exhibitions = (props: Props) => {
 
 	useEffect(() => {
 		loadScenes();
-	}, [loadScenes]);
+	}, []);
 
 	return (
 		<section className="w-full">

@@ -382,6 +382,10 @@ const ExhibitionFormModal = (props: Props) => {
 							className="rounded-lg object-cover"
 							src={sceneThumnail || defaultImage}
 							alt=""
+							style={{
+								minHeight: 256,
+								maxHeight: 256,
+							}}
 						/>
 					</Stack>
 				</div>

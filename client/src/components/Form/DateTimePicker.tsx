@@ -61,7 +61,7 @@ const DateTimePicker = forwardRef<HTMLInputElement, Props>((props, ref) => {
 
 				<div
 					className={clsx(
-						"absolute shadow-lg transition-all duration-200",
+						"absolute right-0 shadow-lg transition-all duration-200",
 						enable ? "opacity-1 visible" : "invisible opacity-0",
 					)}
 				>
