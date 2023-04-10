@@ -48,7 +48,6 @@ const HomePage = () => {
 					);
 				});
 		} else {
-			console.log({ user });
 			ExhibitionsService.getAllExhibitions(params)
 				.then((res) => {
 					if (res.result === "ok") {
@@ -70,11 +69,13 @@ const HomePage = () => {
 					);
 				});
 		}
-	}, [user]);
+	}, [user, params]);
 
 	useEffect(() => {
 		getAllExhibitions();
 	}, [getAllExhibitions, params.page, params.sort]);
+
+	console.log({ params });
 
 	return (
 		<div className="h-full p-2">

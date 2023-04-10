@@ -53,7 +53,9 @@ class UserService {
 		});
 	}
 
-	static login(data: Partial<IUserAuthenticationForm>) {
+	static login(
+		data: Partial<IUserAuthenticationForm>,
+	): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
 			url: `/v1/login`,

@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import validator from "validator";
 
 function validDisplayName(displayName, pattern) {

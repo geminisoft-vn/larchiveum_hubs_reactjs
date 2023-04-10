@@ -1,30 +1,29 @@
-import { AxiosResponse } from "axios";
 import moment from "moment-timezone";
 
 import { IAxiosResponse, IExhibition, IScene } from "src/interfaces";
 import request from "src/utilities/request";
 
 class ExhibitionsService {
-	static getAllExhibitions(data): Promise<IAxiosResponse<IExhibition[]>> {
+	static getAllExhibitions(params): Promise<IAxiosResponse<IExhibition[]>> {
 		return request({
 			method: "GET",
-			url: `/v1/exhibitions?page=${data.page ? data.page : 1}&pageSize=${
-				data.pageSize ? data.pageSize : 15
-			}&sort=${data.sort ? data.sort : ""}`,
+			url: `/v1/exhibitions?page=${params.page || 1}&pageSize=${
+				params.pageSize || 15
+			}&sort=${params.sort ? params.sort : ""}`,
 		});
 	}
 
 	static getAllWithAuthExhibitions(
-		data,
+		params,
 	): Promise<IAxiosResponse<IExhibition[]>> {
 		return request({
 			method: "GET",
-			url: `/v1/auth/exhibitions?page=${data.page ? data.page : 1}&pageSize=${
-				data.pageSize ? data.pageSize : 15
+			url: `/v1/auth/exhibitions?page=${params.page || 1}&pageSize=${
+				params.pageSize || 15
 			}&sort=${
-				data.sort ? data.sort : ""
+				params.sort ? params.sort : ""
 			}&timezone=${moment.tz.guess()}&isAdmin=${
-				data.isAdmin ? data.isAdmin : ""
+				params.isAdmin ? params.isAdmin : ""
 			}`,
 		});
 	}

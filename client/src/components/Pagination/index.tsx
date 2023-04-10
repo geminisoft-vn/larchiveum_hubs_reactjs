@@ -1,11 +1,6 @@
-import React, { useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { Pagination as MUIPagination } from "@mui/material";
 import clsx from "clsx";
 
 import { IParams } from "src/interfaces";
-
-import Button from "../Button";
 
 type Props = {
 	pageCount?: number;
@@ -103,7 +98,7 @@ const Pagination = (props: Props) => {
 };
 
 Pagination.defaultProps = {
-	pageCount: 0
+	pageCount: 0,
 };
 
 export default Pagination;
