@@ -7,9 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-www
+node_modules/
+dist/
+www/
 www.zip
 dist.zip
 dist-ssr
