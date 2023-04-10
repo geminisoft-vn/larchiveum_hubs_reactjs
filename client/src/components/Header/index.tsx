@@ -12,6 +12,7 @@ import {
 } from "src/features/user/selectors";
 import { logout } from "src/features/user/UserSlice";
 import { getLanguage, setLanguage } from "src/language";
+import { APP_ROOT } from "src/utilities/constants";
 
 import "./Header.scss";
 
@@ -56,14 +57,14 @@ const Header = () => {
 		{
 			key: "spoke",
 			label: t("_header.TAB_SPOKE_LABEL"),
-			href: `/spoke`,
+			href: `${APP_ROOT}/spoke`,
 			requiredUserType: 4,
 		},
 
 		{
 			key: "admin",
 			label: t("_header.TAB_ADMIN_LABEL"),
-			href: `/admin`,
+			href: `${APP_ROOT}/admin`,
 			requiredUserType: 5,
 		},
 

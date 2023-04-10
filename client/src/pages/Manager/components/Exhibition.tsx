@@ -15,7 +15,7 @@ import { APP_ROOT } from "src/utilities/constants";
 
 type Props = {
 	exhibition: Partial<IExhibition>;
-	openPopupCustomMedia: (_id?: number) => void;
+	openPopupCustomMedia: (_id?: string) => void;
 	getSceneThumnail: (_sceneId?: string) => string;
 	openPopupPublic: (_id?: number) => void;
 	openPopupExhibition: (_type: "create" | "edit", _id?: number) => void;
@@ -61,7 +61,7 @@ const Exhibition = (props: Props) => {
 					<Button
 						className="absolute top-2 left-2 border-none"
 						onClick={() => {
-							openPopupCustomMedia(exhibition.id);
+							openPopupCustomMedia(exhibition.projectId);
 						}}
 					>
 						<FaTools className="text-lg text-white hover:scale-150" />

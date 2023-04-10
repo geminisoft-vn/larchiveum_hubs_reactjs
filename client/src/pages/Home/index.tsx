@@ -26,7 +26,7 @@ const HomePage = () => {
 	});
 
 	const getAllExhibitions = useCallback(() => {
-		if (user) {
+		if (user?.id) {
 			ExhibitionsService.getAllWithAuthExhibitions(params)
 				.then((res) => {
 					if (res.result === "ok") {
@@ -48,6 +48,7 @@ const HomePage = () => {
 					);
 				});
 		} else {
+			console.log({ user });
 			ExhibitionsService.getAllExhibitions(params)
 				.then((res) => {
 					if (res.result === "ok") {
@@ -69,7 +70,7 @@ const HomePage = () => {
 					);
 				});
 		}
-	}, []);
+	}, [user]);
 
 	useEffect(() => {
 		getAllExhibitions();

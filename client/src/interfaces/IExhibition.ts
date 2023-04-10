@@ -3,6 +3,7 @@ import { IRoom } from "./IRoom";
 export interface IExhibition {
 	id: number;
 	roomId: string;
+	projectId: string;
 	sceneId: string;
 	room: IRoom;
 	name: string;

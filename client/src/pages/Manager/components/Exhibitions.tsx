@@ -40,6 +40,10 @@ const Exhibitions = (props: Props) => {
 	);
 	const [exhibitionId, setExhibitionId] = useState<number>(0);
 
+	const [shouldOpenObjectListModal, setShouldOpenObjectListModal] =
+		useState(false);
+	const [projectId, setProjectId] = useState<string>("");
+
 	const loadExhibitions = useCallback(async () => {
 		try {
 			if (isAuthenticatedUser) {
@@ -98,20 +102,10 @@ const Exhibitions = (props: Props) => {
 		setExhibitionId(_id);
 	};
 
-	const openPopupCustomMedia = (id) => {
-		if (id) {
-			MediaService.getListMedia(id)
-				.then((res) => {
-					if (res.result === "ok") {
-						console.log({ res });
-					}
-				})
-				.catch((err) => {
-					console.log({ err });
-				})
-				.finally(() => {
-					handleClosePopup();
-				});
+	const openPopupCustomMedia = (_projectId) => {
+		setShouldOpenObjectListModal(true);
+		if (_projectId) {
+			setProjectId(_projectId);
 		}
 	};
 
@@ -409,6 +403,14 @@ const Exhibitions = (props: Props) => {
 					type={exhibitionType}
 					exhibitionId={exhibitionId}
 					scenes={scenes}
+				/>
+			)}
+
+			{shouldOpenObjectListModal && (
+				<ObjectListModal
+					isActive={shouldOpenObjectListModal}
+					setIsActive={setShouldOpenObjectListModal}
+					projectId={projectId}
 				/>
 			)}
 		</section>
