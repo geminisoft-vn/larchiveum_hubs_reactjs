@@ -20,10 +20,10 @@
     "build": "rimraf ./dist && webpack --mode=production",
     "bundle-analyzer": "webpack-dev-server --mode=production --env.dev --env.bundleAnalyzer",
     "doc": "node ./scripts/doc/build.js",
-    "prettier": "prettier --write '*.(js|jsx|ts|tsx)' 'src/**/*.(js|jsx|ts|tsx)'",
-    "lint:fix": "eslint --fix",
+    "prettier": "prettier --write '*.js' 'src/**/*.js'",
+    "lint:js": "eslint '*.js' 'scripts/**/*.js' 'src/**/*.js'",
     "lint:html": "htmlhint 'src/**/*.html' && node scripts/indent-linter.js 'src/**/*.html'",
-    "lint": "npm run lint:fix",
+    "lint": "npm run lint:js && npm run lint:html",
     "login": "node -r @babel/register -r esm -r ./scripts/shim scripts/login.js",
     "logout": "node -r @babel/register -r esm -r ./scripts/shim scripts/logout.js",
     "deploy": "node -r @babel/register -r esm -r ./scripts/shim scripts/deploy.js",
@@ -37,11 +37,7 @@
     "storybook": "start-storybook -p 6006",
     "deploy-storybook": "storybook-to-ghpages",
     "intl-extract": "node ./src/assets/locales/intl-extract.js",
-    "intl-extract-en-locale": "node ./src/assets/locales/intl-extract.js en",
-    "lint-staged": {
-      "*.(js|jsx|ts|tsx|html|scss)": "npm run lint"
-    },
-    "postinstall": "husky install"
+    "intl-extract-en-locale": "node ./src/assets/locales/intl-extract.js en"
   },
   "scripts-info": {
     "start": "Run the client against your Hubs Cloud instance, or Mozilla's developer infrastructure,\n  using application configs pulled from the server",
@@ -191,7 +187,6 @@
     "@storybook/react": "^6.0.12",
     "@storybook/storybook-deployer": "^2.8.6",
     "@svgr/webpack": "^5.4.0",
-    "@typescript-eslint/parser": "^5.56.0",
     "acorn": "^6.4.1",
     "ava": "^1.4.1",
     "babel-eslint": "^10.0.1",
@@ -214,10 +209,8 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^4.2.0",
     "htmlhint": "^0.11.0",
-    "husky": "^8.0.3",
     "internal-ip": "^6.1.0",
     "jsdom": "^15.1.1",
-    "lint-staged": "^13.2.0",
     "localstorage-memory": "^1.0.3",
     "mediasoup-client": "^3.6.29",
     "mini-css-extract-plugin": "^0.8.0",
@@ -251,6 +244,6 @@
     "worker-loader": "^2.0.0"
   },
   "optionalDependencies": {
-    "fsevents": "*"
+    "fsevents": "^2.2.1"
   }
 }
