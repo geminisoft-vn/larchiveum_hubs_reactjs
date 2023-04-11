@@ -1,17 +1,19 @@
 import clsx from "clsx";
 
+import { useAppSelector } from "src/app/hooks";
+import { getPaginationInfo } from "src/features/pagination/PaginationSlice";
 import { IParams } from "src/interfaces";
 
 type Props = {
-	pageCount?: number;
 	page: number;
-	hasNext: boolean | undefined;
-	hasPrev: boolean | undefined;
 	setParams: React.Dispatch<React.SetStateAction<IParams>>;
+	className?: string;
 };
 
 const Pagination = (props: Props) => {
-	const { page, pageCount, hasNext, hasPrev, setParams } = props;
+	const { page, setParams, className } = props;
+
+	const { hasNext, hasPrev, total } = useAppSelector(getPaginationInfo);
 
 	const handleChange = (_page: number) => {
 		setParams((prev: IParams) => ({ ...prev, page: _page }));
@@ -30,7 +32,7 @@ const Pagination = (props: Props) => {
 	};
 
 	return (
-		<nav aria-label="Pagination">
+		<nav className={clsx(className)} aria-label="Pagination">
 			<ul className="inline-flex items-center gap-4 -space-x-px">
 				<li>
 					<button
@@ -54,8 +56,8 @@ const Pagination = (props: Props) => {
 					</button>
 				</li>
 
-				{pageCount &&
-					new Array(pageCount).fill(0).map((_, index) => (
+				{total &&
+					new Array(total).fill(0).map((_, index) => (
 						<li key={index}>
 							<button
 								className={clsx(
@@ -98,7 +100,7 @@ const Pagination = (props: Props) => {
 };
 
 Pagination.defaultProps = {
-	pageCount: 0,
+	className: "",
 };
 
 export default Pagination;

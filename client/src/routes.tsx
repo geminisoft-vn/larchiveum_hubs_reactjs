@@ -19,7 +19,7 @@ import {
 	ResetPasswordPage,
 	SigninPage,
 	SignupPage,
-	ViewQuizPage,
+	UserManagementPage,
 	WarningVerifyPage,
 } from "src/pages";
 
@@ -87,6 +87,14 @@ export default function Router() {
 							element: <DocumentFormPage />,
 						},
 					],
+				},
+				{
+					path: "users",
+					element: (
+						<ProtectedRoute>
+							<UserManagementPage />
+						</ProtectedRoute>
+					),
 				},
 			],
 		},

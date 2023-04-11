@@ -1,14 +1,14 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 
 import { RootState } from "src/app/store";
-import { IAxiosResponse, IExhibition } from "src/interfaces";
+import { IExhibition } from "src/interfaces";
 
-type TInitialState = Omit<IAxiosResponse<IExhibition[]>, "message" | "result">;
+type TInitialState = {
+	data: IExhibition[];
+};
 
 const INITIAL_STATE: TInitialState = {
 	data: [],
-	items: {},
-	pages: {},
 };
 
 const exhibitionSlice = createSlice({
@@ -16,10 +16,8 @@ const exhibitionSlice = createSlice({
 	initialState: INITIAL_STATE,
 	reducers: {
 		setExhibitions: (state, action) => {
-			const { data, items, pages } = action.payload;
+			const { data } = action.payload;
 			state.data = data;
-			state.items = items;
-			state.pages = pages;
 		},
 		updateExhibition: (state, action) => {
 			const { id, dataToUpdate } = action.payload;

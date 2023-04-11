@@ -5,31 +5,31 @@ import Store from "../store";
 
 class QuizService {
   static getAll(params) {
-    return request.get("/v1/auth/quizs", { params: params }).then(res => {
+    return request.get("/v1/auth/quizzes", { params: params }).then(res => {
       return res.data;
     });
   }
 
   static getOne(id) {
-    return request.get("/v1/auth/quizs/" + id).then(res => {
+    return request.get("/v1/auth/quizzes/" + id).then(res => {
       return res.data;
     });
   }
 
   static create(data) {
-    return request.post("/v1/auth/quizs", data).then(res => {
+    return request.post("/v1/auth/quizzes", data).then(res => {
       return res.data;
     });
   }
 
   static update(id, data) {
-    return request.put("/v1/auth/quizs/" + id, data).then(res => {
+    return request.put("/v1/auth/quizzes/" + id, data).then(res => {
       return res.data;
     });
   }
 
   static delete(id) {
-    return request.delete("/v1/auth/quizs/" + id).then(res => {
+    return request.delete("/v1/auth/quizzes/" + id).then(res => {
       return res.data;
     });
   }

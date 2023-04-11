@@ -108,6 +108,14 @@ class UserService {
 	): Promise<IAxiosResponse<IUserAuthenticationForm>> {
 		return request.patch(`v1/auth/users/${id}`, data);
 	}
+
+	static getAll(params?): Promise<IAxiosResponse<IUser[]>> {
+		return request({
+			method: "GET",
+			url: `/v1/auth/users`,
+			params,
+		});
+	}
 }
 
 export default UserService;

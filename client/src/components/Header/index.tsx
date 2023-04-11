@@ -74,6 +74,13 @@ const Header = () => {
 			href: "/home/profile",
 			requiredUserType: 0,
 		},
+
+		{
+			key: "user",
+			label: "User",
+			href: "/home/users",
+			requiredUserType: 5,
+		},
 	];
 
 	return (

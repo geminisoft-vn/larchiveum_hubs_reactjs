@@ -7,6 +7,7 @@ import {
 	getExhibitions,
 	setExhibitions,
 } from "src/features/exhibition/ExhibitionSlide";
+import { setPagination } from "src/features/pagination/PaginationSlice";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserInfo } from "src/features/user/selectors";
 import { IParams } from "src/interfaces";
@@ -18,7 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 const HomePage = () => {
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(getUserInfo);
-	const { data: exhibitions, pages } = useAppSelector(getExhibitions);
+	const { data: exhibitions } = useAppSelector(getExhibitions);
 
 	const [params, setParams] = useState<IParams>({
 		page: 1,
@@ -33,10 +34,9 @@ const HomePage = () => {
 						dispatch(
 							setExhibitions({
 								data: res.data,
-								items: res.items,
-								pages: res.pages,
 							}),
 						);
+						dispatch(setPagination(res.pages));
 					}
 				})
 				.catch(() => {
@@ -75,8 +75,6 @@ const HomePage = () => {
 		getAllExhibitions();
 	}, [getAllExhibitions, params.page, params.sort]);
 
-	console.log({ params });
-
 	return (
 		<div className="h-full p-2">
 			<Stack
@@ -95,13 +93,7 @@ const HomePage = () => {
 
 				<Exhibitions exhibitions={exhibitions} />
 
-				<Pagination
-					page={params.page}
-					pageCount={pages.total}
-					setParams={setParams}
-					hasNext={pages.hasNext}
-					hasPrev={pages.hasPrev}
-				/>
+				<Pagination page={params.page} setParams={setParams} />
 			</Stack>
 		</div>
 	);

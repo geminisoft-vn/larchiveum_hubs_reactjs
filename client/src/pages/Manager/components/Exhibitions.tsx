@@ -11,6 +11,7 @@ import {
 	setExhibitions,
 	updateExhibition,
 } from "src/features/exhibition/ExhibitionSlide";
+import { setPagination } from "src/features/pagination/PaginationSlice";
 import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserAuthenticationStatus } from "src/features/user/selectors";
@@ -26,7 +27,7 @@ const Exhibitions = (props: Props) => {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 	const isAuthenticatedUser = useAppSelector(getUserAuthenticationStatus);
-	const { data: exhibitions, pages } = useAppSelector(getExhibitions);
+	const { data: exhibitions } = useAppSelector(getExhibitions);
 
 	const [params, setParams] = useState<IParams>({
 		page: 1,
@@ -56,10 +57,9 @@ const Exhibitions = (props: Props) => {
 					dispatch(
 						setExhibitions({
 							data: res.data,
-							items: res.items,
-							pages: res.pages,
 						}),
 					);
+					dispatch(setPagination(res.pages));
 				}
 			}
 		} catch (err) {
@@ -387,13 +387,7 @@ const Exhibitions = (props: Props) => {
 						})}
 				</Stack>
 
-				<Pagination
-					page={params.page}
-					pageCount={pages.total}
-					setParams={setParams}
-					hasNext={pages.hasNext}
-					hasPrev={pages.hasPrev}
-				/>
+				<Pagination page={params.page} setParams={setParams} />
 			</Stack>
 
 			{shouldActiveExhibitionForm && (

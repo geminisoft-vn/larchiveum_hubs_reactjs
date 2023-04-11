@@ -4,7 +4,7 @@ import request from "./apiRequest";
 
 class MediaService {
   getListMedia(id) {
-    return fetch(`${API_ROOT}/v1/auth/medias?exhibitionId=${id}`, {
+    return fetch(`${API_ROOT}/v1/auth/media?exhibitionId=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -18,7 +18,7 @@ class MediaService {
   }
 
   proxyMedia(objectId) {
-    return fetch(`${API_ROOT}/v1/medias/proxy/${objectId}`, {
+    return fetch(`${API_ROOT}/v1/media/proxy/${objectId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +32,7 @@ class MediaService {
   }
 
   updateMediaMany(data) {
-    return fetch(`${API_ROOT}/v1/auth/medias`, {
+    return fetch(`${API_ROOT}/v1/auth/media`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +52,7 @@ class MediaService {
     const data = new FormData();
     data.append("file", file);
     return request
-      .post("/v1/auth/medias/upload", data, {
+      .post("/v1/auth/media/upload", data, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
