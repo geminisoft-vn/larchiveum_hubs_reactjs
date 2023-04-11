@@ -9,13 +9,12 @@ import { CloseButton } from "../input/CloseButton";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import Linkify from "react-linkify";
 import { LoadingOutlined } from "@ant-design/icons";
-import Store from "../../@larchiveum/utilities/store";
-import { CONTENT_ROOT } from "../../@larchiveum/utilities/constants";
-import QuizService from "../../@larchiveum/utilities/apiServices/QuizService";
-import DocumentService from "../../@larchiveum/utilities/apiServices/DocumentService";
+import Store from "../../@larchiveum/utils/store";
+import { CONTENT_ROOT } from "../../@larchiveum/utils/constants";
+import QuizService from "../../@larchiveum/services/QuizService";
+import DocumentService from "../../@larchiveum/services/DocumentService";
 import { useState, useEffect } from "react";
-import { setLocale } from "../../utils/i18n";
-import { Button, Space, Spin } from "antd";
+import { Space, Spin } from "antd";
 
 export function ContentsSidebar({ children, onClose }) {
   return (
