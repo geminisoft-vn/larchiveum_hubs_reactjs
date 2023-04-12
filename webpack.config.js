@@ -307,7 +307,7 @@ module.exports = async (env, argv) => {
           { from: /^\/cloud/, to: "/cloud.html" },
           { from: /^\/verify/, to: "/verify.html" },
           { from: /^\/tokens/, to: "/tokens.html" },
-          { from: /^\/whats-new/, to: "/whats-new.html" },
+          { from: /^\/whats-new/, to: "/whats-new.html" }
         ]
       },
       before: function(app) {
@@ -423,7 +423,7 @@ module.exports = async (env, argv) => {
           }
         },
         {
-          test: /\.js$/,
+          test: /\.(js|jsx)$/,
           include: [path.resolve(__dirname, "src")],
           // Exclude JS assets in node_modules because they are already transformed and often big.
           exclude: [path.resolve(__dirname, "node_modules")],
@@ -542,6 +542,15 @@ module.exports = async (env, argv) => {
         }
       }
     },
+
+    resolve: {
+      alias: {
+        "@larchiveum": path.resolve(__dirname, "src/@larchiveum/"),
+        src: path.resolve(__dirname, "src/")
+      },
+      extensions: [".js", ".jsx"]
+    },
+
     plugins: [
       new BundleAnalyzerPlugin({
         analyzerMode: env && env.bundleAnalyzer ? "server" : "disabled"
@@ -632,7 +641,7 @@ module.exports = async (env, argv) => {
           removeComments: false
         }
       }),
-   
+
       new HTMLWebpackPlugin({
         filename: "verify.html",
         template: path.join(__dirname, "src", "verify.html"),

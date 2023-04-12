@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
 import ReactDOM from "react-dom";
+import { WrappedIntlProvider } from "./react-components/wrapped-intl-provider";
 import registerTelemetry from "./telemetry";
 import Store from "./storage/store";
 

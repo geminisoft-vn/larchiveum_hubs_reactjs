@@ -15,19 +15,38 @@ import {
 import { detectIdle } from "./utils/idle-detector";
 import { connectToReticulum } from "hubs/src/utils/phoenix-utils";
 import { AppBar, Admin, Layout, Resource } from "react-admin";
-import { postgrestClient, postgrestAuthenticatior } from "./utils/postgrest-data-provider";
+import {
+  postgrestClient,
+  postgrestAuthenticatior
+} from "./utils/postgrest-data-provider";
 import { AdminMenu } from "./react-components/admin-menu";
 import { SceneList, SceneEdit } from "./react-components/scenes";
-import { SceneListingList, SceneListingEdit } from "./react-components/scene-listings";
+import {
+  SceneListingList,
+  SceneListingEdit
+} from "./react-components/scene-listings";
 import { AvatarList, AvatarEdit } from "./react-components/avatars";
-import { IdentityList, IdentityCreate, IdentityEdit } from "./react-components/identities";
-import { AvatarListingList, AvatarListingEdit } from "./react-components/avatar-listings";
-import { FeaturedSceneListingList, FeaturedSceneListingEdit } from "./react-components/featured-scene-listings";
+import {
+  IdentityList,
+  IdentityCreate,
+  IdentityEdit
+} from "./react-components/identities";
+import {
+  AvatarListingList,
+  AvatarListingEdit
+} from "./react-components/avatar-listings";
+import {
+  FeaturedSceneListingList,
+  FeaturedSceneListingEdit
+} from "./react-components/featured-scene-listings";
 import { PendingSceneList } from "./react-components/pending-scenes";
 import { AccountList, AccountEdit } from "./react-components/accounts";
 import { ProjectList, ProjectShow } from "./react-components/projects";
 import { SystemEditor } from "./react-components/system-editor";
-import { ServiceEditor, AppConfigEditor } from "./react-components/service-editor";
+import {
+  ServiceEditor,
+  AppConfigEditor
+} from "./react-components/service-editor";
 import { ServerAccess } from "./react-components/server-access";
 import { ContentCDN } from "./react-components/content-cdn";
 import { ImportContent } from "./react-components/import-content";
@@ -81,12 +100,14 @@ class AdminUI extends Component {
   };
 
   async componentDidMount() {
-    if (process.env.NODE_ENV !== "development" || qs.get("idle_timeout")) detectIdle();
+    if (process.env.NODE_ENV !== "development" || qs.get("idle_timeout"))
+      detectIdle();
     window.addEventListener("idle_detected", this.onIdleDetected);
     window.addEventListener("activity_detected", this.onActivityDetected);
     const adminInfo = await getAdminInfo();
     // Unauthorized account
-    if (adminInfo.error && adminInfo.code === 401) this.setState({ isAdmin: false });
+    if (adminInfo.error && adminInfo.code === 401)
+      this.setState({ isAdmin: false });
   }
 
   componentWillUnmount() {
@@ -148,7 +169,12 @@ class AdminUI extends Component {
               />
 
               <Resource name="accounts" list={AccountList} edit={AccountEdit} />
-              <Resource name="identities" list={IdentityList} create={IdentityCreate} edit={IdentityEdit} />
+              <Resource
+                name="identities"
+                list={IdentityList}
+                create={IdentityCreate}
+                edit={IdentityEdit}
+              />
               <Resource name="scenes" list={SceneList} edit={SceneEdit} />
               <Resource name="avatars" list={AvatarList} edit={AvatarEdit} />
               <Resource name="owned_files" />
@@ -157,7 +183,9 @@ class AdminUI extends Component {
             </Admin>
             {this.state.showAutoEndSessionDialog && (
               <AutoEndSessionDialog
-                onCancel={() => this.setState({ showAutoEndSessionDialog: false })}
+                onCancel={() =>
+                  this.setState({ showAutoEndSessionDialog: false })
+                }
                 onEndSession={() => {
                   this.props.onEndSession();
                   this.setState({ sessionEnded: true });
@@ -191,7 +219,10 @@ const mountUI = async (retPhxChannel, customRoutes, layout) => {
     await postgrestAuthenticatior.refreshPermsToken();
 
     // Refresh perms regularly
-    permsTokenRefreshInterval = setInterval(() => postgrestAuthenticatior.refreshPermsToken(), 60000);
+    permsTokenRefreshInterval = setInterval(
+      () => postgrestAuthenticatior.refreshPermsToken(),
+      60000
+    );
   } else {
     const server = configs.RETICULUM_SERVER || document.location.host;
     dataProvider = postgrestClient("//" + server + "/api/postgrest");
@@ -245,7 +276,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const homeRoute = <Route exact path="/home" component={SystemEditor} />;
   const importRoute = <Route exact path="/import" component={ImportContent} />;
-  const accessRoute = <Route exact path="/server-access" component={ServerAccess} />;
+  const accessRoute = (
+    <Route exact path="/server-access" component={ServerAccess} />
+  );
   const cdnRoute = <Route exact path="/content-cdn" component={ContentCDN} />;
 
   const customRoutes = [homeRoute, importRoute, accessRoute, cdnRoute];
@@ -255,7 +288,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       hubs: toml.parse(await fetch("/hubs/schema.toml").then(r => r.text()))
     });
     const appConfigRoute = (
-      <Route path="/app-settings" render={props => <AppConfigEditor {...props} schema={appConfigSchema} />} />
+      <Route
+        path="/app-settings"
+        render={props => (
+          <AppConfigEditor {...props} schema={appConfigSchema} />
+        )}
+      />
     );
     customRoutes.push(appConfigRoute);
   } catch (e) {
@@ -264,19 +302,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (itaSchemas) {
     customRoutes.push(
-      <Route path="/server-setup" render={props => <ServiceEditor {...props} schema={itaSchemas} />} />
+      <Route
+        path="/server-setup"
+        render={props => <ServiceEditor {...props} schema={itaSchemas} />}
+      />
     );
   }
 
   const layout = props => (
-    <Layout {...props} appBar={HiddenAppBar} menu={props => <AdminMenu {...props} services={schemaCategories} />} />
+    <Layout
+      {...props}
+      appBar={HiddenAppBar}
+      menu={props => <AdminMenu {...props} services={schemaCategories} />}
+    />
   );
 
-  const redirectToLogin = () => (document.location = "/?sign_in&sign_in_destination=admin");
+  const redirectToLogin = () =>
+    (document.location = "/?sign_in&sign_in_destination=admin");
 
   if (store.state.credentials && store.state.credentials.token) {
     // Reticulum global channel
-    const retPhxChannel = socket.channel(`ret`, { hub_id: "admin", token: store.state.credentials.token });
+    const retPhxChannel = socket.channel(`ret`, {
+      hub_id: "admin",
+      token: store.state.credentials.token
+    });
     retPhxChannel
       .join()
       .receive("ok", async () => {
