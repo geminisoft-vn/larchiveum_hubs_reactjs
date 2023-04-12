@@ -2,20 +2,16 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import PropTypes from "prop-types";
-import classNames from "classnames";
-import styles from "./ObjectsSidebar.scss";
 import { Sidebar } from "../sidebar/Sidebar";
 import { CloseButton } from "../input/CloseButton";
-import { defineMessages, FormattedMessage, useIntl } from "react-intl";
-import Linkify from "react-linkify";
+import { FormattedMessage } from "react-intl";
 import { LoadingOutlined } from "@ant-design/icons";
-import Store from "../../utilities/store";
-import { CONTENT_ROOT } from "../../utilities/constants";
-import QuizService from "../../utilities/apiServices/QuizService";
-import DocumentService from "../../utilities/apiServices/DocumentService";
+import Store from "../../@larchiveum/utils/store";
+import { CONTENT_ROOT } from "../../@larchiveum/utils/constants";
+import QuizService from "../../@larchiveum/services/QuizService";
+import DocumentService from "../../@larchiveum/services/DocumentService";
 import { useState, useEffect } from "react";
-import { setLocale } from "../../utils/i18n";
-import { Button, Space, Spin } from "antd";
+import { Space, Spin } from "antd";
 
 export function ContentsSidebar({ children, onClose }) {
   return (
