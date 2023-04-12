@@ -58,13 +58,17 @@ const getTs = (() => {
   }
 
   step.text = "Building Client.";
-
-  await new Promise((resolve, reject) => {
-    exec("npm ci", {}, err => {
-      if (err) reject(err);
-      resolve();
-    });
-  });
+  
+  /**
+   * FIX can't not install packages
+   * You must install package and test successfully if you want to skip this step
+   */
+  // await new Promise((resolve, reject) => {
+  //   exec("npm ci", {}, err => {
+  //     if (err) reject(err);
+  //     resolve();
+  //   });
+  // });
 
   await new Promise((resolve, reject) => {
     exec("npm run build", { env }, err => {
