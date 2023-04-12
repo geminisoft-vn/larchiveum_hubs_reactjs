@@ -2,12 +2,9 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import PropTypes from "prop-types";
-import classNames from "classnames";
-import styles from "./ObjectsSidebar.scss";
 import { Sidebar } from "../sidebar/Sidebar";
 import { CloseButton } from "../input/CloseButton";
-import { defineMessages, FormattedMessage, useIntl } from "react-intl";
-import Linkify from "react-linkify";
+import { FormattedMessage } from "react-intl";
 import { LoadingOutlined } from "@ant-design/icons";
 import Store from "../../@larchiveum/utils/store";
 import { CONTENT_ROOT } from "../../@larchiveum/utils/constants";

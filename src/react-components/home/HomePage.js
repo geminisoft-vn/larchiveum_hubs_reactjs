@@ -8,7 +8,7 @@ import { PWAButton } from "./PWAButton";
 import { useFavoriteRooms } from "./useFavoriteRooms";
 import { usePublicRooms } from "./usePublicRooms";
 import styles from "./HomePage.scss";
-import { AuthContext } from "src/react-components/auth/AuthContext";
+import { AuthContext } from "../auth/AuthContext";
 import { createAndRedirectToNewHub } from "../../utils/phoenix-utils";
 import { MediaGrid } from "../room/MediaGrid";
 import { MediaTile } from "../room/MediaTiles";

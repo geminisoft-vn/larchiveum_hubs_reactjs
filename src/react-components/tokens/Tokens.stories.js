@@ -6,7 +6,7 @@ import { NoAccess } from "./NoAccess";
 import { RevokeTokenModal } from "./RevokeTokenModal";
 import { RevealTokenModal } from "./RevealTokenModal";
 import { CreateToken } from "./CreateToken";
-import { StorybookAuthContextProvider } from "src/react-components/auth/AuthContext";
+import { StorybookAuthContextProvider } from "../auth/AuthContext";
 
 export default {
   title: "Token/Tokens"

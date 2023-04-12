@@ -3,7 +3,7 @@ import { fetchMyTokens } from "./token-utils";
 import { RevokeTokenContainer } from "./RevokeTokenContainer";
 import { TokenList } from "./TokenList";
 import { NoAccess } from "./NoAccess";
-import { AuthContext } from "src/react-components/auth/AuthContext";
+import { AuthContext } from "../auth/AuthContext";
 import { CreateTokenContainer } from "./CreateTokenContainer";
 
 export function TokensContainer() {
