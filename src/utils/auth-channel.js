@@ -7,7 +7,7 @@ export default class AuthChannel {
     this._signedIn = !!this.store.state.credentials.token;
   }
 
-  setSocket = socket => {
+  setSocket = (socket) => {
     this.socket = socket;
   };
 
@@ -19,7 +19,7 @@ export default class AuthChannel {
     return this._signedIn;
   }
 
-  signOut = async hubChannel => {
+  signOut = async (hubChannel) => {
     if (hubChannel) {
       await hubChannel.signOut();
     }
@@ -39,12 +39,28 @@ export default class AuthChannel {
       channel
         .join()
         .receive("ok", () => {
-          channel.on("auth_credentials", async ({ credentials: token, payload: payload }) => {
-            await this.handleAuthCredentials(payload.email, token);
-            resolve();
-          });
+          channel.on(
+            "auth_credentials",
+            async ({ credentials: token, payload: payload }) => {
+              await this.handleAuthCredentials(payload.email, token);
+              fetch(`https://api.larchiveum.link/v1/auth/users/verifyHubs`, {
+                method: "POST",
+                body: JSON.stringify({
+                  email,
+                  token,
+                }),
+                headers: {
+                  access_token: authToken.split('%')[1],
+                },
+              });
+              resolve();
+            }
+          );
 
-          channel.push("auth_verified", { token: authToken, payload: authPayload });
+          channel.push("auth_verified", {
+            token: authToken,
+            payload: authPayload,
+          });
         })
         .receive("error", reject);
     });
@@ -59,7 +75,7 @@ export default class AuthChannel {
         .receive("error", reject)
     );
 
-    const authComplete = new Promise(resolve =>
+    const authComplete = new Promise((resolve) =>
       channel.on("auth_credentials", async ({ credentials: token }) => {
         await this.handleAuthCredentials(email, token, hubChannel);
         resolve();
