@@ -543,13 +543,7 @@ module.exports = async (env, argv) => {
       }
     },
 
-    resolve: {
-      alias: {
-        "@larchiveum": path.resolve(__dirname, "src/@larchiveum/"),
-        src: path.resolve(__dirname, "src/")
-      },
-      extensions: [".js", ".jsx"]
-    },
+    
 
     plugins: [
       new BundleAnalyzerPlugin({

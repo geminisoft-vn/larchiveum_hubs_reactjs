@@ -11,9 +11,9 @@ type Props = {
 	isActive: boolean;
 	setIsActive?: (_v: boolean) => void;
 	width?: number | string;
-	minHeight?: number;
+	minHeight?: number | "max-content";
 	maxHeight?: number | "max-content";
-	height?: number;
+	height?: number | "max-content";
 	title?: string;
 	children: JSX.Element | JSX.Element[] | string | null;
 	actions?: TModalAction[];
@@ -113,9 +113,9 @@ const Modal = (props: Props) => {
 
 Modal.defaultProps = {
 	width: 512,
-	minHeight: 512,
+	minHeight: "max-content",
 	maxHeight: 512,
-	height: 512,
+	height: "max-content",
 };
 
 export default Modal;

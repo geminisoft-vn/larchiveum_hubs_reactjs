@@ -25,4 +25,5 @@ export interface IUserAuthenticationForm {
 	email: string;
 	password: string;
 	repassword: string;
+	type: number;
 }
