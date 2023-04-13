@@ -1,6 +1,6 @@
-import pdfjs from "pdfjs-dist";
+// import pdfjs from "pdfjs-dist";
 // fix: ERROR in ./node_modules/pdfjs-dist/build/pdf.js 1413:9 Module parse failed: Unexpected character '#' (1413:9)
-// import * as pdfjs from 'pdfjs-dist/legacy/build/pdf'; 
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf'; 
 import { SOUND_CAMERA_TOOL_TOOK_SNAPSHOT } from "../systems/sound-effects-system";
 import { scaleToAspectRatio } from "../utils/scale-to-aspect-ratio";
 import { errorTexture } from "../utils/error-texture";
