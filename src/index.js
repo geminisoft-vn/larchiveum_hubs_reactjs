@@ -19,7 +19,7 @@ function Root() {
     <WrappedIntlProvider>
       <ThemeProvider store={store}>
         <AuthContextProvider store={store}>
-          <HomePage />
+          <HomePage store={store} />
         </AuthContextProvider>
       </ThemeProvider>
     </WrappedIntlProvider>

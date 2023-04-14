@@ -41,12 +41,6 @@ const SignIn = () => {
 	const handleLogin = handleSubmit((data) => {
 		dispatch(login(data))
 			.unwrap()
-      .then(() => {
-        let iHubsEl = document.getElementById('IFRAME__HUBS')
-        if(iHubsEl) {
-          iHubsEl.contentWindow.postMessage(JSON.stringify(data), "https://hubs.local:8080")
-        }
-      })
 			.then(() => navigate("/"));
 	});
 

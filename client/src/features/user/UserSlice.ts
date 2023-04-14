@@ -8,6 +8,7 @@ type TInitialState = {
 	data: Partial<IUser>;
 	authentication: {
 		token: string;
+		hubsToken: string | undefined;
 		expire: number;
 		isAuthenticated: boolean;
 	};
@@ -23,6 +24,7 @@ const INITIAL_STATE: TInitialState = {
 	},
 	authentication: {
 		token: "",
+    hubsToken: "",
 		expire: 0,
 		isAuthenticated: false,
 	},

@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import logo from "src/assets/images/larchiveum_logo.png";
 import { Button, Stack, Typography } from "src/components";
 import {
+  getHubsToken,
 	getUserAuthenticationStatus,
 	getUserInfo,
 } from "src/features/user/selectors";
@@ -28,6 +29,7 @@ const Header = () => {
 
 	const isAuthenticated = useAppSelector(getUserAuthenticationStatus);
 	const userInfo = useAppSelector(getUserInfo);
+  const hubsToken = useAppSelector(getHubsToken)
 
 	function handleChangeLanguage(locale: string) {
 		setLanguage(locale);
@@ -37,6 +39,7 @@ const Header = () => {
 	const handleSignOut = () => {
 		dispatch(logout());
 		navigate("/home/app");
+    window.open(`https://hubs.local:8080?action=signout`, "_blank")
 	};
 
 	const btns = [
@@ -57,14 +60,14 @@ const Header = () => {
 		{
 			key: "spoke",
 			label: t("_header.TAB_SPOKE_LABEL"),
-			href: `${APP_ROOT}/spoke`,
+			href: `${APP_ROOT}?action=signin&redirect_url=spoke&email=${userInfo.email}&hubs_token=${hubsToken}`,
 			requiredUserType: 4,
 		},
 
 		{
 			key: "admin",
 			label: t("_header.TAB_ADMIN_LABEL"),
-			href: `${APP_ROOT}/admin`,
+			href: `${APP_ROOT}?action=signin&redirect_url=spoke&email=${userInfo.email}&hubs_token=${hubsToken}`,
 			requiredUserType: 5,
 		},
 

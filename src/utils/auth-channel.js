@@ -1,4 +1,5 @@
 import uuid from "uuid/v4";
+import axios from 'axios';
 
 export default class AuthChannel {
   constructor(store) {
@@ -43,16 +44,18 @@ export default class AuthChannel {
             "auth_credentials",
             async ({ credentials: token, payload: payload }) => {
               await this.handleAuthCredentials(payload.email, token);
-              fetch(`https://api.larchiveum.link/v1/auth/users/verifyHubs`, {
-                method: "POST",
-                body: JSON.stringify({
-                  email,
-                  token,
-                }),
-                headers: {
-                  access_token: authToken.split('%')[1],
+              await axios({
+                method: 'POST',
+                url: `https://api.larchiveum.link/v1/auth/users/verifyHubs`,
+                data: {
+                  email: payload.email,
+                  token
                 },
-              });
+                headers: {
+                  access_token: authTopic.split(':')[1],
+                }
+              })
+              
               resolve();
             }
           );

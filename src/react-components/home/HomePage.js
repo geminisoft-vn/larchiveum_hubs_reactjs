@@ -22,7 +22,9 @@ import { SignInButton } from "./SignInButton";
 import maskEmail from "../../utils/mask-email";
 import { ReactComponent as HmcLogo } from "../icons/HmcLogo.svg";
 
-export function HomePage() {
+
+
+export function HomePage({store}) {
   const auth = useContext(AuthContext);
   const intl = useIntl();
 
@@ -37,7 +39,22 @@ export function HomePage() {
     const qs = new URLSearchParams(location.search);
 
     // Support legacy sign in urls.
-    if (qs.has("sign_in")) {
+    if(qs.has('action')) {
+      if(qs.get('action') === 'signin') {
+        const email = qs.get('email')
+        const hubsToken = qs.get('hubs_token')
+
+        store.update({ credentials: { token: hubsToken, email: email } })
+
+        const redirectUrl = '/' + qs.get('redirect_url')
+        window.location.href = redirectUrl;
+      } else if(qs.get('action') === 'signout') {
+        console.log(qs.get)
+        store.update({ credentials: { token: null, email: null } })
+        window.close()
+      }
+      
+    } else if (qs.has("sign_in")) {
       const redirectUrl = new URL("/signin", window.location);
       redirectUrl.search = location.search;
       window.location = redirectUrl;

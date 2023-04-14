@@ -12,6 +12,11 @@ export const getUserInfo = createSelector(
 	(user) => user,
 );
 
+export const getHubsToken = createSelector(
+	(state: RootState) => state.user.authentication,
+	(authen) => authen.hubsToken,
+);
+
 export const getUserAuthenticationStatus = createSelector(
 	(state: RootState) => state.user.authentication,
 	(authen) => authen.isAuthenticated,

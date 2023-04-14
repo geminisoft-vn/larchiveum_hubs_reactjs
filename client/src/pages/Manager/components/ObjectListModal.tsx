@@ -51,6 +51,28 @@ const ObjectListModal = (props) => {
 		}
 	};
 
+  const handleSaveChangableURL = () => {
+    let clone = [...objects];
+    let changableObjects = clone.filter(obj => obj.changeable)
+    let uuids = changableObjects.map(obj => obj.uuid);
+    ProjectService.updateChangeableObjects(projectId, JSON.stringify(uuids)).then(res => {
+      if(res.result === 'ok') {
+        dispatch(showToast({
+          type:'success',
+          message: t("manager.MESSAGE_SUCCESS")
+        }))
+        
+      }
+    }).catch(() => {
+      dispatch(showToast({
+        type: 'error',
+        message: t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR")
+      }))
+    }).finally(() => {
+      handleCloseModal()
+    })
+  }
+
 	useEffect(() => {
 		load();
 	}, []);
@@ -60,10 +82,12 @@ const ObjectListModal = (props) => {
 			title="Media Edit"
 			isActive={isActive}
 			setIsActive={setIsActive}
+      height={700}
+      width={700}
 			actions={[
 				{
 					text: t(`__BUTTON__.SAVE`),
-					callback: () => {},
+					callback: handleSaveChangableURL,
 				},
 				{
 					text: t(`__BUTTON__.CLOSE`),
@@ -71,26 +95,12 @@ const ObjectListModal = (props) => {
 				},
 			]}
 		>
-			<Stack direction="col" gap={2}>
+			<div>
+        <Stack direction="col" gap={2} className="h-full overflow-y-auto">
 				{objects &&
 					(objects.length > 0 ? (
 						objects.map((item, index) => {
-							// if (item?.changeable == undefined) {
-							// 	if (item.src.includes(item.uuid)) {
-							// 		item.changeable = true;
-							// 	} else {
-							// 		item.changeable = false;
-							// 	}
-							// }
-							// const icon_type = () => {
-							// 	if (item.type == "video") {
-							// 		return <FaVideo className="icon_type" />;
-							// 	}
-							// 	if (item.type == "image") {
-							// 		return <FaRegImage className="icon_type" />;
-							// 	}
-							// 	return <FaCodepen className="icon_type" />;
-							// };
+							
 
 							return (
 								<div className="flex items-center gap-2">
@@ -118,7 +128,7 @@ const ObjectListModal = (props) => {
 												className="largerCheckbox"
 												type="checkbox"
 												name="public"
-												checked={item.changeable}
+												checked={!!item.changeable}
 												onChange={(e) => handleChangeable(e, item)}
 											/>
 											<span className="textCheckbox">
@@ -133,6 +143,7 @@ const ObjectListModal = (props) => {
 						<Empty description="No Objects" />
 					))}
 			</Stack>
+      </div>
 		</Modal>
 	);
 };

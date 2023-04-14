@@ -25,6 +25,7 @@ const login = createAsyncThunk(
 			data: Partial<IUser>;
 			authentication: {
 				token: string;
+				hubsToken: string | undefined;
 				expire: number;
 				isAuthenticated: boolean;
 			};
@@ -32,6 +33,7 @@ const login = createAsyncThunk(
 			data: {},
 			authentication: {
 				token: "",
+				hubsToken: "",
 				expire: 0,
 				isAuthenticated: false,
 			},
@@ -43,6 +45,7 @@ const login = createAsyncThunk(
 			const { exp } = jwtDecode<IJWTPayload>(token);
 			result.authentication = {
 				token,
+        hubsToken: res.data.hubsToken,
 				expire: exp,
 				isAuthenticated: true,
 			};
