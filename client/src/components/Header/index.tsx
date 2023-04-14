@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import logo from "src/assets/images/larchiveum_logo.png";
 import { Button, Stack, Typography } from "src/components";
 import {
-  getHubsToken,
+	getHubsToken,
 	getUserAuthenticationStatus,
 	getUserInfo,
 } from "src/features/user/selectors";
@@ -29,7 +29,7 @@ const Header = () => {
 
 	const isAuthenticated = useAppSelector(getUserAuthenticationStatus);
 	const userInfo = useAppSelector(getUserInfo);
-  const hubsToken = useAppSelector(getHubsToken)
+	const hubsToken = useAppSelector(getHubsToken);
 
 	function handleChangeLanguage(locale: string) {
 		setLanguage(locale);
@@ -39,7 +39,7 @@ const Header = () => {
 	const handleSignOut = () => {
 		dispatch(logout());
 		navigate("/home/app");
-    window.open(`https://hubs.local:8080?action=signout`, "_blank")
+		window.open(`${APP_ROOT}?action=signout`, "_blank");
 	};
 
 	const btns = [
