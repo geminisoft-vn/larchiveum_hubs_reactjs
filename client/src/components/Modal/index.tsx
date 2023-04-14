@@ -52,10 +52,10 @@ const Modal = (props: Props) => {
 			<div
 				className="flex rounded-lg border bg-white shadow-lg"
 				style={{
-					width: `${width}px`,
-					minHeight: `${minHeight}px`,
-					maxHeight: `${maxHeight}px`,
-					height: `${height}px`,
+					width,
+					minHeight,
+					maxHeight,
+					height,
 				}}
 			>
 				<div className="flex h-full max-h-full flex-1 flex-col rounded-lg dark:bg-gray-700">
@@ -113,9 +113,9 @@ const Modal = (props: Props) => {
 
 Modal.defaultProps = {
 	width: 512,
-	minHeight: "max-content",
-	maxHeight: 512,
-	height: "max-content",
+	minHeight: 512,
+	maxHeight: "max-content",
+	height: 512,
 };
 
 export default Modal;
