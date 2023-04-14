@@ -67,7 +67,7 @@ const Header = () => {
 		{
 			key: "admin",
 			label: t("_header.TAB_ADMIN_LABEL"),
-			href: `${APP_ROOT}?action=signin&redirect_url=spoke&email=${userInfo.email}&hubs_token=${hubsToken}`,
+			href: `${APP_ROOT}?action=signin&redirect_url=admin&email=${userInfo.email}&hubs_token=${hubsToken}`,
 			requiredUserType: 5,
 		},
 
