@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import logo from "src/assets/images/larchiveum_logo.png";
 import { Button, Stack, Typography } from "src/components";
+import { AuthContext } from "src/contexts/AuthContext";
 import {
 	getHubsToken,
 	getUserAuthenticationStatus,
@@ -19,8 +20,8 @@ import "./Header.scss";
 
 const Header = () => {
 	const { t } = useTranslation();
-	const navigate = useNavigate();
-	const dispatch = useAppDispatch();
+
+	const { signOut } = useContext(AuthContext);
 
 	const { pathname } = useLocation();
 
@@ -35,12 +36,6 @@ const Header = () => {
 		setLanguage(locale);
 		setShouldOpenLocaleDropdown(false);
 	}
-
-	const handleSignOut = () => {
-		dispatch(logout());
-		navigate("/home/app");
-		window.open(`${APP_ROOT}?action=signout`, "_blank");
-	};
 
 	const btns = [
 		{
@@ -172,7 +167,7 @@ const Header = () => {
 											height: 24,
 										}}
 									/>
-									<Button variant="link" onClick={handleSignOut}>
+									<Button variant="link" onClick={signOut}>
 										{t(`home.SIGN_OUT`)}
 									</Button>
 								</Stack>

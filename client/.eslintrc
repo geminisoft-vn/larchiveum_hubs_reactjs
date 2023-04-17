@@ -57,6 +57,7 @@
     "react/no-array-index-key": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "func-names": "off",
+    "react/destructuring-assignment": "off",
     "no-param-reassign": [
       2,
       {

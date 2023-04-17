@@ -8,7 +8,8 @@ export interface IUser {
 	type: number;
 	system: number;
 	deleted: number;
-	emailVerifyToken: string;
+	token: string;
+	hubsToken: string;
 	googleEmail: string;
 	facebookId: string;
 	naverId: string;

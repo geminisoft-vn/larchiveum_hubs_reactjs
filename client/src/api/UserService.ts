@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 import { IAxiosResponse, IUser, IUserAuthenticationForm } from "src/interfaces";
 import { API_ROOT } from "src/utilities/constants";
 import request from "src/utilities/request";

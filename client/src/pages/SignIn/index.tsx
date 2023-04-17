@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { useAppDispatch } from "src/app/hooks";
 import logo from "src/assets/images/larchiveum_logo.png";
 import {
 	Alert,
@@ -15,13 +14,13 @@ import {
 	TextInput,
 	Typography,
 } from "src/components";
-import { login } from "src/features/user/thunks";
+import { AuthContext } from "src/contexts/AuthContext";
 import { getLanguage, setLanguage } from "src/language";
 
 const SignIn = () => {
 	const { t } = useTranslation();
-	const navigate = useNavigate();
-	const dispatch = useAppDispatch();
+
+	const { signIn } = useContext(AuthContext);
 
 	const {
 		handleSubmit,
@@ -38,10 +37,8 @@ const SignIn = () => {
 		setLanguage(getLanguage());
 	}, []);
 
-	const handleLogin = handleSubmit((data) => {
-		dispatch(login(data))
-			.unwrap()
-			.then(() => navigate("/"));
+	const handleLogin = handleSubmit(async (data) => {
+		await signIn(data);
 	});
 
 	return (

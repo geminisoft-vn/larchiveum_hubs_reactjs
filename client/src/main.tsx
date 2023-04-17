@@ -5,17 +5,25 @@ import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 
 import store from "./app/store";
+import AuthContextProvider from "./contexts/AuthContext";
 import App from "./App";
+import ErrorBoundary from "./ErrorBoundary";
 
 import "./index.css";
 
 const persistor = persistStore(store);
 
-ReactDOM.createRoot(document.getElementById("LARCHIVEUM__ROOT") as HTMLElement).render(
+ReactDOM.createRoot(
+	document.getElementById("LARCHIVEUM__ROOT") as HTMLElement,
+).render(
 	<Provider store={store}>
 		<PersistGate persistor={persistor}>
 			<BrowserRouter>
-				<App />
+				<AuthContextProvider>
+					<ErrorBoundary>
+						<App />
+					</ErrorBoundary>
+				</AuthContextProvider>
 			</BrowserRouter>
 		</PersistGate>
 	</Provider>,
