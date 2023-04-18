@@ -58,6 +58,7 @@ const HomePage = () => {
 								pages: res.pages,
 							}),
 						);
+						dispatch(setPagination(res.pages));
 					}
 				})
 				.catch(() => {
