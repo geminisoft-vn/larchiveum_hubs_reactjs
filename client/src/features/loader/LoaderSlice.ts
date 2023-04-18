@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "src/app/store";
 
 type TInitialState = {
 	isActive: boolean;
@@ -20,6 +21,11 @@ const loaderSlice = createSlice({
 		},
 	},
 });
+
+export const getLoaderInfo = createSelector(
+	(state: RootState) => state.loader,
+	(loader) => loader.isActive,
+);
 
 export const { startLoading, stopLoading } = loaderSlice.actions;
 export default loaderSlice.reducer;

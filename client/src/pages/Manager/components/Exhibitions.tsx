@@ -1,3 +1,4 @@
+import { Empty } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -11,6 +12,7 @@ import {
 	setExhibitions,
 	updateExhibition,
 } from "src/features/exhibition/ExhibitionSlide";
+import { getLoaderInfo } from "src/features/loader/LoaderSlice";
 import { setPagination } from "src/features/pagination/PaginationSlice";
 import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import { showToast } from "src/features/toast/ToastSlice";
@@ -27,6 +29,7 @@ const Exhibitions = (props: Props) => {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 	const isAuthenticatedUser = useAppSelector(getUserAuthenticationStatus);
+	const isActiveLoader = useAppSelector(getLoaderInfo);
 	const { data: exhibitions } = useAppSelector(getExhibitions);
 
 	const [params, setParams] = useState<IParams>({
@@ -358,8 +361,14 @@ const Exhibitions = (props: Props) => {
 	}, []);
 
 	return (
-		<section className="w-full">
-			<Stack direction="col" alignItems="center" gap={2} className="my-4">
+		<section className="h-full w-full">
+			<Stack
+				direction="col"
+				alignItems="center"
+				justifyContent="between"
+				gap={2}
+				className="my-4 h-full p-4"
+			>
 				<Button
 					className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-blue-500 p-4 text-lg text-white shadow-lg"
 					onClick={() => {
@@ -369,7 +378,8 @@ const Exhibitions = (props: Props) => {
 					+
 				</Button>
 				<Stack direction="col" gap={4} className="w-full">
-					{exhibitions &&
+					{!isActiveLoader &&
+						exhibitions &&
 						exhibitions.map((exhibition) => {
 							return (
 								<Exhibition
@@ -385,6 +395,7 @@ const Exhibitions = (props: Props) => {
 								/>
 							);
 						})}
+					{!isActiveLoader && exhibitions.length === 0 && <Empty />}
 				</Stack>
 
 				<Pagination page={params.page} setParams={setParams} />

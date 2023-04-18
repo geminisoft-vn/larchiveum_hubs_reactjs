@@ -460,9 +460,7 @@ const Manager = () => {
 				/>
 			)} */}
 
-			<section className="w-full">
-				<Exhibitions />
-			</section>
+			<Exhibitions />
 		</>
 	);
 };
