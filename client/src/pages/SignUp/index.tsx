@@ -39,10 +39,10 @@ const SignUpForm = () => {
 
 	const handleSignUp = handleSubmit((data) => {
 		if (data.password !== data.repassword) {
-			setError(
-				"password",
-				t("signup.SIGN_UP_ERROR__RE_PASSWORD_NOT_MATCH") as ErrorOption,
-			);
+			setError("password", {
+				type: "error",
+				message: t("signup.SIGN_UP_ERROR__RE_PASSWORD_NOT_MATCH"),
+			});
 			return;
 		}
 

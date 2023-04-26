@@ -105,10 +105,16 @@ const Exhibitions = (props: Props) => {
 		setExhibitionId(_id);
 	};
 
-	const openPopupCustomMedia = (_projectId) => {
+	const openPopupCustomMedia = (
+		_projectId?: string,
+		_exhibitionId?: number,
+	) => {
 		setShouldOpenObjectListModal(true);
 		if (_projectId) {
 			setProjectId(_projectId);
+		}
+		if (_exhibitionId) {
+			setExhibitionId(_exhibitionId);
 		}
 	};
 
@@ -416,6 +422,7 @@ const Exhibitions = (props: Props) => {
 					isActive={shouldOpenObjectListModal}
 					setIsActive={setShouldOpenObjectListModal}
 					projectId={projectId}
+					exhibitionId={exhibitionId}
 				/>
 			)}
 		</section>

@@ -56,32 +56,6 @@ const Manager = () => {
 	// 	});
 	// };
 
-	// const handelOpenPopupChangeMediaURLGuide = () => {
-	// 	setIconLoaded(true);
-	// 	let listUuid = [];
-	// 	listUuid = objects.data.map((item) => {
-	// 		if (item?.changeable === true) {
-	// 			return item.uuid;
-	// 		}
-	// 		return false;
-	// 	});
-	// 	const dataString = JSON.stringify(listUuid);
-	// 	ProjectService.updateChangeableObjects(projectId, dataString).then(
-	// 		(res) => {
-	// 			if (res.result == "ok") {
-	// 				setIconLoaded(false);
-	// 				closePopupCustomObject();
-	// 				setIsOpenPopupChangeMediaURLGuide(true);
-	// 				toast.success(t("manager.MESSAGE_SUCCESS"), { autoClose: 5000 });
-	// 			} else {
-	// 				toast.error(t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"), {
-	// 					autoClose: 5000,
-	// 				});
-	// 			}
-	// 		},
-	// 	);
-	// };
-
 	// const handleChangeable = (object, evt) => {
 	// 	if (object.changeable == true) {
 	// 		object.changeable = false;

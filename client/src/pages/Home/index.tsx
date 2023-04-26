@@ -27,7 +27,7 @@ const HomePage = () => {
 	});
 
 	const getAllExhibitions = useCallback(() => {
-		if (user?.id) {
+		if (user.id) {
 			ExhibitionsService.getAllWithAuthExhibitions(params)
 				.then((res) => {
 					if (res.result === "ok") {

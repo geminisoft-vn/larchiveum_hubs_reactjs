@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import {
 	DeleteOutlined,
 	EyeOutlined,
@@ -10,42 +11,38 @@ import { IQuiz } from "src/interfaces";
 
 type Props = {
 	quiz: IQuiz;
-	handleGotoViewQuiz: (_id?: number) => void;
-	handleGoToQuizForm: (_id?: number) => void;
-	handleDeleteQuiz: (_id?: number) => void;
+	openDeleteQuizPopup: (_id?: number) => void;
 };
 
 const Quiz = (props: Props) => {
-	const { quiz, handleGotoViewQuiz, handleGoToQuizForm, handleDeleteQuiz } =
-		props;
+	const { quiz, openDeleteQuizPopup } = props;
 
 	const { t } = useTranslation();
 	return (
 		<div className="flex w-full justify-between rounded-lg border border-gray-200 p-4">
 			<div className="flex flex-col gap-2">
-				<h3 className="text-2xl font-bold">{quiz.title}</h3>
+				<h3 className="text-xl font-bold">{quiz.title}</h3>
 				<p>{quiz.description}</p>
 			</div>
 
 			<div className="flex items-center gap-4">
-				<Button
-					beforeIcon={<EyeOutlined />}
-					onClick={() => handleGotoViewQuiz(quiz.id)}
-					className="bg-green-700 text-white"
-				>
-					{t("content.QUIZ_TAB__QUIZ_LIST__PREVIEW_BUTTON_LABEL")}
-				</Button>
-				<Button
-					beforeIcon={<UnorderedListOutlined />}
-					onClick={() => handleGoToQuizForm(quiz.id)}
-					className="bg-yellow-700 text-white
+				<Link to={`/preview/quiz/${quiz.id}`} target="_blank">
+					<Button beforeIcon={<EyeOutlined />}>
+						{t("content.QUIZ_TAB__QUIZ_LIST__PREVIEW_BUTTON_LABEL")}
+					</Button>
+				</Link>
+				<Link to={`/home/content/quiz/form/${quiz.id}`}>
+					<Button
+						beforeIcon={<UnorderedListOutlined />}
+						className="bg-yellow-700 text-white
           "
-				>
-					{t("content.QUIZ_TAB__QUIZ_LIST__EDIT_BUTTON_LABEL")}
-				</Button>
+					>
+						{t("content.QUIZ_TAB__QUIZ_LIST__EDIT_BUTTON_LABEL")}
+					</Button>
+				</Link>
 				<Button
 					beforeIcon={<DeleteOutlined />}
-					onClick={() => handleDeleteQuiz(quiz.id)}
+					onClick={() => openDeleteQuizPopup(quiz.id)}
 					danger
 				>
 					{" "}

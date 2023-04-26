@@ -21,7 +21,7 @@ const Toast = (props) => {
 		<div
 			id="__LARCHIVEUM__COMPONENT__TOAST__"
 			className={clsx(
-				"fixed top-8 left-1/2 mb-4 flex w-full max-w-xs -translate-x-1/2 items-center rounded-lg bg-white p-4 text-gray-500 shadow transition-all duration-200 dark:bg-gray-800 dark:text-gray-400",
+				"fixed top-8 left-1/2 z-[9999] mb-4 flex w-full max-w-xs -translate-x-1/2 items-center rounded-lg bg-white p-4 text-gray-500 shadow transition-all duration-200 dark:bg-gray-800 dark:text-gray-400",
 				isActive ? "opacity-1 visible" : "invisible opacity-0",
 			)}
 			role="alert"

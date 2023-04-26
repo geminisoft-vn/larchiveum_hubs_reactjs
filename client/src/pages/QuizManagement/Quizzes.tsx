@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Empty } from "antd";
 
 import QuizService from "src/api/QuizService";
@@ -9,11 +9,11 @@ import { Button } from "src/components";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserInfo } from "src/features/user/selectors";
 import { IQuiz } from "src/interfaces";
-import { CONTENT_ROOT } from "src/utilities/constants";
 
+import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import Quiz from "./Quiz";
 
-const Quizzes = (props) => {
+const Quizzes = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
@@ -39,15 +39,11 @@ const Quizzes = (props) => {
 		});
 	}
 
-	const handleGoToQuizForm = (quizId?) => {
-		if (quizId) {
-			navigate(`/home/content/quiz/form/${quizId}`);
-			return;
-		}
-		navigate("/home/content/quiz/form");
+	const handleClosePopup = () => {
+		dispatch(closePopup());
 	};
 
-	const handleDeleteQuiz = (quizId) => {
+	const handleDeleteQuiz = (quizId: number) => {
 		QuizService.delete(quizId)
 			.then(() => {
 				dispatch(
@@ -64,11 +60,32 @@ const Quizzes = (props) => {
 						message: t(`__TOAST__.ERROR`),
 					}),
 				);
+			})
+			.finally(() => {
+				handleClosePopup();
+				load();
 			});
 	};
 
-	const handleGotoViewQuiz = (quizId) => {
-		window.open(`${CONTENT_ROOT}/quiz?id=${quizId}`);
+	const openDeleteQuizPopup = (quizId: number) => {
+		dispatch(
+			openPopup({
+				isActive: true,
+				title: "Delete Quiz",
+				content: "Do you want to delete this quiz?",
+				actions: [
+					{
+						text: "Delete",
+						className: "bg-red-500 text-white",
+						callback: () => handleDeleteQuiz(quizId),
+					},
+					{
+						text: "Close",
+						callback: handleClosePopup,
+					},
+				],
+			}),
+		);
 	};
 
 	useEffect(() => {
@@ -77,12 +94,11 @@ const Quizzes = (props) => {
 
 	return (
 		<div className="flex flex-col items-center justify-start gap-2">
-			<Button
-				onClick={handleGoToQuizForm}
-				className="self-start bg-blue-700 text-white"
-			>
-				{t("content.QUIZ_TAB__QUIZ_LIST__QUIZ_TAB__ADD_QUIZ_BUTTON_LABEL")}
-			</Button>
+			<Link to="/home/content/quiz/form">
+				<Button className="self-start bg-blue-700 text-white">
+					{t("content.QUIZ_TAB__QUIZ_LIST__QUIZ_TAB__ADD_QUIZ_BUTTON_LABEL")}
+				</Button>
+			</Link>
 			{listQuiz.length === 0 ? (
 				<Empty
 					className="self-center"
@@ -95,9 +111,7 @@ const Quizzes = (props) => {
 						<Quiz
 							key={quiz.id}
 							quiz={quiz}
-							handleGotoViewQuiz={handleGotoViewQuiz}
-							handleGoToQuizForm={handleGoToQuizForm}
-							handleDeleteQuiz={handleDeleteQuiz}
+							openDeleteQuizPopup={openDeleteQuizPopup}
 						/>
 					))}
 				</>

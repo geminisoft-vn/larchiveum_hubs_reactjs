@@ -60,6 +60,7 @@
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
     "sass": "^1.59.3",
+    "swiper": "^9.2.3",
     "tailwindcss": "^3.2.7",
     "validator": "^13.9.0",
     "yup": "^1.0.2"

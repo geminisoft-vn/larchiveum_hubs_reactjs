@@ -15,7 +15,7 @@ import { APP_ROOT } from "src/utilities/constants";
 
 type Props = {
 	exhibition: Partial<IExhibition>;
-	openPopupCustomMedia: (_id?: string) => void;
+	openPopupCustomMedia: (_id?: string, _exhibitionId?: number) => void;
 	getSceneThumnail: (_sceneId?: string) => string;
 	openPopupPublic: (_id?: number) => void;
 	openPopupExhibition: (_type: "create" | "edit", _id?: number) => void;
@@ -44,7 +44,7 @@ const Exhibition = (props: Props) => {
 			<div
 				className="relative col-span-2"
 				style={{
-					maxHeight: 164,
+					maxHeight: "100%",
 				}}
 			>
 				<img
@@ -61,7 +61,7 @@ const Exhibition = (props: Props) => {
 					<Button
 						className="absolute top-2 left-2 border-none"
 						onClick={() => {
-							openPopupCustomMedia(exhibition.projectId);
+							openPopupCustomMedia(exhibition.projectId, exhibition.id);
 						}}
 					>
 						<FaTools className="text-lg text-white hover:scale-150" />

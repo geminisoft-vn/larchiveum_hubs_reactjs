@@ -3,6 +3,7 @@ import { Navigate, useRoutes } from "react-router-dom";
 // layouts
 import AuthLayout from "src/layouts/AuthLayout";
 import MainLayout from "src/layouts/MainLayout";
+import PreviewLayout from "src/layouts/PreviewLayout";
 import ProtectedRoute from "src/layouts/ProtectedRoute";
 // pages
 import {
@@ -16,6 +17,7 @@ import {
 	ProfilePage,
 	QuizFormPage,
 	QuizManagementPage,
+	QuizPreviewPage,
 	ResetPasswordPage,
 	SigninPage,
 	SignupPage,
@@ -128,7 +130,19 @@ export default function Router() {
 				},
 			],
 		},
-
+		{
+			path: "/preview",
+			element: <PreviewLayout />,
+			children: [
+				{
+					path: "quiz/:id",
+					element: <QuizPreviewPage />,
+				},
+				// {
+				// 	path: "document/:id",
+				// },
+			],
+		},
 		{
 			path: "*",
 			element: <Navigate to="/home/app" replace />,

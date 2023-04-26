@@ -22,9 +22,7 @@ class ExhibitionsService {
 				params.pageSize || 15
 			}&sort=${
 				params.sort ? params.sort : ""
-			}&timezone=${moment.tz.guess()}&isAdmin=${
-				params.isAdmin ? params.isAdmin : ""
-			}`,
+			}&timezone=${moment.tz.guess()}&isAdmin=1`,
 		});
 	}
 

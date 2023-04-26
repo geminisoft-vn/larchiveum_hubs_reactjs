@@ -10,6 +10,7 @@ export interface IQuestion {
 	activated: number;
 	deleted: number;
 	answers: IAnswer[];
+	chosenAnswer: number[];
 	createdBy: number;
 	updatedBy: number;
 	createdAt: number;

@@ -9,6 +9,7 @@ import ModalSlice from "src/features/modal/ModalSlice";
 import PaginationSlice from "src/features/pagination/PaginationSlice";
 import PopupSlide from "src/features/popup/PopupSlide";
 import ProgressSlice from "src/features/progress/ProgressSlice";
+import QuizSlice from "src/features/quiz/QuizSlice";
 import ToastSlice from "src/features/toast/ToastSlice";
 import UserSlice from "src/features/user/UserSlice";
 
@@ -21,6 +22,7 @@ const reducers = combineReducers({
 	exhibition: ExhibitionSlide,
 	popup: PopupSlide,
 	pagination: PaginationSlice,
+	quiz: QuizSlice,
 });
 
 const persistConfig = {

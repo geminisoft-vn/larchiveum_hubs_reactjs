@@ -4,10 +4,17 @@ import { IAxiosResponse } from "src/interfaces";
 import request from "src/utilities/request";
 
 class MediaService {
-	static getListMedia(id): Promise<IAxiosResponse> {
+	static getListMedia(id: number): Promise<IAxiosResponse> {
 		return request({
 			method: "GET",
 			url: `/v1/auth/media?exhibitionId=${id}`,
+		});
+	}
+
+	static getAllByProjectId(id: string): Promise<IAxiosResponse> {
+		return request({
+			method: "GET",
+			url: `/v1/auth/media?projectId=${id}`,
 		});
 	}
 

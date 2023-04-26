@@ -9,9 +9,10 @@ import ProjectService from "src/api/ProjectService";
 import { useAppDispatch } from "src/app/hooks";
 import { Modal, Stack } from "src/components";
 import { showToast } from "src/features/toast/ToastSlice";
+import MediaService from "src/api/MediaService";
 
 const ObjectListModal = (props) => {
-	const { projectId, isActive, setIsActive } = props;
+	const { projectId, exhibitionId, isActive, setIsActive } = props;
 
 	const { t } = useTranslation();
 
@@ -24,7 +25,12 @@ const ObjectListModal = (props) => {
 			ProjectService.getListObject(projectId)
 				.then((res) => {
 					if (res.result === "ok") {
-						setObjects(res.data);
+						let clone = [...res.data];
+						clone = clone.map((item) => ({
+							...item,
+							changeable: item.src.includes(item.uuid),
+						}));
+						setObjects(clone);
 					}
 				})
 				.catch(() => {
@@ -36,6 +42,24 @@ const ObjectListModal = (props) => {
 					);
 				});
 		}
+	};
+
+	const loadMedia = () => {
+		let listUuid = [];
+		listUuid = objects.map((item) => {
+			if (item?.changeable === true) {
+				return item.uuid;
+			}
+			return false;
+		});
+		const dataString = JSON.stringify(listUuid);
+		ProjectService.updateChangeableObjects(projectId, dataString).then(
+			(res) => {
+				if (res.result == "ok") {
+					console.log({ res });
+				}
+			},
+		);
 	};
 
 	const handleCloseModal = () => {
@@ -51,39 +75,49 @@ const ObjectListModal = (props) => {
 		}
 	};
 
-  const handleSaveChangableURL = () => {
-    let clone = [...objects];
-    let changableObjects = clone.filter(obj => obj.changeable)
-    let uuids = changableObjects.map(obj => obj.uuid);
-    ProjectService.updateChangeableObjects(projectId, JSON.stringify(uuids)).then(res => {
-      if(res.result === 'ok') {
-        dispatch(showToast({
-          type:'success',
-          message: t("manager.MESSAGE_SUCCESS")
-        }))
-        
-      }
-    }).catch(() => {
-      dispatch(showToast({
-        type: 'error',
-        message: t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR")
-      }))
-    }).finally(() => {
-      handleCloseModal()
-    })
-  }
+	const handleSaveChangableURL = () => {
+		let clone = [...objects];
+		let changableObjects = clone.filter((obj) => obj.changeable);
+		let uuids = changableObjects.map((obj) => obj.uuid);
+		ProjectService.updateChangeableObjects(projectId, JSON.stringify(uuids))
+			.then((res) => {
+				if (res.result === "ok") {
+					dispatch(
+						showToast({
+							type: "success",
+							message: t("manager.MESSAGE_SUCCESS"),
+						}),
+					);
+				}
+			})
+			.catch(() => {
+				dispatch(
+					showToast({
+						type: "error",
+						message: t("manager.UPDATE_CHANGEABLE_OBJECTS_ERROR"),
+					}),
+				);
+			})
+			.finally(() => {
+				handleCloseModal();
+			});
+	};
 
 	useEffect(() => {
 		load();
 	}, []);
+
+	// useEffect(() => {
+	// 	loadMedia();
+	// }, [objects]);
 
 	return (
 		<Modal
 			title="Media Edit"
 			isActive={isActive}
 			setIsActive={setIsActive}
-      height={700}
-      width={700}
+			height={700}
+			width={700}
 			actions={[
 				{
 					text: t(`__BUTTON__.SAVE`),
@@ -96,54 +130,52 @@ const ObjectListModal = (props) => {
 			]}
 		>
 			<div>
-        <Stack direction="col" gap={2} className="h-full overflow-y-auto">
-				{objects &&
-					(objects.length > 0 ? (
-						objects.map((item, index) => {
-							
-
-							return (
-								<div className="flex items-center gap-2">
-									<div className="w-30">
-										{item.type === "video" && <video src={item?.src} />}
-										{item.type === "image" && (
-											<img
-												className="object-contain"
-												src={item?.src}
-												alt=""
-												style={{
-													width: 128,
-													height: 128,
-												}}
-											/>
-										)}
-										{item.type !== "image" && item.type !== "video" && (
-											<model-viewer poster={defaultModel} src={item?.src} />
-										)}
+				<Stack direction="col" gap={2} className="h-full overflow-y-auto">
+					{objects &&
+						(objects.length > 0 ? (
+							objects.map((item, index) => {
+								return (
+									<div className="flex items-center gap-2">
+										<div className="w-30">
+											{item.type === "video" && <video src={item?.src} />}
+											{item.type === "image" && (
+												<img
+													className="object-contain"
+													src={item?.src}
+													alt=""
+													style={{
+														width: 128,
+														height: 128,
+													}}
+												/>
+											)}
+											{item.type !== "image" && item.type !== "video" && (
+												<model-viewer poster={defaultModel} src={item?.src} />
+											)}
+										</div>
+										<div className="flex flex-col">
+											<h3 className="text-lg font-bold">{item?.name}</h3>
+											<label className="flex items-center gap-2">
+												<input
+													className="largerCheckbox"
+													type="checkbox"
+													name="public"
+													checked={!!item.changeable}
+													onChange={(e) => handleChangeable(e, item)}
+												/>
+												<span className="textCheckbox">
+													{t("manager.POPUP_OBJECT__URL_CHANEABLE")}
+												</span>
+											</label>
+										</div>
 									</div>
-									<div className="flex flex-col">
-										<h3 className="text-lg font-bold">{item?.name}</h3>
-										<label className="flex items-center gap-2">
-											<input
-												className="largerCheckbox"
-												type="checkbox"
-												name="public"
-												checked={!!item.changeable}
-												onChange={(e) => handleChangeable(e, item)}
-											/>
-											<span className="textCheckbox">
-												{t("manager.POPUP_OBJECT__URL_CHANEABLE")}
-											</span>
-										</label>
-									</div>
-								</div>
-							);
-						})
-					) : (
-						<Empty description="No Objects" />
-					))}
-			</Stack>
-      </div>
+								);
+							})
+						) : (
+							<Empty description="No Objects" />
+						))}
+				</Stack>
+			</div>
 		</Modal>
 	);
 };

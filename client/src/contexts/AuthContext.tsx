@@ -79,7 +79,7 @@ const AuthContextProvider = (props: Props) => {
 			}
 		} catch (error) {
 			if (error.response) {
-				navigate("/auth/warning_verify");
+				navigate(`/auth/warning_verify?email=${email}`);
 			}
 		}
 	}, []);
