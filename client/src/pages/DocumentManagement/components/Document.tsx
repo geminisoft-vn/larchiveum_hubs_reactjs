@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import {
 	DeleteOutlined,
 	EyeOutlined,
@@ -8,12 +9,7 @@ import {
 import { Button, Stack } from "src/components";
 
 const Document = (props) => {
-	const {
-		document,
-		handleGotoViewDocument,
-		handleGoToDocumentForm,
-		openDeleteDocumentPopup,
-	} = props;
+	const { document, openDeleteDocumentPopup } = props;
 	const { t } = useTranslation();
 	return (
 		<div className="flex items-center justify-between rounded-lg border p-4">
@@ -24,24 +20,22 @@ const Document = (props) => {
 				</p>
 			</Stack>
 			<div className="flex items-center gap-2">
-				<Button
-					beforeIcon={<EyeOutlined />}
-					onClick={() => {
-						handleGotoViewDocument(document.id);
-					}}
-					className="bg-green-700 text-white"
-				>
-					{t("content.DOCUMENT_TAB__DOCUMENT_LIST__PREVIEW_BUTTON_LABEL")}
-				</Button>
-				<Button
-					beforeIcon={<UnorderedListOutlined />}
-					onClick={() => {
-						handleGoToDocumentForm(document.id);
-					}}
-					className="bg-yellow-700 text-white"
-				>
-					{t("content.DOCUMENT_TAB__DOCUMENT_LIST__EDIT_BUTTON_LABEL")}
-				</Button>
+				<Link to={`/preview/document/${document.id}`} target="_blank">
+					<Button
+						beforeIcon={<EyeOutlined />}
+						className="bg-green-700 text-white"
+					>
+						{t("content.DOCUMENT_TAB__DOCUMENT_LIST__PREVIEW_BUTTON_LABEL")}
+					</Button>
+				</Link>
+				<Link to={`/home/content/document/form/${document.id}`}>
+					<Button
+						beforeIcon={<UnorderedListOutlined />}
+						className="bg-yellow-700 text-white"
+					>
+						{t("content.DOCUMENT_TAB__DOCUMENT_LIST__EDIT_BUTTON_LABEL")}
+					</Button>
+				</Link>
 				<Button
 					beforeIcon={<DeleteOutlined />}
 					onClick={() => {

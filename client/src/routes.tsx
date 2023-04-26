@@ -23,6 +23,7 @@ import {
 	SignupPage,
 	UserManagementPage,
 	WarningVerifyPage,
+	DocumentPreviewPage,
 } from "src/pages";
 
 // ----------------------------------------------------------------------
@@ -138,9 +139,10 @@ export default function Router() {
 					path: "quiz/:id",
 					element: <QuizPreviewPage />,
 				},
-				// {
-				// 	path: "document/:id",
-				// },
+				{
+					path: "document/:id",
+					element: <DocumentPreviewPage />,
+				},
 			],
 		},
 		{
