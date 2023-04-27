@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Checkbox, Col, Radio, Row, Space, Spin } from "antd";
+import { Checkbox, Col, Radio, Row, Space } from "antd";
+import { CheckboxChangeEvent } from "antd/es/checkbox";
+import { RadioChangeEvent } from "antd/es/radio";
 
-import { Button, Stack } from "src/components";
-import { IQuestion } from "src/interfaces";
 import { useAppDispatch } from "src/app/hooks";
+import { Button } from "src/components";
 import { updateQuestion } from "src/features/quiz/QuizSlice";
+import { IQuestion } from "src/interfaces";
 
 type Props = {
 	index: number;
@@ -17,7 +18,7 @@ const Question = (props: Props) => {
 
 	const dispatch = useAppDispatch();
 
-	const handleChangeRadio = (e: React.ChangeEvent) => {
+	const handleChangeRadio = (e: RadioChangeEvent) => {
 		const { value } = e.target;
 		dispatch(
 			updateQuestion({
@@ -29,13 +30,14 @@ const Question = (props: Props) => {
 		);
 	};
 
-	const handleChangeSelect = (e) => {
+	const handleChangeSelect = (e: CheckboxChangeEvent) => {
 		const { name, checked } = e.target;
-		let clone = [...(question.chosenAnswer || [])];
+		if (!name) return;
+		const clone = [...(question.chosenAnswer || [])];
 		if (checked) {
-			clone.push(name);
+			clone.push(parseInt(name, 10));
 		} else {
-			const idx = clone.findIndex((obj) => obj === name);
+			const idx = clone.findIndex((obj) => obj === parseInt(name, 10));
 			if (idx > -1) {
 				clone.splice(idx, 1);
 			}
@@ -58,7 +60,7 @@ const Question = (props: Props) => {
 		<div>
 			<>
 				<div style={{ width: "100%", marginBottom: "50px" }}>
-					<div span={24} style={{ fontSize: "2em", fontWeight: "bold" }}>
+					<div style={{ fontSize: "2em", fontWeight: "bold" }}>
 						{index + 1} {". "} {question?.text}
 					</div>
 				</div>
@@ -75,7 +77,7 @@ const Question = (props: Props) => {
 							>
 								<Col span={24}>
 									<Checkbox
-										name={answer.id}
+										name={answer.id.toString()}
 										onChange={handleChangeSelect}
 										style={{ fontWeight: "normal" }}
 									>

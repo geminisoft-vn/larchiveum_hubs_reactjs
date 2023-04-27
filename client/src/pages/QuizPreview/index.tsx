@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
 import QuizService from "src/api/QuizService";
 import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import { getQuestions, setQuestions } from "src/features/quiz/QuizSlice";
-import { IQuestion, IQuiz } from "src/interfaces";
+import { IQuiz } from "src/interfaces";
 
 import GettingStarted from "./components/GettingStarted";
 import Question from "./components/Question";
@@ -94,9 +93,7 @@ const QuizPreview = () => {
 					)}
 				</div>
 			)}
-			{quizStep === QUIZ_STEPS.RESULT && questions && (
-				<Result questions={questions} />
-			)}
+			{quizStep === QUIZ_STEPS.RESULT && questions && <Result />}
 		</div>
 	);
 };

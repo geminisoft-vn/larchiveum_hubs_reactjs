@@ -6,11 +6,11 @@ import { Empty } from "antd";
 import QuizService from "src/api/QuizService";
 import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import { Button } from "src/components";
+import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserInfo } from "src/features/user/selectors";
 import { IQuiz } from "src/interfaces";
 
-import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import Quiz from "./Quiz";
 
 const Quizzes = () => {
@@ -43,7 +43,8 @@ const Quizzes = () => {
 		dispatch(closePopup());
 	};
 
-	const handleDeleteQuiz = (quizId: number) => {
+	const handleDeleteQuiz = (quizId?: number) => {
+		if (!quizId) return;
 		QuizService.delete(quizId)
 			.then(() => {
 				dispatch(
@@ -67,7 +68,7 @@ const Quizzes = () => {
 			});
 	};
 
-	const openDeleteQuizPopup = (quizId: number) => {
+	const openDeleteQuizPopup = (quizId?: number) => {
 		dispatch(
 			openPopup({
 				isActive: true,

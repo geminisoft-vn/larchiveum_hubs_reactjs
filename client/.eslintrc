@@ -58,6 +58,7 @@
     "jsx-a11y/label-has-associated-control": "off",
     "func-names": "off",
     "react/destructuring-assignment": "off",
+    "react/no-danger": "off",
     "no-param-reassign": [
       2,
       {

@@ -39,7 +39,6 @@ const DocumentForm = () => {
 			if (res.result === "ok") {
 				const { content } = res.data;
 				setEditorData(content);
-				console.log(res.data, editorData);
 				return res.data;
 			}
 			return {
@@ -205,11 +204,12 @@ const DocumentForm = () => {
 
 				<Editor
 					apiKey={tinyApp.apiKey}
-					initialValue={editorData}
-					onChange={(e) => {
-						setEditorData(e.target.getBody().innerHTML);
+					value={editorData}
+					onEditorChange={(newValue) => {
+						setEditorData(newValue);
 					}}
 					init={{
+						forced_root_block: "",
 						min_height: 512,
 						width: "100%",
 						menubar: true,
