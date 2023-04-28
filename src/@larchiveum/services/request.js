@@ -16,12 +16,10 @@ const onRequest = config => {
 };
 
 const onRequestError = error => {
-  store.dispatch(stopLoading());
   return Promise.reject(error);
 };
 
 const onResponse = response => {
-  store.dispatch(stopLoading());
   return response.data;
 };
 
@@ -35,7 +33,6 @@ const onResponseError = error => {
   } else {
     console.log("Error", error.message);
   }
-  store.dispatch(stopLoading());
   return Promise.reject(error);
 };
 

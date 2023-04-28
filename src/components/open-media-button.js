@@ -21,9 +21,13 @@ AFRAME.registerComponent("open-media-button", {
     this.updateSrc = async () => {
       if (!this.targetEl.parentNode) return; // If removed
       const mediaLoader = this.targetEl.components["media-loader"].data;
-      const src = (this.src = (mediaLoader.mediaOptions && mediaLoader.mediaOptions.href) || mediaLoader.src);
+      const src = (this.src =
+        (mediaLoader.mediaOptions && mediaLoader.mediaOptions.href) ||
+        mediaLoader.src);
       const visible = src && guessContentType(src) !== "video/vnd.hubs-webrtc";
-      const mayChangeScene = this.el.sceneEl.systems.permissions.canOrWillIfCreator("update_hub");
+      const mayChangeScene = this.el.sceneEl.systems.permissions.canOrWillIfCreator(
+        "update_hub"
+      );
 
       this.el.object3D.visible = !!visible;
 
@@ -53,9 +57,12 @@ AFRAME.registerComponent("open-media-button", {
     };
 
     this.onClick = async () => {
-      const mayChangeScene = this.el.sceneEl.systems.permissions.canOrWillIfCreator("update_hub");
+      const mayChangeScene = this.el.sceneEl.systems.permissions.canOrWillIfCreator(
+        "update_hub"
+      );
 
-      const exitImmersive = async () => await handleExitTo2DInterstitial(false, () => {}, true);
+      const exitImmersive = async () =>
+        await handleExitTo2DInterstitial(false, () => {}, true);
 
       let hubId;
       if (this.data.onlyOpenLink) {
@@ -71,8 +78,15 @@ AFRAME.registerComponent("open-media-button", {
         const url = new URL(this.src);
         if (url.hash && window.APP.hub.hub_id === hubId) {
           // move to waypoint w/o writing to history
-          window.history.replaceState(null, null, window.location.href.split("#")[0] + url.hash);
-        } else if (APP.store.state.preferences.fastRoomSwitching && isLocalHubsUrl(this.src)) {
+          window.history.replaceState(
+            null,
+            null,
+            window.location.href.split("#")[0] + url.hash
+          );
+        } else if (
+          APP.store.state.preferences.fastRoomSwitching &&
+          isLocalHubsUrl(this.src)
+        ) {
           // move to new room without page load or entry flow
           changeHub(hubId);
         } else {
@@ -80,7 +94,8 @@ AFRAME.registerComponent("open-media-button", {
           location.href = this.src;
         }
       } else if (await isQuizUrl(this.src)) {
-        const src = this.src + (Store.getUser()?.id && "&userId=" + Store.getUser()?.id);
+        const src =
+          this.src + (Store.getUserID() && "&userId=" + Store.getUserID());
         window.dispatchEvent(
           new CustomEvent("action_open_popup_quiz", {
             detail: {
@@ -89,7 +104,8 @@ AFRAME.registerComponent("open-media-button", {
           })
         );
       } else if (await isDocumentUrl(this.src)) {
-        const src = this.src + (Store.getUser()?.id && "&userId=" + Store.getUser()?.id);
+        const src =
+          this.src + (Store.getUserID() && "&userId=" + Store.getUserID());
         window.dispatchEvent(
           new CustomEvent("action_open_popup_document", {
             detail: {
@@ -105,7 +121,9 @@ AFRAME.registerComponent("open-media-button", {
 
     NAF.utils.getNetworkedEntity(this.el).then(networkedEl => {
       this.targetEl = networkedEl;
-      this.targetEl.addEventListener("media_resolved", this.updateSrc, { once: true });
+      this.targetEl.addEventListener("media_resolved", this.updateSrc, {
+        once: true
+      });
       this.updateSrc();
     });
   },

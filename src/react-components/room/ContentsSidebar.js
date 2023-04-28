@@ -38,38 +38,35 @@ export function QuizList() {
   const [quizzes, setQuizzes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-    QuizService.getAll({
-      filter: JSON.stringify([
-        {
-          operator: "=",
-          key: "createdBy",
-          value: Store.getUserID()
-        }
-      ])
-    })
-      .then(res => {
-        console.log({ res });
-        if (res.result === "ok") {
-          setQuizzes(res.data);
-        }
-        setIsLoading(false);
-      })
-      .catch(error => {
-        setIsLoading(false);
-      })
-      .finally(() => {
-        setIsLoading(false);
+  const loadQuizzes = async () => {
+    try {
+      setIsLoading(true);
+      const res = await QuizService.getAll({
+        filter: JSON.stringify([
+          {
+            operator: "=",
+            key: "createdBy",
+            value: Store.getUserID()
+          }
+        ])
       });
+      if (res.result === "ok") {
+        setQuizzes(res.data);
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    loadQuizzes();
   }, []);
 
-  console.log({ quizzes });
-
   function generateQuizUrl(quiz) {
-    const url = new URL(CONTENT_ROOT + "/quiz");
-    url.searchParams.append("id", quiz.id);
-    url.searchParams.append("title", quiz.title);
+    const url = new URL(CONTENT_ROOT + `/preview/quiz/${quiz.id}`);
     return url.href;
   }
 
