@@ -16,7 +16,12 @@ import { Space, Spin } from "antd";
 export function ContentsSidebar({ children, onClose }) {
   return (
     <Sidebar
-      title={<FormattedMessage id="contents-sidebar.title" defaultMessage="Contents" />}
+      title={
+        <FormattedMessage
+          id="contents-sidebar.title"
+          defaultMessage="Contents"
+        />
+      }
       beforeTitle={<CloseButton onClick={onClose} />}
     >
       {children}
@@ -30,29 +35,36 @@ ContentsSidebar.propTypes = {
 };
 
 export function QuizList() {
-  const [quizs, setQuizs] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [params, setParams] = useState({
-    filter: JSON.stringify([
-      {
-        operator: "=",
-        key: "createdBy",
-        value: Store.getUser()?.id
-      }
-    ])
-  });
 
   useEffect(() => {
     setIsLoading(true);
-    QuizService.getAll(params)
+    QuizService.getAll({
+      filter: JSON.stringify([
+        {
+          operator: "=",
+          key: "createdBy",
+          value: Store.getUserID()
+        }
+      ])
+    })
       .then(res => {
-        setQuizs(res.data.items);
+        console.log({ res });
+        if (res.result === "ok") {
+          setQuizzes(res.data);
+        }
         setIsLoading(false);
       })
       .catch(error => {
         setIsLoading(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
+
+  console.log({ quizzes });
 
   function generateQuizUrl(quiz) {
     const url = new URL(CONTENT_ROOT + "/quiz");
@@ -77,31 +89,39 @@ export function QuizList() {
         </div>
       ) : (
         <>
-          {quizs?.length > 0 ? (
+          {quizzes.length > 0 ? (
             <>
-              {quizs?.map(quiz => (
-                <a
-                  key={quiz.id}
-                  href={generateQuizUrl(quiz)}
-                  target="_blank"
-                  rel="noopener referrer"
-                  style={{
-                    display: "inline-block",
-                    width: "100%",
-                    padding: "5px 10px",
-                    border: "1px solid #48d7ff",
-                    borderRadius: "3px",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    overflow: "hidden"
-                  }}
-                >
-                  {quiz.title}
-                </a>
-              ))}
+              {quizzes &&
+                quizzes.map(quiz => (
+                  <a
+                    key={quiz.id}
+                    href={generateQuizUrl(quiz)}
+                    target="_blank"
+                    rel="noopener referrer"
+                    style={{
+                      display: "inline-block",
+                      width: "100%",
+                      padding: "5px 10px",
+                      border: "1px solid #48d7ff",
+                      borderRadius: "3px",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden"
+                    }}
+                  >
+                    {quiz.title}
+                  </a>
+                ))}
             </>
           ) : (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", color: "#aaaaaa" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "#aaaaaa"
+              }}
+            >
               <span>{"No quiz"}</span>
             </div>
           )}
@@ -183,7 +203,14 @@ export function DocumentList() {
               ))}
             </>
           ) : (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", color: "#aaaaaa" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "#aaaaaa"
+              }}
+            >
               <span>{"No document"}</span>
             </div>
           )}

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import moment from "moment";
 
 import ReserveService from "src/api/ReserveService";
@@ -8,12 +8,15 @@ import { updateExhibition } from "src/features/exhibition/ExhibitionSlide";
 import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserInfo } from "src/features/user/selectors";
+import { IExhibition } from "src/interfaces";
 import { APP_ROOT } from "src/utilities/constants";
 
-const ExhibitionAction = (props) => {
-	const { exhibition } = props;
+type Props = {
+	exhibition: IExhibition;
+};
 
-	const navigate = useNavigate();
+const ExhibitionAction = (props: Props) => {
+	const { exhibition } = props;
 
 	const dispatch = useAppDispatch();
 
@@ -145,15 +148,11 @@ const ExhibitionAction = (props) => {
 			(exhibition.public || exhibition.reservated))
 	) {
 		return (
-			<button
-				key="enter"
-				className="rounded-lg bg-blue-600 p-2 text-white"
-				onClick={() => {
-					window.open(`${APP_ROOT}/${exhibition.roomId}`, "_blank");
-				}}
-			>
-				{t("home.ENTER")}
-			</button>
+			<Link to={`${APP_ROOT}/${exhibition.roomId}`} target="_blank">
+				<button key="enter" className="rounded-lg bg-blue-600 p-2 text-white">
+					{t("home.ENTER")}
+				</button>
+			</Link>
 		);
 	}
 
@@ -174,13 +173,14 @@ const ExhibitionAction = (props) => {
 
 	if (!user && !exhibition.public) {
 		return (
-			<button
-				key="signin"
-				className="rounded-lg bg-purple-600 p-2 text-white"
-				onClick={() => navigate("/auth/signin")}
-			>
-				{t("home.SIGN_IN")}
-			</button>
+			<Link to="/auth/signin">
+				<button
+					key="signin"
+					className="rounded-lg bg-purple-600 p-2 text-white"
+				>
+					{t("home.SIGN_IN")}
+				</button>
+			</Link>
 		);
 	}
 	return <div />;

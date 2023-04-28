@@ -11,6 +11,7 @@ export interface IExhibition {
 	startDate: string;
 	endDate: string;
 	reservationCount: number;
+  reservated: boolean;
 	maxSize: number;
 	public: boolean;
 	deleted: boolean;

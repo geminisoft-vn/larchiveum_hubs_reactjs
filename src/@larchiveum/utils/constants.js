@@ -7,9 +7,4 @@ const CONTENT_ROOT = "https://larchiveum-content.360fairs.com";
 
 const DATE_TIME_FORMAT = "DD/MM/YYYY HH:mm:SS";
 
-export {
-	API_ROOT,
-	APP_ROOT,
-	CONTENT_ROOT,
-	DATE_TIME_FORMAT,
-};
+export { API_ROOT, APP_ROOT, CONTENT_ROOT, DATE_TIME_FORMAT };

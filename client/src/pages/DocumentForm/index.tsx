@@ -217,7 +217,6 @@ const DocumentForm = () => {
 						image_title: true,
 						automatic_uploads: true,
 						file_picker_types: "image",
-						content_css: "flex",
 						plugins: [
 							"advlist",
 							"autolink",
