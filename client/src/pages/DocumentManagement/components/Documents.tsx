@@ -10,7 +10,6 @@ import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserInfo } from "src/features/user/selectors";
 import { IDocument } from "src/interfaces";
-import { CONTENT_ROOT } from "src/utilities/constants";
 
 import Document from "./Document";
 
@@ -98,10 +97,7 @@ const Documents = () => {
 		navigate(`/home/content/document/form/${documentId}`);
 	}, []);
 
-	const handleGotoViewDocument = useCallback((documentId) => {
-		window.open(`${CONTENT_ROOT}/document?id=${documentId}`);
-	}, []);
-
+	
 	useEffect(() => {
 		loadDocuments();
 	}, []);
@@ -119,7 +115,6 @@ const Documents = () => {
 						<Document
 							key={document.id}
 							document={document}
-							handleGotoViewDocument={handleGotoViewDocument}
 							handleGoToDocumentForm={handleGoToDocumentForm}
 							openDeleteDocumentPopup={openDeleteDocumentPopup}
 						/>

@@ -65,11 +65,6 @@ export function QuizList() {
     loadQuizzes();
   }, []);
 
-  function generateQuizUrl(quiz) {
-    const url = new URL(CONTENT_ROOT + `/preview/quiz/${quiz.id}`);
-    return url.href;
-  }
-
   return (
     <Space direction="vertical" size="middle" style={{ display: "flex" }}>
       {isLoading ? (
@@ -92,7 +87,7 @@ export function QuizList() {
                 quizzes.map(quiz => (
                   <a
                     key={quiz.id}
-                    href={generateQuizUrl(quiz)}
+                    href={`${CONTENT_ROOT}/preview/quiz/${quiz.id}`}
                     target="_blank"
                     rel="noopener referrer"
                     style={{
@@ -131,19 +126,18 @@ export function QuizList() {
 export function DocumentList() {
   const [documents, setdocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [params, setParams] = useState({
-    filter: JSON.stringify([
-      {
-        operator: "=",
-        key: "createdBy",
-        value: Store.getUser()?.id
-      }
-    ])
-  });
 
   useEffect(() => {
     setIsLoading(true);
-    DocumentService.getAll(params)
+    DocumentService.getAll({
+      filter: JSON.stringify([
+        {
+          operator: "=",
+          key: "createdBy",
+          value: Store.getUserID()
+        }
+      ])
+    })
       .then(res => {
         setdocuments(res.data.items);
         setIsLoading(false);
@@ -152,13 +146,6 @@ export function DocumentList() {
         setIsLoading(false);
       });
   }, []);
-
-  function generateDocumentUrl(document) {
-    const url = new URL(CONTENT_ROOT + "/document");
-    url.searchParams.append("id", document.id);
-    url.searchParams.append("title", document.title);
-    return url.href;
-  }
 
   return (
     <Space direction="vertical" size="middle" style={{ display: "flex" }}>
@@ -181,7 +168,7 @@ export function DocumentList() {
               {documents?.map(document => (
                 <a
                   key={document.id}
-                  href={generateDocumentUrl(document)}
+                  href={`${CONTENT_ROOT}/preview/document/${document.id}`}
                   target="_blank"
                   rel="noopener referrer"
                   style={{

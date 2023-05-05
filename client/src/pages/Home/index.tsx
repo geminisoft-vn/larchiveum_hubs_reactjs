@@ -27,50 +27,26 @@ const HomePage = () => {
 	});
 
 	const getAllExhibitions = useCallback(() => {
-		if (user.id) {
-			ExhibitionsService.getAllWithAuthExhibitions(params)
-				.then((res) => {
-					if (res.result === "ok") {
-						dispatch(
-							setExhibitions({
-								data: res.data,
-							}),
-						);
-						dispatch(setPagination(res.pages));
-					}
-				})
-				.catch(() => {
+		ExhibitionsService.getAllWithAuthExhibitions(params)
+			.then((res) => {
+				if (res.result === "ok") {
 					dispatch(
-						showToast({
-							type: "error",
-							message: "Get Exhibitions fail !",
+						setExhibitions({
+							data: res.data,
 						}),
 					);
-				});
-		} else {
-			ExhibitionsService.getAllExhibitions(params)
-				.then((res) => {
-					if (res.result === "ok") {
-						dispatch(
-							setExhibitions({
-								data: res.data,
-								items: res.items,
-								pages: res.pages,
-							}),
-						);
-						dispatch(setPagination(res.pages));
-					}
-				})
-				.catch(() => {
-					dispatch(
-						showToast({
-							type: "error",
-							message: "Get Exhibitions fail !",
-						}),
-					);
-				});
-		}
-	}, [user, params]);
+					dispatch(setPagination(res.pages));
+				}
+			})
+			.catch(() => {
+				dispatch(
+					showToast({
+						type: "error",
+						message: "Get Exhibitions fail !",
+					}),
+				);
+			});
+	}, [params]);
 
 	useEffect(() => {
 		getAllExhibitions();
