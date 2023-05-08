@@ -5,12 +5,12 @@ import axios, {
 } from "axios";
 
 import store from "src/app/store";
-import { startLoading, stopLoading } from "src/features/loader/LoaderSlice";
+import { IAxiosResponse } from "src/interfaces";
 
 import { API_ROOT } from "./constants";
 
 const request = axios.create({
-	baseURL: API_ROOT,
+	baseURL: `${API_ROOT}/v1`,
 	timeout: 20000,
 	maxContentLength: Infinity,
 	maxBodyLength: Infinity,
@@ -29,8 +29,6 @@ const getAccessToken = () => {
 const onRequest = (
 	config: InternalAxiosRequestConfig,
 ): InternalAxiosRequestConfig => {
-	store.dispatch(startLoading());
-
 	const accessToken = getAccessToken();
 	if (accessToken.length) {
 		config.headers.access_token = accessToken;
@@ -39,13 +37,11 @@ const onRequest = (
 };
 
 const onRequestError = (error: AxiosError): Promise<AxiosError> => {
-	store.dispatch(stopLoading());
 	return Promise.reject(error);
 };
 
-const onResponse = (response: AxiosResponse): AxiosResponse => {
-	store.dispatch(stopLoading());
-	return response.data;
+const onResponse = (response: AxiosResponse) => {
+	return response;
 };
 
 const onResponseError = (error: AxiosError): Promise<AxiosError> => {
@@ -64,7 +60,6 @@ const onResponseError = (error: AxiosError): Promise<AxiosError> => {
 		// Something happened in setting up the request that triggered an Error
 		console.log("Error", error.message);
 	}
-	store.dispatch(stopLoading());
 	return Promise.reject(error);
 };
 

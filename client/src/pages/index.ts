@@ -18,6 +18,7 @@ const DocumentFormPage = lazy(() => import("./DocumentForm"));
 const UserManagementPage = lazy(() => import("./UserManagement"));
 const QuizPreviewPage = lazy(() => import("./QuizPreview"));
 const DocumentPreviewPage = lazy(() => import("./DocumentPreview"));
+const VerifyPage = lazy(() => import("./Verify"));
 
 export {
 	HomePage,
@@ -38,4 +39,5 @@ export {
 	UserManagementPage,
 	QuizPreviewPage,
 	DocumentPreviewPage,
+	VerifyPage,
 };

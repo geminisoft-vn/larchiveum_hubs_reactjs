@@ -1,15 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
-import ExhibitionsService from "src/api/ExhibitionsService";
-import { useAppDispatch, useAppSelector } from "src/app/hooks";
-import { Pagination, Stack } from "src/components";
-import {
-	getExhibitions,
-	setExhibitions,
-} from "src/features/exhibition/ExhibitionSlide";
+import { useAppDispatch } from "src/app/hooks";
+import { Loader, Pagination, Stack } from "src/components";
+import { setExhibitions } from "src/features/exhibition/ExhibitionSlide";
 import { setPagination } from "src/features/pagination/PaginationSlice";
-import { showToast } from "src/features/toast/ToastSlice";
-import { getUserInfo } from "src/features/user/selectors";
+import { useData } from "src/hooks";
 import { IParams } from "src/interfaces";
 
 import Exhibitions from "./components/Exhibitions";
@@ -18,60 +13,50 @@ import "react-toastify/dist/ReactToastify.css";
 
 const HomePage = () => {
 	const dispatch = useAppDispatch();
-	const user = useAppSelector(getUserInfo);
-	const { data: exhibitions } = useAppSelector(getExhibitions);
 
 	const [params, setParams] = useState<IParams>({
 		page: 1,
 		pageSize: 9,
 	});
 
-	const getAllExhibitions = useCallback(() => {
-		ExhibitionsService.getAllExhibitions(params)
-			.then((res) => {
-				if (res.result === "ok") {
-					dispatch(
-						setExhibitions({
-							data: res.data,
-						}),
-					);
-					dispatch(setPagination(res.pages));
-				}
-			})
-			.catch(() => {
-				dispatch(
-					showToast({
-						type: "error",
-						message: "Get Exhibitions fail !",
-					}),
-				);
-			});
-	}, [params]);
-
-	useEffect(() => {
-		getAllExhibitions();
-	}, [getAllExhibitions, params.page, params.sort]);
+	const { data: exhibitions, isLoading } = useData(
+		`/exhibitions`,
+		"GET",
+		params,
+		(data, pages) => {
+			dispatch(
+				setExhibitions({
+					data,
+				}),
+			);
+			dispatch(setPagination(pages));
+		},
+	);
 
 	return (
 		<div className="h-full p-2">
-			<Stack
-				direction="col"
-				alignItems="center"
-				justifyContent="between"
-				gap={2}
-				className="h-full"
-			>
-				{/* <Filter
+			{ isLoading ? (
+				<Loader />
+			) : (
+				<Stack
+					direction="col"
+					alignItems="center"
+					justifyContent="between"
+					gap={2}
+					className="h-full"
+				>
+					{/* <Filter
 					sortNewest={sortNewest}
 					sortOldest={sortOldest}
 					isActiveSortASC={isActiveSortASC}
 					isActiveSortDESC={isActiveSortDESC}
 				/> */}
 
-				<Exhibitions exhibitions={exhibitions} />
+					<Exhibitions exhibitions={exhibitions} />
 
-				<Pagination page={params.page} setParams={setParams} />
-			</Stack>
+					<Pagination page={params.page} setParams={setParams} />
+				</Stack>
+			)}
 		</div>
 	);
 };

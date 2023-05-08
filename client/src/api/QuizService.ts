@@ -4,7 +4,7 @@ import request from "src/utilities/request";
 
 class QuizService {
 	static getAll(params) {
-		return request.get("/v1/auth/quizzes", { params });
+		return request.get("/v1/quizzes", { params });
 	}
 
 	static getOne(id): Promise<IAxiosResponse<IQuiz>> {

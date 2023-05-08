@@ -1,0 +1,27 @@
++ KaKao: 
+	Native app key: 0a4ba0a1151f0217fc42e51c30408c14
+	REST API key: 4f4a59a53d516e1c14a5a5647f074e8c
+	JavaScript key: 698ea6399ce6667e16f2a4b9de93ddaf
+	Admin key: 4f3ad6a95a1037aaef29da54fa6fc427
+
++ Naver: 
+	id:  synwoox
+	pass: g3m1n120ft
+
++ Facebook: 
+	id:  adminxr@gemiso.com
+	pass: asdf1235
+
++ Google: 
+	id:  adminxr@gemiso.com
+	pass: asdf1235
+
++ SendGrid:
+	id: adminxr@gemiso.com
+	pass: asdfasdf12351235
+	SendGrid API Key: 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
+	API Key ID: 3zkbbqMqQCOcSSk8K-9QCw
+
++ Webmail:
+	id:  adminxr@gemiso.com
+	pass: asdf1235

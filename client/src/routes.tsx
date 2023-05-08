@@ -11,6 +11,7 @@ import {
 	ContentPage,
 	DocumentFormPage,
 	DocumentManagementPage,
+	DocumentPreviewPage,
 	ForgotPasswordPage,
 	HomePage,
 	ManagerPage,
@@ -22,9 +23,8 @@ import {
 	SigninPage,
 	SignupPage,
 	UserManagementPage,
-	WarningVerifyPage,
-	DocumentPreviewPage,
-} from "src/pages";
+  VerifyPage,
+	WarningVerifyPage} from "src/pages";
 
 // ----------------------------------------------------------------------
 
@@ -129,6 +129,10 @@ export default function Router() {
 					path: "warning_verify",
 					element: <WarningVerifyPage />,
 				},
+        {
+          path: 'verify',
+          element: <VerifyPage />
+        }
 			],
 		},
 		{

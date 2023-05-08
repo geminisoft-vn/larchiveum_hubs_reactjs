@@ -17,6 +17,22 @@ import {
 	naverApp,
 } from "src/utilities/constants";
 
+import _omit from "lodash/omit";
+import _pick from "lodash/pick";
+
+import jwtDecode from "jwt-decode";
+import { setUser } from "src/features/user/UserSlice";
+import { useAppDispatch } from "src/app/hooks";
+import { IUser } from "src/interfaces";
+
+interface IJWTPayload {
+	email: string;
+	method: number;
+	type: number;
+	iat: number;
+	exp: number;
+}
+
 const SigninSocialButton = () => {
 	// useEffect(() => {
 	//   gapi.load('client:auth2', ()=>{
@@ -28,6 +44,7 @@ const SigninSocialButton = () => {
 	// }, []);
 
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 
 	const signupWithGoogle = (response) => {
 		try {
@@ -35,7 +52,43 @@ const SigninSocialButton = () => {
 			UserService.googleLogin(data)
 				.then((res) => {
 					if (res.result === "ok") {
+						const result: {
+							data: Partial<IUser>;
+							authentication: {
+								token: string | undefined;
+								hubsToken: string | undefined;
+								expire: number;
+								isAuthenticated: boolean;
+							};
+						} = {
+							data: {},
+							authentication: {
+								token: "",
+								hubsToken: "",
+								expire: 0,
+								isAuthenticated: false,
+							},
+						};
+
+						result.data = _omit(res.data, ["token"]);
+						const { token } = _pick(res.data, ["token"]);
+						const { exp } = jwtDecode<IJWTPayload>(token || "");
+						result.authentication = {
+							token,
+							hubsToken: res.data.hubsToken,
+							expire: exp,
+							isAuthenticated: true,
+						};
+
+						dispatch(
+							setUser({
+								data: result.data,
+								authentication: result.authentication,
+							}),
+						);
+
 						navigate("/");
+
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
 					}
@@ -54,6 +107,41 @@ const SigninSocialButton = () => {
 			UserService.facebookLogin(data)
 				.then((res) => {
 					if (res.result === "ok") {
+						const result: {
+							data: Partial<IUser>;
+							authentication: {
+								token: string | undefined;
+								hubsToken: string | undefined;
+								expire: number;
+								isAuthenticated: boolean;
+							};
+						} = {
+							data: {},
+							authentication: {
+								token: "",
+								hubsToken: "",
+								expire: 0,
+								isAuthenticated: false,
+							},
+						};
+
+						result.data = _omit(res.data, ["token"]);
+						const { token } = _pick(res.data, ["token"]);
+						const { exp } = jwtDecode<IJWTPayload>(token || "");
+						result.authentication = {
+							token,
+							hubsToken: res.data.hubsToken,
+							expire: exp,
+							isAuthenticated: true,
+						};
+
+						dispatch(
+							setUser({
+								data: result.data,
+								authentication: result.authentication,
+							}),
+						);
+
 						navigate("/");
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });

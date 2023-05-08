@@ -10,7 +10,7 @@ class UserService {
 	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
-			url: `/v1/gglogin`,
+			url: `/gglogin`,
 			data,
 		});
 	}
@@ -20,7 +20,7 @@ class UserService {
 	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
-			url: `/v1/fblogin`,
+			url: `/fblogin`,
 			data,
 		});
 	}
@@ -30,7 +30,7 @@ class UserService {
 	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
-			url: `/v1/nvlogin`,
+			url: `/nvlogin`,
 			data,
 		});
 	}
@@ -40,7 +40,7 @@ class UserService {
 	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
-			url: `/v1/kklogin`,
+			url: `/kklogin`,
 			data,
 		});
 	}
@@ -50,7 +50,7 @@ class UserService {
 	): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
-			url: `/v1/users`,
+			url: `/users`,
 			data,
 		});
 	}
@@ -60,7 +60,7 @@ class UserService {
 	): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
-			url: `/v1/login`,
+			url: `/login`,
 			data,
 		});
 	}
@@ -68,7 +68,7 @@ class UserService {
 	static checkToken(token: string) {
 		return request({
 			method: "POST",
-			url: `/v1/users/checkToken`,
+			url: `/users/checkToken`,
 			data: { token },
 		});
 	}
@@ -78,7 +78,7 @@ class UserService {
 	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
-			url: `/v1/users/requestResetPassword`,
+			url: `/users/requestResetPassword`,
 			data,
 		});
 	}
@@ -89,32 +89,32 @@ class UserService {
 	}): Promise<IAxiosResponse<Partial<IUser>>> {
 		return request({
 			method: "POST",
-			url: `/v1/users/resetPassword`,
+			url: `/users/resetPassword`,
 			data,
 		});
 	}
 
-	static verifyUser(token: string) {
-		return request.post("/v1/auth/users/verifyUser", {
+	static verifyUser(token: string): Promise<IAxiosResponse<Partial<IUser>>> {
+		return request.post("/auth/users/verifyUser", {
 			access_token: token,
 		});
 	}
 
 	static reSendVerifyMail(email: string) {
-		return request.post("v1/users/reSendVerifyMail", { email });
+		return request.post("/users/reSendVerifyMail", { email });
 	}
 
 	static update(
 		id: number,
 		data: Partial<IUserAuthenticationForm>,
 	): Promise<IAxiosResponse<IUserAuthenticationForm>> {
-		return request.patch(`v1/auth/users/${id}`, data);
+		return request.patch(`/auth/users/${id}`, data);
 	}
 
 	static getAll(params?): Promise<IAxiosResponse<IUser[]>> {
 		return request({
 			method: "GET",
-			url: `/v1/auth/users`,
+			url: `/auth/users`,
 			params,
 		});
 	}

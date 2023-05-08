@@ -6,7 +6,6 @@ import _pick from "lodash/pick";
 
 import UserService from "src/api/UserService";
 import { useAppDispatch } from "src/app/hooks";
-import { showToast } from "src/features/toast/ToastSlice";
 import { logout, setUser } from "src/features/user/UserSlice";
 import { IUser } from "src/interfaces";
 import { APP_ROOT } from "src/utilities/constants";
@@ -14,6 +13,7 @@ import { APP_ROOT } from "src/utilities/constants";
 interface IAuthContext {
 	signIn: ({ email, password }) => void;
 	signOut: () => void;
+	verify: (token: string) => void;
 }
 
 interface IJWTPayload {
@@ -90,9 +90,21 @@ const AuthContextProvider = (props: Props) => {
 		window.open(`${APP_ROOT}?action=signout`, "_blank");
 	}, []);
 
+	const verify = useCallback(async (token: string) => {
+		try {
+			const res = await UserService.verifyUser(token);
+			if (res.result === "ok") {
+				navigate("/auth/login");
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}, []);
+
 	const [context] = useState({
 		signIn,
 		signOut,
+		verify,
 	});
 
 	return (
