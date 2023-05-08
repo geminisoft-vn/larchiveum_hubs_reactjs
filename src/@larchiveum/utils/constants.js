@@ -3,7 +3,7 @@
 
 const API_ROOT = "https://api.larchiveum.link";
 const APP_ROOT = "https://larchiveum.link";
-const CONTENT_ROOT = "https://home.larchiveum.link";
+const CONTENT_ROOT = "https://larchiveum-content.360fairs.com";
 
 const DATE_TIME_FORMAT = "DD/MM/YYYY HH:mm:SS";
 
