@@ -9,7 +9,7 @@ const fetcher = (method, params, callback) => (url) => {
 		params,
 	}).then((res) => {
 		const { data, pages } = res.data;
-		if (callback) callback(data, pages);
+		// if (callback) callback(data, pages);
 		return data;
 	});
 };
