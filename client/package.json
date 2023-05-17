@@ -71,6 +71,7 @@
     "yup": "^1.0.2"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.2",
     "@types/js-cookie": "^3.0.3",
     "@types/lodash": "^4.14.192",
     "@types/node": "^18.15.5",

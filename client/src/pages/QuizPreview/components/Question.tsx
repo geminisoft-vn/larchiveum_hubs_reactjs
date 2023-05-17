@@ -16,6 +16,8 @@ type Props = {
 const Question = (props: Props) => {
 	const { index, question, onSubmitAnswer } = props;
 
+console.log({question})
+
 	const dispatch = useAppDispatch();
 
 	const handleChangeRadio = (e: RadioChangeEvent) => {

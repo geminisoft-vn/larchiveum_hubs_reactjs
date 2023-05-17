@@ -4,23 +4,23 @@ import request from "src/utilities/request";
 
 class DocumentService {
 	static getAll(params) {
-		return request.get("/v1/auth/documents", { params });
+		return request.get("/auth/documents", { params });
 	}
 
 	static getOne(id): Promise<IAxiosResponse<IDocument>> {
-		return request.get(`/v1/auth/documents/${id}`);
+		return request.get(`/auth/documents/${id}`).then((res) => res.data);
 	}
 
 	static create(data) {
-		return request.post("/v1/auth/documents", data);
+		return request.post("/auth/documents", data).then((res) => res.data);
 	}
 
 	static update(id, data) {
-		return request.put(`/v1/auth/documents/${id}`, data);
+		return request.put(`/auth/documents/${id}`, data).then((res) => res.data);
 	}
 
 	static delete(id) {
-		return request.delete(`/v1/auth/documents/${id}`);
+		return request.delete(`/auth/documents/${id}`).then((res) => res.data);
 	}
 }
 

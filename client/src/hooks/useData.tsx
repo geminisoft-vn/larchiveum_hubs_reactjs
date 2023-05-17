@@ -15,7 +15,9 @@ const fetcher = (method, params, callback) => (url) => {
 };
 
 const useData = (endpoint, method, params, callback) => {
-	return useSWR(endpoint, fetcher(method, params, callback));
+	return useSWR(endpoint, fetcher(method, params, callback), {
+		revalidateIfStale: true,
+	});
 };
 
 export default useData;

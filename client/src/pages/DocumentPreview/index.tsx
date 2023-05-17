@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import * as DOMPurify from "dompurify";
+import DOMPurify from "dompurify";
 
 import DocumentService from "src/api/DocumentService";
 import { IDocument } from "src/interfaces";

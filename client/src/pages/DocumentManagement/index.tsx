@@ -1,12 +1,33 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "src/app/hooks";
 
-import { Button, Stack } from "src/components";
+import { Button, Loader, Stack } from "src/components";
+import { getUserInfo } from "src/features/user/selectors";
+import { useData } from "src/hooks";
 
 import Documents from "./components/Documents";
 
 const DocumentManagement = (props) => {
 	const { t } = useTranslation();
+
+	const user = useAppSelector(getUserInfo);
+
+	const { data: documents, isLoading } = useData(
+		`/documents`,
+		"GET",
+		{
+			sort: "-createdAt",
+			filter: JSON.stringify([
+				{
+					operator: "=",
+					key: "createdBy",
+					value: user.id,
+				},
+			]),
+		},
+		() => {},
+	);
 
 	return (
 		<Stack direction="col" gap={2}>
@@ -17,7 +38,7 @@ const DocumentManagement = (props) => {
 					)}`}
 				</Button>
 			</Link>
-			<Documents />
+			{isLoading ? <Loader /> : <Documents documents={documents} />}
 		</Stack>
 	);
 };

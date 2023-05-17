@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Empty } from "antd";
@@ -9,37 +9,17 @@ import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import { closePopup, openPopup } from "src/features/popup/PopupSlide";
 import { showToast } from "src/features/toast/ToastSlice";
 import { getUserInfo } from "src/features/user/selectors";
-import { IDocument } from "src/interfaces";
 
 import Document from "./Document";
 
-const Documents = () => {
+const Documents = (props) => {
+	const { documents } = props;
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 
 	const user = useAppSelector(getUserInfo);
 
 	const { t } = useTranslation();
-
-	const [listDocument, setListDocument] = useState<Partial<IDocument>[]>([]);
-
-	function loadDocuments() {
-		DocumentService.getAll({
-			sort: "-createdAt",
-			filter: JSON.stringify([
-				{
-					operator: "=",
-					key: "createdBy",
-					value: user.id,
-				},
-			]),
-		})
-			.then((res) => {
-				const documents = res.data.items;
-				setListDocument(documents);
-			})
-			.catch((error) => {});
-	}
 
 	const handleClosePopup = () => {
 		dispatch(closePopup());
@@ -97,30 +77,21 @@ const Documents = () => {
 		navigate(`/home/content/document/form/${documentId}`);
 	}, []);
 
-	
-	useEffect(() => {
-		loadDocuments();
-	}, []);
-
-	return (
-		<div>
-			{listDocument.length <= 0 ? (
-				<Empty
-					image={Empty.PRESENTED_IMAGE_SIMPLE}
-					style={{ marginTop: "100px" }}
+	return documents.length === 0 ? (
+		<Empty
+			image={Empty.PRESENTED_IMAGE_SIMPLE}
+			style={{ marginTop: "100px" }}
+		/>
+	) : (
+		<div className="flex flex-col gap-2">
+			{documents.map((document) => (
+				<Document
+					key={document.id}
+					document={document}
+					handleGoToDocumentForm={handleGoToDocumentForm}
+					openDeleteDocumentPopup={openDeleteDocumentPopup}
 				/>
-			) : (
-				<div className="flex flex-col gap-2">
-					{listDocument.map((document) => (
-						<Document
-							key={document.id}
-							document={document}
-							handleGoToDocumentForm={handleGoToDocumentForm}
-							openDeleteDocumentPopup={openDeleteDocumentPopup}
-						/>
-					))}
-				</div>
-			)}
+			))}
 		</div>
 	);
 };
