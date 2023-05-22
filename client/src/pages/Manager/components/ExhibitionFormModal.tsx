@@ -38,12 +38,13 @@ type Props = {
 };
 
 const ExhibitionFormModal = (props: Props) => {
-	const { isActive, setIsActive, type, exhibitionId, scenes } = props;
+	const { isActive, setIsActive, type, exhibitionId, scenes, loadExhibitions } = props;
 
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
 	const exhibition = useAppSelector(getExhibition(exhibitionId));
+
 
 	const transformedDefaultValues = useMemo(() => {
 		if (exhibitionId) {
@@ -61,6 +62,7 @@ const ExhibitionFormModal = (props: Props) => {
 				"enableSpawnDrawing",
 				"enableSpawnEmoji",
 				"enableFly",
+        "room"
 			]);
 
 			return _transform(
@@ -76,6 +78,9 @@ const ExhibitionFormModal = (props: Props) => {
 					) {
 						result[key] = moment(value).format(DATE_TIME_FORMAT);
 					}
+          if(key === 'room') {
+            result['name'] = result[key].name
+          }
 				},
 				fields,
 			);
@@ -135,6 +140,11 @@ const ExhibitionFormModal = (props: Props) => {
 		resolver: yupResolver(schema),
 	});
 
+  const handleCloseModal = () => {
+		setIsActive(false);
+	};
+
+
 	const getSceneThumnail = (sceneId) => {
 		if (!sceneId) return defaultImage;
 		return scenes.find((scene) => scene.id === sceneId)?.thumbnailUrl || "";
@@ -164,8 +174,7 @@ const ExhibitionFormModal = (props: Props) => {
 								message: t("manager.MESSAGE_SUCCESS"),
 							}),
 						);
-						setIsActive(false);
-					}
+										}
 				})
 				.catch((err) => {
 					dispatch(
@@ -176,7 +185,12 @@ const ExhibitionFormModal = (props: Props) => {
 							),
 						}),
 					);
-				});
+				}).finally(() => 
+        {
+            	handleCloseModal();
+            loadExhibitions()
+
+          });
 		} else if (type === "edit") {
 			ExhibitionsService.putUpdateOne(exhibitionId, dataToSend)
 				.then((res) => {
@@ -193,7 +207,6 @@ const ExhibitionFormModal = (props: Props) => {
 								dataToUpdate: dataToSend,
 							}),
 						);
-						setIsActive(false);
 					}
 				})
 				.catch((err) => {
@@ -207,14 +220,14 @@ const ExhibitionFormModal = (props: Props) => {
 							}),
 						);
 					}
-				});
+				}).finally(() => {
+          setIsActive(false)
+                      loadExhibitions();
+        });
 		}
 	});
 
-	const handleCloseModal = () => {
-		setIsActive(false);
-	};
-
+	
 	useEffect(() => {
 		const subscription = watch((value, { name, type: _type }) => {
 			clearErrors();
@@ -231,6 +244,7 @@ const ExhibitionFormModal = (props: Props) => {
 	useEffect(() => {
 		setSceneThumbnail(getSceneThumnail(getValues("sceneId")));
 	}, []);
+
 
 	return (
 		<Modal
@@ -251,7 +265,7 @@ const ExhibitionFormModal = (props: Props) => {
 							? t("manager.POPUP_EXHIBITION__EDIT")
 							: t("manager.POPUP_EXHIBITION__CREATE"),
 					className: "",
-					callback: handleSaveForm,
+					callback: () => handleSaveForm(),
 				},
 				{
 					text: t("__BUTTON__.CLOSE"),

@@ -22,7 +22,7 @@ import _pick from "lodash/pick";
 
 import jwtDecode from "jwt-decode";
 import { setUser } from "src/features/user/UserSlice";
-import { useAppDispatch } from "src/app/hooks";
+import { useAppDispatch } from "src/app/store";
 import { IUser } from "src/interfaces";
 
 interface IJWTPayload {
@@ -88,7 +88,6 @@ const SigninSocialButton = () => {
 						);
 
 						navigate("/");
-
 					} else {
 						toast.error("Login failed !", { autoClose: 5000 });
 					}

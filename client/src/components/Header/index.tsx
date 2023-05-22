@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
-import { useAppDispatch, useAppSelector } from "src/app/hooks";
+import { useAppDispatch, useAppSelector } from "src/app/store";
 import logo from "src/assets/images/larchiveum_logo.png";
 import { Button, Stack, Typography } from "src/components";
 import { AuthContext } from "src/contexts/AuthContext";
@@ -175,7 +175,7 @@ const Header = () => {
 								<>
 									<Link
 										to="/auth/signin"
-										className="mr-1 rounded-lg px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800 md:mr-2 md:px-5 md:py-2.5"
+										className="mr-1 rounded-lg px-4 py-2 text-sm font-medium text-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 md:mr-2 md:px-5 md:py-2.5"
 									>
 										{t(`home.SIGN_IN`)}
 									</Link>

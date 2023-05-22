@@ -4,35 +4,35 @@ import request from "src/utilities/request";
 
 class QuestionService {
 	static getAll(params: IParams) {
-		return request.get("/v1/auth/questions", { params });
+		return request.get("/auth/questions", { params });
 	}
 
 	static getOne(id: number): Promise<IAxiosResponse<IQuestion>> {
-		return request.get(`/v1/auth/questions/${id}`);
+		return request.get(`/auth/questions/${id}`);
 	}
 
 	static create(data) {
-		return request.post("/v1/auth/questions", data);
+		return request.post("/auth/questions", data);
 	}
 
 	static update(id, data) {
-		return request.put(`/v1/auth/questions/${id}`, data);
+		return request.put(`/auth/questions/${id}`, data);
 	}
 
 	static chooseCorrectAnswer(id, answerId) {
-		return request.post(`/v1/auth/questions/${id}/choose-correct-answer`, {
+		return request.post(`/auth/questions/${id}/choose-correct-answer`, {
 			answerId,
 		});
 	}
 
 	static submitAnswers(id, answerIds) {
-		return request.post(`/v1/auth/questions/${id}/submit-answers`, {
+		return request.post(`/auth/questions/${id}/submit-answers`, {
 			answerId: answerIds,
 		});
 	}
 
 	static delete(id) {
-		return request.delete(`/v1/auth/questions/${id}`);
+		return request.delete(`/auth/questions/${id}`);
 	}
 }
 

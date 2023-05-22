@@ -62,7 +62,7 @@ class UserService {
 			method: "POST",
 			url: `/login`,
 			data,
-		});
+		}).then((res) => res.data);
 	}
 
 	static checkToken(token: string) {

@@ -32,10 +32,10 @@ const Modal = (props: Props) => {
 		actions,
 	} = props;
 
+
 	const dispatch = useAppDispatch();
 
 	const handleCloseModal = () => {
-		dispatch(closeModal());
 		if (setIsActive) setIsActive(false);
 	};
 

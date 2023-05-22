@@ -50,7 +50,7 @@ const Exhibition = (props) => {
 						/>
 					)}
 					<Typography className="text-lg font-bold text-white">
-						{exhibition.name}
+						{exhibition.room?.name}
 					</Typography>
 				</Stack>
 

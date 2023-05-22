@@ -3,23 +3,23 @@ import request from "src/utilities/request";
 
 class AnswerService {
 	static getAll(params) {
-		return request.get("/v1/auth/answers", { params });
+		return request.get("/auth/answers", { params });
 	}
 
 	static getOne(id) {
-		return request.get(`/v1/auth/answers/${id}`);
+		return request.get(`/auth/answers/${id}`);
 	}
 
 	static create(data) {
-		return request.post("/v1/auth/answers", data);
+		return request.post("/auth/answers", data);
 	}
 
 	static update(id, data) {
-		return request.put(`/v1/auth/answers/${id}`, data);
+		return request.put(`/auth/answers/${id}`, data);
 	}
 
 	static delete(id) {
-		return request.delete(`/v1/auth/answers/${id}`);
+		return request.delete(`/auth/answers/${id}`);
 	}
 }
 

@@ -16,7 +16,6 @@ const QuizManagement = () => {
 		`/quizzes`,
 		"GET",
 		{
-			sort: "-createdAt",
 			filter: JSON.stringify([
 				{
 					operator: "=",

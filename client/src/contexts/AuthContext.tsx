@@ -5,7 +5,7 @@ import _omit from "lodash/omit";
 import _pick from "lodash/pick";
 
 import UserService from "src/api/UserService";
-import { useAppDispatch } from "src/app/hooks";
+import { useAppDispatch } from "src/app/store";
 import { logout, setUser } from "src/features/user/UserSlice";
 import { IUser } from "src/interfaces";
 import { APP_ROOT } from "src/utilities/constants";
@@ -75,6 +75,7 @@ const AuthContextProvider = (props: Props) => {
 						authentication: result.authentication,
 					}),
 				);
+				console.log("success");
 				navigate("/");
 			}
 		} catch (error) {

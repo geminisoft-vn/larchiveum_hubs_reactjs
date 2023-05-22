@@ -7,28 +7,28 @@ class MediaService {
 	static getListMedia(id: number): Promise<IAxiosResponse> {
 		return request({
 			method: "GET",
-			url: `/v1/auth/media?exhibitionId=${id}`,
+			url: `/auth/media?exhibitionId=${id}`,
 		});
 	}
 
 	static getAllByProjectId(id: string): Promise<IAxiosResponse> {
 		return request({
 			method: "GET",
-			url: `/v1/auth/media?projectId=${id}`,
+			url: `/auth/media?projectId=${id}`,
 		});
 	}
 
 	static proxyMedia(objectId) {
 		return request({
 			method: "GET",
-			url: `/v1/media/proxy/${objectId}`,
+			url: `/media/proxy/${objectId}`,
 		});
 	}
 
 	static updateMediaMany(data) {
 		return request({
 			method: "PUT",
-			url: `/v1/auth/media`,
+			url: `/auth/media`,
 			data: {
 				medias: data,
 			},
@@ -42,7 +42,7 @@ class MediaService {
 	): Promise<IAxiosResponse> {
 		const data = new FormData();
 		data.append("file", file);
-		return request.post("/v1/auth/media/upload", data, {
+		return request.post("/auth/media/upload", data, {
 			headers: {
 				"Content-Type": "multipart/form-data",
 			},

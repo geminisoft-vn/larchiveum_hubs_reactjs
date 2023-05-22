@@ -3,20 +3,20 @@ import request from "src/utilities/request";
 
 class AvatarService {
 	static create(data) {
-		return request.post("v1/auth/avatars", data);
+		return request.post("auth/avatars", data);
 	}
 
 	static getOne(id): Promise<IAxiosResponse<IAvatar>> {
 		return request({
 			method: "GET",
-			url: `/v1/auth/avatars/${id}`,
+			url: `/auth/avatars/${id}`,
 		});
 	}
 
 	static getListAvatar(): Promise<IAxiosResponse<IAvatar[]>> {
 		return request({
 			method: "GET",
-			url: `/v1/avatars`,
+			url: `/avatars`,
 		});
 	}
 }

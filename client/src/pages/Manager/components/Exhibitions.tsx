@@ -414,6 +414,7 @@ const Exhibitions = (props: Props) => {
 					type={exhibitionType}
 					exhibitionId={exhibitionId}
 					scenes={scenes}
+          loadExhibitions={loadExhibitions}
 				/>
 			)}
 

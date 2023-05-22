@@ -17,7 +17,6 @@ const DocumentManagement = (props) => {
 		`/documents`,
 		"GET",
 		{
-			sort: "-createdAt",
 			filter: JSON.stringify([
 				{
 					operator: "=",

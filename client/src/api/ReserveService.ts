@@ -11,7 +11,7 @@ class ReserveService {
 	> {
 		return request({
 			method: "POST",
-			url: `/v1/auth/reservations`,
+			url: `/auth/reservations`,
 			data: {
 				exhibitionId: id,
 			},
@@ -21,7 +21,7 @@ class ReserveService {
 	static deleteReservations(data) {
 		return request({
 			method: "DELETE",
-			url: `/v1/auth/reservations/${data.id}`,
+			url: `/auth/reservations/${data.id}`,
 		});
 	}
 }
