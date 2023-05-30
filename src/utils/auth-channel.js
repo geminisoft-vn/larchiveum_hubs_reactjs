@@ -1,5 +1,7 @@
 import uuid from "uuid/v4";
-import axios from 'axios';
+import axios from "axios";
+
+import jwtDecode from "jwt-decode";
 
 export default class AuthChannel {
   constructor(store) {
@@ -8,7 +10,7 @@ export default class AuthChannel {
     this._signedIn = !!this.store.state.credentials.token;
   }
 
-  setSocket = (socket) => {
+  setSocket = socket => {
     this.socket = socket;
   };
 
@@ -20,7 +22,7 @@ export default class AuthChannel {
     return this._signedIn;
   }
 
-  signOut = async (hubChannel) => {
+  signOut = async hubChannel => {
     if (hubChannel) {
       await hubChannel.signOut();
     }
@@ -44,25 +46,29 @@ export default class AuthChannel {
             "auth_credentials",
             async ({ credentials: token, payload: payload }) => {
               await this.handleAuthCredentials(payload.email, token);
-              await axios({
-                method: 'POST',
-                url: `https://api.larchiveum.link/v1/auth/users/verifyHubs`,
-                data: {
-                  email: payload.email,
-                  token
-                },
-                headers: {
-                  access_token: authTopic.split(':')[1],
-                }
-              })
-              
+              let _token = authTopic.split(":")[1];
+              const decodedToken = jwtDecode(_token);
+              if (decodedToken) {
+                const { id } = decodedToken;
+                await axios({
+                  method: "PUT",
+                  url: `https://api.larchiveum.link/v1/users/${id}`,
+                  data: {
+                    token
+                  },
+                  headers: {
+                    Authorization: `Bearer ${token}`
+                  }
+                });
+              }
+
               resolve();
             }
           );
 
           channel.push("auth_verified", {
             token: authToken,
-            payload: authPayload,
+            payload: authPayload
           });
         })
         .receive("error", reject);
@@ -78,7 +84,7 @@ export default class AuthChannel {
         .receive("error", reject)
     );
 
-    const authComplete = new Promise((resolve) =>
+    const authComplete = new Promise(resolve =>
       channel.on("auth_credentials", async ({ credentials: token }) => {
         await this.handleAuthCredentials(email, token, hubChannel);
         resolve();
