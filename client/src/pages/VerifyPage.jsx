@@ -1,18 +1,16 @@
 import { Link } from "react-router-dom";
-
 // @mui
 import {
-  Container,
-  Typography,
-  Divider,
-  Stack,
-  Button,
-  Paper,
   Box,
+  Button,
+  Container,
+  Divider,
+  Paper,
+  Stack,
+  Typography
 } from "@mui/material";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
-export default function VerifyPage() {
+const VerifyPage = () => {
   return (
     <Container
       maxWidth="sm"
@@ -21,7 +19,7 @@ export default function VerifyPage() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "center"
       }}
     >
       <Paper elevation={4} sx={{ p: 2 }}>
@@ -47,4 +45,6 @@ export default function VerifyPage() {
       </Paper>
     </Container>
   );
-}
+};
+
+export default VerifyPage;

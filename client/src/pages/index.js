@@ -13,9 +13,10 @@ const QuizFormPage = lazy(() => import("./QuizFormPage"));
 const DocumentFormPage = lazy(() => import("./DocumentFormPage"));
 const RoomFormPage = lazy(() => import("./RoomFormPage"));
 const UserPage = lazy(() => import("./UserPage"));
+const ConfirmationPage = lazy(() => import("./ConfirmationPage"));
 // const QuizPreviewPage = lazy(() => import("./QuizPreview"));
 // const DocumentPreviewPage = lazy(() => import("./DocumentPreview"));
-const CallbackOAuthGoogle = lazy(() => import("./CallbackOAuthGoogle"));
+const OAuthRedirect = lazy(() => import("./OAuthRedirect"));
 
 export {
   HomePage,
@@ -30,5 +31,6 @@ export {
   RoomFormPage,
   UserPage,
   VerifyPage,
-  CallbackOAuthGoogle,
+  OAuthRedirect,
+  ConfirmationPage
 };

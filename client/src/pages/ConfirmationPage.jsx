@@ -1,18 +1,17 @@
 import { Link } from "react-router-dom";
-
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 // @mui
 import {
-  Container,
-  Typography,
-  Divider,
-  Stack,
-  Button,
-  Paper,
   Box,
+  Button,
+  Container,
+  Divider,
+  Paper,
+  Stack,
+  Typography
 } from "@mui/material";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
-export default function ConfirmationPage() {
+const ConfirmationPage = () => {
   return (
     <Container
       maxWidth="sm"
@@ -21,7 +20,7 @@ export default function ConfirmationPage() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "center"
       }}
     >
       <Paper elevation={4} sx={{ p: 2, width: 512, height: 256 }}>
@@ -39,11 +38,13 @@ export default function ConfirmationPage() {
 
           <Stack direction="column" alignItems="center" spacing={1}>
             <Link to="/auth/signin" style={{ alginSelf: "center" }}>
-              <Button>Back Home</Button>
+              <Button variant="contained">Back Home</Button>
             </Link>
           </Stack>
         </Stack>
       </Paper>
     </Container>
   );
-}
+};
+
+export default ConfirmationPage;

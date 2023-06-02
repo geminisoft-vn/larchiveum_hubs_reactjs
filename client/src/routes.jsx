@@ -7,19 +7,20 @@ import PreviewLayout from "src/layouts/PreviewLayout";
 import ProtectedRoute from "src/layouts/ProtectedRoute";
 // pages
 import {
+  ConfirmationPage,
   ContentPage,
   DocumentFormPage,
   ForgotPasswordPage,
   HomePage,
-  RoomPage,
+  OAuthRedirect,
   ProfilePage,
   QuizFormPage,
   RoomFormPage,
+  RoomPage,
   SigninPage,
   SignupPage,
   UserPage,
-  VerifyPage,
-  CallbackOAuthGoogle,
+  VerifyPage
 } from "src/pages";
 
 // ----------------------------------------------------------------------
@@ -38,7 +39,7 @@ export default function Router() {
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
-          ),
+          )
         },
         {
           path: "room",
@@ -46,7 +47,7 @@ export default function Router() {
             <ProtectedRoute>
               <RoomPage />
             </ProtectedRoute>
-          ),
+          )
         },
         {
           path: "room-form",
@@ -54,7 +55,7 @@ export default function Router() {
             <ProtectedRoute>
               <RoomFormPage />
             </ProtectedRoute>
-          ),
+          )
         },
         {
           path: "room-form/:id",
@@ -62,7 +63,7 @@ export default function Router() {
             <ProtectedRoute>
               <RoomFormPage />
             </ProtectedRoute>
-          ),
+          )
         },
         {
           path: "content",
@@ -70,23 +71,23 @@ export default function Router() {
             <ProtectedRoute>
               <ContentPage />
             </ProtectedRoute>
-          ),
+          )
         },
         {
           path: "quiz-form",
-          element: <QuizFormPage />,
+          element: <QuizFormPage />
         },
         {
           path: "quiz-form/:id",
-          element: <QuizFormPage />,
+          element: <QuizFormPage />
         },
         {
           path: "document-form",
-          element: <DocumentFormPage />,
+          element: <DocumentFormPage />
         },
         {
           path: "document-form/:id",
-          element: <DocumentFormPage />,
+          element: <DocumentFormPage />
         },
         {
           path: "user",
@@ -94,9 +95,9 @@ export default function Router() {
             <ProtectedRoute>
               <UserPage />
             </ProtectedRoute>
-          ),
-        },
-      ],
+          )
+        }
+      ]
     },
     {
       path: "/auth",
@@ -104,33 +105,37 @@ export default function Router() {
       children: [
         {
           element: <Navigate to="/auth/signin" />,
-          index: true,
+          index: true
         },
         {
           path: "signin",
-          element: <SigninPage />,
+          element: <SigninPage />
         },
         {
           path: "signup",
-          element: <SignupPage />,
+          element: <SignupPage />
         },
         {
           path: "forgot-password",
-          element: <ForgotPasswordPage />,
+          element: <ForgotPasswordPage />
         },
         // {
         //   path: "reset_password",
         //   element: <ResetPasswordPage />,
         // },
         {
-          path: "verify",
-          element: <VerifyPage />,
+          path: "confirmation",
+          element: <ConfirmationPage />
         },
-      ],
+        {
+          path: "verify",
+          element: <VerifyPage />
+        }
+      ]
     },
     {
-      path: "/connect/google/redirect",
-      element: <CallbackOAuthGoogle />,
+      path: "/connect/:provider/redirect",
+      element: <OAuthRedirect />
     },
     // {
     //   path: "/preview",
@@ -148,8 +153,8 @@ export default function Router() {
     // },
     {
       path: "*",
-      element: <Navigate to="/home/app" replace />,
-    },
+      element: <Navigate to="/home/app" replace />
+    }
   ]);
 
   return routes;
