@@ -10,7 +10,7 @@ const CallbackOAuthGoogle = () => {
   useEffect(() => {
     fetch(
       `${import.meta.env.VITE_API_ROOT}/v1/auth/${
-        params.providerName
+        params.provider
       }/callback${search}`
     )
       .then(res => {
