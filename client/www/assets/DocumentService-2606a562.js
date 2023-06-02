@@ -1,1 +1,0 @@
-import{r as a}from"./index-bbadcd21.js";class s{static getOne(t){return a.get(`/documents/${t}`).then(e=>e.data.data)}static create(t){return a.post("/documents",t).then(e=>e.data.data)}static update(t,e){return a.put(`/documents/${t}`,e).then(d=>d.data.data)}static delete(t){return a.delete(`/documents/${t}`).then(e=>e.data.data)}}export{s as D};

@@ -1,17 +1,14 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-
-import moment from "moment";
-
-import { Button } from "@mui/material";
+import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
+import ConfirmationNumberRoundedIcon from "@mui/icons-material/ConfirmationNumberRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
-import ConfirmationNumberRoundedIcon from "@mui/icons-material/ConfirmationNumberRounded";
-import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
-
-import { useAuth,  } from "src/hooks";
+import { Button } from "@mui/material";
 import { indigo, red, yellow } from "@mui/material/colors";
+import moment from "moment";
 
-import { useTranslation} from 'react-i18next'
+import { useAuth } from "src/hooks";
 
 const RoomCardAction = ({ room, handleReservate }) => {
   const { t } = useTranslation();
@@ -26,12 +23,13 @@ const RoomCardAction = ({ room, handleReservate }) => {
       <Button
         sx={{
           background: yellow[700],
+          color: "#fff",
           "&.MuiButtonBase-root:hover": {
-            background: yellow[900],
-          },
+            background: yellow[900]
+          }
         }}
       >
-        {t('BUTTON.incoming')} {moment(room.startDate).format("MMMM DD")}
+        {t("BUTTON.incoming")} {moment(room.startDate).format("MMMM DD")}
       </Button>
     );
   }
@@ -49,7 +47,7 @@ const RoomCardAction = ({ room, handleReservate }) => {
         color="secondary"
         onClick={() => handleReservate(room.id)}
       >
-        {t('BUTTON.reservate')}
+        {t("BUTTON.reservate")}
       </Button>
     );
   }
@@ -65,7 +63,7 @@ const RoomCardAction = ({ room, handleReservate }) => {
         target="_blank"
       >
         <Button variant="contained" endIcon={<OpenInNewRoundedIcon />}>
-          {t('BUTTON.enter')}
+          {t("BUTTON.enter")}
         </Button>
       </Link>
     );
@@ -79,11 +77,11 @@ const RoomCardAction = ({ room, handleReservate }) => {
         sx={{
           background: red[700],
           "&.MuiButtonBase-root:hover": {
-            background: red[900],
-          },
+            background: red[900]
+          }
         }}
       >
-        {t('BUTTON.full')}
+        {t("BUTTON.full")}
       </Button>
     );
   }
@@ -96,12 +94,13 @@ const RoomCardAction = ({ room, handleReservate }) => {
           variant="contained"
           sx={{
             background: indigo[700],
+            color: "#fff",
             "&.MuiButtonBase-root:hover": {
-              background: indigo[900],
-            },
+              background: indigo[900]
+            }
           }}
         >
-          {t('BUTTON.login')}
+          {t("BUTTON.login")}
         </Button>
       </Link>
     );
