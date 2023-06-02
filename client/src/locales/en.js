@@ -1,0 +1,36 @@
+export default {
+  LINK: {
+    content: "Content",
+    room: "Room",
+    profile: "Profile",
+    user: "User",
+  },
+  BUTTON: {
+    reservate: "Reservate",
+    enter: "Enter",
+    login: "Log In",
+    register: "Sign Up",
+    logout: "Log Out",
+    incoming: "Incoming",
+    full: "Full",
+    add: "Add",
+    preview: "Preview",
+    edit: "Edit",
+    delete: "Delete",
+    close: "Close",
+    open: "Open",
+    save: "Save",
+    change: "Change",
+    back: "Back",
+  },
+  TAB: {
+    quiz: "Quizzes",
+    document: "Documents",
+    map: "Maps",
+  },
+  LABEL: {
+    public: "Public",
+    username: "Username",
+    password: "Password",
+  },
+};

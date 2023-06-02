@@ -1,0 +1,1 @@
+import{r as a}from"./index-bbadcd21.js";class d{static getOne(t){return a.get(`/quizzes/${t}`).then(e=>e.data.data)}static create(t){return a.post("/quizzes",t).then(e=>e.data.data)}static update(t,e){return a.put(`/quizzes/${t}`,e).then(r=>r.data.data)}static delete(t){return a.delete(`/quizzes/${t}`).then(e=>e.data.data)}}export{d as Q};

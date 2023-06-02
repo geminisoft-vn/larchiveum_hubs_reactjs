@@ -1,0 +1,1 @@
+import{aM as e,H as o,f as c,am as i,j as n}from"./index-bbadcd21.js";const u=()=>{const{search:a}=e(),s=o();return c.useEffect(()=>{fetch(`https://api.larchiveum.link/v1/auth/google/callback?${a}`).then(t=>{if(t.status===200)return t.json()}).then(t=>{t&&(i.set("__LARCHIVEUM__COOKIES",t.jwt),s("/home/app"))})},[a]),n.jsx("div",{})};export{u as default};
