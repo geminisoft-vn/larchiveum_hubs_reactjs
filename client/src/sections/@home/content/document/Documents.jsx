@@ -1,28 +1,45 @@
-import { Stack, Grid, Box, Typography } from "@mui/material";
+import { useState } from "react";
+import { Grid, Stack } from "@mui/material";
 
-
+import Empty from "src/components/empty";
+import Loader from "src/components/loader/Loader";
+import { useAuth, useData, useEventBus } from "src/hooks";
+import { DocumentService } from "src/services";
 
 import DocumentCard from "./DocumentCard";
-import { useData, useEventBus } from "src/hooks";
-import { DocumentService } from "src/services";
-import Loader from "src/components/loader/Loader";
-import Empty from "src/components/empty";
 
 const Documents = () => {
   const { $emit } = useEventBus();
+  const { user } = useAuth();
 
-  const { data: documents, isLoading, mutate } = useData("/documents");
+  const [params, setParams] = useState({
+    page: 1,
+    pageSize: 999,
+    filters: [
+      {
+        key: "user",
+        operator: "=",
+        value: user.id
+      }
+    ]
+  });
 
-  const handleDeleteDocument = (documentId) => {
+  const { data: documents, isLoading, mutate } = useData(
+    `/documents?page=${params.page}&pageSize=${
+      params.pageSize
+    }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
+  );
+
+  const handleDeleteDocument = documentId => {
     $emit("alert/open", {
       title: "Delete document",
       content: "Do you want to delete this document?",
       okText: "Delete",
       okCallback: () => {
-        DocumentService.delete(documentId).finally(() => {
+        DocumentService.delete(documentId).then(() => {
           mutate("/documents");
         });
-      },
+      }
     });
   };
   return (
@@ -31,7 +48,7 @@ const Documents = () => {
         {!isLoading &&
           documents &&
           documents.length > 0 &&
-          documents.map((document) => {
+          documents.map(document => {
             return (
               <DocumentCard
                 key={document.id}

@@ -1,20 +1,21 @@
-import { useFormContext, Controller } from "react-hook-form";
-
+import { Controller, useFormContext } from "react-hook-form";
 import {
   Button,
-  Select,
-  MenuItem,
-  TextField,
-  Typography,
-  Stack,
-  Paper,
   Grid,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+  Typography
 } from "@mui/material";
+
+import { TrashIcon } from "src/components/iconify";
 
 import Options from "./Options";
 
-const Question = (props) => {
-  const { handleDeleteQuestion, questionIndex } = props;
+const Question = props => {
+  const { handleDeleteQuestion, questionIndex, quizId, defaultValues } = props;
 
   const { register, getValues, control } = useFormContext();
 
@@ -26,8 +27,13 @@ const Question = (props) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography>Question #{questionIndex + 1}</Typography>
-          <Button variant="outlined" onClick={handleDeleteQuestion}>
+          <Typography variant="h6">Question #{questionIndex + 1}</Typography>
+          <Button
+            variant="outlined"
+            endIcon={<TrashIcon />}
+            color="error"
+            onClick={handleDeleteQuestion}
+          >
             Delete
           </Button>
         </Stack>
@@ -66,7 +72,11 @@ const Question = (props) => {
           </Grid>
         </Stack>
 
-        <Options questionIndex={questionIndex} />
+        <Options
+          questionIndex={questionIndex}
+          quizId={quizId}
+          defaultValues={defaultValues}
+        />
       </Stack>
     </Paper>
   );

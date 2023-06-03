@@ -1,29 +1,46 @@
-import * as React from "react";
+import { useState } from "react";
+import { Grid, Stack } from "@mui/material";
 
-
-
-import { Grid, Stack, Box, Typography } from "@mui/material";
-import QuizCard from "./QuizCard";
-import { useData, useEventBus } from "src/hooks";
-import { QuizService } from "src/services";
-import Loader from "src/components/loader/Loader";
 import Empty from "src/components/empty";
+import Loader from "src/components/loader/Loader";
+import { useAuth, useData, useEventBus } from "src/hooks";
+import { QuizService } from "src/services";
+
+import QuizCard from "./QuizCard";
 
 const Quizzes = () => {
-  const { data: quizzes, isLoading, mutate } = useData("/quizzes");
+  const { user } = useAuth();
+
+  const [params, setParams] = useState({
+    page: 1,
+    pageSize: 4,
+    filters: [
+      {
+        key: "user",
+        operator: "=",
+        value: user.id
+      }
+    ]
+  });
+
+  const { data: quizzes, isLoading, mutate } = useData(
+    `/quizzes?page=${params.page}&pageSize=${
+      params.pageSize
+    }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
+  );
 
   const { $emit } = useEventBus();
 
-  const handleDeleteQuiz = (quizId) => {
+  const handleDeleteQuiz = quizId => {
     $emit("alert/open", {
       title: "Delete quiz",
       content: "Do you want to delete this quiz?",
       okText: "Delete",
       okCallback: () => {
-        QuizService.delete(quizId).finally(() => {
+        QuizService.delete(quizId).then(() => {
           mutate("/quizzes");
         });
-      },
+      }
     });
   };
   return (
@@ -32,7 +49,7 @@ const Quizzes = () => {
         {!isLoading &&
           quizzes &&
           quizzes.length > 0 &&
-          quizzes.map((quiz) => {
+          quizzes.map(quiz => {
             return (
               <QuizCard
                 key={quiz.id}

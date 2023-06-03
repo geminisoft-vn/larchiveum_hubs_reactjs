@@ -1,27 +1,28 @@
-import { sentenceCase } from "change-case";
 // @mui
 import {
   Card,
-  Table,
-  Tooltip,
-  Paper,
   Checkbox,
-  TableRow,
+  Container,
+  IconButton,
+  Paper,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
-  IconButton,
   TableContainer,
   TablePagination,
+  TableRow,
+  Tooltip,
+  Typography
 } from "@mui/material";
+import { red } from "@mui/material/colors";
+import { sentenceCase } from "change-case";
+
+import Iconify from "src/components/iconify";
 // components
 import Label from "src/components/label";
-import Iconify from "src/components/iconify";
 import Scrollbar from "src/components/scrollbar";
 // sections
 import { UserListHead, UserListToolbar } from "src/sections/@home/user";
-import { red } from "@mui/material/colors";
 
 const TABLE_HEAD = [
   { id: "username", label: "Username", alignRight: false },
@@ -29,7 +30,7 @@ const TABLE_HEAD = [
   { id: "role", label: "Role", alignRight: false },
   { id: "isVerified", label: "Verified", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
-  { id: "" },
+  { id: "" }
 ];
 
 const Users = ({
@@ -48,7 +49,7 @@ const Users = ({
   handleClick,
   emptyRows,
   isNotFound,
-  users,
+  users
 }) => {
   return (
     <Container>
@@ -74,9 +75,15 @@ const Users = ({
               <TableBody>
                 {filteredUsers
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    const { id, username, role, blocked, email, confirmed } =
-                      row;
+                  .map(row => {
+                    const {
+                      id,
+                      username,
+                      role,
+                      blocked,
+                      email,
+                      confirmed
+                    } = row;
                     const selectedUser = selected.indexOf(username) !== -1;
 
                     return (
@@ -90,7 +97,7 @@ const Users = ({
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={selectedUser}
-                            onChange={(event) => handleClick(event, username)}
+                            onChange={event => handleClick(event, username)}
                           />
                         </TableCell>
 
@@ -136,7 +143,7 @@ const Users = ({
                     <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                       <Paper
                         sx={{
-                          textAlign: "center",
+                          textAlign: "center"
                         }}
                       >
                         <Typography variant="h6" paragraph>

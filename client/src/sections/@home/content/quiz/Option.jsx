@@ -4,10 +4,12 @@ import {
   Button,
   FormControlLabel,
   Grid,
+  IconButton,
   Stack,
   Switch,
   TextField
 } from "@mui/material";
+import { TrashIcon } from "src/components/iconify";
 
 const Option = props => {
   const {
@@ -71,9 +73,9 @@ const Option = props => {
               label="Correct"
             />
 
-            <Button variant="contained" onClick={handleDeleteAnswer}>
-              Delete Answer
-            </Button>
+            <IconButton onClick={handleDeleteAnswer}>
+              <TrashIcon />
+            </IconButton>
           </Stack>
         </Grid>
       </Grid>

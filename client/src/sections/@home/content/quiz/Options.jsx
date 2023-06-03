@@ -1,11 +1,14 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
-
 import { Button, Stack } from "@mui/material";
 
 import Option from "./Option";
+import { OptionService } from "src/services";
+import { useEventBus } from "src/hooks";
 
-const Options = (props) => {
-  const { questionIndex } = props;
+const Options = props => {
+  const { questionIndex, quizId, defaultValues } = props;
+
+  const { $emit } = useEventBus();
 
   const { control, getValues } = useFormContext();
 
@@ -13,11 +16,45 @@ const Options = (props) => {
     control,
     name: `questions.${questionIndex}.options`,
     rules: {
-      maxLength: 10,
-    },
+      maxLength: 10
+    }
   });
 
-  const handleChangeCorrectOption = (name) => {
+  const handleDeleteOption = optionIndex => {
+    if (quizId) {
+      if (
+        defaultValues &&
+        defaultValues.questions &&
+        defaultValues.questions.length
+      ) {
+        if (
+          defaultValues.questions[questionIndex].options &&
+          defaultValues.questions[questionIndex].options.length > 0
+        ) {
+          if (!defaultValues.questions[questionIndex].options[optionIndex]) {
+            remove(optionIndex);
+          } else {
+            const optionId =
+              defaultValues.questions[questionIndex].options[optionIndex].id;
+            $emit("alert/open", {
+              title: "Delete Option",
+              content: "Do you want to delete this option?",
+              okText: "Delete",
+              okCallback: () => {
+                OptionService.delete(optionId).then(() => {
+                  remove(optionIndex);
+                });
+              }
+            });
+          }
+        }
+      }
+    } else {
+      remove(optionIndex);
+    }
+  };
+
+  const handleChangeCorrectOption = name => {
     if (getValues(name)) {
       const options = getValues(`questions.${questionIndex}.options`);
       options.forEach((_, index) => {
@@ -27,7 +64,7 @@ const Options = (props) => {
           isCorrect: false,
           content: getValues(
             `questions.${questionIndex}.options.${index}.content`
-          ),
+          )
         });
       });
     }
@@ -41,7 +78,7 @@ const Options = (props) => {
             key={field.id}
             optionIndex={index}
             questionIndex={questionIndex}
-            handleDeleteAnswer={() => remove(index)}
+            handleDeleteAnswer={() => handleDeleteOption(index)}
             handleChangeCorrectAnswer={handleChangeCorrectOption}
           />
         ))}

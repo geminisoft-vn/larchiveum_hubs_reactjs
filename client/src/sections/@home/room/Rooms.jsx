@@ -15,7 +15,7 @@ const Rooms = ({ ...other }) => {
 
   const [params, setParams] = useState({
     page: 1,
-    pageSize: 4,
+    pageSize: 999,
     filters: [
       {
         key: "user",
