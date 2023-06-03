@@ -1,43 +1,38 @@
 import * as React from "react";
-
-import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
-import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
-
-
+import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
+import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
 import {
   Box,
-  Stack,
   Button,
   FormControlLabel,
-  Switch,
-  Typography,
-  Paper,
   Grid,
+  Paper,
+  Stack,
+  Switch,
+  Typography
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { green, blue, yellow, indigo } from "@mui/material/colors";
-
-import { Link } from "react-router-dom";
+import { green, indigo, yellow } from "@mui/material/colors";
 import moment from "moment";
-import { useTranslation } from "react-i18next";
 
-export default function RoomCard({
+const RoomCard = ({
   room,
   handleTogglePublic,
   handleCloseRoom,
-  handleOpenRoom,
-}) {
+  handleOpenRoom
+}) => {
   const {
     name,
-    roomId,
+    hubRoomId,
     hubSceneThumbnailUrl,
     closed,
     startDate,
     endDate,
     public: isPublic,
     reservationCount,
-    maxSize,
+    maxSize
   } = room;
 
   const { t } = useTranslation();
@@ -48,20 +43,20 @@ export default function RoomCard({
         <Grid item lg={6} md={6}>
           <Box
             sx={{
-              height: '100%',
-              width: "100%",
+              height: "100%",
+              width: "100%"
             }}
           >
             <img
               alt=""
               src={hubSceneThumbnailUrl}
               style={{
-                height: '100%',
-                width: '100%',
+                height: "100%",
+                width: "100%",
 
                 objectFit: "cover",
 
-                borderRadius: 16,
+                borderRadius: 16
               }}
             />
           </Box>
@@ -77,14 +72,14 @@ export default function RoomCard({
                 {name}
               </Typography>
               <Link
-                to={`${import.meta.env.VITE_APP_ROOT}/${roomId}`}
+                to={`${import.meta.env.VITE_APP_ROOT}/${hubRoomId}`}
                 target="_blank"
               >
                 <Button
                   startIcon={<LinkRoundedIcon />}
                   sx={{ textTransform: "none" }}
                 >
-                  {import.meta.env.VITE_APP_ROOT}/{roomId}
+                  {import.meta.env.VITE_APP_ROOT}/{hubRoomId}
                 </Button>
               </Link>
               <Button startIcon={<CalendarMonthRoundedIcon />} disabled>
@@ -98,11 +93,11 @@ export default function RoomCard({
                 control={
                   <Switch
                     checked={isPublic}
-                    onChange={(e) => handleTogglePublic(room.id, isPublic)}
+                    onChange={e => handleTogglePublic(room.id, isPublic)}
                     color="info"
                   />
                 }
-                label={t('LABEL.public')}
+                label={t("LABEL.public")}
               />
             </Stack>
 
@@ -118,11 +113,11 @@ export default function RoomCard({
                   sx={{
                     background: yellow[700],
                     "&.MuiButtonBase-root:hover": {
-                      background: yellow[900],
-                    },
+                      background: yellow[900]
+                    }
                   }}
                 >
-                  {t('BUTTON.edit')}
+                  {t("BUTTON.edit")}
                 </Button>
               </Link>
               {closed ? (
@@ -131,12 +126,12 @@ export default function RoomCard({
                   sx={{
                     background: green[700],
                     "&.MuiButtonBase-root:hover": {
-                      background: green[900],
-                    },
+                      background: green[900]
+                    }
                   }}
                   onClick={() => handleOpenRoom(room.id)}
                 >
-                  {t('BUTTON.open')}
+                  {t("BUTTON.open")}
                 </Button>
               ) : (
                 <Button
@@ -145,11 +140,11 @@ export default function RoomCard({
                   sx={{
                     background: indigo[700],
                     "&.MuiButtonBase-root:hover": {
-                      background: indigo[900],
-                    },
+                      background: indigo[900]
+                    }
                   }}
                 >
-                  {t('BUTTON.close')}
+                  {t("BUTTON.close")}
                 </Button>
               )}
             </Stack>
@@ -158,4 +153,6 @@ export default function RoomCard({
       </Grid>
     </Paper>
   );
-}
+};
+
+export default RoomCard;
