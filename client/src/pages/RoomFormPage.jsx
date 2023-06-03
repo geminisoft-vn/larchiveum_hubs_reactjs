@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Button, Stack, Typography } from "@mui/material";
 import { parseInt, transform } from "lodash";
 import moment from "moment";
 import * as yup from "yup";
@@ -106,8 +107,8 @@ const RoomFormPage = () => {
       let defaultValues = {};
       defaultValues.name = room.name;
       defaultValues.description = room.description;
-      defaultValues.startDate = moment(room.startDate);
-      defaultValues.endDate = moment(room.endDate);
+      defaultValues.startDate = room.startDate && moment(room.startDate);
+      defaultValues.endDate = room.endDate && moment(room.endDate);
       defaultValues.maxSize = room.maxSize;
       defaultValues.public = room.public;
       defaultValues.enableFly = room.enableFly;
@@ -116,10 +117,11 @@ const RoomFormPage = () => {
       defaultValues.enableSpawnCamera = room.enableSpawnCamera;
       defaultValues.enableSpawnDrawing = room.enableSpawnDrawing;
       defaultValues.enableSpawnEmoji = room.enableSpawnEmoji;
-      setSelectedScene({
-        sceneId: room.hubSceneId,
-        thumbnailUrl: room.hubSceneThumbnailUrl
-      });
+      if (scenes && scenes.length > 0) {
+        let scene = scenes.find(scene => scene.hubSceneId === room.hubSceneId);
+        setSelectedScene(scene);
+      }
+
       reset({ ...defaultValues });
     }
   };
@@ -170,13 +172,14 @@ const RoomFormPage = () => {
           {roomId ? "Edit" : "Create"} Room
         </Typography>
 
-        <Button
+        <LoadingButton
+          loading={isSubmitting}
           variant="contained"
           endIcon={<SaveRoundedIcon />}
           onClick={onSubmit}
         >
           {t("BUTTON.save")}
-        </Button>
+        </LoadingButton>
       </Stack>
 
       <RoomForm
