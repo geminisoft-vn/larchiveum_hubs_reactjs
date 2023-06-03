@@ -15,7 +15,6 @@ const QuizFormPage = () => {
   const { t } = useTranslation();
   const { id: quizId } = useParams();
 
-  console.log({ quizId });
   const methods = useForm({});
 
   const loadDefaultValues = async () => {
@@ -29,12 +28,12 @@ const QuizFormPage = () => {
     }
   };
 
-  const handleSaveQuiz = methods.handleSubmit((data) => {
+  const handleSaveQuiz = methods.handleSubmit(data => {
     if (quizId) {
       // edit
       const { dirtyFields } = methods.formState;
       const dataToUpdate = {};
-      ["title", "desc"].forEach((item) => {
+      ["title", "desc"].forEach(item => {
         if (dirtyFields[item]) {
           dataToUpdate[item] = data[item];
         }
@@ -44,21 +43,21 @@ const QuizFormPage = () => {
       }
       if (dirtyFields.questions) {
         Promise.all(
-          data.questions.map((question) =>
+          data.questions.map(question =>
             QuestionService.update(question.id, {
               content: question.content,
-              type: question.type,
+              type: question.type
             })
           )
         );
       }
-      if (dirtyFields.questions?.some((obj) => obj.options)) {
+      if (dirtyFields.questions?.some(obj => obj.options)) {
         Promise.all(
-          data.questions.map((question) =>
-            question.options.map((option) => {
+          data.questions.map(question =>
+            question.options.map(option => {
               return OptionService.update(option.id, {
                 content: option.content,
-                isCorrect: option.isCorrect,
+                isCorrect: option.isCorrect
               });
             })
           )
@@ -66,25 +65,25 @@ const QuizFormPage = () => {
       }
     } else {
       // create
-      QuizService.create(pick(data, ["title", "desc"])).then((newQuiz) => {
+      QuizService.create(pick(data, ["title", "desc"])).then(newQuiz => {
         const { id } = newQuiz;
         Promise.all(
-          data.questions.map((question) => {
+          data.questions.map(question => {
             return QuestionService.create({
               quizId: id,
               content: question.content,
-              type: question.type,
+              type: question.type
             });
           })
-        ).then((questions) => {
-          const ids = questions.map((obj) => obj.id);
+        ).then(questions => {
+          const ids = questions.map(obj => obj.id);
           Promise.all(
             ids.map((questionId, index) => {
-              return data.questions[index].options.map((option) => {
+              return data.questions[index].options.map(option => {
                 return OptionService.create({
                   questionId,
                   content: option.content,
-                  isCorrect: option.isCorrect,
+                  isCorrect: option.isCorrect
                 });
               });
             })
@@ -94,9 +93,12 @@ const QuizFormPage = () => {
     }
   });
 
-  useEffect(() => {
-    loadDefaultValues();
-  }, [quizId]);
+  useEffect(
+    () => {
+      loadDefaultValues();
+    },
+    [quizId]
+  );
 
   return (
     <FormProvider {...methods}>

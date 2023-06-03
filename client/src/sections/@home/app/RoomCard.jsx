@@ -1,30 +1,31 @@
-import PropTypes from "prop-types";
-// @mui
-import { alpha, styled } from "@mui/material/styles";
-import {
-  Box,
-  Card,
-  Grid,
-  Avatar,
-  Typography,
-  CardContent,
-  Stack,
-  Button,
-} from "@mui/material";
 import PublicRoundedIcon from "@mui/icons-material/PublicRounded";
 import SecurityRoundedIcon from "@mui/icons-material/SecurityRounded";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Stack,
+  Typography
+} from "@mui/material";
+// @mui
+import { alpha, styled } from "@mui/material/styles";
+import moment from "moment";
+import PropTypes from "prop-types";
+
+import Iconify from "src/components/iconify";
 //
 import SvgColor from "src/components/svg-color";
-import Iconify from "src/components/iconify";
-import RoomCardAction from "./RoomCardAction";
 
-import moment from "moment";
+import RoomCardAction from "./RoomCardAction";
 
 // ----------------------------------------------------------------------
 
 const StyledCardMedia = styled("div")({
   position: "relative",
-  paddingTop: "calc(100% * 3 / 4)",
+  paddingTop: "calc(100% * 3 / 4)"
 });
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
@@ -33,7 +34,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   height: 32,
   position: "absolute",
   left: theme.spacing(3),
-  bottom: theme.spacing(-2),
+  bottom: theme.spacing(-2)
 }));
 
 const StyledInfo = styled("div")(({ theme }) => ({
@@ -41,7 +42,7 @@ const StyledInfo = styled("div")(({ theme }) => ({
   alignItems: "center",
   flexWrap: "wrap",
   justifyContent: "flex-end",
-  color: theme.palette.text.disabled,
+  color: theme.palette.text.disabled
 }));
 
 const StyledCover = styled("img")({
@@ -49,17 +50,12 @@ const StyledCover = styled("img")({
   width: "100%",
   height: "100%",
   objectFit: "cover",
-  position: "absolute",
+  position: "absolute"
 });
 
 // ----------------------------------------------------------------------
 
-RoomCard.propTypes = {
-  post: PropTypes.object.isRequired,
-  index: PropTypes.number,
-};
-
-export default function RoomCard({ room, index, handleReservate }) {
+const RoomCard = ({ room, index, handleReservate }) => {
   const {
     hubSceneThumbnailUrl,
     name,
@@ -67,7 +63,7 @@ export default function RoomCard({ room, index, handleReservate }) {
     maxSize,
     startDate,
     endDate,
-    public: _public,
+    public: _public
   } = room;
 
   const latestPostLarge = index === 0;
@@ -91,15 +87,15 @@ export default function RoomCard({ room, index, handleReservate }) {
                 width: "100%",
                 height: "100%",
                 position: "absolute",
-                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
-              },
+                bgcolor: theme => alpha(theme.palette.grey[900], 0.72)
+              }
             }),
             ...(latestPostLarge && {
               pt: {
                 xs: "calc(100% * 4 / 3)",
-                sm: "calc(100% * 3 / 4.66)",
-              },
-            }),
+                sm: "calc(100% * 3 / 4.66)"
+              }
+            })
           }}
         >
           <SvgColor
@@ -112,7 +108,7 @@ export default function RoomCard({ room, index, handleReservate }) {
               bottom: -15,
               position: "absolute",
               color: "background.paper",
-              ...((latestPostLarge || latestPost) && { display: "none" }),
+              ...((latestPostLarge || latestPost) && { display: "none" })
             }}
           />
           {/* <StyledAvatar */}
@@ -138,8 +134,8 @@ export default function RoomCard({ room, index, handleReservate }) {
             ...((latestPostLarge || latestPost) && {
               bottom: 0,
               width: "100%",
-              position: "absolute",
-            }),
+              position: "absolute"
+            })
           }}
         >
           {(startDate || endDate) && (
@@ -163,8 +159,8 @@ export default function RoomCard({ room, index, handleReservate }) {
               sx={{
                 ...(latestPostLarge && { typography: "h4" }),
                 ...((latestPostLarge || latestPost) && {
-                  color: "common.white",
-                }),
+                  color: "common.white"
+                })
               }}
             >
               {name}
@@ -174,8 +170,8 @@ export default function RoomCard({ room, index, handleReservate }) {
                 sx={{
                   color: "#000",
                   ...((latestPostLarge || latestPost) && {
-                    color: "#fff",
-                  }),
+                    color: "#fff"
+                  })
                 }}
               />
             ) : (
@@ -183,8 +179,8 @@ export default function RoomCard({ room, index, handleReservate }) {
                 sx={{
                   color: "#000",
                   ...((latestPostLarge || latestPost) && {
-                    color: "#fff",
-                  }),
+                    color: "#fff"
+                  })
                 }}
               />
             )}
@@ -195,7 +191,7 @@ export default function RoomCard({ room, index, handleReservate }) {
             alignItems="center"
             justifyContent="space-between"
             sx={{
-              marginTop: 2,
+              marginTop: 2
             }}
           >
             <RoomCardAction room={room} handleReservate={handleReservate} />
@@ -206,8 +202,8 @@ export default function RoomCard({ room, index, handleReservate }) {
                   alignItems: "center",
                   ml: index === 0 ? 0 : 1.5,
                   ...((latestPostLarge || latestPost) && {
-                    color: "grey.500",
-                  }),
+                    color: "grey.500"
+                  })
                 }}
               >
                 <Iconify
@@ -224,4 +220,11 @@ export default function RoomCard({ room, index, handleReservate }) {
       </Card>
     </Grid>
   );
-}
+};
+
+RoomCard.propTypes = {
+  room: PropTypes.object.isRequired,
+  index: PropTypes.number
+};
+
+export default RoomCard;

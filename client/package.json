@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.1.0",
     "@iconify/react": "^4.1.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "5.0.0-alpha.131",
@@ -35,7 +36,8 @@
     "react-i18next": "^12.3.1",
     "react-router-dom": "^6.11.2",
     "simplebar-react": "^3.2.4",
-    "swr": "^2.1.5"
+    "swr": "^2.1.5",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

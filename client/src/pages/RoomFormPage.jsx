@@ -1,50 +1,106 @@
-import { useState, useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-
-import { Stack, TextField, Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-
-import { RoomForm } from "src/sections/@home/room";
-
-import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { transform } from "lodash";
-
+import { Button, Stack, TextField, Typography } from "@mui/material";
+import { parseInt, transform } from "lodash";
 import moment from "moment";
-import { RoomService } from "src/services";
-import { useAuth } from "src/hooks";
+import * as yup from "yup";
 
-import { useTranslation } from "react-i18next";
+import { useAuth, useData } from "src/hooks";
+import { RoomForm } from "src/sections/@home/room";
+import { RoomService } from "src/services";
 
 const RoomFormPage = () => {
   const { t } = useTranslation();
   const { id: roomId } = useParams();
 
+  const { data: scenes, isLoading: isLoadingScenes } = useData("/scenes");
+
   const { user } = useAuth();
 
   const [selectedScene, setSelectedScene] = useState();
 
-  const { handleSubmit, control, reset } = useForm({
+  useEffect(
+    () => {
+      if (scenes && scenes.length > 0) {
+        setSelectedScene(scenes[0]);
+      }
+    },
+    [scenes]
+  );
+
+  const schema = yup.object().shape({
+    name: yup
+      .string()
+      .min(4, t(`ERROR.invalid_room_name_length`))
+      .max(255, t(`ERROR.invalid_room_name_length`))
+      .required(t(`ERROR.required`)),
+    description: yup
+      .string()
+      .min(1, t(`ERROR.invalid_room_desc_length`))
+      .max(1000, t(`ERROR.invalid_room_desc_length`))
+      .required(t(`ERROR.required`)),
+    maxSize: yup
+      .number()
+      .transform(v => parseInt(v, 10))
+      .min(1, t(`ERROR.invalid_room_max_size`))
+      .max(24, t(`ERROR.invalid_room_max_size`)),
+    startDate: yup
+      .object()
+      .nullable()
+      .when("endDate", ([endDate], schema) => {
+        return endDate
+          ? schema.required(t(`ERROR.invalid_start_date`))
+          : schema;
+      }),
+    endDate: yup
+      .object()
+      .nullable()
+      .test(
+        "is-valid-end-date",
+        t(`ERROR.invalid_end_date`),
+        (endDate, context) => {
+          if (endDate) {
+            const { startDate } = context.parent;
+            if (startDate) {
+              return moment(endDate).isAfter(startDate);
+            }
+            return true;
+          }
+          return true;
+        }
+      )
+  });
+
+  const {
+    handleSubmit,
+    control,
+    reset,
+    clearErrors,
+    formState: { errors, isSubmitting }
+  } = useForm({
     defaultValues: {
       name: "",
-      desc: "",
-      startDate: "",
-      endDate: "",
+      description: "",
+      startDate: null,
+      endDate: null,
       maxSize: 0,
-      sceneId: "",
-      isPublic: false,
-      isEnablePinObject: false,
-      isEnableFly: false,
-      isEnableCreateCamera: false,
-      isEnableCreateDrawing: false,
-      isEnableCreateEmoji: false,
+      public: false,
+      enablePinObjects: false,
+      enableFly: false,
+      enableSpawnCamera: false,
+      enableSpawnDrawing: false,
+      enableSpawnEmoji: false
     },
+    resolver: yupResolver(schema)
   });
 
   const loadDefaultValues = async () => {
-    console.log({ roomId });
     if (roomId) {
       const room = await RoomService.getOne(roomId);
       let defaultValues = {};
@@ -61,14 +117,14 @@ const RoomFormPage = () => {
       defaultValues.enableSpawnDrawing = room.enableSpawnDrawing;
       defaultValues.enableSpawnEmoji = room.enableSpawnEmoji;
       setSelectedScene({
-        hubSceneId: room.sceneId,
-        thumbnailUrl: room.hubSceneThumbnailUrl,
+        sceneId: room.hubSceneId,
+        thumbnailUrl: room.hubSceneThumbnailUrl
       });
       reset({ ...defaultValues });
     }
   };
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(data => {
     let dataToSave = transform(
       data,
       (result, value, key) => {
@@ -83,21 +139,24 @@ const RoomFormPage = () => {
       RoomService.update(roomId, {
         ...dataToSave,
         sceneId: selectedScene.hubSceneId,
-        hubSceneThumbnailUrl: selectedScene.thumbnailUrl,
+        hubSceneThumbnailUrl: selectedScene.thumbnailUrl
       });
     } else {
       RoomService.create({
         ...dataToSave,
         sceneId: selectedScene.hubSceneId,
         hubSceneThumbnailUrl: selectedScene.thumbnailUrl,
-        userId: user.id,
+        userId: user.id
       });
     }
   });
 
-  useEffect(() => {
-    loadDefaultValues();
-  }, [roomId]);
+  useEffect(
+    () => {
+      loadDefaultValues();
+    },
+    [roomId]
+  );
 
   return (
     <Stack direction="column" spacing={2}>
@@ -122,8 +181,11 @@ const RoomFormPage = () => {
 
       <RoomForm
         control={control}
+        scenes={scenes}
+        isLoadingScenes={isLoadingScenes}
         selectedScene={selectedScene}
         setSelectedScene={setSelectedScene}
+        errors={errors}
       />
     </Stack>
   );

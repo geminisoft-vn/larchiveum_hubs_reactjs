@@ -12,7 +12,7 @@ import { ReservationService } from "src/services";
 
 const SORT_OPTIONS = [
   { value: "createdAt|desc", label: "Latest" },
-  { value: "createdAt|asc", label: "Oldest" },
+  { value: "createdAt|asc", label: "Oldest" }
 ];
 
 const AppPage = () => {
@@ -22,35 +22,30 @@ const AppPage = () => {
   const [params, setParams] = useState({
     page: 1,
     pageSize: 8,
-    sort: "createdAt|desc",
+    sort: "createdAt|desc"
   });
 
-  const {
-    data: rooms,
-    pagination,
-    isLoading,
-    mutate,
-  } = useData(
+  const { data: rooms, pagination, isLoading, mutate } = useData(
     `/rooms?page=${params.page}&pageSize=${params.pageSize}&sort=${params.sort}`
   );
 
-  const handleReservate = (roomId) => {
+  const handleReservate = roomId => {
     $emit("alert/open", {
       title: "Make Reservation",
       content: "Do you want to make reservation of this room?",
       okCallback: () => {
         ReservationService.create({
-          roomId,
-          userId: user.id,
+          hubRoomId: roomId,
+          userId: user.id
         }).then(() => {
           mutate();
         });
-      },
+      }
     });
   };
 
-  const handleSort = (value) => {
-    setParams((prev) => ({ ...prev, sort: value }));
+  const handleSort = value => {
+    setParams(prev => ({ ...prev, sort: value }));
   };
 
   return (
@@ -69,30 +64,32 @@ const AppPage = () => {
         />
       </Stack>
 
-      {!isLoading && rooms && rooms.length > 0 && (
-        <>
-          <Grid container spacing={3}>
-            {rooms.map((room, index) => (
-              <RoomCard
-                key={room.id}
-                room={room}
-                index={index}
-                handleReservate={handleReservate}
+      {!isLoading &&
+        rooms &&
+        rooms.length > 0 && (
+          <>
+            <Grid container spacing={3}>
+              {rooms.map((room, index) => (
+                <RoomCard
+                  key={room.id}
+                  room={room}
+                  index={index}
+                  handleReservate={handleReservate}
+                />
+              ))}
+            </Grid>
+            <Stack direction="row" justifyContent="center" sx={{ my: 2 }}>
+              <Pagination
+                color="primary"
+                count={pagination?.total || 1}
+                page={params.page}
+                onChange={(_, newPage) =>
+                  setParams(prev => ({ ...prev, page: newPage }))
+                }
               />
-            ))}
-          </Grid>
-          <Stack direction="row" justifyContent="center" sx={{ my: 2 }}>
-            <Pagination
-              color="primary"
-              count={pagination?.total || 1}
-              page={params.page}
-              onChange={(_, newPage) =>
-                setParams((prev) => ({ ...prev, page: newPage }))
-              }
-            />
-          </Stack>
-        </>
-      )}
+            </Stack>
+          </>
+        )}
       {!isLoading && rooms && rooms.length === 0 && <Empty />}
       {isLoading && <Loader />}
     </>

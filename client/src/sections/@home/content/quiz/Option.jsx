@@ -1,37 +1,39 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-
 import {
   Button,
+  FormControlLabel,
   Grid,
   Stack,
   Switch,
-  TextField,
-  FormControlLabel,
+  TextField
 } from "@mui/material";
 
-const Option = (props) => {
+const Option = props => {
   const {
     questionIndex,
     optionIndex,
     handleDeleteAnswer,
-    handleChangeCorrectAnswer,
+    handleChangeCorrectAnswer
   } = props;
 
   const { register, control, watch, getValues } = useFormContext();
 
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
-      if (
-        type === "change" &&
-        name.includes("isCorrect") &&
-        getValues(`questions.${questionIndex}.type`) === "single"
-      ) {
-        handleChangeCorrectAnswer(name);
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+  useEffect(
+    () => {
+      const subscription = watch((value, { name, type }) => {
+        if (
+          type === "change" &&
+          name.includes("isCorrect") &&
+          getValues(`questions.${questionIndex}.type`) === "single"
+        ) {
+          handleChangeCorrectAnswer(name);
+        }
+      });
+      return () => subscription.unsubscribe();
+    },
+    [watch]
+  );
 
   return (
     <Stack sx={{ px: 2 }}>
@@ -60,7 +62,7 @@ const Option = (props) => {
                   control={control}
                   render={({ field }) => (
                     <Switch
-                      onChange={(e) => field.onChange(e.target.checked)}
+                      onChange={e => field.onChange(e.target.checked)}
                       checked={field.value}
                     />
                   )}

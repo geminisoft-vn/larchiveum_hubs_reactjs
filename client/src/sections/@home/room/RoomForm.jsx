@@ -1,30 +1,23 @@
-import { useState, useEffect } from "react";
-
-
-
+import { Controller } from "react-hook-form";
 import {
-  TextField,
-  FormControlLabel,
-  Switch,
-  Stack,
   Autocomplete,
   Box,
-  Grid
+  FormControlLabel,
+  Grid,
+  Stack,
+  Switch,
+  TextField
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import { Controller } from "react-hook-form";
-import { useData } from "src/hooks";
-
-const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
-  const { data: scenes } = useData("/scenes");
-
-  useEffect(() => {
-    if (scenes && scenes.length > 0) {
-      setSelectedScene(scenes[0]);
-    }
-  }, [scenes]);
-
+const RoomForm = ({
+  control,
+  scenes,
+  isLoadingScenes,
+  selectedScene,
+  setSelectedScene,
+  errors
+}) => {
   return (
     <Grid container spacing={2} justifyContent="space-between">
       <Grid item lg={3} md={3} sm={6} xs={12}>
@@ -33,6 +26,8 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
           control={control}
           render={({ field: { onChange, value } }) => (
             <TextField
+              error={Boolean(errors.name)}
+              helperText={errors.name && errors.name.message}
               InputLabelProps={{ shrink: true }}
               onChange={onChange}
               value={value}
@@ -47,7 +42,16 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
           name="startDate"
           control={control}
           render={({ field: { ref, ...rest } }) => (
-            <DatePicker fullWidth label="Start Date" {...rest} />
+            <DatePicker
+              slotProps={{
+                textField: {
+                  error: Boolean(errors.startDate),
+                  helperText: errors.startDate && errors.startDate.message
+                }
+              }}
+              label="Start Date"
+              {...rest}
+            />
           )}
         />{" "}
       </Grid>{" "}
@@ -56,7 +60,16 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
           name="endDate"
           control={control}
           render={({ field: { ref, ...rest } }) => (
-            <DatePicker fullWidth label="End Date" {...rest} />
+            <DatePicker
+              slotProps={{
+                textField: {
+                  error: Boolean(errors.endDate),
+                  helperText: errors.endDate && errors.endDate.message
+                }
+              }}
+              label="End Date"
+              {...rest}
+            />
           )}
         />{" "}
       </Grid>
@@ -66,6 +79,8 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
           control={control}
           render={({ field: { onChange, value } }) => (
             <TextField
+              error={Boolean(errors.maxSize)}
+              helperText={errors.maxSize && errors.maxSize.message}
               onChange={onChange}
               value={value}
               label={"Max Size"}
@@ -83,6 +98,8 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
             control={control}
             render={({ field: { onChange, value } }) => (
               <TextField
+                error={Boolean(errors.description)}
+                helperText={errors.description && errors.description.message}
                 InputLabelProps={{ shrink: true }}
                 fullWidth
                 onChange={onChange}
@@ -101,12 +118,14 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                   <Controller
                     name="public"
                     control={control}
-                    render={({ field }) => (
-                      <Switch
-                        onChange={(e) => field.onChange(e.target.checked)}
-                        checked={field.value}
-                      />
-                    )}
+                    render={({ field }) => {
+                      return (
+                        <Switch
+                          onChange={e => field.onChange(e.target.checked)}
+                          checked={field.value}
+                        />
+                      );
+                    }}
                   />
                 }
                 label="Public"
@@ -120,7 +139,7 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                     control={control}
                     render={({ field }) => (
                       <Switch
-                        onChange={(e) => field.onChange(e.target.checked)}
+                        onChange={e => field.onChange(e.target.checked)}
                         checked={field.value}
                       />
                     )}
@@ -137,7 +156,7 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                     control={control}
                     render={({ field }) => (
                       <Switch
-                        onChange={(e) => field.onChange(e.target.checked)}
+                        onChange={e => field.onChange(e.target.checked)}
                         checked={field.value}
                       />
                     )}
@@ -154,7 +173,7 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                     control={control}
                     render={({ field }) => (
                       <Switch
-                        onChange={(e) => field.onChange(e.target.checked)}
+                        onChange={e => field.onChange(e.target.checked)}
                         checked={field.value}
                       />
                     )}
@@ -171,7 +190,7 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                     control={control}
                     render={({ field }) => (
                       <Switch
-                        onChange={(e) => field.onChange(e.target.checked)}
+                        onChange={e => field.onChange(e.target.checked)}
                         checked={field.value}
                       />
                     )}
@@ -188,7 +207,7 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                     control={control}
                     render={({ field }) => (
                       <Switch
-                        onChange={(e) => field.onChange(e.target.checked)}
+                        onChange={e => field.onChange(e.target.checked)}
                         checked={field.value}
                       />
                     )}
@@ -202,10 +221,12 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
       </Grid>
       <Grid item lg={6} md={6} sm={12} xs={12}>
         <Stack direction="column" spacing={2}>
-          {scenes && (
+          {selectedScene && (
             <Autocomplete
+              freeSolo
+              loading={isLoadingScenes}
               options={scenes}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={option => option.name}
               autoHighlight
               value={selectedScene}
               renderOption={(props, option) => {
@@ -216,9 +237,11 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                 );
               }}
               onChange={(e, newValue) => {
-                setSelectedScene(newValue);
+                if (newValue) {
+                  setSelectedScene(newValue);
+                }
               }}
-              renderInput={(params) => (
+              renderInput={params => (
                 <TextField
                   {...params}
                   label="Scene"
@@ -226,7 +249,7 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                   fullWidth
                   inputProps={{
                     ...params.inputProps,
-                    autoComplete: "disabled", // disable autocomplete and autofill
+                    autoComplete: "disabled" // disable autocomplete and autofill
                   }}
                 />
               )}
@@ -240,9 +263,9 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                 lg: 400,
                 md: 300,
                 sm: 256,
-                xs: 128,
+                xs: 128
               },
-              position: "relative",
+              position: "relative"
             }}
           >
             <img
@@ -251,10 +274,9 @@ const RoomForm = ({ control, selectedScene, setSelectedScene, roomId }) => {
                 "/assets/images/default-image.png"
               }
               alt=""
-              fill
               style={{
                 borderRadius: "16px",
-                objectFit: "cover",
+                objectFit: "cover"
               }}
             />
           </Box>
