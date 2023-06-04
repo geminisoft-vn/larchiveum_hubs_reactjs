@@ -1,36 +1,44 @@
 import { lazy } from "react";
 
-const HomePage = lazy(() => import("./HomePage"));
-const SigninPage = lazy(() => import("./SigninPage"));
-const SignupPage = lazy(() => import("./SignupPage"));
-const VerifyPage = lazy(() => import("./VerifyPage"));
-const ContentPage = lazy(() => import("./ContentPage"));
-const RoomPage = lazy(() => import("./RoomPage"));
-const ForgotPasswordPage = lazy(() => import("./ForgotPasswordPage"));
-// const ResetPasswordPage = lazy(() => import("./ResetPasswordPage"));
-const ProfilePage = lazy(() => import("./ProfilePage"));
-const QuizFormPage = lazy(() => import("./QuizFormPage"));
-const DocumentFormPage = lazy(() => import("./DocumentFormPage"));
-const RoomFormPage = lazy(() => import("./RoomFormPage"));
-const UserPage = lazy(() => import("./UserPage"));
-const ConfirmationPage = lazy(() => import("./ConfirmationPage"));
-// const QuizPreviewPage = lazy(() => import("./QuizPreview"));
-// const DocumentPreviewPage = lazy(() => import("./DocumentPreview"));
-const OAuthRedirect = lazy(() => import("./OAuthRedirect"));
+// home
+const HomePage = lazy(() => import("./home/Home"));
+const ProfilePage = lazy(() => import("./home/Profile"));
+const QuizFormPage = lazy(() => import("./home/QuizForm"));
+const DocumentFormPage = lazy(() => import("./home/DocumentForm"));
+const RoomFormPage = lazy(() => import("./home/RoomForm"));
+const UserManagamentPage = lazy(() => import("./home/UserManagement"));
+const ContentPage = lazy(() => import("./home/ContentManagement"));
+const RoomManagementPage = lazy(() => import("./home/RoomManagement"));
+
+// auth
+const LoginPage = lazy(() => import("./auth/Login"));
+const RegistrationPage = lazy(() => import("./auth/Registration"));
+const VerifyPage = lazy(() => import("./auth/Verification"));
+const ForgotPasswordPage = lazy(() => import("./auth/ForgotPassword"));
+const OAuthRedirectPage = lazy(() => import("./auth/OAuthRedirect"));
+const ConfirmationPage = lazy(() => import("./auth/Confirmation"));
+// const ResetPasswordPage = lazy(() => import("./auth/ResetPassword"));
+
+const AnsweringPage = lazy(() => import("./preview/Answering"));
+const DocumentPreviewPage = lazy(() => import("./preview/Document"));
+const QuizPreviewPage = lazy(() => import("./preview/Quiz"));
 
 export {
   HomePage,
-  SigninPage,
-  SignupPage,
+  LoginPage,
+  RegistrationPage,
   ContentPage,
-  RoomPage,
+  RoomManagementPage,
   ForgotPasswordPage,
   ProfilePage,
   QuizFormPage,
   DocumentFormPage,
   RoomFormPage,
-  UserPage,
+  UserManagamentPage,
   VerifyPage,
-  OAuthRedirect,
-  ConfirmationPage
+  OAuthRedirectPage,
+  ConfirmationPage,
+  AnsweringPage,
+  DocumentPreviewPage,
+  QuizPreviewPage
 };

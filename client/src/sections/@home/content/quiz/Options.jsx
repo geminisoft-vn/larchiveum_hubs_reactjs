@@ -1,9 +1,10 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button, Stack } from "@mui/material";
 
-import Option from "./Option";
-import { OptionService } from "src/services";
 import { useEventBus } from "src/hooks";
+import { OptionService } from "src/services";
+
+import Option from "./Option";
 
 const Options = props => {
   const { questionIndex, quizId, defaultValues } = props;

@@ -23,7 +23,7 @@ const HEADER_MOBILE = 64;
 const HEADER_DESKTOP = 92;
 
 const StyledRoot = styled(AppBar)(({ theme }) => ({
-  ...bgBlur({ color: theme.palette.background.default }),
+  ...bgBlur({ color: theme.palette.background.default })
   // boxShadow: "none",
 }));
 
@@ -33,8 +33,8 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   minHeight: HEADER_MOBILE,
   [theme.breakpoints.up("lg")]: {
     minHeight: HEADER_DESKTOP,
-    padding: theme.spacing(0, 5),
-  },
+    padding: theme.spacing(0, 5)
+  }
 }));
 
 // ----------------------------------------------------------------------
@@ -52,28 +52,28 @@ const Header = ({ onOpenNav }) => {
     {
       title: t("LINK.content"),
       path: "/home/content",
-      requiredType: 4,
-      target: "_self",
+      requiredType: 3,
+      target: "_self"
     },
     {
       title: t("LINK.room"),
       path: "/home/room",
-      requiredType: 4,
-      target: "_self",
+      requiredType: 3,
+      target: "_self"
     },
 
     {
       title: t("LINK.profile"),
       path: "/home/profile",
       requiredType: 3,
-      target: "_self",
+      target: "_self"
     },
     {
       title: t("LINK.user"),
       path: "/home/user",
-      requiredType: 5,
-      target: "_self",
-    },
+      requiredType: 4,
+      target: "_self"
+    }
   ];
 
   return (
@@ -84,7 +84,7 @@ const Header = ({ onOpenNav }) => {
           sx={{
             mr: 1,
             color: "text.primary",
-            display: { lg: "none" },
+            display: { lg: "none" }
           }}
         >
           <Iconify icon="eva:menu-2-fill" />
@@ -96,71 +96,74 @@ const Header = ({ onOpenNav }) => {
               sx={{
                 width: 128,
                 height: 64,
-                position: "relative",
+                position: "relative"
               }}
             >
               <img
                 src="/assets/logo.png"
                 alt="Logo"
                 style={{
-                  objectFit: "contain",
+                  objectFit: "contain"
                 }}
               />
             </Box>
           </Link>
         )}
 
-        {isDesktop && user && (
-          <Stack direction="row" alignItems="center" spacing={2}>
-            {navConfig.map((item) => {
-              return (
-                user.role &&
-                user.role.id >= item.requiredType && (
-                  <Link key={item.title} to={item.path} target={item.target}>
-                    <Button
-                      variant={
-                        pathname.includes(item.path) ? "contained" : "text"
-                      }
-                    >
-                      {item.title}
-                    </Button>
+        {isDesktop &&
+          user && (
+            <Stack direction="row" alignItems="center" spacing={2}>
+              {navConfig.map(item => {
+                return (
+                  user.role &&
+                  user.role.id >= item.requiredType && (
+                    <Link key={item.title} to={item.path} target={item.target}>
+                      <Button
+                        variant={
+                          pathname.includes(item.path) ? "contained" : "text"
+                        }
+                      >
+                        {item.title}
+                      </Button>
+                    </Link>
+                  )
+                );
+              })}
+              {user.role &&
+                user.role.id >= 4 && (
+                  <Link
+                    to={`${
+                      import.meta.env.VITE_APP_ROOT
+                    }?action=signin&redirect_url=admin&email=${
+                      user.email
+                    }&hubs_token=${user.hubToken}`}
+                    target="_blank"
+                  >
+                    <Button>Admin</Button>
                   </Link>
-                )
-              );
-            })}
-            {user.role && user.role.id >= 5 && (
-              <Link
-                to={`${
-                  import.meta.env.VITE_APP_ROOT
-                }?action=signin&redirect_url=admin&email=${
-                  user.email
-                }&hubs_token=${user.hubToken}`}
-                target="_blank"
-              >
-                <Button>Admin</Button>
-              </Link>
-            )}
-            {user.role && user.role.id >= 5 && (
-              <Link
-                to={`${
-                  import.meta.env.VITE_APP_ROOT
-                }?action=signin&redirect_url=spoke&email=${
-                  user.email
-                }&hubs_token=${user.hubToken}`}
-                target="_blank"
-              >
-                <Button>Spoke</Button>
-              </Link>
-            )}
-          </Stack>
-        )}
+                )}
+              {user.role &&
+                user.role.id >= 4 && (
+                  <Link
+                    to={`${
+                      import.meta.env.VITE_APP_ROOT
+                    }?action=signin&redirect_url=spoke&email=${
+                      user.email
+                    }&hubs_token=${user.hubToken}`}
+                    target="_blank"
+                  >
+                    <Button>Spoke</Button>
+                  </Link>
+                )}
+            </Stack>
+          )}
 
         <Stack
           direction="row"
           alignItems="center"
           spacing={{
             xs: 0.5,
-            sm: 1,
+            sm: 1
           }}
         >
           <LanguagePopover />

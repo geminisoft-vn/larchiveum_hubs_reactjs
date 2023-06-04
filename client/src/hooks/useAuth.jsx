@@ -3,9 +3,9 @@ import {
   useCallback,
   useContext,
   useMemo,
-  useState,
+  useState
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import useSWR from "swr";
 
@@ -16,17 +16,20 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const { data: user, mutate } = useSWR(
-    Cookies.get("__LARCHIVEUM__COOKIES") ? "/users/me?populate=*" : null,
-    (url) => {
+    Cookies.get("__LARCHIVEUM__COOKIES") && pathname.includes("home")
+      ? "/users/me?populate=*"
+      : null,
+    url => {
       return request
         .get(url, {
           headers: {
-            Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`,
-          },
+            Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`
+          }
         })
-        .then((res) => {
+        .then(res => {
           if (res.status === 200) {
             return res.data;
           }
@@ -72,7 +75,7 @@ export const AuthProvider = ({ children }) => {
       signOut,
       signUp,
       isLoading,
-      user,
+      user
     }),
     [user, isLoading, error]
   );

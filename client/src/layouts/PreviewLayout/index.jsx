@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
+import { Container } from "@mui/material";
 
 const PreviewLayout = () => {
-	return (
-		<div className="flex h-full w-full justify-center">
-			<Outlet />
-		</div>
-	);
+  return (
+    <Container>
+      <Outlet />
+    </Container>
+  );
 };
 
 export default PreviewLayout;

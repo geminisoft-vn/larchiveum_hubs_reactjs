@@ -1,3 +1,4 @@
+/* eslint-disable simple-import-sort/imports */
 import React, { useEffect } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -6,16 +7,36 @@ import { Link } from "react-router-dom";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { pick } from "lodash";
+import { parseInt, pick } from "lodash";
 
+import { useAuth, useData } from "src/hooks";
 import { Questions } from "src/sections/@home/content/quiz";
 import { OptionService, QuestionService, QuizService } from "src/services";
-import { useAuth } from "src/hooks";
+
+import useSWR from "swr";
+import request from "src/utils/request";
+
+import qs from "qs";
 
 const QuizFormPage = () => {
   const { t } = useTranslation();
   const { id: quizId } = useParams();
   const { user } = useAuth();
+
+  const { data: quiz } = useSWR(quizId ? `/quizzes/${quizId}` : null, url => {
+    return request.get(url).then(res => res.data.data);
+  });
+  const { data: questions } = useData(
+    quiz
+      ? `/questions?${qs.stringify({
+          filters: {
+            quiz: {
+              id: quiz.id
+            }
+          }
+        })}`
+      : null
+  );
 
   const methods = useForm({
     defaultValues: {
@@ -26,12 +47,13 @@ const QuizFormPage = () => {
   });
 
   const loadDefaultValues = async () => {
-    if (quizId) {
-      const quiz = await QuizService.getOne(quizId);
+    if (quiz) {
       let defaultValues = {};
       defaultValues.title = quiz.title;
       defaultValues.desc = quiz.desc;
-      defaultValues.questions = quiz.questions;
+      if (questions) {
+        defaultValues.questions = questions;
+      }
       methods.reset({ ...defaultValues });
     }
   };
@@ -146,7 +168,7 @@ const QuizFormPage = () => {
     () => {
       loadDefaultValues();
     },
-    [quizId]
+    [quiz, questions]
   );
 
   return (

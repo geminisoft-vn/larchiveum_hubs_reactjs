@@ -15,8 +15,8 @@ import Logo from "src/components/logo";
 // hooks
 import useResponsive from "src/hooks/useResponsive";
 // sections
-import { LoginForm } from "src/sections/auth/login";
-import SignupForm from "src/sections/auth/signup/SignupForm";
+import { LoginForm } from "src/sections/@auth/login";
+import SignupForm from "src/sections/@auth/signup/SignupForm";
 
 // ----------------------------------------------------------------------
 

@@ -7,19 +7,22 @@ import PreviewLayout from "src/layouts/PreviewLayout";
 import ProtectedRoute from "src/layouts/ProtectedRoute";
 // pages
 import {
+  AnsweringPage,
   ConfirmationPage,
   ContentPage,
   DocumentFormPage,
+  DocumentPreviewPage,
   ForgotPasswordPage,
   HomePage,
-  OAuthRedirect,
+  LoginPage,
+  OAuthRedirectPage,
   ProfilePage,
   QuizFormPage,
+  QuizPreviewPage,
+  RegistrationPage,
   RoomFormPage,
-  RoomPage,
-  SigninPage,
-  SignupPage,
-  UserPage,
+  RoomManagementPage,
+  UserManagamentPage,
   VerifyPage
 } from "src/pages";
 
@@ -45,7 +48,7 @@ export default function Router() {
           path: "room",
           element: (
             <ProtectedRoute>
-              <RoomPage />
+              <RoomManagementPage />
             </ProtectedRoute>
           )
         },
@@ -93,7 +96,7 @@ export default function Router() {
           path: "user",
           element: (
             <ProtectedRoute>
-              <UserPage />
+              <UserManagamentPage />
             </ProtectedRoute>
           )
         }
@@ -109,11 +112,11 @@ export default function Router() {
         },
         {
           path: "signin",
-          element: <SigninPage />
+          element: <LoginPage />
         },
         {
           path: "signup",
-          element: <SignupPage />
+          element: <RegistrationPage />
         },
         {
           path: "forgot-password",
@@ -130,27 +133,33 @@ export default function Router() {
         {
           path: "verify",
           element: <VerifyPage />
+        },
+        {
+          path: "connect/:provider/redirect",
+          element: <OAuthRedirectPage />
         }
       ]
     },
+
     {
-      path: "/connect/:provider/redirect",
-      element: <OAuthRedirect />
+      path: "/preview",
+      element: <PreviewLayout />,
+      children: [
+        {
+          path: "quiz/:id",
+          element: <QuizPreviewPage />
+        },
+        {
+          path: "answering/:questionId",
+          element: <AnsweringPage />
+        },
+
+        {
+          path: "document/:id",
+          element: <DocumentPreviewPage />
+        }
+      ]
     },
-    // {
-    //   path: "/preview",
-    //   element: <PreviewLayout />,
-    //   children: [
-    //     {
-    //       path: "quiz/:id",
-    //       element: <QuizPreviewPage />,
-    //     },
-    //     {
-    //       path: "document/:id",
-    //       element: <DocumentPreviewPage />,
-    //     },
-    //   ],
-    // },
     {
       path: "*",
       element: <Navigate to="/home/app" replace />

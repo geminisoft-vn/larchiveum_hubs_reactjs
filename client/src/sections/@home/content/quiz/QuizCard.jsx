@@ -1,21 +1,19 @@
-import {
-  Grid,
-  Typography,
-  Tooltip,
-  IconButton,
-  Button,
-  Paper,
-  Card,
-  CardContent,
-  CardActions,
-} from "@mui/material";
-
-import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  IconButton,
+  Paper,
+  Tooltip,
+  Typography
+} from "@mui/material";
 
 const QuizCard = ({ quiz, handleDeleteQuiz }) => {
   const { t } = useTranslation();
@@ -31,21 +29,23 @@ const QuizCard = ({ quiz, handleDeleteQuiz }) => {
             <Typography variant="body2">{desc}</Typography>
           </CardContent>
           <CardActions>
-            <Tooltip title={t('BUTTON.preview')}>
-              <IconButton color="info">
-                <VisibilityRoundedIcon />
-              </IconButton>
-            </Tooltip>
+            <Link to={`/preview/quiz/${quiz.id}`} target="_blank">
+              <Tooltip title={t("BUTTON.preview")}>
+                <IconButton color="info">
+                  <VisibilityRoundedIcon />
+                </IconButton>
+              </Tooltip>
+            </Link>
 
             <Link to={`/home/quiz-form/${quiz.id}`}>
-              <Tooltip title={t('BUTTON.edit')} color="warning">
+              <Tooltip title={t("BUTTON.edit")} color="warning">
                 <IconButton>
                   <EditRoundedIcon />
                 </IconButton>
               </Tooltip>
             </Link>
 
-            <Tooltip title={t('BUTTON.delete')}>
+            <Tooltip title={t("BUTTON.delete")}>
               <IconButton
                 onClick={() => handleDeleteQuiz(quiz.id)}
                 color="error"

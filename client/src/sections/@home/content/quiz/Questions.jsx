@@ -1,12 +1,15 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button, Stack } from "@mui/material";
 
-import Question from "./Question";
+import { useEventBus } from "src/hooks";
 import { QuestionService } from "src/services";
+
+import Question from "./Question";
 
 const MAX_QUESTION = 10;
 
 const Questions = ({ quizId, defaultValues }) => {
+  const { $emit } = useEventBus();
   const { control } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -24,7 +27,16 @@ const Questions = ({ quizId, defaultValues }) => {
           remove(questionIndex);
         } else {
           const questionId = defaultValues.questions[questionIndex].id;
-          QuestionService.delete(questionId);
+          $emit("alert/open", {
+            title: "Delete Question",
+            content: "Do you want to delete this question?",
+            okText: "Delete",
+            okCallback: () => {
+              QuestionService.delete(questionId).then(() => {
+                remove(questionIndex);
+              });
+            }
+          });
         }
       }
     } else {

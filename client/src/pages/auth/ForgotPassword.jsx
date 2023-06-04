@@ -14,8 +14,8 @@ import useResponsive from "src/hooks/useResponsive";
 import Logo from "src/components/logo";
 import Iconify from "src/components/iconify";
 // sections
-import { LoginForm } from "src/sections/auth/login";
-import ForgotPasswordForm from "src/sections/auth/forgot-password";
+import { LoginForm } from "src/sections/@auth/login";
+import ForgotPasswordForm from "src/sections/@auth/forgot-password";
 
 // ----------------------------------------------------------------------
 

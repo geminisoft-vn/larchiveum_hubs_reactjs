@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Grid, Pagination, Stack } from "@mui/material";
+import qs from "qs";
 
 import Empty from "src/components/empty";
 import Loader from "src/components/loader/Loader";
@@ -16,19 +17,17 @@ const Rooms = ({ ...other }) => {
   const [params, setParams] = useState({
     page: 1,
     pageSize: 999,
-    filters: [
-      {
-        key: "user",
-        operator: "=",
-        value: user.id
+    filters: {
+      user: {
+        id: user.id
       }
-    ]
+    }
   });
 
   const { data: rooms, pagination, isLoading, mutate } = useData(
     `/rooms?page=${params.page}&pageSize=${
       params.pageSize
-    }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
+    }&sort=createdAt|desc&filters=${qs.stringify(params.filters)}`
   );
 
   const { $emit } = useEventBus();
