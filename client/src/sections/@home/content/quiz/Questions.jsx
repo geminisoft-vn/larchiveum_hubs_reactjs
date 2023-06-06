@@ -8,7 +8,7 @@ import Question from "./Question";
 
 const MAX_QUESTION = 10;
 
-const Questions = ({ quizId, defaultValues }) => {
+const Questions = ({ quizId, defaultValues, mutateQuestion }) => {
   const { $emit } = useEventBus();
   const { control } = useFormContext();
 
@@ -34,6 +34,7 @@ const Questions = ({ quizId, defaultValues }) => {
             okCallback: () => {
               QuestionService.delete(questionId).then(() => {
                 remove(questionIndex);
+                mutateQuestion();
               });
             }
           });
@@ -55,6 +56,7 @@ const Questions = ({ quizId, defaultValues }) => {
             handleDeleteQuestion={() => handleDeleteQuestion(index)}
             quizId={quizId}
             defaultValues={defaultValues}
+            mutateQuestion={mutateQuestion}
           />
         ))}
       </Stack>
@@ -66,7 +68,7 @@ const Questions = ({ quizId, defaultValues }) => {
               sx={{
                 alignSelf: "center"
               }}
-              onClick={() => append({ content: "" })}
+              onClick={() => append({ content: "", type: "single" })}
             >
               Add Question
             </Button>

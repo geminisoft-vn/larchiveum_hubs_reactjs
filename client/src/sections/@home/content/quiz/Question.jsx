@@ -15,7 +15,13 @@ import { TrashIcon } from "src/components/iconify";
 import Options from "./Options";
 
 const Question = props => {
-  const { handleDeleteQuestion, questionIndex, quizId, defaultValues } = props;
+  const {
+    handleDeleteQuestion,
+    questionIndex,
+    quizId,
+    defaultValues,
+    mutateQuestion
+  } = props;
 
   const { register, getValues, control } = useFormContext();
 
@@ -76,6 +82,7 @@ const Question = props => {
           questionIndex={questionIndex}
           quizId={quizId}
           defaultValues={defaultValues}
+          mutateQuestion={mutateQuestion}
         />
       </Stack>
     </Paper>

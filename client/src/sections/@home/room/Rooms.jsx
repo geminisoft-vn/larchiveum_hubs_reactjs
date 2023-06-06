@@ -38,9 +38,7 @@ const Rooms = ({ ...other }) => {
       content: "Do you want to open this room?",
       okText: "Open",
       okCallback: () => {
-        RoomService.update(roomId, {
-          closed: false
-        }).then(() => {
+        RoomService.open(roomId).then(() => {
           mutate();
         });
       }
@@ -53,9 +51,7 @@ const Rooms = ({ ...other }) => {
       content: "Do you want to close this room?",
       okText: "Close",
       okCallback: () => {
-        RoomService.update(roomId, {
-          closed: true
-        }).then(() => {
+        RoomService.close(roomId).then(() => {
           mutate();
         });
       }
@@ -68,9 +64,7 @@ const Rooms = ({ ...other }) => {
       content: "Do you want to change public of this room?",
       okText: "Change",
       okCallback: () => {
-        RoomService.update(roomId, {
-          public: !isPublic
-        }).then(() => {
+        RoomService.togglePublic(roomId).then(() => {
           mutate();
         });
       }

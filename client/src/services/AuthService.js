@@ -4,7 +4,7 @@ class AuthService {
   static oAuthGoogle() {
     return request({
       method: "POST",
-      url: `/auth/google/callback`,
+      url: `/auth/google/callback`
     });
   }
 
@@ -12,7 +12,7 @@ class AuthService {
     return request({
       method: "POST",
       url: `/fblogin`,
-      data,
+      data
     });
   }
 
@@ -20,7 +20,7 @@ class AuthService {
     return request({
       method: "POST",
       url: `/nvlogin`,
-      data,
+      data
     });
   }
 
@@ -28,30 +28,30 @@ class AuthService {
     return request({
       method: "POST",
       url: `/kklogin`,
-      data,
+      data
     });
   }
 
   static register(username, email, password) {
     return request({
       method: "POST",
-      url: `/auth/local/register`,
+      url: `/register`,
       data: {
         username,
         email,
-        password,
-      },
+        password
+      }
     });
   }
 
   static login(email, password) {
     return request({
       method: "POST",
-      url: `/auth/local`,
+      url: `/login`,
       data: {
-        identifier: email,
-        password,
-      },
+        email,
+        password
+      }
     });
   }
 
@@ -59,7 +59,7 @@ class AuthService {
     return request({
       method: "POST",
       url: `/users/checkToken`,
-      data: { token },
+      data: { token }
     });
   }
 
@@ -67,7 +67,7 @@ class AuthService {
     return request({
       method: "POST",
       url: `/users/requestResetPassword`,
-      data,
+      data
     });
   }
 
@@ -75,13 +75,13 @@ class AuthService {
     return request({
       method: "POST",
       url: `/users/resetPassword`,
-      data,
+      data
     });
   }
 
   static verifyUser(token) {
     return request.post("/auth/users/verifyUser", {
-      access_token: token,
+      access_token: token
     });
   }
 

@@ -1,7 +1,6 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import {
-  Button,
   FormControlLabel,
   Grid,
   IconButton,
@@ -9,13 +8,14 @@ import {
   Switch,
   TextField
 } from "@mui/material";
+
 import { TrashIcon } from "src/components/iconify";
 
 const Option = props => {
   const {
     questionIndex,
     optionIndex,
-    handleDeleteAnswer,
+    handleDeleteOption,
     handleChangeCorrectAnswer
   } = props;
 
@@ -73,7 +73,7 @@ const Option = props => {
               label="Correct"
             />
 
-            <IconButton onClick={handleDeleteAnswer}>
+            <IconButton onClick={handleDeleteOption}>
               <TrashIcon />
             </IconButton>
           </Stack>

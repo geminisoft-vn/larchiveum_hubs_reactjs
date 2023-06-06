@@ -19,9 +19,7 @@ export const AuthProvider = ({ children }) => {
   const { pathname } = useLocation();
 
   const { data: user, mutate } = useSWR(
-    Cookies.get("__LARCHIVEUM__COOKIES") && pathname.includes("home")
-      ? "/users/me?populate=*"
-      : null,
+    Cookies.get("__LARCHIVEUM__COOKIES") ? "/auth/users/me" : null,
     url => {
       return request
         .get(url, {
@@ -31,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         })
         .then(res => {
           if (res.status === 200) {
-            return res.data;
+            return res.data.data;
           }
           return null;
         });

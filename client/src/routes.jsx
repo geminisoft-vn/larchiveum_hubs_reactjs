@@ -150,7 +150,7 @@ export default function Router() {
           element: <QuizPreviewPage />
         },
         {
-          path: "answering/:questionId",
+          path: "answering",
           element: <AnsweringPage />
         },
 

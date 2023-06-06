@@ -7,7 +7,7 @@ import { OptionService } from "src/services";
 import Option from "./Option";
 
 const Options = props => {
-  const { questionIndex, quizId, defaultValues } = props;
+  const { questionIndex, quizId, defaultValues, mutateQuestion } = props;
 
   const { $emit } = useEventBus();
 
@@ -23,6 +23,7 @@ const Options = props => {
 
   const handleDeleteOption = optionIndex => {
     if (quizId) {
+      console.log({ defaultValues, optionIndex });
       if (
         defaultValues &&
         defaultValues.questions &&
@@ -44,10 +45,13 @@ const Options = props => {
               okCallback: () => {
                 OptionService.delete(optionId).then(() => {
                   remove(optionIndex);
+                  mutateQuestion();
                 });
               }
             });
           }
+        } else {
+          remove(optionIndex);
         }
       }
     } else {
@@ -79,7 +83,7 @@ const Options = props => {
             key={field.id}
             optionIndex={index}
             questionIndex={questionIndex}
-            handleDeleteAnswer={() => handleDeleteOption(index)}
+            handleDeleteOption={() => handleDeleteOption(index)}
             handleChangeCorrectAnswer={handleChangeCorrectOption}
           />
         ))}
@@ -87,7 +91,7 @@ const Options = props => {
       <Button
         variant="outlined"
         sx={{ alignSelf: "center" }}
-        onClick={() => append({ content: "" })}
+        onClick={() => append({ content: "", isCorrect: false })}
       >
         Add Answer
       </Button>

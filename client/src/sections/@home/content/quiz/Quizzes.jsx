@@ -15,17 +15,19 @@ const Quizzes = () => {
   const [params, setParams] = useState({
     page: 1,
     pageSize: 4,
-    filters: {
-      user: {
-        id: user.id
+    filters: [
+      {
+        key: "userId",
+        operator: "=",
+        value: user.id
       }
-    }
+    ]
   });
 
   const { data: quizzes, isLoading, mutate } = useData(
     `/quizzes?page=${params.page}&pageSize=${
       params.pageSize
-    }&sort=createdAt|desc&filters=${qs.stringify(params.filters)}`
+    }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
   );
 
   const { $emit } = useEventBus();

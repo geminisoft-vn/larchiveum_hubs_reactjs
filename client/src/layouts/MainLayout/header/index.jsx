@@ -52,26 +52,26 @@ const Header = ({ onOpenNav }) => {
     {
       title: t("LINK.content"),
       path: "/home/content",
-      requiredType: 3,
+      requiredType: 4,
       target: "_self"
     },
     {
       title: t("LINK.room"),
       path: "/home/room",
-      requiredType: 3,
+      requiredType: 4,
       target: "_self"
     },
 
     {
       title: t("LINK.profile"),
       path: "/home/profile",
-      requiredType: 3,
+      requiredType: 2,
       target: "_self"
     },
     {
       title: t("LINK.user"),
       path: "/home/user",
-      requiredType: 4,
+      requiredType: 5,
       target: "_self"
     }
   ];
@@ -115,8 +115,8 @@ const Header = ({ onOpenNav }) => {
             <Stack direction="row" alignItems="center" spacing={2}>
               {navConfig.map(item => {
                 return (
-                  user.role &&
-                  user.role.id >= item.requiredType && (
+                  user &&
+                  user.type >= item.requiredType && (
                     <Link key={item.title} to={item.path} target={item.target}>
                       <Button
                         variant={
@@ -129,8 +129,8 @@ const Header = ({ onOpenNav }) => {
                   )
                 );
               })}
-              {user.role &&
-                user.role.id >= 4 && (
+              {user &&
+                user.type >= 5 && (
                   <Link
                     to={`${
                       import.meta.env.VITE_APP_ROOT
@@ -142,8 +142,8 @@ const Header = ({ onOpenNav }) => {
                     <Button>Admin</Button>
                   </Link>
                 )}
-              {user.role &&
-                user.role.id >= 4 && (
+              {user &&
+                user.type >= 5 && (
                   <Link
                     to={`${
                       import.meta.env.VITE_APP_ROOT

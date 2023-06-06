@@ -10,38 +10,38 @@ const request = axios.create({
   maxContentLength: Infinity,
   maxBodyLength: Infinity,
   headers: {
-    "Content-Type": "application/json",
-  },
+    "Content-Type": "application/json"
+  }
 });
 
-const onRequest = (config) => {
+const onRequest = config => {
   if (
     config.method.toLowerCase() !== "get" &&
-    !config.url.toLowerCase().includes("auth")
+    config.url.toLowerCase().includes("auth")
   ) {
     if (Cookies.get("__LARCHIVEUM__COOKIES")) {
       config.headers = {
         ...config.headers,
-        Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`,
+        Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`
       };
     }
   }
   if (config.url.toLowerCase().includes("upload")) {
     config.headers = {
       ...config.headers,
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "multipart/form-data"
     };
   }
   return config;
 };
 
-const onRequestError = (error) => {
+const onRequestError = error => {
   return Promise.reject(error);
 };
 
-const onResponse = (response) => {
+const onResponse = response => {
   if (
-    !response.config.url.toLowerCase().includes("auth") &&
+    response.config.url.toLowerCase().includes("auth") &&
     response.config.method.toLowerCase() !== "get" &&
     response.status >= 200 &&
     response.status < 300
@@ -63,7 +63,7 @@ const onResponse = (response) => {
   return response;
 };
 
-const onResponseError = (error) => {
+const onResponseError = error => {
   if (error.response) {
     if (error.response.data) {
       if (error.response.data.error) {

@@ -20,7 +20,9 @@ const RoomFormPage = () => {
   const { t } = useTranslation();
   const { id: roomId } = useParams();
 
-  const { data: scenes, isLoading: isLoadingScenes } = useData("/scenes");
+  const { data: scenes, isLoading: isLoadingScenes } = useData(
+    "/auth/rooms/scenes"
+  );
 
   const { user } = useAuth();
 

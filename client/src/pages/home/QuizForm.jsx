@@ -16,25 +16,26 @@ import { OptionService, QuestionService, QuizService } from "src/services";
 import useSWR from "swr";
 import request from "src/utils/request";
 
-import qs from "qs";
-
 const QuizFormPage = () => {
   const { t } = useTranslation();
   const { id: quizId } = useParams();
   const { user } = useAuth();
 
-  const { data: quiz } = useSWR(quizId ? `/quizzes/${quizId}` : null, url => {
-    return request.get(url).then(res => res.data.data);
-  });
-  const { data: questions } = useData(
+  const { data: quiz, mutate: mutateQuiz } = useSWR(
+    quizId ? `/quizzes/${quizId}` : null,
+    url => {
+      return request.get(url).then(res => res.data.data);
+    }
+  );
+  const { data: questions, mutate: mutateQuestion } = useData(
     quiz
-      ? `/questions?${qs.stringify({
-          filters: {
-            quiz: {
-              id: quiz.id
-            }
+      ? `/questions?filters=${JSON.stringify([
+          {
+            key: "quizId",
+            operator: "=",
+            value: quiz.id
           }
-        })}`
+        ])}`
       : null
   );
 
@@ -69,7 +70,10 @@ const QuizFormPage = () => {
         }
       });
       if (dirtyFields.title || dirtyFields.desc) {
-        QuizService.update(quizId, dataToUpdate);
+        QuizService.update(quizId, dataToUpdate).then(() => {
+          mutateQuiz();
+          mutateQuestion();
+        });
       }
       if (dirtyFields.questions && dirtyFields.questions.length) {
         let filteredQuestions = dirtyFields.questions.map((question, index) => {
@@ -85,12 +89,14 @@ const QuizFormPage = () => {
                   return QuestionService.update(question.id, {
                     content: question.content,
                     type: question.type
-                  });
+                  }).then(() => mutateQuestion());
                 } else {
                   return QuestionService.create({
-                    quizId,
+                    quizId: parseInt(quizId, 10),
                     content: question.content,
                     type: question.type
+                  }).then(() => {
+                    mutateQuestion();
                   });
                 }
               }
@@ -112,20 +118,19 @@ const QuizFormPage = () => {
         if (filteredOptions && filteredOptions.length) {
           Promise.all(
             filteredOptions.map(([questionIdx, optionIdx]) => {
-              console.log({ questionIdx, optionIdx });
               let question = data.questions[questionIdx];
               let option = data.questions[questionIdx].options[optionIdx];
               if (option.id) {
                 return OptionService.update(option.id, {
                   content: option.content,
                   isCorrect: option.isCorrect
-                });
+                }).then(() => mutateQuestion());
               } else {
                 return OptionService.create({
                   questionId: question.id,
                   content: option.content,
                   isCorrect: option.isCorrect
-                });
+                }).then(() => mutateQuestion());
               }
             })
           );
@@ -138,28 +143,35 @@ const QuizFormPage = () => {
         userId: user.id
       }).then(newQuiz => {
         const { id } = newQuiz;
-        Promise.all(
-          data.questions.map(question => {
-            return QuestionService.create({
-              quizId: id,
-              content: question.content,
-              type: question.type
-            });
-          })
-        ).then(questions => {
-          const ids = questions.map(obj => obj.id);
+        if (data.questions && data.questions.length > 0) {
           Promise.all(
-            ids.map((questionId, index) => {
-              return data.questions[index].options.map(option => {
-                return OptionService.create({
-                  questionId,
-                  content: option.content,
-                  isCorrect: option.isCorrect
-                });
+            data.questions.map(question => {
+              return QuestionService.create({
+                quizId: id,
+                content: question.content,
+                type: question.type
               });
             })
-          );
-        });
+          ).then(questions => {
+            const ids = questions.map(obj => obj.id);
+            Promise.all(
+              ids.map((questionId, index) => {
+                if (
+                  data.questions[index].options &&
+                  data.questions[index].options.length > 0
+                ) {
+                  return data.questions[index].options.map(option => {
+                    return OptionService.create({
+                      questionId,
+                      content: option.content,
+                      isCorrect: option.isCorrect
+                    });
+                  });
+                }
+              })
+            );
+          });
+        }
       });
     }
   });
@@ -230,6 +242,7 @@ const QuizFormPage = () => {
         <Questions
           quizId={quizId}
           defaultValues={methods.formState.defaultValues}
+          mutateQuestion={mutateQuestion}
         />
       </Stack>
     </FormProvider>

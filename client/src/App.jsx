@@ -1,24 +1,18 @@
 import { Suspense, useEffect } from "react";
-
-import ThemeProvider from "src/theme";
-
+import { I18nextProvider } from "react-i18next";
+import { BrowserRouter } from "react-router-dom";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-
 import { SnackbarProvider } from "notistack";
-import { SnackbarUtilsConfigurator } from "src/utils/snackbar";
-
-import { AuthProvider } from "src/hooks/useAuth";
+import NProgress from "nprogress";
 
 import Alert from "src/components/Alert";
+import { AuthProvider } from "src/hooks/useAuth";
+import ThemeProvider from "src/theme";
+import { SnackbarUtilsConfigurator } from "src/utils/snackbar";
 
-import Router from "./routes";
-import { BrowserRouter } from "react-router-dom";
-
-import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
-
-import NProgress from "nprogress";
+import Router from "./routes";
 
 const LazyLoad = () => {
   useEffect(() => {
@@ -37,10 +31,10 @@ const App = () => {
     <ThemeProvider>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <SnackbarProvider
-          maxSnack={5}
+          maxSnack={1}
           anchorOrigin={{
             vertical: "top",
-            horizontal: "center",
+            horizontal: "center"
           }}
         >
           <BrowserRouter>
