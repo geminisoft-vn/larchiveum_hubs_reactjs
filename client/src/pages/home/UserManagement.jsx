@@ -31,24 +31,24 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => {
+    return filter(array, _user => {
       if (_user) {
         return _user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1;
       }
     });
   }
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis.map(el => el[0]);
 }
 
 const UserPage = () => {
-  const { data: users } = useSWR("/users?populate=*", (url) => {
+  const { data: users } = useSWR("/auth/users", url => {
     return request
       .get(url, {
         headers: {
-          Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`,
-        },
+          Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`
+        }
       })
-      .then((res) => res.data);
+      .then(res => res.data.data);
   });
 
   const [page, setPage] = useState(0);
@@ -69,9 +69,9 @@ const UserPage = () => {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
+  const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n?.username);
+      const newSelecteds = users.map(n => n?.username);
       setSelected(newSelecteds);
       return;
     }
@@ -100,12 +100,12 @@ const UserPage = () => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = event => {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByName = (event) => {
+  const handleFilterByName = event => {
     setPage(0);
     setFilterName(event.target.value);
   };

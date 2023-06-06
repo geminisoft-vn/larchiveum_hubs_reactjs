@@ -76,14 +76,7 @@ const Users = ({
                 {filteredUsers
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(row => {
-                    const {
-                      id,
-                      username,
-                      role,
-                      blocked,
-                      email,
-                      confirmed
-                    } = row;
+                    const { id, username, type, email, verified } = row;
                     const selectedUser = selected.indexOf(username) !== -1;
 
                     return (
@@ -105,16 +98,14 @@ const Users = ({
 
                         <TableCell align="left">{email}</TableCell>
 
-                        <TableCell align="left">{role.name}</TableCell>
+                        <TableCell align="left">{type}</TableCell>
 
                         <TableCell align="left">
-                          {confirmed ? "Yes" : "No"}
-                        </TableCell>
-
-                        <TableCell align="left">
-                          <Label color={blocked ? "error" : "success"}>
-                            {sentenceCase(blocked ? "Blocked" : "Active")}
-                          </Label>
+                          <Label color={verified ? "success" : "error"}>
+                            {sentenceCase(
+                              verified ? "Verified" : "Not Verified"
+                            )}
+                          </Label>{" "}
                         </TableCell>
 
                         <TableCell>
