@@ -1,34 +1,13 @@
 import request from "src/utils/request";
 
 class AuthService {
-  static oAuthGoogle() {
+  static checkToken(token) {
     return request({
       method: "POST",
-      url: `/auth/google/callback`
-    });
-  }
-
-  static oAuthFacebook(data) {
-    return request({
-      method: "POST",
-      url: `/fblogin`,
-      data
-    });
-  }
-
-  static oAuthNaver(data) {
-    return request({
-      method: "POST",
-      url: `/nvlogin`,
-      data
-    });
-  }
-
-  static oAuthKakao(data) {
-    return request({
-      method: "POST",
-      url: `/kklogin`,
-      data
+      url: "/check-token",
+      data: {
+        token
+      }
     });
   }
 
@@ -52,14 +31,6 @@ class AuthService {
         email,
         password
       }
-    });
-  }
-
-  static checkToken(token) {
-    return request({
-      method: "POST",
-      url: `/users/checkToken`,
-      data: { token }
     });
   }
 
