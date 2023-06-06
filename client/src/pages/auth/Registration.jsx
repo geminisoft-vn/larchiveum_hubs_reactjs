@@ -5,7 +5,7 @@ import {
   Divider,
   Link,
   Stack,
-  Typography,
+  Typography
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -22,8 +22,8 @@ import SignupForm from "src/sections/@auth/signup/SignupForm";
 
 const StyledRoot = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
-    display: "flex",
-  },
+    display: "flex"
+  }
 }));
 
 const StyledSection = styled("div")(({ theme }) => ({
@@ -33,7 +33,7 @@ const StyledSection = styled("div")(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.palette.background.default
 }));
 
 const StyledContent = styled("div")(({ theme }) => ({
@@ -42,44 +42,78 @@ const StyledContent = styled("div")(({ theme }) => ({
   minHeight: "100vh",
   display: "flex",
   justifyContent: "center",
-  flexDirection: "column",
+  flexDirection: "column"
 }));
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+const RegistrationPage = () => {
   return (
     <>
       <StyledRoot>
         <Container maxWidth="sm">
           <StyledContent>
-            <Stack direction="row" spacing={2}>
-              <Button fullWidth size="large" color="inherit" variant="outlined">
-                <Iconify
-                  icon="eva:google-fill"
-                  color="#DF3E30"
-                  width={22}
-                  height={22}
-                />
-              </Button>
-
-              <Button fullWidth size="large" color="inherit" variant="outlined">
-                <Iconify
-                  icon="eva:facebook-fill"
-                  color="#1877F2"
-                  width={22}
-                  height={22}
-                />
-              </Button>
-
-              <Button fullWidth size="large" color="inherit" variant="outlined">
-                <Iconify
-                  icon="eva:twitter-fill"
-                  color="#1C9CEA"
-                  width={22}
-                  height={22}
-                />
-              </Button>
+            <Stack direction="row" justifyContent="center" spacing={2}>
+              <Link to={`${import.meta.env.VITE_API_ROOT}/v1/connect/google`}>
+                <Button
+                  fullWidth
+                  size="large"
+                  color="inherit"
+                  variant="outlined"
+                >
+                  <Iconify
+                    icon="eva:google-fill"
+                    color="#DF3E30"
+                    width={32}
+                    height={32}
+                  />
+                </Button>
+              </Link>
+              <Link to={`${import.meta.env.VITE_API_ROOT}/v1/connect/facebook`}>
+                <Button
+                  fullWidth
+                  size="large"
+                  color="inherit"
+                  variant="outlined"
+                >
+                  <Iconify
+                    icon="eva:facebook-fill"
+                    color="#1877F2"
+                    width={32}
+                    height={32}
+                  />
+                </Button>
+              </Link>
+              <Link to={`${import.meta.env.VITE_API_ROOT}/v1/connect/kakao`}>
+                <Button
+                  fullWidth
+                  size="large"
+                  color="inherit"
+                  variant="outlined"
+                >
+                  <img
+                    src="/assets/icons/kakao.svg"
+                    alt="kakao logo"
+                    width={32}
+                    height={32}
+                  />
+                </Button>
+              </Link>{" "}
+              <Link to={`${import.meta.env.VITE_API_ROOT}/v1/connect/naver`}>
+                <Button
+                  fullWidth
+                  size="large"
+                  color="inherit"
+                  variant="outlined"
+                >
+                  <img
+                    src="/assets/icons/naver.svg"
+                    alt="naver logo"
+                    width={64}
+                    height={64}
+                  />
+                </Button>
+              </Link>
             </Stack>
 
             <Divider sx={{ my: 3 }}>
@@ -94,4 +128,6 @@ export default function LoginPage() {
       </StyledRoot>
     </>
   );
-}
+};
+
+export default RegistrationPage;

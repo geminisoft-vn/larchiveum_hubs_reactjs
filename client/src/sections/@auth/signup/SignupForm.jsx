@@ -10,21 +10,21 @@ import {
   InputAdornment,
   Stack,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 
 // components
 import Iconify from "src/components/iconify";
 import { useAuth } from "src/hooks";
 
-export default function SignupForm() {
+const SignupForm = () => {
   const { signUp, isLoading } = useAuth();
 
   const { control, handleSubmit } = useForm();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = handleSubmit((data) => {
+  const handleLogin = handleSubmit(data => {
     const { username, email, password } = data;
     signUp(username, email, password);
   });
@@ -82,7 +82,7 @@ export default function SignupForm() {
                       />
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
             />
           )}
@@ -112,7 +112,7 @@ export default function SignupForm() {
                       />
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
             />
           )}
@@ -138,4 +138,6 @@ export default function SignupForm() {
       </LoadingButton>
     </>
   );
-}
+};
+
+export default SignupForm;

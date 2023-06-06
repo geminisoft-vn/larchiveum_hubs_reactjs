@@ -1,25 +1,18 @@
 import { Link } from "react-router-dom";
-
+import { Button, Container, Divider, Stack, Typography } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
-import { Container, Typography, Divider, Stack, Button } from "@mui/material";
-// hooks
-import useResponsive from "src/hooks/useResponsive";
-// components
-import Logo from "src/components/logo";
+
 import Iconify from "src/components/iconify";
 // sections
 import { LoginForm } from "src/sections/@auth/login";
-import { useAuth } from "src/hooks";
-
-
 
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
-    display: "flex",
-  },
+    display: "flex"
+  }
 }));
 
 const StyledSection = styled("div")(({ theme }) => ({
@@ -29,7 +22,7 @@ const StyledSection = styled("div")(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.palette.background.default
 }));
 
 const StyledContent = styled("div")(({ theme }) => ({
@@ -38,28 +31,24 @@ const StyledContent = styled("div")(({ theme }) => ({
   minHeight: "100vh",
   display: "flex",
   justifyContent: "center",
-  flexDirection: "column",
+  flexDirection: "column"
 }));
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
-  const { signInWithGoogle } = useAuth();
+const LoginPage = () => {
   return (
     <>
       <StyledRoot>
         <Container maxWidth="sm">
           <StyledContent>
             <Stack direction="row" justifyContent="center" spacing={2}>
-              <Link
-                to={`${import.meta.env.VITE_API_ROOT}/v1/connect/google`}
-              >
+              <Link to={`${import.meta.env.VITE_API_ROOT}/v1/connect/google`}>
                 <Button
                   fullWidth
                   size="large"
                   color="inherit"
                   variant="outlined"
-                  onClick={signInWithGoogle}
                 >
                   <Iconify
                     icon="eva:google-fill"
@@ -69,9 +58,7 @@ export default function LoginPage() {
                   />
                 </Button>
               </Link>
-              <Link
-                to={`${import.meta.env.VITE_API_ROOT}/v1/connect/facebook`}
-              >
+              <Link to={`${import.meta.env.VITE_API_ROOT}/v1/connect/facebook`}>
                 <Button
                   fullWidth
                   size="large"
@@ -86,9 +73,7 @@ export default function LoginPage() {
                   />
                 </Button>
               </Link>
-              <Link
-                to={`${import.meta.env.VITE_API_ROOT}/v1/connect/kakao`}
-              >
+              <Link to={`${import.meta.env.VITE_API_ROOT}/v1/connect/kakao`}>
                 <Button
                   fullWidth
                   size="large"
@@ -103,9 +88,7 @@ export default function LoginPage() {
                   />
                 </Button>
               </Link>{" "}
-              <Link
-                to={`${import.meta.env.VITE_API_ROOT}/v1/connect/naver`}
-              >
+              <Link to={`${import.meta.env.VITE_API_ROOT}/v1/connect/naver`}>
                 <Button
                   fullWidth
                   size="large"
@@ -134,4 +117,6 @@ export default function LoginPage() {
       </StyledRoot>
     </>
   );
-}
+};
+
+export default LoginPage;

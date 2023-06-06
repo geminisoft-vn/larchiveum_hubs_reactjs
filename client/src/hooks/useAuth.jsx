@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     await AuthService.register(username, email, password);
     setIsLoading(false);
-    navigate("/auth/signin");
+    navigate("/auth/verify");
   }, []);
 
   const signOut = useCallback(() => {

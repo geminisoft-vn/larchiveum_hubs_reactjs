@@ -1,39 +1,38 @@
 import { useState } from "react";
-
+import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
 // @mui
 import {
-  Stack,
   Button,
-  IconButton,
-  InputAdornment,
-  TextField,
   Checkbox,
   FormControlLabel,
-  Typography,
+  IconButton,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+
 // components
 import Iconify from "src/components/iconify";
-
-import { Controller, useForm } from "react-hook-form";
 import { useAuth } from "src/hooks";
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+const LoginForm = () => {
   const { signIn, isLoading } = useAuth();
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
       email: "",
-      password: "",
-    },
+      password: ""
+    }
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [shouldRememberMe, setShouldRememberMe] = useState(false);
 
-  const handleLogin = handleSubmit((data) => {
+  const handleLogin = handleSubmit(data => {
     const { email, password } = data;
     signIn(email, password);
   });
@@ -78,7 +77,7 @@ export default function LoginForm() {
                       />
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
             />
           )}
@@ -95,7 +94,7 @@ export default function LoginForm() {
           control={
             <Checkbox
               checked={shouldRememberMe}
-              onChange={(e) => setShouldRememberMe(e.target.checked)}
+              onChange={e => setShouldRememberMe(e.target.checked)}
             />
           }
           label="Remember me"
@@ -124,4 +123,6 @@ export default function LoginForm() {
       </LoadingButton>
     </>
   );
-}
+};
+
+export default LoginForm;

@@ -29,8 +29,10 @@ const VerifyPage = () => {
           justifyContent="space-between"
           sx={{ height: "100%" }}
         >
-          <Typography sx={{ textAlign: "center" }}>
-            Please go to your email and verify your account
+          <Typography
+            sx={{ textAlign: "center", fontSize: "24px", fontStyle: "italic" }}
+          >
+            Please go to your email and verify your account.
           </Typography>
 
           <Divider sx={{ my: 2 }} />
