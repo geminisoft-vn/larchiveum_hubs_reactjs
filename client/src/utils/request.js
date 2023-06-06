@@ -15,10 +15,7 @@ const request = axios.create({
 });
 
 const onRequest = config => {
-  if (
-    config.method.toLowerCase() !== "get" &&
-    config.url.toLowerCase().includes("auth")
-  ) {
+  if (config.url.toLowerCase().includes("auth")) {
     if (Cookies.get("__LARCHIVEUM__COOKIES")) {
       config.headers = {
         ...config.headers,

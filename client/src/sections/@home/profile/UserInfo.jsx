@@ -1,7 +1,6 @@
-import { Grid, Paper, Stack, Button, TextField, Box } from "@mui/material";
-
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { Box, Button, Grid, Paper, Stack, TextField } from "@mui/material";
 
 const UserInfo = ({ control, handleSaveUserInfo }) => {
   const { t } = useTranslation();
@@ -22,13 +21,13 @@ const UserInfo = ({ control, handleSaveUserInfo }) => {
               InputLabelProps={{ shrink: true }}
               onChange={onChange}
               value={value}
-              label={t('LABEL.username')}
+              label={t("LABEL.username")}
             />
           )}
         />
 
         <Button variant="contained" onClick={handleSaveUserInfo}>
-          {t('BUTTON.save')}
+          {t("BUTTON.save")}
         </Button>
       </Stack>
     </Paper>

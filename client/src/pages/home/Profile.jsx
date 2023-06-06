@@ -1,17 +1,29 @@
-import { useState, useEffect } from "react";
-
-import { Grid, Paper, Stack, Button, TextField, Box } from "@mui/material";
-
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Grid } from "@mui/material";
+import * as yup from "yup";
 
-import AvatarPickingModal from "src/sections/@home/profile/AvatarPickingModal";
 import { useAuth, useEventBus } from "src/hooks";
-import UserService from "src/services/UserService";
+import AvatarPickingModal from "src/sections/@home/profile/AvatarPickingModal";
 import AvatarPreview from "src/sections/@home/profile/AvatarPreview";
 import UserInfo from "src/sections/@home/profile/UserInfo";
+import UserService from "src/services/UserService";
 
 const ProfilePage = () => {
-  const { control, reset, handleSubmit } = useForm();
+  const { t } = useTranslation();
+
+  const schema = yup.object().shape({
+    username: yup.string().required(t("ERROR.required"))
+  });
+
+  const { control, reset, handleSubmit } = useForm({
+    defaultValues: {
+      username: ""
+    },
+    resolver: yupResolver(schema)
+  });
 
   const { user } = useAuth();
 
@@ -20,9 +32,8 @@ const ProfilePage = () => {
   const [avatar, setAvatar] = useState();
 
   const loadAvatar = () => {
-    if (user && user.avatarId) {
-      UserService.getAvatar(user.id).then((avatar) => {
-        console.log({ avatar });
+    if (user && user.hubAvatarId) {
+      UserService.getAvatar(user.id).then(avatar => {
         setAvatar(avatar);
       });
     }
@@ -30,23 +41,25 @@ const ProfilePage = () => {
 
   const handleOpenAvatarPickingModal = () => {
     $emit("modal/avatar-picking/open", {
-      defaultAvatar: avatar,
+      defaultAvatar: avatar
     });
   };
 
-  const handleSaveUserInfo = handleSubmit((data) => {
+  const handleSaveUserInfo = handleSubmit(data => {
     UserService.update(user.id, { username: data.username });
   });
 
   useEffect(() => {
     loadAvatar();
+  }, []);
 
+  useEffect(() => {
     let defaultValues = {};
-    if (user) {
+    if (user.id) {
       defaultValues.username = user.username;
       reset({ ...defaultValues });
     }
-  }, [user]);
+  }, []);
 
   return (
     <>
@@ -62,10 +75,13 @@ const ProfilePage = () => {
         </Grid>
       </Grid>
 
-      <AvatarPickingModal defaultAvatar={avatar} setAvatar={setAvatar} />
+      <AvatarPickingModal
+        defaultAvatar={avatar}
+        setAvatar={setAvatar}
+        loadAvatar={loadAvatar}
+      />
     </>
   );
 };
 
-
-export default ProfilePage
+export default ProfilePage;

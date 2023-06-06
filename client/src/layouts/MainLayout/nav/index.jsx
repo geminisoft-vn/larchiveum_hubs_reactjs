@@ -1,29 +1,30 @@
-import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
-
-// @mui
-import { styled, alpha } from "@mui/material/styles";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
+  Avatar,
   Box,
-  Link,
   Button,
   Drawer,
-  Typography,
-  Avatar,
+  Link,
   Stack,
+  Typography
 } from "@mui/material";
+// @mui
+import { alpha, styled } from "@mui/material/styles";
+import PropTypes from "prop-types";
+
 // mock
 import account from "src/_mock/account";
-// hooks
-import useResponsive from "src/hooks/useResponsive";
+import NavSection from "src/components/nav-section";
 // components
 import Scrollbar from "src/components/scrollbar";
-import NavSection from "src/components/nav-section";
+import { useAuth } from "src/hooks";
+// hooks
+import useResponsive from "src/hooks/useResponsive";
+import UserService from "src/services/UserService";
+
 //
 import navConfig from "./config";
-import { useAuth } from "src/hooks";
-import UserService from "src/services/UserService";
-import { useLocation } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -34,17 +35,12 @@ const StyledAccount = styled("div")(({ theme }) => ({
   alignItems: "center",
   padding: theme.spacing(2, 2.5),
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: alpha(theme.palette.grey[500], 0.12),
+  backgroundColor: alpha(theme.palette.grey[500], 0.12)
 }));
 
 // ----------------------------------------------------------------------
 
-Nav.propTypes = {
-  openNav: PropTypes.bool,
-  onCloseNav: PropTypes.func,
-};
-
-export default function Nav({ openNav, onCloseNav }) {
+const Nav = ({ openNav, onCloseNav }) => {
   const { user } = useAuth();
   const { pathname } = useLocation();
 
@@ -55,23 +51,29 @@ export default function Nav({ openNav, onCloseNav }) {
   );
 
   const loadAvatar = () => {
-    if (user && user.avatarId) {
-      UserService.getAvatar(user.id).then((avatar) => {
+    if (user && user.hubAvatarId) {
+      UserService.getAvatar(user.id).then(avatar => {
         setAvatar(avatar?.images?.preview?.url);
       });
     }
   };
 
-  useEffect(() => {
-    if (openNav) {
-      onCloseNav();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  useEffect(
+    () => {
+      if (openNav) {
+        onCloseNav();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [pathname]
+  );
 
-  useEffect(() => {
-    loadAvatar();
-  }, [user]);
+  useEffect(
+    () => {
+      loadAvatar();
+    },
+    [user]
+  );
 
   const renderContent = (
     <Scrollbar
@@ -80,8 +82,8 @@ export default function Nav({ openNav, onCloseNav }) {
         "& .simplebar-content": {
           height: 1,
           display: "flex",
-          flexDirection: "column",
-        },
+          flexDirection: "column"
+        }
       }}
     >
       {/* <Box */}
@@ -126,17 +128,17 @@ export default function Nav({ openNav, onCloseNav }) {
         component="nav"
         sx={{
           flexShrink: { lg: 0 },
-          width: { lg: NAV_WIDTH },
+          width: { lg: NAV_WIDTH }
         }}
       >
         <Drawer
           open={openNav}
           onClose={onCloseNav}
           ModalProps={{
-            keepMounted: false,
+            keepMounted: false
           }}
           PaperProps={{
-            sx: { width: NAV_WIDTH },
+            sx: { width: NAV_WIDTH }
           }}
         >
           {renderContent}
@@ -144,4 +146,11 @@ export default function Nav({ openNav, onCloseNav }) {
       </Box>
     )
   );
-}
+};
+
+Nav.propTypes = {
+  openNav: PropTypes.bool,
+  onCloseNav: PropTypes.func
+};
+
+export default Nav;

@@ -1,27 +1,26 @@
-import { useState, useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  MenuItem,
+  Popover,
+  Stack,
+  Typography
+} from "@mui/material";
 // @mui
 import { alpha } from "@mui/material/styles";
-import {
-  Box,
-  Divider,
-  Typography,
-  Stack,
-  MenuItem,
-  Avatar,
-  IconButton,
-  Popover,
-  Button,
-} from "@mui/material";
 
 import { useAuth } from "src/hooks";
 import UserService from "src/services/UserService";
-import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover() {
+const AccountPopover = () => {
   const { t } = useTranslation();
   const { user, signOut } = useAuth();
 
@@ -31,8 +30,8 @@ export default function AccountPopover() {
   );
 
   const loadAvatar = () => {
-    if (user && user.avatarId) {
-      UserService.getAvatar(user.id).then((avatar) => {
+    if (user && user.hubAvatarId) {
+      UserService.getAvatar(user.id).then(avatar => {
         setAvatar(avatar?.images?.preview?.url);
       });
     }
@@ -43,7 +42,7 @@ export default function AccountPopover() {
     setOpen(false);
   };
 
-  const handleOpen = (event) => {
+  const handleOpen = event => {
     setOpen(event.currentTarget);
   };
 
@@ -70,9 +69,9 @@ export default function AccountPopover() {
                 height: "100%",
                 borderRadius: "50%",
                 position: "absolute",
-                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
-              },
-            }),
+                bgcolor: theme => alpha(theme.palette.grey[900], 0.8)
+              }
+            })
           }}
         >
           <Avatar src={avatar} alt="avatar" />
@@ -80,10 +79,10 @@ export default function AccountPopover() {
       ) : (
         <Stack direction="row" alignItems="center" spacing={1}>
           <Link to="/auth/signup">
-            <Button>{t('BUTTON.register')}</Button>
+            <Button>{t("BUTTON.register")}</Button>
           </Link>
           <Link to="/auth/signin">
-            <Button variant="contained">{t('BUTTON.login')}</Button>
+            <Button variant="contained">{t("BUTTON.login")}</Button>
           </Link>
         </Stack>
       )}
@@ -103,9 +102,9 @@ export default function AccountPopover() {
             width: 180,
             "& .MuiMenuItem-root": {
               typography: "body2",
-              borderRadius: 0.75,
-            },
-          },
+              borderRadius: 0.75
+            }
+          }
         }}
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
@@ -120,9 +119,11 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: "dashed" }} />
 
         <MenuItem onClick={handleSignOut} sx={{ m: 1 }}>
-          {t('BUTTON.logout')}
+          {t("BUTTON.logout")}
         </MenuItem>
       </Popover>
     </>
   );
-}
+};
+
+export default AccountPopover;

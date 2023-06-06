@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-
-import { AvatarService } from "src/services";
-
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Grid,
-  Button,
-} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid
+} from "@mui/material";
+
 import { useAuth, useEventBus } from "src/hooks";
+import { AvatarService } from "src/services";
 import UserService from "src/services/UserService";
 
-const AvatarPickingModal = (props) => {
+const AvatarPickingModal = ({ loadAvatar }) => {
   const { $on } = useEventBus();
 
   const { user } = useAuth();
@@ -26,12 +25,12 @@ const AvatarPickingModal = (props) => {
 
   const handleChangeAvatar = () => {
     UserService.update(user.id, {
-      avatarId: selectedAvatar.id,
-    });
+      avatarId: selectedAvatar.id
+    }).then(() => loadAvatar());
   };
 
   const loadAvatars = () => {
-    AvatarService.getAll().then((avatars) => {
+    AvatarService.getAll().then(avatars => {
       setAvatars(avatars);
     });
   };
@@ -40,7 +39,7 @@ const AvatarPickingModal = (props) => {
     setOpen(false);
   };
 
-  const handleSelectAvatar = (avt) => {
+  const handleSelectAvatar = avt => {
     setSelectedAvatar(avt);
   };
 
@@ -53,13 +52,16 @@ const AvatarPickingModal = (props) => {
     loadAvatars();
   }, []);
 
-  useEffect(() => {
-    $on("modal/avatar-picking/open", ({ defaultAvatar }) => {
-      setOpen(true);
+  useEffect(
+    () => {
+      $on("modal/avatar-picking/open", ({ defaultAvatar }) => {
+        setOpen(true);
 
-      setSelectedAvatar(defaultAvatar);
-    });
-  }, [$on]);
+        setSelectedAvatar(defaultAvatar);
+      });
+    },
+    [$on]
+  );
 
   return (
     <Dialog open={open} onClose={handleCloseModal}>
@@ -67,7 +69,7 @@ const AvatarPickingModal = (props) => {
       <DialogContent>
         <Grid container>
           {avatars &&
-            avatars.map((avt) => (
+            avatars.map(avt => (
               <Grid key={avt.id} item lg={4} md={4} sm={6} xs={12}>
                 <Button
                   variant={

@@ -1,5 +1,5 @@
-import { Paper, Stack, Button, Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Box, Button, Paper, Stack } from "@mui/material";
 
 const AvatarPreview = ({ avatar, handleOpenAvatarPickingModal }) => {
   const { t } = useTranslation();
@@ -17,9 +17,9 @@ const AvatarPreview = ({ avatar, handleOpenAvatarPickingModal }) => {
                 style={{
                   display: "block",
                   width: "100%",
-                  height: "100%",
+                  height: "100%"
                 }}
-                src={avatar.gltfs.avatar}
+                src={avatar && avatar.gltfs && avatar.gltfs.avatar}
                 camera-controls
               />
             )}{" "}
@@ -29,7 +29,7 @@ const AvatarPreview = ({ avatar, handleOpenAvatarPickingModal }) => {
             onClick={handleOpenAvatarPickingModal}
             sx={{ alignSelf: "center" }}
           >
-            {t('BUTTON.change')}
+            {t("BUTTON.change")}
           </Button>
         </Stack>
       </Stack>
