@@ -1,30 +1,40 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-
-import { Stack, TextField, Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-
-import { Link } from "react-router-dom";
-
-import { Editor } from "@tinymce/tinymce-react";
-import { DocumentService, MediaService } from "src/services";
 import { LoadingButton } from "@mui/lab";
-import { useTranslation } from "react-i18next";
+import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Editor } from "@tinymce/tinymce-react";
+import * as yup from "yup";
+
+import { useAuth } from "src/hooks";
+import { DocumentService, MediaService } from "src/services";
 
 const DocumentFormPage = () => {
   const { t } = useTranslation();
   const { id: documentId } = useParams();
+  const { user } = useAuth();
+
+  const schema = yup.object().shape({
+    title: yup.string().required(t(`ERROR.required`))
+  });
 
   const {
     control,
     reset,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm();
+    formState: { isSubmitting, errors }
+  } = useForm({
+    defaultValues: {
+      title: "",
+      desc: ""
+    },
+    resolver: yupResolver(schema)
+  });
 
   const loadDefaultValues = async () => {
     if (documentId) {
@@ -49,12 +59,13 @@ const DocumentFormPage = () => {
       input.setAttribute("accept", "video/*,audio/*");
     }
 
-    input.addEventListener("change", (e) => {
+    input.addEventListener("change", e => {
       const { files } = e.target;
       if (files) {
-        MediaService.upload({ files: files[0] }).then((media) => {
-          callback(import.meta.env.VITE_API_ROOT + media[0].url, {
-            title: media[0].name,
+        MediaService.upload({ files: files[0] }).then(mediaUrl => {
+          console.log({ mediaUrl });
+          callback(mediaUrl, {
+            title: files[0].filename
           });
         });
       }
@@ -63,11 +74,12 @@ const DocumentFormPage = () => {
     input.click();
   };
 
-  const handleSaveDocument = handleSubmit((data) => {
+  const handleSaveDocument = handleSubmit(data => {
     const dataToSave = {
       title: data.title,
       desc: data.desc,
       content: editorData,
+      userId: user.id
     };
 
     if (documentId) {
@@ -79,9 +91,12 @@ const DocumentFormPage = () => {
     }
   });
 
-  useEffect(() => {
-    loadDefaultValues();
-  }, [documentId]);
+  useEffect(
+    () => {
+      loadDefaultValues();
+    },
+    [documentId]
+  );
 
   return (
     <Stack direction="column" spacing={2}>
@@ -111,6 +126,8 @@ const DocumentFormPage = () => {
         render={({ field }) => {
           return (
             <TextField
+              error={Boolean(errors.title)}
+              helperText={errors.title && errors.title.message}
               InputLabelProps={{ shrink: true }}
               label="Title"
               {...field}
@@ -125,6 +142,8 @@ const DocumentFormPage = () => {
         render={({ field }) => {
           return (
             <TextField
+              error={Boolean(errors.desc)}
+              helperText={errors.desc && errors.desc.message}
               label="Description"
               InputLabelProps={{ shrink: true }}
               {...field}
@@ -136,7 +155,7 @@ const DocumentFormPage = () => {
       <Editor
         apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
         value={editorData}
-        onEditorChange={(newValue) => {
+        onEditorChange={newValue => {
           setEditorData(newValue);
         }}
         init={{
@@ -165,12 +184,12 @@ const DocumentFormPage = () => {
             "table",
             "help",
             "wordcount",
-            "autoresize",
+            "autoresize"
           ],
           toolbar:
             "undo redo | casechange blocks | bold italic backcolor | image media file | " +
             "alignleft aligncenter alignright alignjustify | " +
-            "bullist numlist checklist outdent indent | removeformat | code table help",
+            "bullist numlist checklist outdent indent | removeformat | code table help"
         }}
       />
     </Stack>
