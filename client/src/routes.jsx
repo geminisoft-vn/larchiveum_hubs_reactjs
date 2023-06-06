@@ -135,7 +135,7 @@ export default function Router() {
           element: <VerifyPage />
         },
         {
-          path: "connect/:provider/redirect",
+          path: "oauth/redirect",
           element: <OAuthRedirectPage />
         }
       ]

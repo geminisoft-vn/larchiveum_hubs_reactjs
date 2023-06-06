@@ -11,6 +11,17 @@ class AuthService {
     });
   }
 
+  static verify(email, token) {
+    return request({
+      method: "POST",
+      url: "/verify",
+      data: {
+        email,
+        token
+      }
+    });
+  }
+
   static register(username, email, password) {
     return request({
       method: "POST",
@@ -37,7 +48,7 @@ class AuthService {
   static requestResetPassword(data) {
     return request({
       method: "POST",
-      url: `/users/requestResetPassword`,
+      url: `/request-reset-password`,
       data
     });
   }
@@ -45,19 +56,13 @@ class AuthService {
   static resetPassword(data) {
     return request({
       method: "POST",
-      url: `/users/resetPassword`,
+      url: `/reset-password`,
       data
     });
   }
 
-  static verifyUser(token) {
-    return request.post("/auth/users/verifyUser", {
-      access_token: token
-    });
-  }
-
   static reSendVerifyMail(email) {
-    return request.post("/users/reSendVerifyMail", { email });
+    return request.post("/resend-email-verification", { email });
   }
 }
 

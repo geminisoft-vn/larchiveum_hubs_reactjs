@@ -1,27 +1,29 @@
 import React, { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
+import { AuthService } from "src/services";
+
 const CallbackOAuthGoogle = () => {
-  const { search } = useLocation();
-  const params = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch(
-      `${import.meta.env.VITE_API_ROOT}/v1/auth/${
-        params.provider
-      }/callback${search}`
-    )
-      .then(res => {
-        if (res.status === 200) return res.json();
-      })
-      .then(user => {
-        if (user) {
-          Cookies.set("__LARCHIVEUM__COOKIES", user.jwt);
+  const checkToken = () => {
+    const token = searchParams.get("token");
+    if (token) {
+      AuthService.checkToken(token).then(res => {
+        if (res.status === 200) {
+          Cookies.set("__LARCHIVEUM__COOKIES", token);
           navigate("/home/app");
+        } else {
+          navigate("/auth/signin");
         }
       });
+    }
+  };
+
+  useEffect(() => {
+    checkToken();
   }, []);
 
   return <div />;

@@ -16,8 +16,9 @@ const ConfirmationPage = () => {
 
   const checkToken = () => {
     const token = searchParams.get("token");
-    if (token) {
-      AuthService.checkToken(token).then(res => {
+    const email = searchParams.get("email");
+    if (token && email) {
+      AuthService.verify(email, token).then(res => {
         if (res.status === 200) {
           setStatus("success");
           Cookies.set("__LARCHIVEUM__COOKIES", token);
