@@ -7,20 +7,24 @@ import {
   Select,
   Stack,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 
 import { TrashIcon } from "src/components/iconify";
 
 import Options from "./Options";
 
-const Question = props => {
+const Question = (props) => {
   const {
     handleDeleteQuestion,
+    handleSaveQuestionContent,
+    handleSaveQuestionType,
+    handleToggleAllOption,
+    question,
     questionIndex,
     quizId,
     defaultValues,
-    mutateQuestion
+    mutateQuestion,
   } = props;
 
   const { register, getValues, control } = useFormContext();
@@ -38,7 +42,7 @@ const Question = props => {
             variant="outlined"
             endIcon={<TrashIcon />}
             color="error"
-            onClick={handleDeleteQuestion}
+            onClick={() => handleDeleteQuestion(questionIndex)}
           >
             Delete
           </Button>
@@ -52,6 +56,12 @@ const Question = props => {
                 fullWidth
                 {...register(`questions.${questionIndex}.content`)}
                 placeholder="Enter your question"
+                onBlur={() =>
+                  handleSaveQuestionContent(
+                    questionIndex,
+                    getValues(`questions.${questionIndex}.content`)
+                  )
+                }
               />
             </Grid>
             <Grid item xl={4} lg={4} md={4} sm={12} xs={12}>
@@ -66,7 +76,17 @@ const Question = props => {
                     <Select
                       fullWidth
                       {...field}
+                      onChange={(e) => {
+                        field.onChange(e.target.value);
+                        handleToggleAllOption(questionIndex,e.target.value);
+                      }}
                       MenuProps={{ disableScrollLock: true }}
+                      onClose={() =>
+                        handleSaveQuestionType(
+                          questionIndex,
+                          getValues(`questions.${questionIndex}.type`)
+                        )
+                      }
                     >
                       <MenuItem value="single">Single</MenuItem>
                       <MenuItem value="multiple">Multiple</MenuItem>
@@ -80,6 +100,7 @@ const Question = props => {
 
         <Options
           questionIndex={questionIndex}
+          questionId={question.questionId}
           quizId={quizId}
           defaultValues={defaultValues}
           mutateQuestion={mutateQuestion}

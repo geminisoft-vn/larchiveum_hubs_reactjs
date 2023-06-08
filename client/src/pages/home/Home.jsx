@@ -1,12 +1,12 @@
 import { useState } from "react";
-
 // @mui
-import { Grid, Stack, Pagination } from "@mui/material";
-// components
-import { RoomSearch, RoomCard, RoomSort } from "src/sections/@home/app";
-import { useAuth, useData, useEventBus } from "src/hooks";
-import Loader from "src/components/loader/Loader";
+import { Grid, Pagination, Stack } from "@mui/material";
+
 import Empty from "src/components/empty";
+import Loader from "src/components/loader/Loader";
+import { useAuth, useData, useEventBus } from "src/hooks";
+// components
+import { RoomCard, RoomSearch, RoomSort } from "src/sections/@home/app";
 import { ReservationService } from "src/services";
 // ----------------------------------------------------------------------
 
@@ -26,7 +26,9 @@ const AppPage = () => {
   });
 
   const { data: rooms, pagination, isLoading, mutate } = useData(
-    `/rooms?page=${params.page}&pageSize=${params.pageSize}&sort=${params.sort}`
+    `/${user && user.id ? "auth/" : ""}rooms?page=${params.page}&pageSize=${
+      params.pageSize
+    }&sort=${params.sort}`
   );
 
   const handleReservate = roomId => {
@@ -35,7 +37,7 @@ const AppPage = () => {
       content: "Do you want to make reservation of this room?",
       okCallback: () => {
         ReservationService.create({
-          hubRoomId: roomId,
+          roomId,
           userId: user.id
         }).then(() => {
           mutate();

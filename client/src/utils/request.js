@@ -2,8 +2,6 @@ import axios from "axios";
 
 import Cookies from "js-cookie";
 
-import Snackbar, { SnackbarUtilsConfigurator } from "src/utils/snackbar";
-
 const request = axios.create({
   baseURL: `${import.meta.env.VITE_API_ROOT}/v1`,
   timeout: 20000,
@@ -37,26 +35,6 @@ const onRequestError = error => {
 };
 
 const onResponse = response => {
-  if (
-    response.config.url.toLowerCase().includes("auth") &&
-    response.config.method.toLowerCase() !== "get" &&
-    response.status >= 200 &&
-    response.status < 300
-  ) {
-    if (response.config.url.toLowerCase().includes("upload")) {
-      Snackbar.success("Upload Successfully!", { variant: "success" });
-      return response;
-    }
-    if (response.config.method.toLowerCase() === "post") {
-      Snackbar.success("Create Successfully!", { variant: "success" });
-    }
-    if (response.config.method.toLowerCase() === "put") {
-      Snackbar.success("Update Successfully!", { variant: "success" });
-    }
-    if (response.config.method.toLowerCase() === "delete") {
-      Snackbar.success("Delete Successfully!", { variant: "success" });
-    }
-  }
   return response;
 };
 
@@ -65,7 +43,7 @@ const onResponseError = error => {
     if (error.response.data) {
       if (error.response.data.error) {
         if (error.response.data.error.message) {
-          Snackbar.error(error.response.data.error.message);
+          console.error(error.response.data.error.message);
         }
       }
     }

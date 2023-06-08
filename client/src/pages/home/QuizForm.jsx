@@ -23,28 +23,44 @@ const QuizFormPage = () => {
 
   const { data: quiz, mutate: mutateQuiz } = useSWR(
     quizId ? `/quizzes/${quizId}` : null,
-    url => {
-      return request.get(url).then(res => res.data.data);
+    (url) => {
+      return request.get(url).then((res) => res.data.data);
     }
   );
-  const { data: questions, mutate: mutateQuestion } = useData(
+  const { data: questions, mutate: mutateQuestion } = useSWR(
     quiz
       ? `/questions?filters=${JSON.stringify([
           {
             key: "quizId",
             operator: "=",
-            value: quiz.id
-          }
+            value: quiz.id,
+          },
         ])}`
-      : null
+      : null,
+    (url) => {
+      return request.get(url).then((res) => {
+        if (res.data.result === "ok") {
+          // Because Field Array use id as default value so we
+          // have to change to another keyname
+          return res.data.data.map((item) => ({
+            ...item,
+            questionId: item.id,
+            options: item.options.map((option) => ({
+              ...option,
+              optionId: option.id,
+            })),
+          }));
+        }
+      });
+    }
   );
 
   const methods = useForm({
     defaultValues: {
       title: "",
       desc: "",
-      questions: []
-    }
+      questions: [],
+    },
   });
 
   const loadDefaultValues = async () => {
@@ -59,12 +75,12 @@ const QuizFormPage = () => {
     }
   };
 
-  const handleSaveQuiz = methods.handleSubmit(data => {
+  const handleSaveQuiz = methods.handleSubmit((data) => {
     if (quizId) {
       // edit
       const { dirtyFields } = methods.formState;
       const dataToUpdate = {};
-      ["title", "desc"].forEach(item => {
+      ["title", "desc"].forEach((item) => {
         if (dirtyFields[item]) {
           dataToUpdate[item] = data[item];
         }
@@ -75,103 +91,11 @@ const QuizFormPage = () => {
           mutateQuestion();
         });
       }
-      if (dirtyFields.questions && dirtyFields.questions.length) {
-        let filteredQuestions = dirtyFields.questions.map((question, index) => {
-          if (question.content || question.type) return index;
-        });
-
-        if (filteredQuestions && filteredQuestions.length) {
-          Promise.all(
-            filteredQuestions.map(questionIdx => {
-              let question = data.questions[questionIdx];
-              if (question) {
-                if (question.id) {
-                  return QuestionService.update(question.id, {
-                    content: question.content,
-                    type: question.type
-                  }).then(() => mutateQuestion());
-                } else {
-                  return QuestionService.create({
-                    quizId: parseInt(quizId, 10),
-                    content: question.content,
-                    type: question.type
-                  }).then(() => {
-                    mutateQuestion();
-                  });
-                }
-              }
-            })
-          );
-        }
-      }
-      if (dirtyFields.questions?.some(obj => obj.options)) {
-        let filteredOptions = [];
-        dirtyFields.questions.forEach((question, questionIndex) => {
-          if (question.options && question.options.length) {
-            question.options.forEach((option, optionIndex) => {
-              if (option.content || option.isCorrect)
-                filteredOptions.push([questionIndex, optionIndex]);
-            });
-          }
-        });
-
-        if (filteredOptions && filteredOptions.length) {
-          Promise.all(
-            filteredOptions.map(([questionIdx, optionIdx]) => {
-              let question = data.questions[questionIdx];
-              let option = data.questions[questionIdx].options[optionIdx];
-              if (option.id) {
-                return OptionService.update(option.id, {
-                  content: option.content,
-                  isCorrect: option.isCorrect
-                }).then(() => mutateQuestion());
-              } else {
-                return OptionService.create({
-                  questionId: question.id,
-                  content: option.content,
-                  isCorrect: option.isCorrect
-                }).then(() => mutateQuestion());
-              }
-            })
-          );
-        }
-      }
     } else {
       // create
       QuizService.create({
         ...pick(data, ["title", "desc"]),
-        userId: user.id
-      }).then(newQuiz => {
-        const { id } = newQuiz;
-        if (data.questions && data.questions.length > 0) {
-          Promise.all(
-            data.questions.map(question => {
-              return QuestionService.create({
-                quizId: id,
-                content: question.content,
-                type: question.type
-              });
-            })
-          ).then(questions => {
-            const ids = questions.map(obj => obj.id);
-            Promise.all(
-              ids.map((questionId, index) => {
-                if (
-                  data.questions[index].options &&
-                  data.questions[index].options.length > 0
-                ) {
-                  return data.questions[index].options.map(option => {
-                    return OptionService.create({
-                      questionId,
-                      content: option.content,
-                      isCorrect: option.isCorrect
-                    });
-                  });
-                }
-              })
-            );
-          });
-        }
+        userId: user.id,
       });
     }
   });

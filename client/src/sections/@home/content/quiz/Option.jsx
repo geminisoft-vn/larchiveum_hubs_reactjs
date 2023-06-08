@@ -16,26 +16,11 @@ const Option = props => {
     questionIndex,
     optionIndex,
     handleDeleteOption,
-    handleChangeCorrectAnswer
+    handleChangeCorrectAnswer,
+    handleSaveOptionContent,
   } = props;
 
   const { register, control, watch, getValues } = useFormContext();
-
-  useEffect(
-    () => {
-      const subscription = watch((value, { name, type }) => {
-        if (
-          type === "change" &&
-          name.includes("isCorrect") &&
-          getValues(`questions.${questionIndex}.type`) === "single"
-        ) {
-          handleChangeCorrectAnswer(name);
-        }
-      });
-      return () => subscription.unsubscribe();
-    },
-    [watch]
-  );
 
   return (
     <Stack sx={{ px: 2 }}>
@@ -47,6 +32,7 @@ const Option = props => {
             {...register(
               `questions.${questionIndex}.options.${optionIndex}.content`
             )}
+            onBlur={() => handleSaveOptionContent(optionIndex, getValues(`questions.${questionIndex}.options.${optionIndex}.content`))}
           />
         </Grid>
         <Grid item lg={4} md={4} sm={12} xs={12}>
@@ -64,7 +50,10 @@ const Option = props => {
                   control={control}
                   render={({ field }) => (
                     <Switch
-                      onChange={e => field.onChange(e.target.checked)}
+                      onChange={e => {
+                        field.onChange(e.target.checked)
+                        handleChangeCorrectAnswer(optionIndex, e.target.checked)
+                      }}
                       checked={field.value}
                     />
                   )}
@@ -73,7 +62,7 @@ const Option = props => {
               label="Correct"
             />
 
-            <IconButton onClick={handleDeleteOption}>
+            <IconButton onClick={() => handleDeleteOption(optionIndex)}>
               <TrashIcon />
             </IconButton>
           </Stack>

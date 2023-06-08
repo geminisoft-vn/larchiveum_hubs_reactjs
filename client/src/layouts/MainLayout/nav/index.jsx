@@ -72,7 +72,7 @@ const Nav = ({ openNav, onCloseNav }) => {
     () => {
       loadAvatar();
     },
-    [user]
+    []
   );
 
   const renderContent = (

@@ -9,7 +9,6 @@ import NProgress from "nprogress";
 import Alert from "src/components/Alert";
 import { AuthProvider } from "src/hooks/useAuth";
 import ThemeProvider from "src/theme";
-import { SnackbarUtilsConfigurator } from "src/utils/snackbar";
 
 import i18n from "./i18n";
 import Router from "./routes";
@@ -46,7 +45,6 @@ const App = () => {
               </I18nextProvider>
             </AuthProvider>
           </BrowserRouter>
-          <SnackbarUtilsConfigurator />
         </SnackbarProvider>
         <Alert />
       </LocalizationProvider>

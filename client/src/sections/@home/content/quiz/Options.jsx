@@ -6,8 +6,14 @@ import { OptionService } from "src/services";
 
 import Option from "./Option";
 
-const Options = props => {
-  const { questionIndex, quizId, defaultValues, mutateQuestion } = props;
+const Options = (props) => {
+  const {
+    questionIndex,
+    questionId,
+    quizId,
+    defaultValues,
+    mutateQuestion,
+  } = props;
 
   const { $emit } = useEventBus();
 
@@ -17,62 +23,54 @@ const Options = props => {
     control,
     name: `questions.${questionIndex}.options`,
     rules: {
-      maxLength: 10
-    }
+      maxLength: 10,
+    },
   });
 
-  const handleDeleteOption = optionIndex => {
-    if (quizId) {
-      console.log({ defaultValues, optionIndex });
-      if (
-        defaultValues &&
-        defaultValues.questions &&
-        defaultValues.questions.length
-      ) {
-        if (
-          defaultValues.questions[questionIndex].options &&
-          defaultValues.questions[questionIndex].options.length > 0
-        ) {
-          if (!defaultValues.questions[questionIndex].options[optionIndex]) {
-            remove(optionIndex);
-          } else {
-            const optionId =
-              defaultValues.questions[questionIndex].options[optionIndex].id;
-            $emit("alert/open", {
-              title: "Delete Option",
-              content: "Do you want to delete this option?",
-              okText: "Delete",
-              okCallback: () => {
-                OptionService.delete(optionId).then(() => {
-                  remove(optionIndex);
-                  mutateQuestion();
-                });
-              }
-            });
-          }
-        } else {
-          remove(optionIndex);
+  console.log({ fields });
+
+  const handleAddOption = () => {
+    OptionService.create({ questionId }).then((option) => {
+      append({ optionId: option.id, content: "", isCorrect: false });
+    });
+  };
+
+  const handleSaveOptionContent = (optionIndex, content) => {
+    const option = fields[optionIndex];
+    if (!content || option.content === content) return;
+    OptionService.update(option.optionId, { content });
+  };
+
+  const handleChangeCorrectOption = async (optionIndex, isCorrect) => {
+    // if single choice, there's only one correct option
+    // if multiple choice, there's many correct options
+    const _option = fields[optionIndex];
+    await OptionService.update(_option.optionId, { isCorrect });
+    const options = getValues(`questions.${questionIndex}.options`);
+    if (getValues(`questions.${questionIndex}.type`) === "single") {
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].optionId !== _option.optionId) {
+          await OptionService.update(options[i].optionId, { isCorrect: false });
+          update(i, {
+            isCorrect: false,
+          });
         }
       }
-    } else {
-      remove(optionIndex);
     }
   };
 
-  const handleChangeCorrectOption = name => {
-    if (getValues(name)) {
-      const options = getValues(`questions.${questionIndex}.options`);
-      options.forEach((_, index) => {
-        if (name === `questions.${questionIndex}.options.${index}.isCorrect`)
-          return;
-        update(index, {
-          isCorrect: false,
-          content: getValues(
-            `questions.${questionIndex}.options.${index}.content`
-          )
+  const handleDeleteOption = (optionIndex) => {
+    const option = fields[optionIndex];
+    $emit("alert/open", {
+      title: "Delete Option",
+      content: "Do you want to delete this option?",
+      okText: "Delete",
+      okCallback: () => {
+        OptionService.delete(option.optionId).then(() => {
+          remove(optionIndex);
         });
-      });
-    }
+      },
+    });
   };
 
   return (
@@ -83,15 +81,16 @@ const Options = props => {
             key={field.id}
             optionIndex={index}
             questionIndex={questionIndex}
-            handleDeleteOption={() => handleDeleteOption(index)}
+            handleDeleteOption={handleDeleteOption}
             handleChangeCorrectAnswer={handleChangeCorrectOption}
+            handleSaveOptionContent={handleSaveOptionContent}
           />
         ))}
       </Stack>
       <Button
         variant="outlined"
         sx={{ alignSelf: "center" }}
-        onClick={() => append({ content: "", isCorrect: false })}
+        onClick={handleAddOption}
       >
         Add Answer
       </Button>

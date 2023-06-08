@@ -1,17 +1,17 @@
-import PropTypes from "prop-types";
-
 import { Link } from "react-router-dom";
-
 // @mui
 import { Box, List, ListItemText } from "@mui/material";
+import PropTypes from "prop-types";
+
+import { useAuth } from "src/hooks";
+
 //
 import { StyledNavItem, StyledNavItemIcon } from "./styles";
-import { useAuth } from "src/hooks";
 
 // ----------------------------------------------------------------------
 
 NavSection.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.array
 };
 
 export default function NavSection({ data = [], ...other }) {
@@ -23,13 +23,13 @@ export default function NavSection({ data = [], ...other }) {
         <NavItem
           item={{
             title: "Home",
-            path: "/home/app",
+            path: "/home/app"
           }}
         />
         {data.map(
-          (item) =>
-            user.role &&
-            user.role.id >= item.requiredType && (
+          item =>
+            user &&
+            user.type >= item.requiredType && (
               <NavItem key={item.title} item={item} />
             )
         )}
@@ -41,7 +41,7 @@ export default function NavSection({ data = [], ...other }) {
 // ----------------------------------------------------------------------
 
 NavItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object
 };
 
 function NavItem({ item }) {
@@ -55,8 +55,8 @@ function NavItem({ item }) {
         "&.active": {
           color: "text.primary",
           bgcolor: "action.selected",
-          fontWeight: "fontWeightBold",
-        },
+          fontWeight: "fontWeightBold"
+        }
       }}
     >
       <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
