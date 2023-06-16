@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Grid, Stack } from "@mui/material";
+import { useSnackbar } from "notistack";
 import qs from "qs";
 
 import Empty from "src/components/empty";
@@ -11,6 +12,7 @@ import QuizCard from "./QuizCard";
 
 const Quizzes = () => {
   const { user } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [params, setParams] = useState({
     page: 1,
@@ -38,9 +40,16 @@ const Quizzes = () => {
       content: "Do you want to delete this quiz?",
       okText: "Delete",
       okCallback: () => {
-        QuizService.delete(quizId).then(() => {
-          mutate("/quizzes");
-        });
+        QuizService.delete(quizId)
+          .then(() => {
+            mutate("/quizzes");
+          })
+          .then(() => {
+            enqueueSnackbar("Successfully!", { variant: "success" });
+          })
+          .catch(() => {
+            enqueueSnackbar("Failed!", { variant: "error" });
+          });
       }
     });
   };

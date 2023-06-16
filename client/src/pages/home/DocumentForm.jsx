@@ -13,11 +13,13 @@ import * as yup from "yup";
 
 import { useAuth } from "src/hooks";
 import { DocumentService, MediaService } from "src/services";
+import { useSnackbar } from "notistack";
 
 const DocumentFormPage = () => {
   const { t } = useTranslation();
   const { id: documentId } = useParams();
   const { user } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
   const schema = yup.object().shape({
     title: yup.string().required(t(`ERROR.required`))
@@ -62,12 +64,19 @@ const DocumentFormPage = () => {
     input.addEventListener("change", e => {
       const { files } = e.target;
       if (files) {
-        MediaService.upload({ files: files[0] }).then(mediaUrl => {
-          console.log({ mediaUrl });
-          callback(mediaUrl, {
-            title: files[0].filename
+        MediaService.upload({ files: files[0] })
+          .then(mediaUrl => {
+            enqueueSnackbar("Upload Successfully!", { variant: "success" });
+            return mediaUrl;
+          })
+          .then(mediaUrl => {
+            callback(mediaUrl, {
+              title: files[0].filename
+            });
+          })
+          .catch(() => {
+            enqueueSnackbar("Upload Failed!", { variant: "error" });
           });
-        });
       }
     });
 
@@ -84,10 +93,22 @@ const DocumentFormPage = () => {
 
     if (documentId) {
       // edit
-      DocumentService.update(documentId, dataToSave);
+      DocumentService.update(documentId, dataToSave)
+        .then(() => {
+          enqueueSnackbar("Successfully!", { variant: "success" });
+        })
+        .catch(() => {
+          enqueueSnackbar("Failed!", { variant: "error" });
+        });
     } else {
       // create
-      DocumentService.create(dataToSave);
+      DocumentService.create(dataToSave)
+        .then(() => {
+          enqueueSnackbar("Successfully!", { variant: "success" });
+        })
+        .catch(() => {
+          enqueueSnackbar("Failed!", { variant: "error" });
+        });
     }
   });
 

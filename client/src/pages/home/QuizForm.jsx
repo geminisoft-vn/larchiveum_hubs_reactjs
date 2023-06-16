@@ -15,16 +15,18 @@ import { OptionService, QuestionService, QuizService } from "src/services";
 
 import useSWR from "swr";
 import request from "src/utils/request";
+import { useSnackbar } from "notistack";
 
 const QuizFormPage = () => {
   const { t } = useTranslation();
   const { id: quizId } = useParams();
   const { user } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { data: quiz, mutate: mutateQuiz } = useSWR(
     quizId ? `/quizzes/${quizId}` : null,
-    (url) => {
-      return request.get(url).then((res) => res.data.data);
+    url => {
+      return request.get(url).then(res => res.data.data);
     }
   );
   const { data: questions, mutate: mutateQuestion } = useSWR(
@@ -33,22 +35,22 @@ const QuizFormPage = () => {
           {
             key: "quizId",
             operator: "=",
-            value: quiz.id,
-          },
+            value: quiz.id
+          }
         ])}`
       : null,
-    (url) => {
-      return request.get(url).then((res) => {
+    url => {
+      return request.get(url).then(res => {
         if (res.data.result === "ok") {
           // Because Field Array use id as default value so we
           // have to change to another keyname
-          return res.data.data.map((item) => ({
+          return res.data.data.map(item => ({
             ...item,
             questionId: item.id,
-            options: item.options.map((option) => ({
+            options: item.options.map(option => ({
               ...option,
-              optionId: option.id,
-            })),
+              optionId: option.id
+            }))
           }));
         }
       });
@@ -59,8 +61,8 @@ const QuizFormPage = () => {
     defaultValues: {
       title: "",
       desc: "",
-      questions: [],
-    },
+      questions: []
+    }
   });
 
   const loadDefaultValues = async () => {
@@ -75,28 +77,42 @@ const QuizFormPage = () => {
     }
   };
 
-  const handleSaveQuiz = methods.handleSubmit((data) => {
+  const handleSaveQuiz = methods.handleSubmit(data => {
     if (quizId) {
       // edit
       const { dirtyFields } = methods.formState;
       const dataToUpdate = {};
-      ["title", "desc"].forEach((item) => {
+      ["title", "desc"].forEach(item => {
         if (dirtyFields[item]) {
           dataToUpdate[item] = data[item];
         }
       });
+
       if (dirtyFields.title || dirtyFields.desc) {
-        QuizService.update(quizId, dataToUpdate).then(() => {
-          mutateQuiz();
-          mutateQuestion();
-        });
+        QuizService.update(quizId, dataToUpdate)
+          .then(() => {
+            mutateQuiz();
+            mutateQuestion();
+          })
+          .then(() => {
+            enqueueSnackbar("Successfully!", { variant: "success" });
+          })
+          .catch(() => {
+            enqueueSnackbar("Failed!", { variant: "error" });
+          });
       }
     } else {
       // create
       QuizService.create({
         ...pick(data, ["title", "desc"]),
-        userId: user.id,
-      });
+        userId: user.id
+      })
+        .then(() => {
+          enqueueSnackbar("Successfully!", { variant: "success" });
+        })
+        .catch(() => {
+          enqueueSnackbar("Failed!", { variant: "error" });
+        });
     }
   });
 

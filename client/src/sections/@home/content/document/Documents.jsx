@@ -7,10 +7,12 @@ import { useAuth, useData, useEventBus } from "src/hooks";
 import { DocumentService } from "src/services";
 
 import DocumentCard from "./DocumentCard";
+import { useSnackbar } from "notistack";
 
 const Documents = () => {
   const { $emit } = useEventBus();
   const { user } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [params, setParams] = useState({
     page: 1,
@@ -36,9 +38,16 @@ const Documents = () => {
       content: "Do you want to delete this document?",
       okText: "Delete",
       okCallback: () => {
-        DocumentService.delete(documentId).then(() => {
-          mutate("/documents");
-        });
+        DocumentService.delete(documentId)
+          .then(() => {
+            mutate("/documents");
+          })
+          .then(() => {
+            enqueueSnackbar("Successfully!", { variant: "success" });
+          })
+          .catch(() => {
+            enqueueSnackbar("Failed!", { variant: "error" });
+          });
       }
     });
   };
