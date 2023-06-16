@@ -87,7 +87,7 @@ const RoomCard = ({
                 ~ {endDate ? moment(endDate).format("DD/MM/YYYY") : "Not Set"}
               </Button>
               <Button startIcon={<GroupRoundedIcon />} disabled>
-                {reservationCount}/{maxSize}
+                {reservationCount || 0}/{maxSize}
               </Button>
               <FormControlLabel
                 control={
