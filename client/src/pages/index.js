@@ -17,7 +17,7 @@ const VerifyPage = lazy(() => import("./auth/Verification"));
 const ForgotPasswordPage = lazy(() => import("./auth/ForgotPassword"));
 const OAuthRedirectPage = lazy(() => import("./auth/OAuthRedirect"));
 const ConfirmationPage = lazy(() => import("./auth/Confirmation"));
-// const ResetPasswordPage = lazy(() => import("./auth/ResetPassword"));
+const ResetPasswordPage = lazy(() => import("./auth/ResetPassword"));
 
 export {
   HomePage,
@@ -33,5 +33,6 @@ export {
   UserManagamentPage,
   VerifyPage,
   OAuthRedirectPage,
-  ConfirmationPage
+  ConfirmationPage,
+  ResetPasswordPage
 };

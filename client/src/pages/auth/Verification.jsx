@@ -32,7 +32,7 @@ const VerifyPage = () => {
           <Typography
             sx={{ textAlign: "center", fontSize: "24px", fontStyle: "italic" }}
           >
-            Please go to your email and verify your account.
+            Please go to your email.
           </Typography>
 
           <Divider sx={{ my: 2 }} />

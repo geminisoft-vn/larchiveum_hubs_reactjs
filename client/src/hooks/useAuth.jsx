@@ -16,7 +16,6 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   const { data: user, mutate } = useSWR(
     Cookies.get("__LARCHIVEUM__COOKIES") ? "/auth/users/me" : null,
@@ -37,42 +36,82 @@ export const AuthProvider = ({ children }) => {
   );
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const signIn = useCallback(async (email, password) => {
+  const signIn = useCallback((email, password) => {
     setIsLoading(true);
-    const res = await AuthService.login(email, password);
-    Cookies.set("__LARCHIVEUM__COOKIES", res.data.jwt);
-    setIsLoading(false);
-    mutate();
-    navigate("/home/app");
+    AuthService.login(email, password)
+      .then(res => {
+        Cookies.set("__LARCHIVEUM__COOKIES", res.data.jwt);
+        mutate();
+        navigate("/home/app");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
-  const signInWithGoogle = useCallback(async () => {
+  const retrievePassword = useCallback(async email => {
     setIsLoading(true);
-    const res = await AuthService.oAuthGoogle();
+    AuthService.requestResetPassword(email)
+      .then(res => {
+        if (res.status === 200) {
+          setIsSuccess(true);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  const resetPassword = useCallback(async (token, password) => {
+    setIsLoading(true);
+    AuthService.resetPassword(token, password)
+      .then(res => {
+        if (res.status === 200) {
+          navigate("/auth/signin");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const signUp = useCallback(async (username, email, password) => {
     setIsLoading(true);
-    await AuthService.register(username, email, password);
-    setIsLoading(false);
-    navigate("/auth/verify");
+    AuthService.register(username, email, password)
+      .then(res => {
+        navigate("/auth/verify");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
-  const signOut = useCallback(() => {
-    Cookies.remove("__LARCHIVEUM__COOKIES");
-    navigate("/home/app");
-    window.open(`${import.meta.env.VITE_APP_ROOT}?action=signout`, "_blank");
-  }, []);
+  const signOut = useCallback(
+    () => {
+      Cookies.remove("__LARCHIVEUM__COOKIES");
+      navigate("/home/app");
+      if (user && user.type >= 4) {
+        window.open(
+          `${import.meta.env.VITE_APP_ROOT}?action=signout`,
+          "_blank"
+        );
+      }
+    },
+    [user]
+  );
 
   const memoedValue = useMemo(
     () => ({
       signIn,
-      signInWithGoogle,
       signOut,
       signUp,
+      retrievePassword,
+      resetPassword,
       isLoading,
+      isSuccess,
       user
     }),
     [user, isLoading, error]

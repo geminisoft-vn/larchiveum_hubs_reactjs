@@ -45,19 +45,22 @@ class AuthService {
     });
   }
 
-  static requestResetPassword(data) {
+  static requestResetPassword(email) {
     return request({
       method: "POST",
       url: `/request-reset-password`,
-      data
+      data: { email }
     });
   }
 
-  static resetPassword(data) {
+  static resetPassword(token, password) {
     return request({
       method: "POST",
       url: `/reset-password`,
-      data
+      data: {
+        token,
+        password
+      }
     });
   }
 

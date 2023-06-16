@@ -1,22 +1,8 @@
 // @mui
-import {
-  Button,
-  Container,
-  Divider,
-  Link,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import Iconify from "src/components/iconify";
-// components
-import Logo from "src/components/logo";
-// hooks
-import useResponsive from "src/hooks/useResponsive";
-import ForgotPasswordForm from "src/sections/@auth/forgot-password";
-// sections
-import { LoginForm } from "src/sections/@auth/login";
+import ResetPasswordForm from "src/sections/@auth/reset-password";
 
 // ----------------------------------------------------------------------
 
@@ -47,16 +33,16 @@ const StyledContent = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const ForgotPasswordPage = () => {
+const ResetPasswordPage = () => {
   return (
     <>
       <StyledRoot>
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h3" sx={{ textAlign: "center", mb: 2 }}>
-              Retrieve Password
+              Reset Password
             </Typography>
-            <ForgotPasswordForm />
+            <ResetPasswordForm />
           </StyledContent>
         </Container>
       </StyledRoot>
@@ -64,4 +50,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ResetPasswordPage;

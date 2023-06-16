@@ -16,6 +16,7 @@ import {
   ProfilePage,
   QuizFormPage,
   RegistrationPage,
+  ResetPasswordPage,
   RoomFormPage,
   RoomManagementPage,
   UserManagamentPage,
@@ -118,10 +119,10 @@ export default function Router() {
           path: "forgot-password",
           element: <ForgotPasswordPage />
         },
-        // {
-        //   path: "reset_password",
-        //   element: <ResetPasswordPage />,
-        // },
+        {
+          path: "reset-password",
+          element: <ResetPasswordPage />
+        },
         {
           path: "confirmation",
           element: <ConfirmationPage />
