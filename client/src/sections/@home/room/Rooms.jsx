@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Grid, Pagination, Stack } from "@mui/material";
+import { useSnackbar } from "notistack";
 import qs from "qs";
 
 import Empty from "src/components/empty";
@@ -13,6 +14,7 @@ import RoomCard from "./RoomCard";
 
 const Rooms = ({ ...other }) => {
   const { user } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [params, setParams] = useState({
     page: 1,
@@ -38,9 +40,16 @@ const Rooms = ({ ...other }) => {
       content: "Do you want to open this room?",
       okText: "Open",
       okCallback: () => {
-        RoomService.open(roomId).then(() => {
-          mutate();
-        });
+        RoomService.open(roomId)
+          .then(() => {
+            mutate();
+          })
+          .then(() => {
+            enqueueSnackbar("Successfully!", { variant: "success" });
+          })
+          .catch(() => {
+            enqueueSnackbar("Failed!", { variant: "error" });
+          });
       }
     });
   };
@@ -51,9 +60,16 @@ const Rooms = ({ ...other }) => {
       content: "Do you want to close this room?",
       okText: "Close",
       okCallback: () => {
-        RoomService.close(roomId).then(() => {
-          mutate();
-        });
+        RoomService.close(roomId)
+          .then(() => {
+            mutate();
+          })
+          .then(() => {
+            enqueueSnackbar("Successfully!", { variant: "success" });
+          })
+          .catch(() => {
+            enqueueSnackbar("Failed!", { variant: "error" });
+          });
       }
     });
   };
@@ -64,9 +80,16 @@ const Rooms = ({ ...other }) => {
       content: "Do you want to change public of this room?",
       okText: "Change",
       okCallback: () => {
-        RoomService.togglePublic(roomId).then(() => {
-          mutate();
-        });
+        RoomService.togglePublic(roomId)
+          .then(() => {
+            mutate();
+          })
+          .then(() => {
+            enqueueSnackbar("Successfully!", { variant: "success" });
+          })
+          .catch(() => {
+            enqueueSnackbar("Failed!", { variant: "error" });
+          });
       }
     });
   };
