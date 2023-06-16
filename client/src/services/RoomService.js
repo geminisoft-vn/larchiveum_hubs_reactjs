@@ -1,8 +1,12 @@
+import Cookies from "js-cookie";
+
 import request from "src/utils/request";
 
 class RoomService {
   static getOne(id) {
-    return request.get(`/rooms/${id}`).then(res => res.data.data);
+    return request
+      .get(`/${Cookies.get("__LARCHIVEUM__COOKIES") ? "auth/" : ""}rooms/${id}`)
+      .then(res => res.data.data);
   }
   static create(data) {
     return request.post("/auth/rooms", data).then(res => res.data.data);

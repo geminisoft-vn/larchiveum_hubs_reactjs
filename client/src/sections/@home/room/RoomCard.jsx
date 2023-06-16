@@ -1,9 +1,12 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
+import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 import {
   Box,
   Button,
@@ -68,7 +71,7 @@ const RoomCard = ({
             sx={{ height: "100%" }}
           >
             <Stack direction="column" alignItems="flex-start">
-              <Typography noWrap variant="h4" sx={{ alignSelf: "center" }}>
+              <Typography variant="h4" sx={{ alignSelf: "center" }}>
                 {name}
               </Typography>
               <Link
@@ -110,6 +113,7 @@ const RoomCard = ({
               <Link to={`/home/room-form/${room.id}`}>
                 <Button
                   variant="contained"
+                  endIcon={<EditRoundedIcon />}
                   sx={{
                     background: yellow[700],
                     "&.MuiButtonBase-root:hover": {
@@ -123,6 +127,7 @@ const RoomCard = ({
               {closed ? (
                 <Button
                   variant="contained"
+                  endIcon={<LockOpenRoundedIcon />}
                   sx={{
                     background: green[700],
                     "&.MuiButtonBase-root:hover": {
@@ -137,6 +142,7 @@ const RoomCard = ({
                 <Button
                   variant="contained"
                   onClick={() => handleCloseRoom(room.id)}
+                  endIcon={<BlockRoundedIcon />}
                   sx={{
                     background: indigo[700],
                     "&.MuiButtonBase-root:hover": {

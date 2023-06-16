@@ -19,7 +19,7 @@ const Rooms = ({ ...other }) => {
     pageSize: 999,
     filters: {
       user: {
-        id: user.id
+        id: user?.id
       }
     }
   });

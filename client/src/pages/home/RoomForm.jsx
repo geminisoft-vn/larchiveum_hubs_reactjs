@@ -46,8 +46,7 @@ const RoomFormPage = () => {
     description: yup
       .string()
       .min(1, t(`ERROR.invalid_room_desc_length`))
-      .max(1000, t(`ERROR.invalid_room_desc_length`))
-      .required(t(`ERROR.required`)),
+      .max(1000, t(`ERROR.invalid_room_desc_length`)),
     maxSize: yup
       .number()
       .transform(v => parseInt(v, 10))
