@@ -52,8 +52,9 @@ export default class AuthChannel {
                 const { id } = decodedToken;
                 await axios({
                   method: "PUT",
-                  url: `https://api.larchiveum.link/v1/users/${id}`,
+                  url: `https://api.larchiveum.link/v1/verify-hub/`,
                   data: {
+                    email: payload.email,
                     token
                   },
                   headers: {
