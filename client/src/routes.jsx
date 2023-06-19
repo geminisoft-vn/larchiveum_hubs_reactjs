@@ -9,12 +9,14 @@ import {
   ConfirmationPage,
   ContentPage,
   DocumentFormPage,
+  DocumentViewerPage,
   ForgotPasswordPage,
   HomePage,
   LoginPage,
   OAuthRedirectPage,
   ProfilePage,
   QuizFormPage,
+  QuizGamePage,
   RegistrationPage,
   ResetPasswordPage,
   RoomFormPage,
@@ -136,6 +138,14 @@ export default function Router() {
           element: <OAuthRedirectPage />
         }
       ]
+    },
+    {
+      path: "/quiz-game/:id",
+      element: <QuizGamePage />
+    },
+    {
+      path: "/document-viewer/:id",
+      element: <DocumentViewerPage />
     },
 
     {

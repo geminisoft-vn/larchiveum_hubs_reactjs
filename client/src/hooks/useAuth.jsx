@@ -16,9 +16,14 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const { data: user, mutate } = useSWR(
-    Cookies.get("__LARCHIVEUM__COOKIES") ? "/auth/users/me" : null,
+    Cookies.get("__LARCHIVEUM__COOKIES") &&
+    !pathname.includes("quiz-game") &&
+    !pathname.includes("document-viewer")
+      ? "/auth/users/me"
+      : null,
     url => {
       return request
         .get(url, {
