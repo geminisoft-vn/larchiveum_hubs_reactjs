@@ -9,11 +9,11 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { LoadingButton } from "@mui/lab";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { Editor } from "@tinymce/tinymce-react";
+import { useSnackbar } from "notistack";
 import * as yup from "yup";
 
 import { useAuth } from "src/hooks";
 import { DocumentService, MediaService } from "src/services";
-import { useSnackbar } from "notistack";
 
 const DocumentFormPage = () => {
   const { t } = useTranslation();

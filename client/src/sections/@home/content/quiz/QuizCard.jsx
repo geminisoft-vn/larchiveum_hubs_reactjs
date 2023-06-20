@@ -24,7 +24,16 @@ const QuizCard = ({ quiz, handleDeleteQuiz }) => {
       <Paper elevation={4}>
         <Card sx={{ minWidth: 256 }}>
           <CardContent>
-            <Typography variant="h3">{title}</Typography>
+            {title ? (
+              <Typography variant="h3">{title}</Typography>
+            ) : (
+              <Typography
+                variant="h3"
+                sx={{ color: "#999", userSelect: "none !important" }}
+              >
+                Untitled
+              </Typography>
+            )}
 
             <Typography variant="body2">{desc}</Typography>
           </CardContent>

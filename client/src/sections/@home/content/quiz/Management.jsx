@@ -1,32 +1,37 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, Stack } from "@mui/material";
 
 import Iconify from "src/components/iconify";
+import { QuizService } from "src/services";
 
 import Quizzes from "./Quizzes";
 
 const Management = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const handleAddNewQuiz = () => {
+    QuizService.create().then(quiz => {
+      if (quiz && quiz.id) {
+        navigate(`/home/quiz-form/${quiz.id}`);
+      }
+    });
+  };
+
   return (
     <Stack direction="column" spacing={2}>
-      <Link
-        to={`/home/quiz-form`}
-        style={{
-          alignSelf: "flex-start",
+      <Button
+        variant="contained"
+        startIcon={<Iconify icon="eva:plus-fill" />}
+        onClick={handleAddNewQuiz}
+        sx={{
+          alignSelf: "flex-start"
         }}
       >
-        <Button
-          variant="contained"
-          startIcon={<Iconify icon="eva:plus-fill" />}
-          sx={{
-            alignSelf: "flex-end",
-          }}
-        >
-          {t("BUTTON.add")}
-        </Button>
-      </Link>
+        {t("BUTTON.add")}
+      </Button>
 
       <Quizzes />
     </Stack>

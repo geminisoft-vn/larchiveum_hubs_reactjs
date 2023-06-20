@@ -3,11 +3,12 @@ import React, { useEffect } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { parseInt, pick } from "lodash";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useAuth, useData } from "src/hooks";
 import { Questions } from "src/sections/@home/content/quiz";
@@ -19,6 +20,7 @@ import { useSnackbar } from "notistack";
 
 const QuizFormPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { id: quizId } = useParams();
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
@@ -57,12 +59,18 @@ const QuizFormPage = () => {
     }
   );
 
+  const schema = yup.object().shape({
+    title: yup.string().required(t(`ERROR.required`))
+  });
+
   const methods = useForm({
+    mode: "onChange",
     defaultValues: {
       title: "",
       desc: "",
       questions: []
-    }
+    },
+    resolver: yupResolver(schema)
   });
 
   const loadDefaultValues = async () => {
@@ -77,44 +85,35 @@ const QuizFormPage = () => {
     }
   };
 
-  const handleSaveQuiz = methods.handleSubmit(data => {
-    if (quizId) {
-      // edit
-      const { dirtyFields } = methods.formState;
-      const dataToUpdate = {};
-      ["title", "desc"].forEach(item => {
-        if (dirtyFields[item]) {
-          dataToUpdate[item] = data[item];
-        }
-      });
-
-      if (dirtyFields.title || dirtyFields.desc) {
-        QuizService.update(quizId, dataToUpdate)
-          .then(() => {
-            mutateQuiz();
-            mutateQuestion();
-          })
-          .then(() => {
-            enqueueSnackbar("Successfully!", { variant: "success" });
-          })
-          .catch(() => {
-            enqueueSnackbar("Failed!", { variant: "error" });
-          });
-      }
-    } else {
-      // create
-      QuizService.create({
-        ...pick(data, ["title", "desc"]),
-        userId: user.id
-      })
-        .then(() => {
-          enqueueSnackbar("Successfully!", { variant: "success" });
-        })
-        .catch(() => {
-          enqueueSnackbar("Failed!", { variant: "error" });
-        });
+  const handleSaveQuizTitle = async newTitle => {
+    if (!quizId) return;
+    if (!newTitle) {
+      await methods.trigger("title");
+      return;
     }
-  });
+    if (!methods.formState.dirtyFields["title"]) return;
+    QuizService.update(quizId, { title: newTitle })
+      .then(() => {
+        mutateQuiz();
+        mutateQuestion();
+      })
+      .then(() => {
+        enqueueSnackbar("Successfully!", { variant: "success" });
+      })
+      .catch(() => {
+        enqueueSnackbar("Failed!", { variant: "error" });
+      });
+  };
+
+  const handleSaveQuizDesc = () => {};
+
+  const handleGoBack = () => {
+    if (!methods.getValues("title")) {
+      methods.trigger("title", { shouldFocus: true });
+      return;
+    }
+    navigate("/home/content?tab=0");
+  };
 
   useEffect(
     () => {
@@ -122,6 +121,8 @@ const QuizFormPage = () => {
     },
     [quiz, questions]
   );
+
+  console.log(methods.formState.errors);
 
   return (
     <FormProvider {...methods}>
@@ -131,20 +132,19 @@ const QuizFormPage = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Link to="/home/content?tab=0">
-            <Button variant="contained" startIcon={<ArrowBackRoundedIcon />}>
-              {t("BUTTON.back")}
-            </Button>
-          </Link>
+          <Button
+            variant="contained"
+            startIcon={<ArrowBackRoundedIcon />}
+            onClick={handleGoBack}
+          >
+            {t("BUTTON.back")}
+          </Button>
+
           <Typography variant="h6" sx={{ textAlign: "center" }}>
             {quizId ? "Edit" : "Create"} Quiz
           </Typography>
 
-          <Button
-            variant="contained"
-            endIcon={<SaveRoundedIcon />}
-            onClick={handleSaveQuiz}
-          >
+          <Button variant="contained" endIcon={<SaveRoundedIcon />}>
             {t("BUTTON.save")}
           </Button>
         </Stack>
@@ -155,10 +155,17 @@ const QuizFormPage = () => {
           render={({ field }) => {
             return (
               <TextField
+                error={Boolean(methods.formState.errors.title)}
+                helperText={
+                  methods.formState.errors &&
+                  methods.formState.errors.title &&
+                  methods.formState.errors.title.message
+                }
                 label="Title"
                 InputLabelProps={{ shrink: true }}
                 placeholder="Enter quiz's title"
                 {...field}
+                onBlur={() => handleSaveQuizTitle(methods.getValues("title"))}
               />
             );
           }}
