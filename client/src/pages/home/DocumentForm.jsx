@@ -2,24 +2,36 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { LoadingButton } from "@mui/lab";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { Editor } from "@tinymce/tinymce-react";
 import { useSnackbar } from "notistack";
+import useSWR from "swr";
 import * as yup from "yup";
 
-import { useAuth } from "src/hooks";
+import { useAuth, useEventBus } from "src/hooks";
 import { DocumentService, MediaService } from "src/services";
+import request from "src/utils/request";
 
 const DocumentFormPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { $emit } = useEventBus();
+  const { enqueueSnackbar } = useSnackbar();
   const { id: documentId } = useParams();
   const { user } = useAuth();
-  const { enqueueSnackbar } = useSnackbar();
+
+  const { data: document, mutate } = useSWR(
+    documentId ? `/documents/${documentId}` : null,
+    url => {
+      return request.get(url).then(res => res.data.data);
+    }
+  );
 
   const schema = yup.object().shape({
     title: yup.string().required(t(`ERROR.required`))
@@ -28,8 +40,9 @@ const DocumentFormPage = () => {
   const {
     control,
     reset,
-    handleSubmit,
-    formState: { isSubmitting, errors }
+    trigger,
+    getValues,
+    formState: { isSubmitting, errors, dirtyFields }
   } = useForm({
     defaultValues: {
       title: "",
@@ -39,13 +52,12 @@ const DocumentFormPage = () => {
   });
 
   const loadDefaultValues = async () => {
-    if (documentId) {
-      const _document = await DocumentService.getOne(documentId);
+    if (document) {
       let defaultValues = {};
-      defaultValues.title = _document.title;
-      defaultValues.desc = _document.desc;
+      defaultValues.title = document.title;
+      defaultValues.desc = document.desc;
       reset({ ...defaultValues });
-      setEditorData(_document.content);
+      setEditorData(document.content);
     }
   };
 
@@ -83,62 +95,91 @@ const DocumentFormPage = () => {
     input.click();
   };
 
-  const handleSaveDocument = handleSubmit(data => {
-    const dataToSave = {
-      title: data.title,
-      desc: data.desc,
-      content: editorData,
-      userId: user.id
-    };
-
-    if (documentId) {
-      // edit
-      DocumentService.update(documentId, dataToSave)
-        .then(() => {
-          enqueueSnackbar("Successfully!", { variant: "success" });
-        })
-        .catch(() => {
-          enqueueSnackbar("Failed!", { variant: "error" });
-        });
-    } else {
-      // create
-      DocumentService.create(dataToSave)
-        .then(() => {
-          enqueueSnackbar("Successfully!", { variant: "success" });
-        })
-        .catch(() => {
-          enqueueSnackbar("Failed!", { variant: "error" });
-        });
+  const handleSaveDocumentTitle = async newTitle => {
+    if (!documentId) return;
+    if (!newTitle) {
+      await trigger("title");
+      return;
     }
-  });
+    if (!dirtyFields["title"]) return;
+    DocumentService.update(documentId, { title: newTitle }).then(() => {
+      mutate();
+    });
+  };
+
+  const handleSaveDocumentDesc = newDesc => {
+    if (!documentId) return;
+    DocumentService.update(documentId, { desc: newDesc }).then(() => {
+      mutate();
+    });
+  };
+
+  const handleSaveDocumentContent = () => {
+    if (!documentId) return;
+    DocumentService.update(documentId, { content: editorData }).then(() => {
+      mutate();
+    });
+  };
+
+  const handleDeleteDocument = () => {
+    if (!documentId) return;
+    $emit("alert/open", {
+      title: "Delete document",
+      content: "Do you want to delete this document?",
+      okText: "Delete",
+      okCallback: () => {
+        DocumentService.delete(documentId)
+          .then(() => {
+            navigate("/home/content?tab=1");
+          })
+          .then(() => {
+            enqueueSnackbar("Successfully!", { variant: "success" });
+          })
+          .catch(() => {
+            enqueueSnackbar("Failed!", { variant: "error" });
+          });
+      }
+    });
+  };
+
+  const handleGoBack = async () => {
+    if (!getValues("title")) {
+      await trigger("title");
+      return;
+    }
+    navigate("/home/content?tab=1");
+  };
 
   useEffect(
     () => {
       loadDefaultValues();
     },
-    [documentId]
+    [document]
   );
 
   return (
     <Stack direction="column" spacing={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Link to="/home/content?tab=1">
-          <Button variant="contained" startIcon={<ArrowBackRoundedIcon />}>
-            {t("BUTTON.back")}
-          </Button>
-        </Link>
+        <Button
+          variant="contained"
+          startIcon={<ArrowBackRoundedIcon />}
+          onClick={handleGoBack}
+        >
+          {t("BUTTON.back")}
+        </Button>
+
         <Typography variant="h6" sx={{ textAlign: "center" }}>
           {documentId ? "Edit" : "Create"} Document
         </Typography>
 
-        <LoadingButton
-          loading={isSubmitting}
-          endIcon={<SaveRoundedIcon />}
+        <Button
+          color="error"
+          endIcon={<DeleteForeverRoundedIcon />}
           variant="contained"
-          onClick={handleSaveDocument}
+          onClick={handleDeleteDocument}
         >
-          {t("BUTTON.save")}
-        </LoadingButton>
+          {t("BUTTON.delete")}
+        </Button>
       </Stack>
 
       <Controller
@@ -152,6 +193,7 @@ const DocumentFormPage = () => {
               InputLabelProps={{ shrink: true }}
               label="Title"
               {...field}
+              onBlur={() => handleSaveDocumentTitle(getValues("title"))}
             />
           );
         }}
@@ -168,6 +210,7 @@ const DocumentFormPage = () => {
               label="Description"
               InputLabelProps={{ shrink: true }}
               {...field}
+              onBlur={() => handleSaveDocumentDesc(getValues("desc"))}
             />
           );
         }}
@@ -179,6 +222,7 @@ const DocumentFormPage = () => {
         onEditorChange={newValue => {
           setEditorData(newValue);
         }}
+        onBlur={handleSaveDocumentContent}
         init={{
           forced_root_block: "",
           min_height: 512,

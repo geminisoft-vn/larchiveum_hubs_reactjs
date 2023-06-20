@@ -1,33 +1,37 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
-import { Stack, Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { Button, Stack } from "@mui/material";
 
 import Iconify from "src/components/iconify";
+import { DocumentService } from "src/services";
 
 import Documents from "./Documents";
-import { useTranslation } from "react-i18next";
 
 const Management = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const handleAddNewDocument = () => {
+    DocumentService.create().then(document => {
+      if (document && document.id) {
+        navigate(`/home/document-form/${document.id}`);
+      }
+    });
+  };
+
   return (
     <Stack direction="column" spacing={2}>
-      <Link
-        to={`/home/document-form`}
-        style={{
-          alignSelf: "flex-start",
+      <Button
+        variant="contained"
+        startIcon={<Iconify icon="eva:plus-fill" />}
+        onClick={handleAddNewDocument}
+        sx={{
+          alignSelf: "flex-start"
         }}
       >
-        <Button
-          variant="contained"
-          startIcon={<Iconify icon="eva:plus-fill" />}
-          sx={{
-            alignSelf: "flex-end",
-          }}
-        >
-          {t('BUTTON.add')}
-        </Button>
-      </Link>
+        {t("BUTTON.add")}
+      </Button>
 
       <Documents />
     </Stack>

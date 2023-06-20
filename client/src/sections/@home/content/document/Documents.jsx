@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Grid, Stack } from "@mui/material";
+import { useSnackbar } from "notistack";
 
 import Empty from "src/components/empty";
 import Loader from "src/components/loader/Loader";
@@ -7,7 +8,6 @@ import { useAuth, useData, useEventBus } from "src/hooks";
 import { DocumentService } from "src/services";
 
 import DocumentCard from "./DocumentCard";
-import { useSnackbar } from "notistack";
 
 const Documents = () => {
   const { $emit } = useEventBus();
@@ -51,6 +51,7 @@ const Documents = () => {
       }
     });
   };
+
   return (
     <Stack>
       <Grid container spacing={1}>
