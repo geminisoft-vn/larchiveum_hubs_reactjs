@@ -98,7 +98,15 @@ const QuizFormPage = () => {
     });
   };
 
-  const handleSaveQuizDesc = () => {};
+  const handleSaveQuizDesc = newDesc => {
+    if (!quizId) return;
+
+    if (!methods.formState.dirtyFields["desc"]) return;
+    QuizService.update(quizId, { desc: newDesc }).then(() => {
+      mutateQuiz();
+      mutateQuestion();
+    });
+  };
 
   const handleDeleteQuiz = () => {
     if (!quizId) return;
@@ -198,6 +206,7 @@ const QuizFormPage = () => {
                 InputLabelProps={{ shrink: true }}
                 placeholder="Enter quiz's description"
                 {...field}
+                onBlur={() => handleSaveQuizDesc(methods.getValues("desc"))}
               />
             );
           }}

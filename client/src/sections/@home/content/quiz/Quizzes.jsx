@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Grid, Stack } from "@mui/material";
+import { Grid, Pagination, Stack } from "@mui/material";
 import { useSnackbar } from "notistack";
-import qs from "qs";
 
 import Empty from "src/components/empty";
 import Loader from "src/components/loader/Loader";
@@ -26,7 +25,7 @@ const Quizzes = () => {
     ]
   });
 
-  const { data: quizzes, isLoading, mutate } = useData(
+  const { data: quizzes, pagination, isLoading, mutate } = useData(
     `/quizzes?page=${params.page}&pageSize=${
       params.pageSize
     }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
@@ -55,7 +54,7 @@ const Quizzes = () => {
   };
 
   return (
-    <Stack>
+    <Stack direction="column" alignItems="center" spacing={2}>
       <Grid container spacing={1}>
         {!isLoading &&
           quizzes &&
@@ -69,9 +68,22 @@ const Quizzes = () => {
               />
             );
           })}
-        {!isLoading && quizzes && quizzes.length === 0 && <Empty />}
-        {isLoading && <Loader />}
       </Grid>
+      {!isLoading && quizzes && quizzes.length === 0 && <Empty />}
+      {isLoading && <Loader />}
+
+      {!isLoading &&
+        quizzes &&
+        quizzes.length > 0 && (
+          <Pagination
+            color="primary"
+            count={pagination?.total || 1}
+            page={params.page}
+            onChange={(_, newPage) =>
+              setParams(prev => ({ ...prev, page: newPage }))
+            }
+          />
+        )}
     </Stack>
   );
 };
