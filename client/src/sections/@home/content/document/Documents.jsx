@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Grid, Stack } from "@mui/material";
+import { Grid, Pagination, Stack } from "@mui/material";
 import { useSnackbar } from "notistack";
 
 import Empty from "src/components/empty";
@@ -16,7 +16,7 @@ const Documents = () => {
 
   const [params, setParams] = useState({
     page: 1,
-    pageSize: 999,
+    pageSize: 4,
     filters: [
       {
         key: "userId",
@@ -26,7 +26,7 @@ const Documents = () => {
     ]
   });
 
-  const { data: documents, isLoading, mutate } = useData(
+  const { data: documents, pagination, isLoading, mutate } = useData(
     `/documents?page=${params.page}&pageSize=${
       params.pageSize
     }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
@@ -53,7 +53,7 @@ const Documents = () => {
   };
 
   return (
-    <Stack>
+    <Stack direction="column" alignItems="center" spacing={2}>
       <Grid container spacing={1}>
         {!isLoading &&
           documents &&
@@ -67,9 +67,22 @@ const Documents = () => {
               />
             );
           })}
-        {!isLoading && documents && documents.length === 0 && <Empty />}
-        {isLoading && <Loader />}
       </Grid>
+      {!isLoading && documents && documents.length === 0 && <Empty />}
+      {isLoading && <Loader />}
+
+      {!isLoading &&
+        documents &&
+        documents.length > 0 && (
+          <Pagination
+            color="primary"
+            count={pagination?.total || 1}
+            page={params.page}
+            onChange={(_, newPage) =>
+              setParams(prev => ({ ...prev, page: newPage }))
+            }
+          />
+        )}
     </Stack>
   );
 };
