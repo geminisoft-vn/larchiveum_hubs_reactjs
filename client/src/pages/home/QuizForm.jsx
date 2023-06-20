@@ -5,14 +5,14 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { useAuth, useData } from "src/hooks";
+import { useEventBus } from "src/hooks";
 import { Questions } from "src/sections/@home/content/quiz";
-import { OptionService, QuestionService, QuizService } from "src/services";
+import { QuizService } from "src/services";
 
 import useSWR from "swr";
 import request from "src/utils/request";
@@ -20,9 +20,9 @@ import { useSnackbar } from "notistack";
 
 const QuizFormPage = () => {
   const { t } = useTranslation();
+  const { $emit } = useEventBus();
   const navigate = useNavigate();
   const { id: quizId } = useParams();
-  const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
 
   const { data: quiz, mutate: mutateQuiz } = useSWR(
@@ -92,20 +92,34 @@ const QuizFormPage = () => {
       return;
     }
     if (!methods.formState.dirtyFields["title"]) return;
-    QuizService.update(quizId, { title: newTitle })
-      .then(() => {
-        mutateQuiz();
-        mutateQuestion();
-      })
-      .then(() => {
-        enqueueSnackbar("Successfully!", { variant: "success" });
-      })
-      .catch(() => {
-        enqueueSnackbar("Failed!", { variant: "error" });
-      });
+    QuizService.update(quizId, { title: newTitle }).then(() => {
+      mutateQuiz();
+      mutateQuestion();
+    });
   };
 
   const handleSaveQuizDesc = () => {};
+
+  const handleDeleteQuiz = () => {
+    if (!quizId) return;
+    $emit("alert/open", {
+      title: "Delete quiz",
+      content: "Do you want to delete this quiz?",
+      okText: "Delete",
+      okCallback: () => {
+        QuizService.delete(quizId)
+          .then(() => {
+            navigate("/home/content?tab=0");
+          })
+          .then(() => {
+            enqueueSnackbar("Successfully!", { variant: "success" });
+          })
+          .catch(() => {
+            enqueueSnackbar("Failed!", { variant: "error" });
+          });
+      }
+    });
+  };
 
   const handleGoBack = () => {
     if (!methods.getValues("title")) {
@@ -121,8 +135,6 @@ const QuizFormPage = () => {
     },
     [quiz, questions]
   );
-
-  console.log(methods.formState.errors);
 
   return (
     <FormProvider {...methods}>
@@ -144,8 +156,13 @@ const QuizFormPage = () => {
             {quizId ? "Edit" : "Create"} Quiz
           </Typography>
 
-          <Button variant="contained" endIcon={<SaveRoundedIcon />}>
-            {t("BUTTON.save")}
+          <Button
+            color="error"
+            variant="contained"
+            endIcon={<DeleteForeverRoundedIcon />}
+            onClick={handleDeleteQuiz}
+          >
+            {t("BUTTON.delete")}
           </Button>
         </Stack>
 

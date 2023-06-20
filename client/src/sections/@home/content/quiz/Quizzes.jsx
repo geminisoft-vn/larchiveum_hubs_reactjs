@@ -53,6 +53,7 @@ const Quizzes = () => {
       }
     });
   };
+
   return (
     <Stack>
       <Grid container spacing={1}>
