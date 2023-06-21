@@ -21,7 +21,7 @@ const AppPage = () => {
 
   const [params, setParams] = useState({
     page: 1,
-    pageSize: 8,
+    pageSize: 7,
     sort: "createdAt|desc"
   });
 

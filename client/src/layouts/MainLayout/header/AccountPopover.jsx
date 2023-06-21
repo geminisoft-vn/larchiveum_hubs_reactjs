@@ -29,14 +29,6 @@ const AccountPopover = () => {
     "/assets/images/avatars/avatar_default.jpg"
   );
 
-  const loadAvatar = () => {
-    if (user && user.hubAvatarId) {
-      UserService.getAvatar(user.id).then(avatar => {
-        setAvatar(avatar?.images?.preview?.url);
-      });
-    }
-  };
-
   const handleSignOut = () => {
     signOut();
     setOpen(false);
@@ -49,10 +41,6 @@ const AccountPopover = () => {
   const handleClose = () => {
     setOpen(null);
   };
-
-  useEffect(() => {
-    loadAvatar();
-  }, []);
 
   return (
     <>
@@ -74,7 +62,13 @@ const AccountPopover = () => {
             })
           }}
         >
-          <Avatar src={avatar} alt="avatar" />
+          <Avatar
+            src={
+              user?.avatar?.images?.preview?.url ||
+              "/assets/images/avatars/avatar_default.jpg"
+            }
+            alt="avatar"
+          />
         </IconButton>
       ) : (
         <Stack direction="row" alignItems="center" spacing={1}>

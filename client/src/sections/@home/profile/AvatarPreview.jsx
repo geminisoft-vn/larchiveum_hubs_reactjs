@@ -3,6 +3,7 @@ import { Box, Button, Paper, Stack } from "@mui/material";
 
 const AvatarPreview = ({ avatar, handleOpenAvatarPickingModal }) => {
   const { t } = useTranslation();
+  console.log({ avatar });
   return (
     <Paper elevation={4} sx={{ p: 2, minHeight: "512px" }}>
       <Stack
@@ -19,7 +20,7 @@ const AvatarPreview = ({ avatar, handleOpenAvatarPickingModal }) => {
                   width: "100%",
                   height: "100%"
                 }}
-                src={avatar && avatar.gltfs && avatar.gltfs.avatar}
+                src={avatar?.gltfs?.avatar}
                 camera-controls
               />
             )}{" "}

@@ -8,13 +8,15 @@ import {
   DialogTitle,
   Grid
 } from "@mui/material";
+import { useSnackbar } from "notistack";
 
 import { useAuth, useEventBus } from "src/hooks";
 import { AvatarService } from "src/services";
 import UserService from "src/services/UserService";
 
-const AvatarPickingModal = ({ loadAvatar }) => {
+const AvatarPickingModal = () => {
   const { $on } = useEventBus();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useAuth();
 
@@ -26,7 +28,17 @@ const AvatarPickingModal = ({ loadAvatar }) => {
   const handleChangeAvatar = () => {
     UserService.update(user.id, {
       avatarId: selectedAvatar.id
-    }).then(() => loadAvatar());
+    })
+      .then(() => {
+        enqueueSnackbar("Successfully!", {
+          variant: "success"
+        });
+      })
+      .catch(() => {
+        enqueueSnackbar("Failed!", {
+          variant: "error"
+        });
+      });
   };
 
   const loadAvatars = () => {

@@ -29,44 +29,34 @@ const ProfilePage = () => {
 
   const { $emit } = useEventBus();
 
-  const [avatar, setAvatar] = useState();
-
-  const loadAvatar = () => {
-    if (user && user.hubAvatarId) {
-      UserService.getAvatar(user.id).then(avatar => {
-        setAvatar(avatar);
-      });
-    }
-  };
-
   const handleOpenAvatarPickingModal = () => {
     $emit("modal/avatar-picking/open", {
-      defaultAvatar: avatar
+      defaultAvatar: user.avatar
     });
   };
 
   const handleSaveUserInfo = handleSubmit(data => {
-    UserService.update(user.id, { username: data.username });
+    if (!user?.id) return;
+    UserService.update(user?.id, { username: data.username });
   });
 
-  useEffect(() => {
-    loadAvatar();
-  }, []);
-
-  useEffect(() => {
-    let defaultValues = {};
-    if (user.id) {
-      defaultValues.username = user.username;
-      reset({ ...defaultValues });
-    }
-  }, []);
+  useEffect(
+    () => {
+      let defaultValues = {};
+      if (user) {
+        defaultValues.username = user.username;
+        reset({ ...defaultValues });
+      }
+    },
+    [user]
+  );
 
   return (
     <>
       <Grid container spacing={2}>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <AvatarPreview
-            avatar={avatar}
+            avatar={user?.avatar}
             handleOpenAvatarPickingModal={handleOpenAvatarPickingModal}
           />
         </Grid>
@@ -75,11 +65,7 @@ const ProfilePage = () => {
         </Grid>
       </Grid>
 
-      <AvatarPickingModal
-        defaultAvatar={avatar}
-        setAvatar={setAvatar}
-        loadAvatar={loadAvatar}
-      />
+      <AvatarPickingModal />
     </>
   );
 };

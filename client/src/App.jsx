@@ -31,7 +31,6 @@ const App = () => {
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <SnackbarProvider
           maxSnack={1}
-          autoHideDuration={1000}
           anchorOrigin={{
             vertical: "top",
             horizontal: "center"

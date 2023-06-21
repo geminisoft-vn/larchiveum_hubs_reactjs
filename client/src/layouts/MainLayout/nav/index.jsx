@@ -1,20 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  Avatar,
-  Box,
-  Button,
-  Drawer,
-  Link,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Avatar, Box, Drawer, Link, Typography } from "@mui/material";
 // @mui
 import { alpha, styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 
-// mock
-import account from "src/_mock/account";
 import NavSection from "src/components/nav-section";
 // components
 import Scrollbar from "src/components/scrollbar";
@@ -28,7 +18,7 @@ import navConfig from "./config";
 
 // ----------------------------------------------------------------------
 
-const NAV_WIDTH = 280;
+const NAV_WIDTH = 256;
 
 const StyledAccount = styled("div")(({ theme }) => ({
   display: "flex",
@@ -46,18 +36,6 @@ const Nav = ({ openNav, onCloseNav }) => {
 
   const isDesktop = useResponsive("up", "lg");
 
-  const [avatar, setAvatar] = useState(
-    "/assets/images/avatars/avatar_default.jpg"
-  );
-
-  const loadAvatar = () => {
-    if (user && user.hubAvatarId) {
-      UserService.getAvatar(user.id).then(avatar => {
-        setAvatar(avatar?.images?.preview?.url);
-      });
-    }
-  };
-
   useEffect(
     () => {
       if (openNav) {
@@ -66,13 +44,6 @@ const Nav = ({ openNav, onCloseNav }) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [pathname]
-  );
-
-  useEffect(
-    () => {
-      loadAvatar();
-    },
-    []
   );
 
   const renderContent = (
@@ -101,7 +72,13 @@ const Nav = ({ openNav, onCloseNav }) => {
       <Box sx={{ mt: 5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={avatar} alt="photoURL" />
+            <Avatar
+              src={
+                user?.avatar?.images?.preview?.url ||
+                "/assets/images/avatars/avatar_default.jpg"
+              }
+              alt="photoURL"
+            />
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>

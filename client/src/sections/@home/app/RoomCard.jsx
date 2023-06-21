@@ -3,15 +3,16 @@ import SecurityRoundedIcon from "@mui/icons-material/SecurityRounded";
 import {
   Avatar,
   Box,
-  Button,
   Card,
   CardContent,
   Grid,
   Stack,
+  Tooltip,
   Typography
 } from "@mui/material";
 // @mui
 import { alpha, styled } from "@mui/material/styles";
+import { tooltipClasses } from "@mui/material/Tooltip";
 import moment from "moment";
 import PropTypes from "prop-types";
 
@@ -34,7 +35,9 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   height: 32,
   position: "absolute",
   left: theme.spacing(3),
-  bottom: theme.spacing(-2)
+  bottom: theme.spacing(-2),
+
+  backgroundColor: "#fff"
 }));
 
 const StyledInfo = styled("div")(({ theme }) => ({
@@ -53,6 +56,17 @@ const StyledCover = styled("img")({
   position: "absolute"
 });
 
+const StyledTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.common.white
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: theme.palette.common.black
+  }
+}));
 // ----------------------------------------------------------------------
 
 const RoomCard = ({ room, index, handleReservate }) => {
@@ -63,6 +77,7 @@ const RoomCard = ({ room, index, handleReservate }) => {
     maxSize,
     startDate,
     endDate,
+    user,
     public: _public
   } = room;
 
@@ -111,19 +126,41 @@ const RoomCard = ({ room, index, handleReservate }) => {
               ...((latestPostLarge || latestPost) && { display: "none" })
             }}
           />
-          {/* <StyledAvatar */}
-          {/*   alt={name} */}
-          {/*   src={avatar} */}
-          {/*   sx={{ */}
-          {/*     ...((latestPostLarge || latestPost) && { */}
-          {/*       zIndex: 9, */}
-          {/*       top: 24, */}
-          {/*       left: 24, */}
-          {/*       width: 40, */}
-          {/*       height: 40, */}
-          {/*     }), */}
-          {/*   }} */}
-          {/* /> */}
+
+          <StyledTooltip
+            title={
+              <Box sx={{ my: 1.5, px: 2.5 }}>
+                <Typography variant="subtitle2" noWrap>
+                  {user?.username}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "text.secondary" }}
+                  noWrap
+                >
+                  {user?.email}
+                </Typography>
+              </Box>
+            }
+            arrow
+          >
+            <StyledAvatar
+              alt={name}
+              src={
+                user?.avatar?.images?.preview?.url ||
+                "/assets/images/avatars/avatar_default.jpg"
+              }
+              sx={{
+                ...((latestPostLarge || latestPost) && {
+                  zIndex: 9,
+                  top: 24,
+                  left: 24,
+                  width: 40,
+                  height: 40
+                })
+              }}
+            />
+          </StyledTooltip>
 
           <StyledCover alt={name} src={hubSceneThumbnailUrl} />
         </StyledCardMedia>

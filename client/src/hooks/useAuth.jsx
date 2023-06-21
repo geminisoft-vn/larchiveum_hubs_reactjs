@@ -19,9 +19,7 @@ export const AuthProvider = ({ children }) => {
   const { pathname } = useLocation();
 
   const { data: user, mutate } = useSWR(
-    Cookies.get("__LARCHIVEUM__COOKIES") &&
-    !pathname.includes("quiz-game") &&
-    !pathname.includes("document-viewer")
+    Cookies.get("__LARCHIVEUM__COOKIES") && pathname.includes("home")
       ? "/auth/users/me"
       : null,
     url => {

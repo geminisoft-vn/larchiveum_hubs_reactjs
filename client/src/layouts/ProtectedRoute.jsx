@@ -1,20 +1,26 @@
 import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import jwtDecode from "jwt-decode";
 
 import { checkExpireJwtToken } from "src/utils/common";
 
-import Cookies from "js-cookie";
-
-const ProtectedRoute = (props) => {
+const ProtectedRoute = props => {
   const { children } = props;
 
-  if(Cookies.get('__LARCHIVEUM__COOKIES')) {
-    if (!checkExpireJwtToken(Cookies.get('__LARCHIVEUM__COOKIES'))) {
-      return <Navigate to="/auth/signin" replace />;
+  const jwt = Cookies.get("__LARCHIVEUM__COOKIES");
+
+  if (jwt) {
+    const decoded = jwtDecode(jwt);
+    if (decoded && decoded.exp) {
+      if (!checkExpireJwtToken(decoded.exp)) {
+        Cookies.remove("__LARCHIVEUM__COOKIES");
+        return <Navigate to="/auth/signin" replace />;
+      }
     }
   } else {
     return <Navigate to="/auth/signin" replace />;
   }
-  
+
   return <>{children}</>;
 };
 

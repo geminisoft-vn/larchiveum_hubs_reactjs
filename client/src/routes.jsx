@@ -3,7 +3,6 @@ import { Navigate, useRoutes } from "react-router-dom";
 // layouts
 import AuthLayout from "src/layouts/AuthLayout";
 import MainLayout from "src/layouts/MainLayout";
-import ProtectedRoute from "src/layouts/ProtectedRoute";
 // pages
 import {
   ConfirmationPage,
@@ -37,43 +36,23 @@ export default function Router() {
         { path: "app", element: <HomePage /> },
         {
           path: "profile",
-          element: (
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          )
+          element: <ProfilePage />
         },
         {
           path: "room",
-          element: (
-            <ProtectedRoute>
-              <RoomManagementPage />
-            </ProtectedRoute>
-          )
+          element: <RoomManagementPage />
         },
         {
           path: "room-form",
-          element: (
-            <ProtectedRoute>
-              <RoomFormPage />
-            </ProtectedRoute>
-          )
+          element: <RoomFormPage />
         },
         {
           path: "room-form/:id",
-          element: (
-            <ProtectedRoute>
-              <RoomFormPage />
-            </ProtectedRoute>
-          )
+          element: <RoomFormPage />
         },
         {
           path: "content",
-          element: (
-            <ProtectedRoute>
-              <ContentPage />
-            </ProtectedRoute>
-          )
+          element: <ContentPage />
         },
         {
           path: "quiz-form",
@@ -93,11 +72,7 @@ export default function Router() {
         },
         {
           path: "user",
-          element: (
-            <ProtectedRoute>
-              <UserManagamentPage />
-            </ProtectedRoute>
-          )
+          element: <UserManagamentPage />
         }
       ]
     },
