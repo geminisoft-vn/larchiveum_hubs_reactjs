@@ -8,6 +8,7 @@ import NProgress from "nprogress";
 
 import Alert from "src/components/Alert";
 import { AuthProvider } from "src/hooks/useAuth";
+import Interceptor from "src/layouts/Interceptor";
 import ThemeProvider from "src/theme";
 
 import i18n from "./i18n";
@@ -38,11 +39,13 @@ const App = () => {
         >
           <BrowserRouter>
             <AuthProvider>
-              <I18nextProvider i18n={i18n}>
-                <Suspense fallback={<LazyLoad />}>
-                  <Router />
-                </Suspense>
-              </I18nextProvider>
+              <Interceptor>
+                <I18nextProvider i18n={i18n}>
+                  <Suspense fallback={<LazyLoad />}>
+                    <Router />
+                  </Suspense>
+                </I18nextProvider>
+              </Interceptor>
             </AuthProvider>
           </BrowserRouter>
         </SnackbarProvider>

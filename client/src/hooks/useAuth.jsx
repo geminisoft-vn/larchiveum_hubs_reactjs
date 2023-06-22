@@ -5,7 +5,7 @@ import {
   useMemo,
   useState
 } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import useSWR from "swr";
 

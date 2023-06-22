@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
 import ConfirmationNumberRoundedIcon from "@mui/icons-material/ConfirmationNumberRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
@@ -59,7 +58,9 @@ const RoomCardAction = ({ room, handleReservate }) => {
   ) {
     return (
       <Link
-        to={`${import.meta.env.VITE_APP_ROOT}/${room.hubRoomId}`}
+        to={`${import.meta.env.VITE_APP_ROOT}?admin-user-id=${user.id}&hub-id=${
+          room.hubRoomId
+        }`}
         target="_blank"
       >
         <Button variant="contained" endIcon={<OpenInNewRoundedIcon />}>
