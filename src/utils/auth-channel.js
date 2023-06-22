@@ -47,22 +47,17 @@ export default class AuthChannel {
             async ({ credentials: token, payload: payload }) => {
               await this.handleAuthCredentials(payload.email, token);
               let _token = authTopic.split(":")[1];
-              const decodedToken = jwtDecode(_token);
-              if (decodedToken) {
-                const { id } = decodedToken;
-                await axios({
-                  method: "PUT",
-                  url: `https://api.larchiveum.link/v1/verify-hub/`,
-                  data: {
-                    email: payload.email,
-                    token
-                  },
-                  headers: {
-                    Authorization: `Bearer ${token}`
-                  }
-                });
-              }
-
+              await axios({
+                method: "POST",
+                url: `https://api.larchiveum.link/v1/verify-hub/`,
+                data: {
+                  email: payload.email,
+                  token
+                },
+                headers: {
+                  Authorization: `Bearer ${_token}`
+                }
+              });
               resolve();
             }
           );
