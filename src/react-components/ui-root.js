@@ -82,6 +82,7 @@ import { SharePopoverContainer } from "./room/SharePopoverContainer";
 import { AudioPopoverContainer } from "./room/AudioPopoverContainer";
 import { ReactionPopoverContainer } from "./room/ReactionPopoverContainer";
 import { ChangeAvatarButtonContainer } from "./room/ChangeAvatarButtonContainer";
+import { ControlGuideButtonContainer } from "./room/ControlGuideButtonContainer";
 import { SafariMicModal } from "./room/SafariMicModal";
 import { RoomSignInModalContainer } from "./auth/RoomSignInModalContainer";
 import { SignInStep } from "./auth/SignInModal";
@@ -100,6 +101,7 @@ import { SignInMessages } from "./auth/SignInModal";
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
 import { QuizContentModal } from "./room/QuizContentModal";
 import { DocumentContentModal } from "./room/DocumentContentModal";
+import { ControlGuideModal } from "./room/ControlGuideModal";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -802,6 +804,12 @@ class UIRoot extends Component {
     // this.props.mediaSearchStore.sourceNavigateWithNoNav("avatars", "use");
     this.setSidebar("profile");
   };
+
+  onControlGuide = e => {
+    e.preventDefault();
+    this.showNonHistoriedDialog(ControlGuideModal, {
+    });
+  }
 
   renderInterstitialPrompt = () => {
     return (
@@ -1677,6 +1685,7 @@ class UIRoot extends Component {
                     )}
                     <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} />
                     <ChangeAvatarButtonContainer onClick={this.onChangeAvatar} />
+                    <ControlGuideButtonContainer onClick={this.onControlGuide} />
                     {entered &&
                       isMobileVR && (
                         <ToolbarButton

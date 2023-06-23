@@ -92,11 +92,18 @@ AFRAME.registerComponent("billboard", {
         // Set the camera world position as the target.
         targetPos.setFromMatrixPosition(camera.matrixWorld);
 
-        if (this.data.onlyY) {
-          object3D.getWorldPosition(worldPos);
-          targetPos.y = worldPos.y;
-        }
+        // original code
+        // if (this.data.onlyY) {
+        //   object3D.getWorldPosition(worldPos);
+        //   targetPos.y = worldPos.y;
+        // }
+
+        // Temporarily locks all Billboard-applied objects to Y-axis rotation.(23.06.19)
+        // edit code
+        object3D.getWorldPosition(worldPos);
+        targetPos.y = worldPos.y;
         object3D.lookAt(targetPos);
+        // 
 
         object3D.matrixNeedsUpdate = true;
       }
