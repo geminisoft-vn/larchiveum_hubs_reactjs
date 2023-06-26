@@ -10,7 +10,7 @@ export function ContentsSidebarContainer({ onClose }) {
   return (
     <ContentsSidebar onClose={onClose}>
       <Collapse defaultActiveKey={["1"]} style={{ borderRadius: "0px" }}>
-        <Panel header="Quizs" key="1" style={{ borderRadius: "0px" }}>
+        <Panel header="Quizzes" key="1" style={{ borderRadius: "0px" }}>
           <QuizList />
         </Panel>
         <Panel header="Documents" key="2" style={{ borderRadius: "0px" }}>

@@ -58,9 +58,9 @@ const RoomCardAction = ({ room, handleReservate }) => {
   ) {
     return (
       <Link
-        to={`${import.meta.env.VITE_APP_ROOT}?admin-user-id=${user.id}&hub-id=${
-          room.hubRoomId
-        }`}
+        to={`${import.meta.env.VITE_APP_ROOT}?admin-user-id=${
+          user?.id
+        }&hub-id=${room?.hubRoomId}`}
         target="_blank"
       >
         <Button variant="contained" endIcon={<OpenInNewRoundedIcon />}>

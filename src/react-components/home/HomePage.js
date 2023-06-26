@@ -22,38 +22,39 @@ import { SignInButton } from "./SignInButton";
 import maskEmail from "../../utils/mask-email";
 import { ReactComponent as HmcLogo } from "../icons/HmcLogo.svg";
 
-
-
-export function HomePage({store}) {
+export function HomePage({ store }) {
   const auth = useContext(AuthContext);
   const intl = useIntl();
 
   const { results: favoriteRooms } = useFavoriteRooms();
   const { results: publicRooms } = usePublicRooms();
 
-  const sortedFavoriteRooms = Array.from(favoriteRooms).sort((a, b) => b.member_count - a.member_count);
-  const sortedPublicRooms = Array.from(publicRooms).sort((a, b) => b.member_count - a.member_count);
+  const sortedFavoriteRooms = Array.from(favoriteRooms).sort(
+    (a, b) => b.member_count - a.member_count
+  );
+  const sortedPublicRooms = Array.from(publicRooms).sort(
+    (a, b) => b.member_count - a.member_count
+  );
   const wrapInBold = chunk => <b>{chunk}</b>;
   const isHmc = configs.feature("show_cloud");
   useEffect(() => {
     const qs = new URLSearchParams(location.search);
 
     // Support legacy sign in urls.
-    if(qs.has('action')) {
-      if(qs.get('action') === 'signin') {
-        const email = qs.get('email')
-        const hubsToken = qs.get('hubs_token')
+    if (qs.has("action")) {
+      if (qs.get("action") === "signin") {
+        const email = qs.get("email");
+        const hubsToken = qs.get("hubs_token");
 
-        store.update({ credentials: { token: hubsToken, email: email } })
+        store.update({ credentials: { token: hubsToken, email: email } });
 
-        const redirectUrl = '/' + qs.get('redirect_url')
+        const redirectUrl = "/" + qs.get("redirect_url");
         window.location.href = redirectUrl;
-      } else if(qs.get('action') === 'signout') {
-        console.log(qs.get)
-        store.update({ credentials: { token: null, email: null } })
-        window.close()
+      } else if (qs.get("action") === "signout") {
+        console.log(qs.get);
+        store.update({ credentials: { token: null, email: null } });
+        window.close();
       }
-      
     } else if (qs.has("sign_in")) {
       const redirectUrl = new URL("/signin", window.location);
       redirectUrl.search = location.search;
@@ -67,9 +68,22 @@ export function HomePage({store}) {
     if (qs.has("new")) {
       createAndRedirectToNewHub(null, null, true);
     }
+
+    if (qs.has("admin-user-id") && qs.has("hub-id")) {
+      if (qs.get("admin-user-id") && store.state.credentials) {
+        window.localStorage.setItem(
+          "__LARCHIVEUM__USERID",
+          qs.get("admin-user-id")
+        );
+        if (qs.get("hub-id")) {
+          window.location.href = `https://larchiveum.link/${qs.get("hub-id")}`;
+        }
+      }
+    }
   }, []);
 
-  const canCreateRooms = !configs.feature("disable_room_creation") || auth.isAdmin;
+  const canCreateRooms =
+    !configs.feature("disable_room_creation") || auth.isAdmin;
   const email = auth.email;
   return (
     <PageContainer className={styles.homePage}>
@@ -84,8 +98,15 @@ export function HomePage({store}) {
                   values={{ email: maskEmail(email) }}
                 />
               </span>
-              <a href="#" onClick={auth.signOut} className={styles.mobileSignOut}>
-                <FormattedMessage id="header.sign-out" defaultMessage="Sign Out" />
+              <a
+                href="#"
+                onClick={auth.signOut}
+                className={styles.mobileSignOut}
+              >
+                <FormattedMessage
+                  id="header.sign-out"
+                  defaultMessage="Sign Out"
+                />
               </a>
             </div>
           ) : (
@@ -99,7 +120,9 @@ export function HomePage({store}) {
             )}
           </div>
           <div className={styles.appInfo}>
-            <div className={styles.appDescription}>{configs.translation("app-description")}</div>
+            <div className={styles.appDescription}>
+              {configs.translation("app-description")}
+            </div>
             {canCreateRooms && <CreateRoomButton />}
             <PWAButton />
           </div>
@@ -118,11 +141,16 @@ export function HomePage({store}) {
         </div>
       </Container>
       {configs.feature("show_feature_panels") && (
-        <Container className={classNames(styles.features, styles.colLg, styles.centerLg)}>
+        <Container
+          className={classNames(styles.features, styles.colLg, styles.centerLg)}
+        >
           <Column padding gap="xl" className={styles.card}>
             <img src={configs.image("landing_rooms_thumb")} />
             <h3>
-              <FormattedMessage id="home-page.rooms-title" defaultMessage="Instantly create rooms" />
+              <FormattedMessage
+                id="home-page.rooms-title"
+                defaultMessage="Instantly create rooms"
+              />
             </h3>
             <p>
               <FormattedMessage
@@ -135,7 +163,10 @@ export function HomePage({store}) {
           <Column padding gap="xl" className={styles.card}>
             <img src={configs.image("landing_communicate_thumb")} />
             <h3>
-              <FormattedMessage id="home-page.communicate-title" defaultMessage="Communicate and Collaborate" />
+              <FormattedMessage
+                id="home-page.communicate-title"
+                defaultMessage="Communicate and Collaborate"
+              />
             </h3>
             <p>
               <FormattedMessage
@@ -147,7 +178,10 @@ export function HomePage({store}) {
           <Column padding gap="xl" className={styles.card}>
             <img src={configs.image("landing_media_thumb")} />
             <h3>
-              <FormattedMessage id="home-page.media-title" defaultMessage="An easier way to share media" />
+              <FormattedMessage
+                id="home-page.media-title"
+                defaultMessage="An easier way to share media"
+              />
             </h3>
             <p>
               <FormattedMessage
@@ -161,7 +195,10 @@ export function HomePage({store}) {
       {sortedPublicRooms.length > 0 && (
         <Container className={styles.roomsContainer}>
           <h3 className={styles.roomsHeading}>
-            <FormattedMessage id="home-page.public--rooms" defaultMessage="Public Rooms" />
+            <FormattedMessage
+              id="home-page.public--rooms"
+              defaultMessage="Public Rooms"
+            />
           </h3>
           <Column grow padding className={styles.rooms}>
             <MediaGrid center>
@@ -171,7 +208,11 @@ export function HomePage({store}) {
                     key={room.id}
                     entry={room}
                     processThumbnailUrl={(entry, width, height) =>
-                      scaledThumbnailUrlFor(entry.images.preview.url, width, height)
+                      scaledThumbnailUrlFor(
+                        entry.images.preview.url,
+                        width,
+                        height
+                      )
                     }
                   />
                 );
@@ -183,7 +224,10 @@ export function HomePage({store}) {
       {sortedFavoriteRooms.length > 0 && (
         <Container className={styles.roomsContainer}>
           <h3 className={styles.roomsHeading}>
-            <FormattedMessage id="home-page.favorite-rooms" defaultMessage="Favorite Rooms" />
+            <FormattedMessage
+              id="home-page.favorite-rooms"
+              defaultMessage="Favorite Rooms"
+            />
           </h3>
           <Column grow padding className={styles.rooms}>
             <MediaGrid center>
@@ -193,7 +237,11 @@ export function HomePage({store}) {
                     key={room.id}
                     entry={room}
                     processThumbnailUrl={(entry, width, height) =>
-                      scaledThumbnailUrlFor(entry.images.preview.url, width, height)
+                      scaledThumbnailUrlFor(
+                        entry.images.preview.url,
+                        width,
+                        height
+                      )
                     }
                   />
                 );
@@ -205,7 +253,10 @@ export function HomePage({store}) {
       <Container>
         <Column center grow>
           <Button thin preset="landing" as="a" href="/link">
-            <FormattedMessage id="home-page.have-code" defaultMessage="Have a room code?" />
+            <FormattedMessage
+              id="home-page.have-code"
+              defaultMessage="Have a room code?"
+            />
           </Button>
         </Column>
       </Container>

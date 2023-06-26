@@ -45,19 +45,34 @@ export default class AuthChannel {
           channel.on(
             "auth_credentials",
             async ({ credentials: token, payload: payload }) => {
-              await this.handleAuthCredentials(payload.email, token);
-              let _token = authTopic.split(":")[1];
-              await axios({
-                method: "POST",
-                url: `https://api.larchiveum.link/v1/verify-hub/`,
-                data: {
-                  email: payload.email,
-                  token
-                },
-                headers: {
-                  Authorization: `Bearer ${_token}`
+              let larchiveumUserId = null;
+              if (authTopic) {
+                let _token = authTopic.split(":")[1];
+                if (_token && payload && payload.email) {
+                  await axios({
+                    method: "POST",
+                    url: `https://api.larchiveum.link/v1/verify-hub/`,
+                    data: {
+                      email: payload.email,
+                      token
+                    },
+                    headers: {
+                      Authorization: `Bearer ${_token}`
+                    }
+                  }).then(res => {
+                    if (res.status === 200) {
+                      larchiveumUserId = res.data.data.id;
+                    }
+                  });
                 }
-              });
+              }
+
+              await this.handleAuthCredentials(
+                payload.email,
+                token,
+                null,
+                larchiveumUserId
+              );
               resolve();
             }
           );
@@ -94,8 +109,8 @@ export default class AuthChannel {
     return { authComplete };
   }
 
-  async handleAuthCredentials(email, token, hubChannel) {
-    this.store.update({ credentials: { email, token } });
+  async handleAuthCredentials(email, token, hubChannel, larchiveumUserId) {
+    this.store.update({ credentials: { email, token, larchiveumUserId } });
 
     if (hubChannel) {
       await hubChannel.signIn(token);

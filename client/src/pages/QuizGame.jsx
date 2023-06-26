@@ -39,19 +39,17 @@ const Answering = () => {
   };
 
   const loadQuestions = () => {
-    if (quizId) {
-      QuestionService.getAll({
-        filters: [
-          {
-            key: "quizId",
-            operator: "=",
-            value: quizId
-          }
-        ]
-      }).then(questions => {
-        setQuestions(questions);
-      });
-    }
+    QuestionService.getAll({
+      filters: [
+        {
+          key: "quizId",
+          operator: "=",
+          value: quizId
+        }
+      ]
+    }).then(questions => {
+      setQuestions(questions);
+    });
   };
 
   const loadResponses = () => {

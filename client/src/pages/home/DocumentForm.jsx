@@ -62,7 +62,7 @@ const DocumentFormPage = () => {
   const [editorData, setEditorData] = useState("");
 
   const onPickFile = (callback, value, meta) => {
-    const input = document.createElement("input");
+    const input = window.document.createElement("input");
     input.setAttribute("type", "file");
     if (meta.filetype === "image") {
       input.setAttribute("accept", "image/*");

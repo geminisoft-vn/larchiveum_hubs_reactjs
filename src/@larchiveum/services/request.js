@@ -20,7 +20,7 @@ const onRequestError = error => {
 };
 
 const onResponse = response => {
-  return response.data;
+  return response;
 };
 
 const onResponseError = error => {

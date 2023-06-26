@@ -9,12 +9,12 @@ const Interceptor = ({ children }) => {
     if (searchParams.has("quiz-game")) {
       if (searchParams.get("quiz-game")) {
         const quizId = searchParams.get("quiz-game");
-        navigate(`/quiz-game/${quizId}`, { replace: true });
+        navigate(`/quiz-game/${quizId}`);
       }
     } else if (searchParams.has("document-viewer")) {
       if (searchParams.get("document-viewer")) {
         const documentId = searchParams.get("document-viewer");
-        navigate(`/document-viewer/${documentId}`, { replace: true });
+        navigate(`/document-viewer/${documentId}`);
       }
     }
   }, []);

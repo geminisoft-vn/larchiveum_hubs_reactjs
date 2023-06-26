@@ -2,11 +2,11 @@ import request from "./request";
 
 class DocumentService {
   static getAll(params) {
-    return request.get("/v1/auth/documents", { params });
+    return request.get("/v1/documents", { params });
   }
 
   static getOne(id) {
-    return request.get(`/v1/auth/documents/${id}`);
+    return request.get(`/v1/documents/${id}`);
   }
 
   static create(data) {
