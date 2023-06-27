@@ -20,7 +20,7 @@ const Quizzes = () => {
       {
         key: "userId",
         operator: "=",
-        value: user.id
+        value: user?.id
       }
     ]
   });

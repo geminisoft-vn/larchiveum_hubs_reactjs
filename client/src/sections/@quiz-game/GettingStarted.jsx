@@ -1,6 +1,7 @@
-import { Container, Stack, Grid, Box, TextField } from "@mui/material";
+import FlagRoundedIcon from "@mui/icons-material/FlagRounded";
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
-const GettingStarted = ({ answer, setAnswer }) => {
+const GettingStarted = ({ quiz, handleStartQuiz }) => {
   return (
     <Container sx={{ height: " 100%" }}>
       <Stack
@@ -18,26 +19,30 @@ const GettingStarted = ({ answer, setAnswer }) => {
                   width: "100%",
                   height: "100%",
 
-                  objectFit: "cover",
+                  objectFit: "cover"
                 }}
               />
             </Box>
           </Grid>
 
           <Grid item lg={7} md={7} sm={12} xs={12}>
-            <Stack direction="row" alignItems="center" sx={{ height: "100%" }}>
-              <TextField
-                label="What's your name?"
-                variant="standard"
-                fullWidth
-                autoFocus
-                value={answer?.username || ""}
-                onChange={(e) =>
-                  setAnswer((prev) => ({ ...prev, username: e.target.value }))
-                }
-                inputProps={{ style: { fontSize: 32 } }}
-                InputLabelProps={{ style: { fontSize: 28 } }}
-              />
+            <Stack
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+              spacing={2}
+              sx={{ height: "100%" }}
+            >
+              <Typography variant="h1">{quiz?.title}</Typography>
+              <Typography variant="body1">{quiz?.desc}</Typography>
+              <Button
+                variant="contained"
+                endIcon={<FlagRoundedIcon />}
+                size="large"
+                onClick={handleStartQuiz}
+              >
+                Start
+              </Button>
             </Stack>
           </Grid>
         </Grid>

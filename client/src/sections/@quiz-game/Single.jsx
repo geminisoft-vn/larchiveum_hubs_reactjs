@@ -1,15 +1,30 @@
+import { useMemo } from "react";
+
 import {
   FormControl,
-  FormLabel,
   FormControlLabel,
-  Typography,
+  FormLabel,
   Radio,
   RadioGroup,
   Stack,
+  Typography
 } from "@mui/material";
 import { purple } from "@mui/material/colors";
 
-const Single = ({ question, questionIndex, handleSelectOption }) => {
+const Single = ({
+  question,
+  questionIndex,
+  responses,
+  handleSelectOption,
+  isInReview
+}) => {
+  const answer = useMemo(
+    () => {
+      return Array.from(question.answers)[0];
+    },
+    [question]
+  );
+
   return (
     <FormControl>
       <FormLabel id="demo-radio-buttons-group-label">
@@ -26,39 +41,58 @@ const Single = ({ question, questionIndex, handleSelectOption }) => {
       </FormLabel>
       <RadioGroup
         size="large"
-        sx={{
-          "& .MuiSvgIcon-root": {
-            fontSize: 32,
-          },
-          width: "max-content",
-        }}
-        onChange={(e) => {
-          handleSelectOption(question.id, parseInt(e.target.value, 10));
+        onChange={e => {
+          handleSelectOption(questionIndex, parseInt(e.target.value, 10));
         }}
       >
         {question &&
           question.options &&
-          question.options.map((option) => {
-            return (
+          question.options.map(option => {
+            return isInReview ? (
+              <FormControlLabel
+                key={option.id}
+                control={
+                  <Radio
+                    disableRipple
+                    disabled
+                    checked={question.answers.has(option.id)}
+                    sx={{
+                      "& .MuiSvgIcon-root": { fontSize: 32 }
+                    }}
+                  />
+                }
+                label={option.content}
+                sx={{
+                  "&.Mui-disabled": {
+                    "& .MuiTypography-root": {
+                      color: option.isCorrect
+                        ? "green"
+                        : question.answers.has(option.id) && !option.isCorrect
+                          ? "red"
+                          : "inherit"
+                    }
+                  },
+                  "& .MuiTypography-root": {
+                    fontSize: 20
+                  }
+                }}
+              />
+            ) : (
               <FormControlLabel
                 key={option.id}
                 value={option.id}
                 control={
                   <Radio
                     sx={{
-                      color: purple[800],
-                      "&.Mui-checked": {
-                        color: purple[600],
-                      },
+                      "& .MuiSvgIcon-root": { fontSize: 32 }
                     }}
                   />
                 }
                 label={option.content}
                 sx={{
-                  color: purple[800],
-                  "&.Mui-checked": {
-                    color: purple[600],
-                  },
+                  "& .MuiTypography-root": {
+                    fontSize: 20
+                  }
                 }}
               />
             );

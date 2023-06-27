@@ -1,6 +1,6 @@
-import { Container, Paper, Stack, Typography, Button } from "@mui/material";
-
 import { Link } from "react-router-dom";
+
+import { Button, Container, Paper, Stack, Typography } from "@mui/material";
 
 const Ending = () => {
   return (
