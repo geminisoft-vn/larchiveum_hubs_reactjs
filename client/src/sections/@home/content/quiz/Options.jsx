@@ -6,13 +6,13 @@ import { OptionService } from "src/services";
 
 import Option from "./Option";
 
-const Options = (props) => {
+const Options = props => {
   const {
     questionIndex,
     questionId,
     quizId,
     defaultValues,
-    mutateQuestion,
+    mutateQuestion
   } = props;
 
   const { $emit } = useEventBus();
@@ -23,21 +23,27 @@ const Options = (props) => {
     control,
     name: `questions.${questionIndex}.options`,
     rules: {
-      maxLength: 10,
-    },
+      maxLength: 10
+    }
   });
 
-  console.log({ fields });
-
   const handleAddOption = () => {
-    OptionService.create({ questionId }).then((option) => {
+    OptionService.create({ questionId }).then(option => {
       append({ optionId: option.id, content: "", isCorrect: false });
     });
   };
 
   const handleSaveOptionContent = (optionIndex, content) => {
     const option = fields[optionIndex];
-    if (!content || option.content === content) return;
+    if (content && option.content === content) return;
+    if (!content) {
+      OptionService.update(option.optionId, {
+        content: `Option #${optionIndex + 1}`
+      }).then(() => {
+        update(optionIndex, { content: `Option #${optionIndex + 1}` });
+      });
+      return;
+    }
     OptionService.update(option.optionId, { content });
   };
 
@@ -52,14 +58,14 @@ const Options = (props) => {
         if (options[i].optionId !== _option.optionId) {
           await OptionService.update(options[i].optionId, { isCorrect: false });
           update(i, {
-            isCorrect: false,
+            isCorrect: false
           });
         }
       }
     }
   };
 
-  const handleDeleteOption = (optionIndex) => {
+  const handleDeleteOption = optionIndex => {
     const option = fields[optionIndex];
     $emit("alert/open", {
       title: "Delete Option",
@@ -69,7 +75,7 @@ const Options = (props) => {
         OptionService.delete(option.optionId).then(() => {
           remove(optionIndex);
         });
-      },
+      }
     });
   };
 

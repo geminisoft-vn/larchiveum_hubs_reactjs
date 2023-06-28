@@ -16,12 +16,12 @@ const Questions = ({ quizId, defaultValues, mutateQuestion }) => {
     control,
     name: "questions",
     rules: {
-      maxLength: 10,
-    },
+      maxLength: 10
+    }
   });
 
   const handleAddQuestion = () => {
-    QuestionService.create({ quizId }).then((question) => {
+    QuestionService.create({ quizId }).then(question => {
       if (question) {
         append({ questionId: question.id, content: "", type: "single" });
       }
@@ -30,9 +30,17 @@ const Questions = ({ quizId, defaultValues, mutateQuestion }) => {
 
   const handleSaveQuestionContent = (questionIndex, content) => {
     const question = fields[questionIndex];
-    if (!content || question.content === content) return;
+    if (content && question.content === content) return;
+    if (!content) {
+      QuestionService.update(question.questionId, {
+        content: `Question #${questionIndex + 1}`
+      }).then(() => {
+        update(questionIndex, { content: `Question #${questionIndex + 1}` });
+      });
+      return;
+    }
     QuestionService.update(question.questionId, {
-      content,
+      content
     });
   };
 
@@ -40,12 +48,12 @@ const Questions = ({ quizId, defaultValues, mutateQuestion }) => {
     const question = fields[questionIndex];
     if (question.type === type) return;
     QuestionService.update(question.questionId, {
-      type,
+      type
     });
   };
 
   const handleToggleAllOption = async (questionIndex, type) => {
-    console.log({questionIndex, type})
+    console.log({ questionIndex, type });
     if (type === "single") {
       const question = fields[questionIndex];
       const options = question.options;
@@ -53,14 +61,14 @@ const Questions = ({ quizId, defaultValues, mutateQuestion }) => {
         for (let i = 0; i < options.length; i++) {
           await OptionService.update(options[i].optionId, { isCorrect: false });
           update(questionIndex, {
-            options: options.map((option) => ({ ...option, isCorrect: false })),
+            options: options.map(option => ({ ...option, isCorrect: false }))
           });
         }
       }
     }
   };
 
-  const handleDeleteQuestion = (questionIndex) => {
+  const handleDeleteQuestion = questionIndex => {
     const question = fields[questionIndex];
     $emit("alert/open", {
       title: "Delete Question",
@@ -71,7 +79,7 @@ const Questions = ({ quizId, defaultValues, mutateQuestion }) => {
           remove(questionIndex);
           mutateQuestion();
         });
-      },
+      }
     });
   };
 
@@ -99,7 +107,7 @@ const Questions = ({ quizId, defaultValues, mutateQuestion }) => {
             <Button
               variant="outlined"
               sx={{
-                alignSelf: "center",
+                alignSelf: "center"
               }}
               onClick={handleAddQuestion}
             >
