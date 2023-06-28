@@ -1,17 +1,17 @@
-import { Box, Container, Grid, Stack, Typography } from "@mui/material";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import { Box, Container, Grid, Stack, Typography } from "@mui/material";
+import _ from "lodash";
 
 import Multiple from "./Multiple";
 import Single from "./Single";
-
-import _ from "lodash";
 
 const Question = ({
   question,
   index,
   responses,
-  handleSelectOption,
+  handleSelectSingleOption,
+  handleSelectMultipleOption,
   isInReview
 }) => {
   return (
@@ -49,14 +49,14 @@ const Question = ({
                   question={question}
                   questionIndex={index}
                   responses={responses}
-                  handleSelectOption={handleSelectOption}
+                  handleSelectSingleOption={handleSelectSingleOption}
                   isInReview={isInReview}
                 />
               ) : (
                 <Multiple
                   question={question}
                   questionIndex={index}
-                  handleSelectOption={handleSelectOption}
+                  handleSelectMultipleOption={handleSelectMultipleOption}
                   isInReview={isInReview}
                 />
               )}

@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-
 import {
   FormControl,
   FormControlLabel,
@@ -14,8 +13,7 @@ import { purple } from "@mui/material/colors";
 const Single = ({
   question,
   questionIndex,
-  responses,
-  handleSelectOption,
+  handleSelectSingleOption,
   isInReview
 }) => {
   const answer = useMemo(
@@ -42,7 +40,7 @@ const Single = ({
       <RadioGroup
         size="large"
         onChange={e => {
-          handleSelectOption(questionIndex, parseInt(e.target.value, 10));
+          handleSelectSingleOption(questionIndex, parseInt(e.target.value, 10));
         }}
       >
         {question &&

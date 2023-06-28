@@ -38,7 +38,7 @@ const QuizCard = ({ quiz, handleDeleteQuiz }) => {
             <Typography variant="body2">{desc}</Typography>
           </CardContent>
           <CardActions>
-            <Link to={`/preview/quiz/${quiz.id}`} target="_blank">
+            <Link to={`/quiz-game/${quiz.id}`} target="_blank">
               <Tooltip title={t("BUTTON.preview")}>
                 <IconButton color="info">
                   <VisibilityRoundedIcon />

@@ -39,13 +39,11 @@ const App = () => {
         >
           <BrowserRouter>
             <AuthProvider>
-              <Interceptor>
-                <I18nextProvider i18n={i18n}>
-                  <Suspense fallback={<LazyLoad />}>
-                    <Router />
-                  </Suspense>
-                </I18nextProvider>
-              </Interceptor>
+              <I18nextProvider i18n={i18n}>
+                <Suspense fallback={<LazyLoad />}>
+                  <Router />
+                </Suspense>
+              </I18nextProvider>
             </AuthProvider>
           </BrowserRouter>
         </SnackbarProvider>

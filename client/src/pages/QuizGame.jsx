@@ -14,10 +14,10 @@ import "swiper/css/effect-creative";
 import "swiper/css/pagination";
 
 import "swiper/css";
+import { parseInt } from "lodash";
 
 const QuizGame = () => {
   const { id: quizId } = useParams();
-  const swiperQuestionRef = useRef(null);
 
   const [step, setStep] = useState(STEP["GETTING_STARTED"]);
   const [quiz, setQuiz] = useState();
@@ -55,8 +55,20 @@ const QuizGame = () => {
     setActiveQuestionIndex(slide.activeIndex);
   };
 
-  const handleSelectOption = (questionIdx, optionId) => {
+  const handleSelectSingleOption = (questionIdx, optionId) => {
+    questions[questionIdx].answers.clear();
     questions[questionIdx].answers.add(parseInt(optionId, 10));
+    setQuestions(questions);
+  };
+
+  const handleSelectMultipleOption = (checked, questionIdx, optionId) => {
+    if (checked) {
+      if (!questions[questionIdx].answers.has(parseInt(optionId, 10))) {
+        questions[questionIdx].answers.add(parseInt(optionId, 10));
+      }
+    } else {
+      questions[questionIdx].answers.delete(parseInt(optionId, 10));
+    }
     setQuestions(questions);
   };
 
@@ -74,7 +86,6 @@ const QuizGame = () => {
     setActiveQuestionIndex(0);
     setIsInReview(true);
     setStep(STEP["GAME"]);
-    swiperQuestionRef.current?.swiper.slideTo(0);
   };
 
   const handleResetGame = () => {
@@ -106,11 +117,11 @@ const QuizGame = () => {
 
       {step === STEP["GAME"] && (
         <Game
-          swiperQuestionRef={swiperQuestionRef}
           questions={questions}
           activeQuestionIndex={activeQuestionIndex}
           handleChangeSlide={handleChangeSlide}
-          handleSelectOption={handleSelectOption}
+          handleSelectSingleOption={handleSelectSingleOption}
+          handleSelectMultipleOption={handleSelectMultipleOption}
           handleGoToResult={handleGoToResult}
           isInReview={isInReview}
         />

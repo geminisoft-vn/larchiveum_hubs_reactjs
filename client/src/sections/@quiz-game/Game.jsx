@@ -14,14 +14,16 @@ import "swiper/css/pagination";
 import "swiper/css";
 
 const Game = ({
-  swiperQuestionRef,
   questions,
   activeQuestionIndex,
   handleChangeSlide,
-  handleSelectOption,
+  handleSelectSingleOption,
+  handleSelectMultipleOption,
   handleGoToResult,
   isInReview
 }) => {
+  const swiperQuestionRef = useRef(null);
+
   return (
     <Stack
       direction="column"
@@ -68,7 +70,8 @@ const Game = ({
                   question={question}
                   index={index}
                   isInReview={isInReview}
-                  handleSelectOption={handleSelectOption}
+                  handleSelectSingleOption={handleSelectSingleOption}
+                  handleSelectMultipleOption={handleSelectMultipleOption}
                 />
               </SwiperSlide>
             );

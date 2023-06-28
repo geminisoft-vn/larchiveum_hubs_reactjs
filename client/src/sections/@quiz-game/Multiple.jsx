@@ -1,11 +1,9 @@
 import { useMemo } from "react";
-
 import {
   Checkbox,
   FormControl,
   FormControlLabel,
   FormGroup,
-  FormHelperText,
   FormLabel,
   Stack,
   Typography
@@ -15,7 +13,7 @@ import { grey, purple } from "@mui/material/colors";
 const Multiple = ({
   question,
   questionIndex,
-  handleSelectOption,
+  handleSelectMultipleOption,
   isInReview
 }) => {
   return (
@@ -86,9 +84,11 @@ const Multiple = ({
                   }
                 }}
                 onChange={e => {
-                  if (e.target.checked) {
-                    handleSelectOption(questionIndex, e.target.value);
-                  }
+                  handleSelectMultipleOption(
+                    e.target.checked,
+                    questionIndex,
+                    e.target.value
+                  );
                 }}
               />
             );
