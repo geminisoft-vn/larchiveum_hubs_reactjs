@@ -5,7 +5,7 @@ import {
   useMemo,
   useState
 } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import useSWR from "swr";
 
@@ -121,7 +121,14 @@ export const AuthProvider = ({ children }) => {
   );
 
   return (
-    <AuthContext.Provider value={memoedValue}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={memoedValue}>
+      {pathname.includes("home/content") ||
+      pathname.includes("home/room") ||
+      pathname.includes("home/profile") ||
+      pathname.includes("home/user")
+        ? user && user.id && children
+        : children}
+    </AuthContext.Provider>
   );
 };
 

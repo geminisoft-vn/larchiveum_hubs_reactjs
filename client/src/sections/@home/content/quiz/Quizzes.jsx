@@ -26,9 +26,11 @@ const Quizzes = () => {
   });
 
   const { data: quizzes, pagination, isLoading, mutate } = useData(
-    `/quizzes?page=${params.page}&pageSize=${
-      params.pageSize
-    }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
+    user && user.id
+      ? `/quizzes?page=${params.page}&pageSize=${
+          params.pageSize
+        }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
+      : null
   );
 
   const { $emit } = useEventBus();

@@ -21,15 +21,17 @@ const Documents = () => {
       {
         key: "userId",
         operator: "=",
-        value: user.id
+        value: user?.id
       }
     ]
   });
 
   const { data: documents, pagination, isLoading, mutate } = useData(
-    `/documents?page=${params.page}&pageSize=${
-      params.pageSize
-    }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
+    user && user.id
+      ? `/documents?page=${params.page}&pageSize=${
+          params.pageSize
+        }&sort=createdAt|desc&filters=${JSON.stringify(params.filters)}`
+      : null
   );
 
   const handleDeleteDocument = documentId => {
