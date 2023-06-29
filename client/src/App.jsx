@@ -8,7 +8,6 @@ import NProgress from "nprogress";
 
 import Alert from "src/components/Alert";
 import { AuthProvider } from "src/hooks/useAuth";
-import Interceptor from "src/layouts/Interceptor";
 import ThemeProvider from "src/theme";
 
 import i18n from "./i18n";
@@ -27,6 +26,12 @@ const LazyLoad = () => {
 };
 
 const App = () => {
+  useEffect(() => {
+    const locale = localStorage.getItem("__LARCHIVEUM__LOCALE");
+    if (locale) {
+      i18n.changeLanguage(locale);
+    }
+  }, []);
   return (
     <ThemeProvider>
       <LocalizationProvider dateAdapter={AdapterMoment}>

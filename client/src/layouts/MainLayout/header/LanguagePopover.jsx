@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
-
+import { useTranslation } from "react-i18next";
+import { Box, IconButton, MenuItem, Popover, Stack } from "@mui/material";
 // @mui
 import { alpha } from "@mui/material/styles";
-import { Box, MenuItem, Stack, IconButton, Popover } from "@mui/material";
-import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -11,27 +10,34 @@ const LANGS = [
   {
     value: "ko",
     label: "Korean",
-    icon: "/assets/icons/korean-flag.svg",
+    icon: "/assets/icons/korean-flag.svg"
   },
   {
     value: "en",
     label: "English",
-    icon: "/assets/icons/usa-flag.svg",
-  },
+    icon: "/assets/icons/usa-flag.svg"
+  }
 ];
 
 // ----------------------------------------------------------------------
 
-export default function LanguagePopover() {
+const LanguagePopover = () => {
   const { i18n } = useTranslation();
 
-  const selectedLocale = useMemo(() => {
-    return LANGS.find((lang) => lang.value === i18n.languages[0]);
-  }, [i18n.languages[0]]);
+  const selectedLocale = useMemo(
+    () => {
+      const locale = localStorage.getItem("__LARCHIVEUM__LOCALE");
+      if (locale) {
+        return LANGS.find(lang => lang.value === locale);
+      }
+      return LANGS.find(lang => lang.value === i18n.languages[0]);
+    },
+    [i18n.languages]
+  );
 
   const [open, setOpen] = useState(null);
 
-  const handleOpen = (event) => {
+  const handleOpen = event => {
     setOpen(event.currentTarget);
   };
 
@@ -39,8 +45,9 @@ export default function LanguagePopover() {
     setOpen(null);
   };
 
-  const handleselectlocale = (locale) => {
+  const handleselectlocale = locale => {
     i18n.changeLanguage(locale);
+    localStorage.setItem("__LARCHIVEUM__LOCALE", locale);
     handleClose();
   };
 
@@ -53,12 +60,12 @@ export default function LanguagePopover() {
           width: 48,
           height: 48,
           ...(open && {
-            bgcolor: (theme) =>
+            bgcolor: theme =>
               alpha(
                 theme.palette.primary.main,
                 theme.palette.action.focusOpacity
-              ),
-          }),
+              )
+          })
         }}
       >
         <img
@@ -85,13 +92,13 @@ export default function LanguagePopover() {
             "& .MuiMenuItem-root": {
               px: 1,
               typography: "body2",
-              borderRadius: 0.75,
-            },
-          },
+              borderRadius: 0.75
+            }
+          }
         }}
       >
         <Stack spacing={0.75}>
-          {LANGS.map((option) => (
+          {LANGS.map(option => (
             <MenuItem
               key={option.value}
               selected={option.value === i18n.languages[0]}
@@ -111,4 +118,6 @@ export default function LanguagePopover() {
       </Popover>
     </>
   );
-}
+};
+
+export default LanguagePopover;
