@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
-
-import { Button,Dialog,DialogActions,DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from "@mui/material";
 
 import { useEventBus } from "src/hooks";
 
-export default function AlertDialog() {
+const AlertDialog = () => {
   const { $on } = useEventBus();
 
   const [open, setOpen] = useState(false);
@@ -13,7 +19,7 @@ export default function AlertDialog() {
     content: "",
     okText: "OK",
     cancelText: "Cancel",
-    okCallback: null,
+    okCallback: null
   });
 
   const handleClose = () => {
@@ -21,15 +27,21 @@ export default function AlertDialog() {
   };
 
   useEffect(() => {
-    $on("alert/open", (payload) => {
+    $on("alert/open", payload => {
       setOpen(true);
-      setInfo((prev) => ({ ...prev, ...payload }));
+      setInfo(prev => ({ ...prev, ...payload }));
     });
   }, []);
 
   return (
     <div>
-      <Dialog disableScrollLock open={open} onClose={handleClose}>
+      <Dialog
+        disableScrollLock
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="xs"
+      >
         <DialogTitle id="alert-dialog-title">{info.title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -52,4 +64,6 @@ export default function AlertDialog() {
       </Dialog>
     </div>
   );
-}
+};
+
+export default AlertDialog;

@@ -12,12 +12,10 @@ import "@babel/polyfill";
 import jwtDecode from "jwt-decode";
 
 console.log(
-  `App version: ${
-    configs.IS_LOCAL_OR_CUSTOM_CLIENT
-      ? `Custom client or local client (undeploy custom client to run build ${
-          process.env.BUILD_VERSION
-        })`
-      : process.env.BUILD_VERSION || "?"
+  `App version: ${configs.IS_LOCAL_OR_CUSTOM_CLIENT
+    ? `Custom client or local client (undeploy custom client to run build ${process.env.BUILD_VERSION
+    })`
+    : process.env.BUILD_VERSION || "?"
   }`
 );
 
@@ -230,6 +228,39 @@ if (isEmbed && !qs.get("embed_token")) {
   throw new Error("no embed token");
 }
 
+if (
+  qs.has("user-id") &&
+  qs.get("user-id") &&
+  qs.get("user-id") !== "undefined"
+) {
+  localStorage.setItem("__LARCHIVEUM__USERID", qs.get("user-id"));
+}
+
+if (
+  qs.has("hub-token") &&
+  qs.get("hub-token") &&
+  qs.get("hub-token") !== "undefined"
+) {
+  const token = qs.get("hub-token");
+  store.update({ credentials: { token } });
+}
+
+if (
+  qs.has("displayName") &&
+  qs.get("displayName") &&
+  qs.get("displayName") !== "undefined"
+) {
+  store.update({ profile: { displayName: qs.get("displayName") } });
+}
+
+if (
+  qs.has("avatarId") &&
+  qs.get("avatarId") &&
+  qs.get("avatarId") !== "undefined"
+) {
+  store.update({ profile: { avatarId: qs.get("avatarId") } });
+}
+
 THREE.Object3D.DefaultMatrixAutoUpdate = false;
 
 import "./components/owned-object-limiter";
@@ -377,19 +408,19 @@ function mountUI(props = {}) {
                   reason={props.roomUnavailableReason}
                 />
               ) : (
-                <UIRoot
-                  {...{
-                    scene,
-                    isBotMode,
-                    disableAutoExitOnIdle,
-                    forcedVREntryType,
-                    store,
-                    mediaSearchStore,
-                    ...props,
-                    ...routeProps
-                  }}
-                />
-              )
+                    <UIRoot
+                      {...{
+                        scene,
+                        isBotMode,
+                        disableAutoExitOnIdle,
+                        forcedVREntryType,
+                        store,
+                        mediaSearchStore,
+                        ...props,
+                        ...routeProps
+                      }}
+                    />
+                  )
             }
           />
         </Router>
@@ -775,7 +806,7 @@ function handleHubChannelJoined(
 
 async function runBotMode(scene, entryManager) {
   console.log("Running in bot mode...");
-  const noop = () => {};
+  const noop = () => { };
   const alwaysFalse = () => false;
   scene.renderer = {
     setAnimationLoop: noop,
@@ -1117,8 +1148,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   getReticulumMeta().then(reticulumMeta => {
     console.log(
-      `Reticulum @ ${reticulumMeta.phx_host}: v${reticulumMeta.version} on ${
-        reticulumMeta.pool
+      `Reticulum @ ${reticulumMeta.phx_host}: v${reticulumMeta.version} on ${reticulumMeta.pool
       }`
     );
 

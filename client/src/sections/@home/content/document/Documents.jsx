@@ -12,7 +12,6 @@ import DocumentCard from "./DocumentCard";
 const Documents = () => {
   const { $emit } = useEventBus();
   const { user } = useAuth();
-  const { enqueueSnackbar } = useSnackbar();
 
   const [params, setParams] = useState({
     page: 1,
@@ -40,16 +39,9 @@ const Documents = () => {
       content: "Do you want to delete this document?",
       okText: "Delete",
       okCallback: () => {
-        DocumentService.delete(documentId)
-          .then(() => {
-            mutate("/documents");
-          })
-          .then(() => {
-            enqueueSnackbar("Successfully!", { variant: "success" });
-          })
-          .catch(() => {
-            enqueueSnackbar("Failed!", { variant: "error" });
-          });
+        DocumentService.delete(documentId).then(() => {
+          mutate("/documents");
+        });
       }
     });
   };

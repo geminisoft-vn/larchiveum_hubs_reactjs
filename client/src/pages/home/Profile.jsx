@@ -25,7 +25,7 @@ const ProfilePage = () => {
     resolver: yupResolver(schema)
   });
 
-  const { user } = useAuth();
+  const { user, mutate } = useAuth();
 
   const { $emit } = useEventBus();
 
@@ -37,7 +37,9 @@ const ProfilePage = () => {
 
   const handleSaveUserInfo = handleSubmit(data => {
     if (!user?.id) return;
-    UserService.update(user?.id, { username: data.username });
+    UserService.update(user?.id, { username: data.username }).then(() => {
+      mutate();
+    });
   });
 
   useEffect(

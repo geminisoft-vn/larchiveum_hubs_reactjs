@@ -147,6 +147,10 @@ export const AuthProvider = ({ children }) => {
       isLoading,
       isSuccess,
       user,
+<<<<<<< HEAD
+=======
+      mutate
+>>>>>>> 4e1d6499eac4a4eb89679d57338eca92cd79a44d
     }),
     [user, isLoading, error]
   );

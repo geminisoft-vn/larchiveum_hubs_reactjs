@@ -17,7 +17,11 @@ const Multiple = ({
   isInReview
 }) => {
   return (
-    <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
+    <FormControl
+      sx={{ maxWidth: "512px" }}
+      component="fieldset"
+      variant="standard"
+    >
       <FormLabel
         component="legend"
         sx={{ fontSize: "20px", color: purple[700], fontWeight: 900 }}

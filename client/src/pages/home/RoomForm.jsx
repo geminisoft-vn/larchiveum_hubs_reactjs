@@ -20,7 +20,6 @@ import { RoomService } from "src/services";
 const RoomFormPage = () => {
   const { t } = useTranslation();
   const { id: roomId } = useParams();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const { data: scenes, isLoading: isLoadingScenes } = useData(
     "/auth/rooms/scenes"
@@ -145,26 +144,14 @@ const RoomFormPage = () => {
         ...dataToSave,
         sceneId: selectedScene.hubSceneId,
         hubSceneThumbnailUrl: selectedScene.thumbnailUrl
-      })
-        .then(() => {
-          enqueueSnackbar("Updated Successfully!", { variant: "success" });
-        })
-        .catch(() => {
-          enqueueSnackbar("Updated Failed!", { variant: "error" });
-        });
+      });
     } else {
       RoomService.create({
         ...dataToSave,
         sceneId: selectedScene.hubSceneId,
         hubSceneThumbnailUrl: selectedScene.thumbnailUrl,
         userId: user.id
-      })
-        .then(() => {
-          enqueueSnackbar("Create Successfully!", { variant: "success" });
-        })
-        .catch(() => {
-          enqueueSnackbar("Create Failed!", { variant: "error" });
-        });
+      });
     }
   });
 

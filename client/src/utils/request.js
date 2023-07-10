@@ -1,6 +1,6 @@
 import axios from "axios";
-
 import Cookies from "js-cookie";
+import { enqueueSnackbar } from "notistack";
 
 const request = axios.create({
   baseURL: `${import.meta.env.VITE_API_ROOT}/v1`,
@@ -35,19 +35,45 @@ const onRequestError = error => {
 };
 
 const onResponse = response => {
+  if (!response.config.url.toLowerCase().includes("auth")) return response;
+  if (response.config.method === "get") return response;
+  if (response.status === 200 || response.status === 201) {
+    if (response.config.method === "post") {
+      enqueueSnackbar("Create successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "left"
+        }
+      });
+    } else if (
+      response.config.method === "put" ||
+      response.config.method === "patch"
+    ) {
+      enqueueSnackbar("Update successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "left"
+        }
+      });
+    } else {
+      enqueueSnackbar("Delete successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "left"
+        }
+      });
+    }
+  }
   return response;
 };
 
 const onResponseError = error => {
-  if (error.response) {
-    if (error.response.data) {
-      if (error.response.data.error) {
-        if (error.response.data.error.message) {
-          console.error(error.response.data.error.message);
-        }
-      }
-    }
-  }
+  enqueueSnackbar(error?.response?.data?.all || "Failed!", {
+    variant: "error"
+  });
   return Promise.reject(error);
 };
 

@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { parseInt } from "lodash";
+import { enqueueSnackbar } from "notistack";
 
+import { useEventBus } from "src/hooks";
 import { GettingStarted } from "src/sections/@quiz-game";
 import Game from "src/sections/@quiz-game/Game";
 import Result from "src/sections/@quiz-game/Result";
@@ -14,14 +16,17 @@ import "swiper/css/effect-creative";
 import "swiper/css/pagination";
 
 import "swiper/css";
-import { parseInt } from "lodash";
 
 const QuizGame = () => {
   const { id: quizId } = useParams();
 
-  const [step, setStep] = useState(STEP["GETTING_STARTED"]);
+  const { $emit } = useEventBus();
+
+  const swiperQuestionRef = useRef(null);
+
   const [quiz, setQuiz] = useState();
   const [questions, setQuestions] = useState();
+  const [step, setStep] = useState(STEP["GETTING_STARTED"]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [isInReview, setIsInReview] = useState(false);
 
@@ -77,6 +82,33 @@ const QuizGame = () => {
     setIsInReview(false);
   };
 
+  const handleGoToNextQuiz = () => {
+    if (swiperQuestionRef.current && questions && questions.length > 0) {
+      const question = questions[activeQuestionIndex];
+      if (question && question.answers) {
+        if (question.answers.size <= 0) {
+          enqueueSnackbar("Please choose at least one option!", {
+            variant: "error"
+          });
+        } else {
+          if (questions.length === activeQuestionIndex + 1) {
+            $emit("alert/open", {
+              title: "Submit Quiz",
+              content: "Do you want to submit?",
+              okText: "Submit",
+              okCallback: () => {
+                setStep(STEP["RESULT"]);
+                setIsInReview(false);
+              }
+            });
+            return;
+          }
+          swiperQuestionRef.current.swiper.slideNext();
+        }
+      }
+    }
+  };
+
   const handleGoToResult = () => {
     setStep(STEP["RESULT"]);
     setIsInReview(false);
@@ -117,11 +149,13 @@ const QuizGame = () => {
 
       {step === STEP["GAME"] && (
         <Game
+          swiperQuestionRef={swiperQuestionRef}
           questions={questions}
           activeQuestionIndex={activeQuestionIndex}
           handleChangeSlide={handleChangeSlide}
           handleSelectSingleOption={handleSelectSingleOption}
           handleSelectMultipleOption={handleSelectMultipleOption}
+          handleGoToNextQuiz={handleGoToNextQuiz}
           handleGoToResult={handleGoToResult}
           isInReview={isInReview}
         />
