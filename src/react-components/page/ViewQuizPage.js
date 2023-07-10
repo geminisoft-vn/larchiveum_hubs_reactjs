@@ -103,7 +103,7 @@ export function ViewQuizPage() {
               </Row>
               <Row style={{ width: "100%", marginTop: "50px" }}>
                 <Col span={24} style={{ fontSize: "2em", textAlign: "center", color: "gray" }}>
-                  {"Wrong quiz"}
+                 {"Wrong quiz"}
                 </Col>
               </Row>
             </div>

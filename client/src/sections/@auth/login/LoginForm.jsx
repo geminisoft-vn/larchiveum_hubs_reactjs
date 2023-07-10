@@ -11,8 +11,10 @@ import {
   InputAdornment,
   Stack,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
+//Toast
+import { enqueueSnackbar, SnackbarProvider } from "notistack";
 
 // components
 import Iconify from "src/components/iconify";
@@ -25,16 +27,25 @@ const LoginForm = () => {
   const { control, handleSubmit } = useForm({
     defaultValues: {
       email: "",
-      password: ""
-    }
+      password: "",
+    },
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [shouldRememberMe, setShouldRememberMe] = useState(false);
 
-  const handleLogin = handleSubmit(data => {
+  const handleLogin = handleSubmit((data) => {
     const { email, password } = data;
-    signIn(email, password);
+    if (!email || !password) {
+      enqueueSnackbar("Please fill in all required fields.", {
+        variant: "error",
+      });
+      return;
+    } else {
+      signIn(email, password);
+      localStorage.setItem('email', email);
+    }
+    
   });
 
   return (
@@ -77,7 +88,7 @@ const LoginForm = () => {
                       />
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
           )}
@@ -94,7 +105,7 @@ const LoginForm = () => {
           control={
             <Checkbox
               checked={shouldRememberMe}
-              onChange={e => setShouldRememberMe(e.target.checked)}
+              onChange={(e) => setShouldRememberMe(e.target.checked)}
             />
           }
           label="Remember me"
@@ -110,6 +121,14 @@ const LoginForm = () => {
           <Button>Get Started</Button>
         </Link>
       </Stack>
+
+      <SnackbarProvider
+        autoHideDuration={2000}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      />
 
       <LoadingButton
         fullWidth

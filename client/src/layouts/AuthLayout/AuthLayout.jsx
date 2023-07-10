@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 // components
 import Logo from "../../components/logo";
+import { Link } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -24,11 +25,13 @@ const AuthLayout = () => {
   return (
     <>
       <StyledHeader>
+        <Link to="/home/app">
         <img
           src="/assets/logo.png"
           alt="logo icon"
           style={{ width: "128px" }}
         />
+        </Link>
       </StyledHeader>
 
       <Outlet />

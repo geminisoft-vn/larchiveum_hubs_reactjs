@@ -28,6 +28,7 @@ const SignupForm = () => {
   const handleLogin = handleSubmit(data => {
     const { username, email, password } = data;
     signUp(username, email, password);
+    localStorage.setItem('email', email);
   });
 
   return (

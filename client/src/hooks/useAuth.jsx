@@ -3,10 +3,11 @@ import {
   useCallback,
   useContext,
   useMemo,
-  useState
+  useState,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { enqueueSnackbar, SnackbarProvider } from "notistack";
 import useSWR from "swr";
 
 import { AuthService } from "src/services";
@@ -22,14 +23,14 @@ export const AuthProvider = ({ children }) => {
     Cookies.get("__LARCHIVEUM__COOKIES") && pathname.includes("home")
       ? "/auth/users/me"
       : null,
-    url => {
+    (url) => {
       return request
         .get(url, {
           headers: {
-            Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`
-          }
+            Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`,
+          },
         })
-        .then(res => {
+        .then((res) => {
           if (res.status === 200) {
             return res.data.data;
           }
@@ -45,20 +46,49 @@ export const AuthProvider = ({ children }) => {
   const signIn = useCallback((email, password) => {
     setIsLoading(true);
     AuthService.login(email, password)
-      .then(res => {
+      .then((res) => {
         Cookies.set("__LARCHIVEUM__COOKIES", res.data.jwt);
         mutate();
         navigate("/home/app");
+      })
+      .catch((error) => {
+        const errorMessage = error.response.data.all;
+        console.error("Login failed:", errorMessage);
+        enqueueSnackbar(errorMessage, {
+          variant: "error",
+        });
+        if(error.response.data.error === "unverified_email"){
+          navigate("/auth/verify");
+        }
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
 
-  const retrievePassword = useCallback(async email => {
+  const reSendVerificationEmail = useCallback( async(email) => {
+    setIsLoading(true);
+    AuthService.reSendVerifyMail(email)
+      .then((res) => {
+        enqueueSnackbar("Successfull", {
+          variant: "success",
+        });
+      })
+      .catch((error) => {
+        enqueueSnackbar("Resend Email fail!", {
+          variant: "error",
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+  
+
+  const retrievePassword = useCallback(async (email) => {
     setIsLoading(true);
     AuthService.requestResetPassword(email)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           setIsSuccess(true);
         }
@@ -71,7 +101,7 @@ export const AuthProvider = ({ children }) => {
   const resetPassword = useCallback(async (token, password) => {
     setIsLoading(true);
     AuthService.resetPassword(token, password)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           navigate("/auth/signin");
         }
@@ -84,7 +114,7 @@ export const AuthProvider = ({ children }) => {
   const signUp = useCallback(async (username, email, password) => {
     setIsLoading(true);
     AuthService.register(username, email, password)
-      .then(res => {
+      .then((res) => {
         navigate("/auth/verify");
       })
       .finally(() => {
@@ -109,13 +139,14 @@ export const AuthProvider = ({ children }) => {
   const memoedValue = useMemo(
     () => ({
       signIn,
+      reSendVerificationEmail,
       signOut,
       signUp,
       retrievePassword,
       resetPassword,
       isLoading,
       isSuccess,
-      user
+      user,
     }),
     [user, isLoading, error]
   );
