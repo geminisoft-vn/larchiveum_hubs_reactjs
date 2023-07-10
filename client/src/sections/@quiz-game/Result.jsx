@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import {
   Box,
   Button,
@@ -113,7 +114,11 @@ const Result = ({ questions, handleResetGame, handleGoToReview }) => {
               </Button>
             </Stack>
             <Link to={`/home/app`}>
-              <Button variant="contained" fullWidth>
+              <Button
+                variant="contained"
+                fullWidth
+                endIcon={<HomeRoundedIcon />}
+              >
                 Go home
               </Button>
             </Link>

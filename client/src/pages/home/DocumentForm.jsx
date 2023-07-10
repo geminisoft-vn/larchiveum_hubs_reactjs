@@ -22,7 +22,6 @@ const DocumentFormPage = () => {
   const { $emit } = useEventBus();
   const { enqueueSnackbar } = useSnackbar();
   const { id: documentId } = useParams();
-  const { user } = useAuth();
 
   const { data: document, mutate } = useSWR(
     documentId ? `/documents/${documentId}` : null,
@@ -126,16 +125,9 @@ const DocumentFormPage = () => {
       content: "Do you want to delete this document?",
       okText: "Delete",
       okCallback: () => {
-        DocumentService.delete(documentId)
-          .then(() => {
-            navigate("/home/content?tab=1");
-          })
-          .then(() => {
-            enqueueSnackbar("Successfully!", { variant: "success" });
-          })
-          .catch(() => {
-            enqueueSnackbar("Failed!", { variant: "error" });
-          });
+        DocumentService.delete(documentId).then(() => {
+          navigate("/home/content?tab=1");
+        });
       }
     });
   };

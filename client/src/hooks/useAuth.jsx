@@ -115,7 +115,8 @@ export const AuthProvider = ({ children }) => {
       resetPassword,
       isLoading,
       isSuccess,
-      user
+      user,
+      mutate
     }),
     [user, isLoading, error]
   );

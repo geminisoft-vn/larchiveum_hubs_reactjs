@@ -4,25 +4,14 @@ import useSWR from "swr";
 
 import request from "src/utils/request";
 
-const fetcher = url => {
+const fetcher = async url => {
   let headers = {};
   if (Cookies.get("__LARCHIVEUM__COOKIES")) {
     headers.Authorization = `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`;
   }
-  return request
-    .get(url, { headers })
-    .then(res => {
-      if (res.status === 200) return res.data;
-    })
-    .catch(error => {
-      if (error.response) {
-        if (error.response.data) {
-          enqueueSnackbar(error.response.data.error.message, {
-            variant: "error"
-          });
-        }
-      }
-    });
+  return request.get(url, { headers }).then(res => {
+    if (res.status === 200) return res.data;
+  });
 };
 
 const useData = url => {

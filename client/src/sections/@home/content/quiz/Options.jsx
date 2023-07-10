@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button, Stack } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
 
 import { useEventBus } from "src/hooks";
 import { OptionService } from "src/services";
@@ -7,15 +9,9 @@ import { OptionService } from "src/services";
 import Option from "./Option";
 
 const Options = props => {
-  const {
-    questionIndex,
-    questionId,
-    quizId,
-    defaultValues,
-    mutateQuestion
-  } = props;
+  const { questionIndex, questionId } = props;
 
-  const { $emit } = useEventBus();
+  const { $emit, $on, $remove } = useEventBus();
 
   const { control, getValues } = useFormContext();
 
@@ -66,6 +62,13 @@ const Options = props => {
   };
 
   const handleDeleteOption = optionIndex => {
+    const options = getValues(`questions.${questionIndex}.options`);
+    if (options.length <= 1) {
+      enqueueSnackbar("There must be at least one option!", {
+        variant: "error"
+      });
+      return;
+    }
     const option = fields[optionIndex];
     $emit("alert/open", {
       title: "Delete Option",

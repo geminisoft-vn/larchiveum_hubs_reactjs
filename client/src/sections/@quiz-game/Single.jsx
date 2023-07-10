@@ -16,23 +16,23 @@ const Single = ({
   handleSelectSingleOption,
   isInReview
 }) => {
-  const answer = useMemo(
-    () => {
-      return Array.from(question.answers)[0];
-    },
-    [question]
-  );
-
   return (
-    <FormControl>
+    <FormControl sx={{ maxWidth: "512px" }}>
       <FormLabel id="demo-radio-buttons-group-label">
         <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
           <Typography
+            flexWrap
             sx={{ fontSize: "20px", color: purple[700], fontWeight: 900 }}
           >
             {questionIndex + 1}.
           </Typography>
-          <Typography sx={{ fontSize: "28px", color: "#000", fontWeight: 500 }}>
+          <Typography
+            sx={{
+              fontSize: "28px",
+              color: "#000",
+              fontWeight: 500
+            }}
+          >
             {question.content}
           </Typography>
         </Stack>

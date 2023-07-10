@@ -16,14 +16,12 @@ import { QuizService } from "src/services";
 
 import useSWR from "swr";
 import request from "src/utils/request";
-import { useSnackbar } from "notistack";
 
 const QuizFormPage = () => {
   const { t } = useTranslation();
   const { $emit } = useEventBus();
   const navigate = useNavigate();
   const { id: quizId } = useParams();
-  const { enqueueSnackbar } = useSnackbar();
 
   const { data: quiz, mutate: mutateQuiz } = useSWR(
     quizId ? `/quizzes/${quizId}` : null,
@@ -115,16 +113,9 @@ const QuizFormPage = () => {
       content: "Do you want to delete this quiz?",
       okText: "Delete",
       okCallback: () => {
-        QuizService.delete(quizId)
-          .then(() => {
-            navigate("/home/content?tab=0");
-          })
-          .then(() => {
-            enqueueSnackbar("Successfully!", { variant: "success" });
-          })
-          .catch(() => {
-            enqueueSnackbar("Failed!", { variant: "error" });
-          });
+        QuizService.delete(quizId).then(() => {
+          navigate("/home/content?tab=0");
+        });
       }
     });
   };

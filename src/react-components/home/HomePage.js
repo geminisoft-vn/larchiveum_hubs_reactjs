@@ -22,6 +22,8 @@ import { SignInButton } from "./SignInButton";
 import maskEmail from "../../utils/mask-email";
 import { ReactComponent as HmcLogo } from "../icons/HmcLogo.svg";
 
+import jwtDecode from "jwt-decode";
+
 export function HomePage({ store }) {
   const auth = useContext(AuthContext);
   const intl = useIntl();
@@ -51,7 +53,6 @@ export function HomePage({ store }) {
         const redirectUrl = "/" + qs.get("redirect_url");
         window.location.href = redirectUrl;
       } else if (qs.get("action") === "signout") {
-        console.log(qs.get);
         store.update({ credentials: { token: null, email: null } });
         window.close();
       }
@@ -67,18 +68,6 @@ export function HomePage({ store }) {
 
     if (qs.has("new")) {
       createAndRedirectToNewHub(null, null, true);
-    }
-
-    if (qs.has("admin-user-id") && qs.has("hub-id")) {
-      if (qs.get("admin-user-id") && store.state.credentials) {
-        window.localStorage.setItem(
-          "__LARCHIVEUM__USERID",
-          qs.get("admin-user-id")
-        );
-        if (qs.get("hub-id")) {
-          window.location.href = `https://larchiveum.link/${qs.get("hub-id")}`;
-        }
-      }
     }
   }, []);
 

@@ -109,8 +109,8 @@ export default class AuthChannel {
     return { authComplete };
   }
 
-  async handleAuthCredentials(email, token, hubChannel, larchiveumUserId) {
-    this.store.update({ credentials: { email, token, larchiveumUserId } });
+  async handleAuthCredentials(email, token, hubChannel) {
+    this.store.update({ credentials: { email, token } });
 
     if (hubChannel) {
       await hubChannel.signIn(token);

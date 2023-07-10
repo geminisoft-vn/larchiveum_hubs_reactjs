@@ -206,7 +206,7 @@ class UIRoot extends Component {
     objectSrc: "",
     sidebarId: null,
     presenceCount: 0,
-    chatInputEffect: () => {}
+    chatInputEffect: () => { }
   };
 
   constructor(props) {
@@ -746,7 +746,7 @@ class UIRoot extends Component {
   };
 
   onTweet = ({ detail }) => {
-    handleExitTo2DInterstitial(true, () => {}).then(() => {
+    handleExitTo2DInterstitial(true, () => { }).then(() => {
       this.props.performConditionalSignIn(
         () => this.props.hubChannel.signedIn,
         () => {
@@ -775,7 +775,7 @@ class UIRoot extends Component {
   pushHistoryState = (k, v) => pushHistoryState(this.props.history, k, v);
 
   setSidebar(sidebarId, otherState) {
-    this.setState({ sidebarId, chatInputEffect: () => {}, selectedUserId: null, ...otherState });
+    this.setState({ sidebarId, chatInputEffect: () => { }, selectedUserId: null, ...otherState });
   }
 
   toggleSidebar(sidebarId, otherState) {
@@ -1110,44 +1110,44 @@ class UIRoot extends Component {
           onCancel={this.endAutoExitTimer}
         />
       ) : (
-        <>
-          <StateRoute stateKey="entry_step" stateValue="device" history={this.props.history}>
-            {this.renderDevicePanel()}
-          </StateRoute>
-          <StateRoute stateKey="entry_step" stateValue="audio" history={this.props.history}>
-            {this.renderAudioSetupPanel()}
-          </StateRoute>
-          <StateRoute
-            stateKey="entry_step"
-            stateValue="profile"
-            history={this.props.history}
-            render={props => (
-              <ProfileEntryPanel
-                {...props}
-                containerType="modal"
-                displayNameOverride={displayNameOverride}
-                finished={() => {
-                  if (this.props.forcedVREntryType) {
-                    this.pushHistoryState();
-                    this.handleForceEntry();
-                  } else {
-                    this.onRequestMicPermission();
-                    this.pushHistoryState("entry_step", "audio");
-                  }
-                }}
-                showBackButton
-                onBack={() => this.pushHistoryState()}
-                store={this.props.store}
-                mediaSearchStore={this.props.mediaSearchStore}
-                avatarId={props.location.state.detail && props.location.state.detail.avatarId}
-              />
-            )}
-          />
-          <StateRoute stateKey="entry_step" stateValue="" history={this.props.history}>
-            {this.renderEntryStartPanel()}
-          </StateRoute>
-        </>
-      ));
+          <>
+            <StateRoute stateKey="entry_step" stateValue="device" history={this.props.history}>
+              {this.renderDevicePanel()}
+            </StateRoute>
+            <StateRoute stateKey="entry_step" stateValue="audio" history={this.props.history}>
+              {this.renderAudioSetupPanel()}
+            </StateRoute>
+            <StateRoute
+              stateKey="entry_step"
+              stateValue="profile"
+              history={this.props.history}
+              render={props => (
+                <ProfileEntryPanel
+                  {...props}
+                  containerType="modal"
+                  displayNameOverride={displayNameOverride}
+                  finished={() => {
+                    if (this.props.forcedVREntryType) {
+                      this.pushHistoryState();
+                      this.handleForceEntry();
+                    } else {
+                      this.onRequestMicPermission();
+                      this.pushHistoryState("entry_step", "audio");
+                    }
+                  }}
+                  showBackButton
+                  onBack={() => this.pushHistoryState()}
+                  store={this.props.store}
+                  mediaSearchStore={this.props.mediaSearchStore}
+                  avatarId={props.location.state.detail && props.location.state.detail.avatarId}
+                />
+              )}
+            />
+            <StateRoute stateKey="entry_step" stateValue="" history={this.props.history}>
+              {this.renderEntryStartPanel()}
+            </StateRoute>
+          </>
+        ));
 
     const presenceLogEntries = this.props.presenceLogEntries || [];
 
@@ -1176,29 +1176,29 @@ class UIRoot extends Component {
         label: !this.state.signedIn ? (
           <FormattedMessage id="more-menu.not-signed-in" defaultMessage="You are not signed in" />
         ) : (
-          <FormattedMessage
-            id="more-menu.you-signed-in-as"
-            defaultMessage="Signed in as: {email}"
-            values={{ email: maskEmail(this.props.store.state.credentials.email) }}
-          />
-        ),
+            <FormattedMessage
+              id="more-menu.you-signed-in-as"
+              defaultMessage="Signed in as: {email}"
+              values={{ email: maskEmail(this.props.store.state.credentials.email) }}
+            />
+          ),
         items: [
           this.state.signedIn
             ? {
-                id: "sign-out",
-                label: <FormattedMessage id="more-menu.sign-out" defaultMessage="Sign Out" />,
-                icon: LeaveIcon,
-                onClick: async () => {
-                  await this.props.authChannel.signOut(this.props.hubChannel);
-                  this.setState({ signedIn: false });
-                }
+              id: "sign-out",
+              label: <FormattedMessage id="more-menu.sign-out" defaultMessage="Sign Out" />,
+              icon: LeaveIcon,
+              onClick: async () => {
+                await this.props.authChannel.signOut(this.props.hubChannel);
+                this.setState({ signedIn: false });
               }
+            }
             : {
-                id: "sign-in",
-                label: <FormattedMessage id="more-menu.sign-in" defaultMessage="Sign In" />,
-                icon: EnterIcon,
-                onClick: () => this.showContextualSignInDialog()
-              },
+              id: "sign-in",
+              label: <FormattedMessage id="more-menu.sign-in" defaultMessage="Sign In" />,
+              icon: EnterIcon,
+              onClick: () => this.showContextualSignInDialog()
+            },
           canCreateRoom && {
             id: "create-room",
             label: <FormattedMessage id="more-menu.create-room" defaultMessage="Create Room" />,
@@ -1248,48 +1248,48 @@ class UIRoot extends Component {
             onClick: () => this.setSidebar("room-info")
           },
           (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
-            (this.props.hub.entry_mode !== "invite" || this.props.hubChannel.can("update_hub")) && {
-              id: "invite",
-              label: <FormattedMessage id="more-menu.invite" defaultMessage="Invite" />,
-              icon: InviteIcon,
-              onClick: () => this.props.scene.emit("action_invite")
-            },
+          (this.props.hub.entry_mode !== "invite" || this.props.hubChannel.can("update_hub")) && {
+            id: "invite",
+            label: <FormattedMessage id="more-menu.invite" defaultMessage="Invite" />,
+            icon: InviteIcon,
+            onClick: () => this.props.scene.emit("action_invite")
+          },
           this.isFavorited()
             ? {
-                id: "unfavorite-room",
-                label: <FormattedMessage id="more-menu.unfavorite-room" defaultMessage="Unfavorite Room" />,
-                icon: StarIcon,
-                onClick: () => this.toggleFavorited()
-              }
+              id: "unfavorite-room",
+              label: <FormattedMessage id="more-menu.unfavorite-room" defaultMessage="Unfavorite Room" />,
+              icon: StarIcon,
+              onClick: () => this.toggleFavorited()
+            }
             : {
-                id: "favorite-room",
-                label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
-                icon: StarOutlineIcon,
-                onClick: () => this.toggleFavorited()
-              },
+              id: "favorite-room",
+              label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
+              icon: StarOutlineIcon,
+              onClick: () => this.toggleFavorited()
+            },
           isModerator &&
-            entered && {
-              id: "streamer-mode",
-              label: streaming ? (
-                <FormattedMessage id="more-menu.exit-streamer-mode" defaultMessage="Exit Streamer Mode" />
-              ) : (
+          entered && {
+            id: "streamer-mode",
+            label: streaming ? (
+              <FormattedMessage id="more-menu.exit-streamer-mode" defaultMessage="Exit Streamer Mode" />
+            ) : (
                 <FormattedMessage id="more-menu.enter-streamer-mode" defaultMessage="Enter Streamer Mode" />
               ),
-              icon: CameraIcon,
-              onClick: () => this.toggleStreamerMode()
-            },
+            icon: CameraIcon,
+            onClick: () => this.toggleStreamerMode()
+          },
           (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
-            entered && {
-              id: "leave-room",
-              label: <FormattedMessage id="more-menu.enter-leave-room" defaultMessage="Leave Room" />,
-              icon: LeaveIcon,
-              onClick: () => {
-                this.showNonHistoriedDialog(LeaveRoomModal, {
-                  destinationUrl: "/",
-                  reason: LeaveReason.leaveRoom
-                });
-              }
-            },
+          entered && {
+            id: "leave-room",
+            label: <FormattedMessage id="more-menu.enter-leave-room" defaultMessage="Leave Room" />,
+            icon: LeaveIcon,
+            onClick: () => {
+              this.showNonHistoriedDialog(LeaveRoomModal, {
+                destinationUrl: "/",
+                reason: LeaveReason.leaveRoom
+              });
+            }
+          },
           canCloseRoom && {
             id: "close-room",
             label: <FormattedMessage id="more-menu.close-room" defaultMessage="Close Room" />,
@@ -1365,6 +1365,8 @@ class UIRoot extends Component {
         ].filter(item => item)
       }
     ];
+
+
 
     return (
       <MoreMenuContextProvider>
@@ -1474,24 +1476,24 @@ class UIRoot extends Component {
                     {!this.props.selectedObject && <CompactMoreMenuButton />}
                     {(!this.props.selectedObject ||
                       (this.props.breakpoint !== "sm" && this.props.breakpoint !== "md")) && (
-                      <ContentMenu>
-                        {showObjectList && (
-                          <ObjectsMenuButton
-                            active={this.state.sidebarId === "objects"}
-                            onClick={() => this.toggleSidebar("objects")}
+                        <ContentMenu>
+                          {showObjectList && (
+                            <ObjectsMenuButton
+                              active={this.state.sidebarId === "objects"}
+                              onClick={() => this.toggleSidebar("objects")}
+                            />
+                          )}
+                          <PeopleMenuButton
+                            active={this.state.sidebarId === "people"}
+                            onClick={() => this.toggleSidebar("people")}
+                            presencecount={this.state.presenceCount}
                           />
-                        )}
-                        <PeopleMenuButton
-                          active={this.state.sidebarId === "people"}
-                          onClick={() => this.toggleSidebar("people")}
-                          presencecount={this.state.presenceCount}
-                        />
-                        <ContentsMenuButton
-                          active={this.state.sidebarId === "contents"}
-                          onClick={() => this.toggleSidebar("contents")}
-                        />
-                      </ContentMenu>
-                    )}
+                          <ContentsMenuButton
+                            active={this.state.sidebarId === "contents"}
+                            onClick={() => this.toggleSidebar("contents")}
+                          />
+                        </ContentMenu>
+                      )}
                     {!entered && !streaming && !isMobile && streamerName && <SpectatingLabel name={streamerName} />}
                     {this.props.activeObject && (
                       <ObjectMenuContainer
@@ -1637,8 +1639,8 @@ class UIRoot extends Component {
                       )}
                     </>
                   ) : (
-                    undefined
-                  )
+                      undefined
+                    )
                 }
                 modal={this.state.dialog}
                 toolbarLeft={

@@ -16,7 +16,6 @@ import UserService from "src/services/UserService";
 
 const AvatarPickingModal = () => {
   const { $on } = useEventBus();
-  const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useAuth();
 
@@ -28,17 +27,7 @@ const AvatarPickingModal = () => {
   const handleChangeAvatar = () => {
     UserService.update(user.id, {
       avatarId: selectedAvatar.id
-    })
-      .then(() => {
-        enqueueSnackbar("Successfully!", {
-          variant: "success"
-        });
-      })
-      .catch(() => {
-        enqueueSnackbar("Failed!", {
-          variant: "error"
-        });
-      });
+    });
   };
 
   const loadAvatars = () => {

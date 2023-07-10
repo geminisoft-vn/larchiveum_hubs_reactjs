@@ -1,6 +1,6 @@
-import { useRef } from "react";
 import ArrowCircleLeftRoundedIcon from "@mui/icons-material/ArrowCircleLeftRounded";
 import ArrowCircleRightRoundedIcon from "@mui/icons-material/ArrowCircleRightRounded";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Box, Button, ButtonGroup, IconButton, Stack } from "@mui/material";
 import { EffectCreative, Pagination } from "swiper";
@@ -14,16 +14,16 @@ import "swiper/css/pagination";
 import "swiper/css";
 
 const Game = ({
+  swiperQuestionRef,
   questions,
   activeQuestionIndex,
   handleChangeSlide,
   handleSelectSingleOption,
   handleSelectMultipleOption,
+  handleGoToNextQuiz,
   handleGoToResult,
   isInReview
 }) => {
-  const swiperQuestionRef = useRef(null);
-
   return (
     <Stack
       direction="column"
@@ -78,28 +78,38 @@ const Game = ({
           })}
       </Swiper>
       <ButtonGroup variant="text" sx={{ alignSelf: "center" }}>
-        <Button
-          disabled={activeQuestionIndex === 0}
-          onClick={() =>
-            swiperQuestionRef.current &&
-            swiperQuestionRef.current.swiper.slidePrev()
-          }
-        >
-          <ArrowCircleLeftRoundedIcon />
-        </Button>
+        {isInReview && (
+          <>
+            <Button
+              disabled={activeQuestionIndex === 0}
+              onClick={() =>
+                swiperQuestionRef.current &&
+                swiperQuestionRef.current.swiper.slidePrev()
+              }
+            >
+              <ArrowCircleLeftRoundedIcon />
+            </Button>
 
-        <Button
-          disabled={questions && questions.length - 1 === activeQuestionIndex}
-          onClick={() =>
-            swiperQuestionRef.current &&
-            swiperQuestionRef.current.swiper.slideNext()
-          }
-        >
-          <ArrowCircleRightRoundedIcon />
-        </Button>
+            <Button
+              disabled={
+                questions && questions.length - 1 === activeQuestionIndex
+              }
+              onClick={() =>
+                swiperQuestionRef.current &&
+                swiperQuestionRef.current.swiper.slideNext()
+              }
+            >
+              <ArrowCircleRightRoundedIcon />
+            </Button>
+          </>
+        )}
         {!isInReview && (
-          <Button variant="contained" onClick={handleGoToResult}>
-            Submit
+          <Button
+            variant="contained"
+            onClick={handleGoToNextQuiz}
+            endIcon={<ArrowForwardRoundedIcon />}
+          >
+            Next
           </Button>
         )}
       </ButtonGroup>

@@ -1,8 +1,7 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 // @mui
 import { styled } from "@mui/material/styles";
 // components
-import Logo from "../../components/logo";
 
 // ----------------------------------------------------------------------
 
@@ -14,8 +13,8 @@ const StyledHeader = styled("header")(({ theme }) => ({
   position: "absolute",
   padding: theme.spacing(3, 3, 0),
   [theme.breakpoints.up("sm")]: {
-    padding: theme.spacing(5, 5, 0),
-  },
+    padding: theme.spacing(5, 5, 0)
+  }
 }));
 
 // ----------------------------------------------------------------------
@@ -24,11 +23,13 @@ const AuthLayout = () => {
   return (
     <>
       <StyledHeader>
-        <img
-          src="/assets/logo.png"
-          alt="logo icon"
-          style={{ width: "128px" }}
-        />
+        <Link to="/home/app">
+          <img
+            src="/assets/logo.png"
+            alt="logo icon"
+            style={{ width: "128px" }}
+          />
+        </Link>
       </StyledHeader>
 
       <Outlet />
