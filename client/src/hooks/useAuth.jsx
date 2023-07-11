@@ -52,11 +52,6 @@ export const AuthProvider = ({ children }) => {
         navigate("/home/app");
       })
       .catch((error) => {
-        const errorMessage = error.response.data.all;
-        console.error("Login failed:", errorMessage);
-        enqueueSnackbar(errorMessage, {
-          variant: "error",
-        });
         if(error.response.data.error === "unverified_email"){
           navigate("/auth/verify");
         }
@@ -75,7 +70,7 @@ export const AuthProvider = ({ children }) => {
         });
       })
       .catch((error) => {
-        enqueueSnackbar("Resend Email fail!", {
+        enqueueSnackbar("Resend Email Failed!", {
           variant: "error",
         });
       })
