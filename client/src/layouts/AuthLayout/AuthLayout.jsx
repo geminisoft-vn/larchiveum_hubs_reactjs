@@ -2,11 +2,6 @@ import { Link, Outlet } from "react-router-dom";
 // @mui
 import { styled } from "@mui/material/styles";
 // components
-<<<<<<< HEAD
-import Logo from "../../components/logo";
-import { Link } from "react-router-dom";
-=======
->>>>>>> 4e1d6499eac4a4eb89679d57338eca92cd79a44d
 
 // ----------------------------------------------------------------------
 
@@ -29,19 +24,11 @@ const AuthLayout = () => {
     <>
       <StyledHeader>
         <Link to="/home/app">
-<<<<<<< HEAD
-        <img
-          src="/assets/logo.png"
-          alt="logo icon"
-          style={{ width: "128px" }}
-        />
-=======
           <img
             src="/assets/logo.png"
             alt="logo icon"
             style={{ width: "128px" }}
           />
->>>>>>> 4e1d6499eac4a4eb89679d57338eca92cd79a44d
         </Link>
       </StyledHeader>
 
