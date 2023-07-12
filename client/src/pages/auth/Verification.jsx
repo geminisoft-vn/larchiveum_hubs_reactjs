@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
-import MarkEmailUnreadIcon from '@mui/icons-material/MarkEmailUnread';
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import MarkEmailUnreadIcon from "@mui/icons-material/MarkEmailUnread";
 // @mui
 import {
   Box,
@@ -18,10 +19,10 @@ import { useAuth } from "src/hooks";
 
 const VerifyPage = () => {
   const { reSendVerificationEmail } = useAuth();
-  const reSendEmail = (() => {
+  const reSendEmail = () => {
     const email = localStorage.getItem("email");
     reSendVerificationEmail(email);
-  });
+  };
 
   return (
     <Container
@@ -48,22 +49,43 @@ const VerifyPage = () => {
               horizontal: "center",
             }}
           />
+
+          <Divider sx={{ my: 1 }} />
+          <MarkEmailUnreadIcon fontSize="inherit" sx={{ fontSize: "48px" }} />
           <Typography
-            sx={{ textAlign: "center", fontSize: "24px", fontStyle: "italic" }}
+            variant="h4"
+            sx={{
+              textAlign: "center",
+              fontSize: "28px",
+              fontStyle: "bold",
+              marginBottom: "20px",
+              color: "#333333",
+            }}
           >
-            Please go to your email.
+            Verify your email address
           </Typography>
-
+          <Typography variant="body1" align="center" gutterBottom>
+            We have sent a verification link to your email.
+          </Typography>
+          <Typography variant="body1" align="center" gutterBottom>
+            Click on the link to complete the verification process.
+          </Typography>
+          <Typography variant="body1" align="center" gutterBottom>
+            You might need to <b>check your spam folder</b>.
+          </Typography>
           <Divider sx={{ my: 1 }} />
-          <MarkEmailUnreadIcon fontSize={"large"}/>
-          <Divider sx={{ my: 1 }} />
 
-          <Stack direction="column" alignItems="center" spacing={1}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            spacing={2}
+          >
             <Button variant="contained" onClick={reSendEmail}>
               Resend Email
             </Button>
-            <Link to="/auth/signin" style={{ alginSelf: "center" }}>
-              <Button>Back Home</Button>
+            <Link to="/auth/signin" style={{ alignSelf: "center" }}>
+              <Button endIcon={<ArrowForwardIcon />}>Back Home</Button>
             </Link>
           </Stack>
         </Stack>

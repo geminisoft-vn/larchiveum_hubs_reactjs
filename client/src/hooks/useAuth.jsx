@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
         navigate("/home/app");
       })
       .catch((error) => {
-        if(error.response.data.error === "unverified_email"){
+        if (error.response.data.error === "unverified_email") {
           navigate("/auth/verify");
         }
       })
@@ -61,13 +61,13 @@ export const AuthProvider = ({ children }) => {
       });
   }, []);
 
-  const reSendVerificationEmail = useCallback( async(email) => {
+  const reSendVerificationEmail = useCallback(async (email) => {
     setIsLoading(true);
     AuthService.reSendVerifyMail(email)
       .then((res) => {
-        enqueueSnackbar("Successfull", {
-          variant: "success",
-        });
+          enqueueSnackbar("Successfull", {
+            variant: "success",
+          });
       })
       .catch((error) => {
         enqueueSnackbar("Resend Email Failed!", {
@@ -78,7 +78,6 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
       });
   }, []);
-  
 
   const retrievePassword = useCallback(async (email) => {
     setIsLoading(true);
@@ -142,7 +141,7 @@ export const AuthProvider = ({ children }) => {
       isLoading,
       isSuccess,
       user,
-      mutate
+      mutate,
     }),
     [user, isLoading, error]
   );
