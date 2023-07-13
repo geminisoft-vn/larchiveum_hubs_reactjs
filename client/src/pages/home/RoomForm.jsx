@@ -92,7 +92,7 @@ const RoomFormPage = () => {
       description: "",
       startDate: null,
       endDate: null,
-      maxSize: 0,
+      maxSize: 10,
       public: false,
       enablePinObjects: false,
       enableFly: false,
