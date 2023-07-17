@@ -939,6 +939,7 @@ class UIRoot extends Component {
   };
 
   renderQuizPanel = () => {
+    
     return (
       <StateRoute
         stateKey="entry_step"

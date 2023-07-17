@@ -87,7 +87,7 @@ export function QuizList() {
               {quizzes.map(quiz => (
                 <a
                   key={quiz.id}
-                  href={`${CONTENT_ROOT}?quiz-game=${quiz.id}`}
+                  href={`${CONTENT_ROOT}/quiz-game/${quiz.id}`}
                   target="_blank"
                   rel="noopener referrer"
                   style={{

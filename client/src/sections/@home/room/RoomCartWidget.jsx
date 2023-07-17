@@ -1,6 +1,7 @@
 // @mui
-import { styled } from '@mui/material/styles';
 import { Badge } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
 // component
 import Iconify from 'src/components/iconify';
 
@@ -29,6 +30,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+// eslint-disable-next-line react/function-component-definition
 export default function CartWidget() {
   return (
     <StyledRoot>

@@ -228,6 +228,14 @@ if (isEmbed && !qs.get("embed_token")) {
   throw new Error("no embed token");
 }
 
+const urlString = window.location.href;
+const userIdStartIndex = urlString.indexOf('user-id=');
+if (userIdStartIndex !== -1) {
+  const userIdEndIndex = urlString.indexOf('&', userIdStartIndex);
+  const userId = urlString.slice(userIdStartIndex + 8, userIdEndIndex !== -1 ? userIdEndIndex : undefined);
+  localStorage.setItem("__LARCHIVEUM__USERID", userId);
+}
+
 if (
   qs.has("user-id") &&
   qs.get("user-id") &&

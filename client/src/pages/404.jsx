@@ -17,6 +17,7 @@ const StyledContent = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+// eslint-disable-next-line react/function-component-definition
 export default function Page404() {
   return (
     <>
@@ -38,7 +39,7 @@ export default function Page404() {
           />
 
           <Link to="/">
-            <Button  size="large" variant="contained" >
+            <Button size="large" variant="contained">
               Go to Home
             </Button>
           </Link>
