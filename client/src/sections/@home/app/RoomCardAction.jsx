@@ -26,7 +26,7 @@ const RoomCardAction = ({ room, handleReservate }) => {
       params["avatarId"] = user?.avatar?.id;
     }
     window.open(
-      `${import.meta.env.VITE_APP_ROOT}/${room?.hubRoomId}/${qs.stringify(
+      `${import.meta.env.VITE_APP_ROOT}/${room?.hubRoomId}?${qs.stringify(
         params
       )}`
     );
