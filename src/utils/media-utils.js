@@ -6,6 +6,7 @@ import { updateMaterials } from "./material-utils";
 import HubsTextureLoader from "../loaders/HubsTextureLoader";
 import { validMaterials } from "../components/hoverable-visuals";
 import { proxiedUrlFor, guessContentType } from "../utils/media-url-utils";
+import { HOST_NAME } from "../@larchiveum/utils/constants";
 import { isIOS as detectIOS } from "./is-mobile";
 import Linkify from "linkify-it";
 import tlds from "tlds";
@@ -38,13 +39,22 @@ export const getDefaultResolveQuality = (is360 = false) => {
 };
 
 export const resolveUrl = async (url, quality = null, version = 1, bustCache) => {
-  const key = `${url}_${version}`;
+  
+  let baseURL;
+  const parsedURL = new URL(url);
+  if(parsedURL.host === HOST_NAME ){
+    baseURL = `${parsedURL.protocol}//${parsedURL.host}`;
+  }else {
+    baseURL = url;
+  }
+
+  const key = `${baseURL}_${version}`;
   if (!bustCache && resolveUrlCache.has(key)) return resolveUrlCache.get(key);
 
   const resultPromise = fetch(mediaAPIEndpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ media: { url, quality: quality || getDefaultResolveQuality() }, version })
+    body: JSON.stringify({ media: { url: baseURL, quality: quality || getDefaultResolveQuality() }, version })
   }).then(async response => {
     if (!response.ok) {
       const message = `Error resolving url "${url}":`;
@@ -55,12 +65,21 @@ export const resolveUrl = async (url, quality = null, version = 1, bustCache) =>
         throw new Error(message + " " + response.statusText);
       }
     }
-    return response.json();
+
+    const resolvedData = await response.json();
+
+    const responseData = {
+      originalUrl: url,
+      ...resolvedData,
+    };
+
+    return responseData;
   });
 
   resolveUrlCache.set(key, resultPromise);
   return resultPromise;
 };
+
 
 export const upload = (file, desiredContentType) => {
   const formData = new FormData();

@@ -179,7 +179,7 @@ export function DocumentList() {
               {documents.map(document => (
                 <a
                   key={document.id}
-                  href={`${CONTENT_ROOT}?document-viewer=${document.id}`}
+                  href={`${CONTENT_ROOT}/document-viewer/${document.id}`}
                   target="_blank"
                   rel="noopener referrer"
                   style={{

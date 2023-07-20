@@ -21,6 +21,7 @@ AFRAME.registerComponent("open-media-button", {
     this.updateSrc = async () => {
       if (!this.targetEl.parentNode) return; // If removed
       const mediaLoader = this.targetEl.components["media-loader"].data;
+      console.log("object loaded ", this.src);
       const src = (this.src =
         (mediaLoader.mediaOptions && mediaLoader.mediaOptions.href) ||
         mediaLoader.src);
