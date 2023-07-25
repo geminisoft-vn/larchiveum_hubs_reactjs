@@ -15,6 +15,8 @@ import { green, grey, red } from "@mui/material/colors";
 import _ from "lodash";
 
 const Result = ({ questions, handleResetGame, handleGoToReview }) => {
+
+  const isInsideIframe = window.self !== window.top;
   const result = useMemo(
     () => {
       if (!questions) return null;
@@ -113,16 +115,18 @@ const Result = ({ questions, handleResetGame, handleGoToReview }) => {
                 Do it again
               </Button>
             </Stack>
-            <Link to={`/home/app`}>
-              <Button
-                variant="contained"
-                id="goHomeButton"
-                fullWidth
-                endIcon={<HomeRoundedIcon />}
-              >
-                Go home
-              </Button>
-            </Link>
+            {!isInsideIframe && (
+              <Link to={`/home/app`}>
+                <Button
+                  variant="contained"
+                  id="goHomeButton"
+                  fullWidth
+                  endIcon={<HomeRoundedIcon />}
+                >
+                  Go home
+                </Button>
+              </Link>
+            )}
           </Stack>
         </Stack>
       </Box>

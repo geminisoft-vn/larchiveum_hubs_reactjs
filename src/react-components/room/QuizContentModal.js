@@ -10,11 +10,11 @@ import { FormattedMessage } from "react-intl";
 
 export function QuizContentModal({ className, quizUrl, closeable, onClose }) {
 
-  const handleIframeLoad = (event) => {
-    const iframeContent = event.target.contentQuiz;
-    const goHomeButton = iframeContent.getElementById("goHomeButton");
-    goHomeButton.style.display = "none";
-  };
+  // const handleIframeLoad = (event) => {
+  //   //const iframeContent = event.target.contentQuiz;
+  //   const goHomeButton = document.getElementById("goHomeButton");
+  //   goHomeButton.style.display = "none";
+  // };
   
   return (
     <Modal
@@ -24,7 +24,7 @@ export function QuizContentModal({ className, quizUrl, closeable, onClose }) {
       beforeTitle={closeable && <CloseButton onClick={onClose} />}
     >
       <Column center className={styles.content}>
-        <iframe height={"100%"} width={"100%"} src={quizUrl} frameBorder={0} onLoad={handleIframeLoad}/>
+        <iframe height={"100%"} width={"100%"} src={quizUrl} frameBorder={0} />
       </Column>
     </Modal>
   );
