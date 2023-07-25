@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button, Stack } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
@@ -29,6 +29,8 @@ const Options = props => {
     });
   };
 
+  const [prevOptionContent, setPrevOptionContent] = useState("");
+
   const handleSaveOptionContent = (optionIndex, content) => {
     const option = fields[optionIndex];
     if (content && option.content === content) return;
@@ -40,26 +42,36 @@ const Options = props => {
       });
       return;
     }
-    OptionService.update(option.optionId, { content });
+    
+    if (content !== prevOptionContent) {
+      OptionService.update(option.optionId, { content });
+    }
   };
 
   const handleChangeCorrectOption = async (optionIndex, isCorrect) => {
-    // if single choice, there's only one correct option
-    // if multiple choice, there's many correct options
     const _option = fields[optionIndex];
-    await OptionService.update(_option.optionId, { isCorrect });
-    const options = getValues(`questions.${questionIndex}.options`);
-    if (getValues(`questions.${questionIndex}.type`) === "single") {
-      for (let i = 0; i < options.length; i++) {
-        if (options[i].optionId !== _option.optionId) {
-          await OptionService.update(options[i].optionId, { isCorrect: false });
-          update(i, {
-            isCorrect: false
-          });
+    const currentIsCorrect = _option.isCorrect;
+  
+    if (isCorrect !== currentIsCorrect) {
+      // Only update the database and state if the value has changed
+      await OptionService.update(_option.optionId, { isCorrect });
+  
+      if (getValues(`questions.${questionIndex}.type`) === "single") {
+        // For single-choice questions, set all other options to incorrect
+        const options = getValues(`questions.${questionIndex}.options`);
+        for (let i = 0; i < options.length; i++) {
+          if (i !== optionIndex && options[i].isCorrect) {
+            // Update only the incorrect options
+            await OptionService.update(options[i].optionId, { isCorrect: false });
+            update(i, {
+              isCorrect: false
+            });
+          }
         }
       }
     }
   };
+  
 
   const handleDeleteOption = optionIndex => {
     const options = getValues(`questions.${questionIndex}.options`);
@@ -81,6 +93,11 @@ const Options = props => {
       }
     });
   };
+
+  useEffect(() => {
+    const option = fields[questionIndex];
+    setPrevOptionContent(option?.content || "");
+  }, [fields[questionIndex]?.content, questionIndex]);
 
   return (
     <Stack direction="column" spacing={2}>

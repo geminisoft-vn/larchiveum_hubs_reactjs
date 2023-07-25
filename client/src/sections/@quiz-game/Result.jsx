@@ -116,6 +116,7 @@ const Result = ({ questions, handleResetGame, handleGoToReview }) => {
             <Link to={`/home/app`}>
               <Button
                 variant="contained"
+                id="goHomeButton"
                 fullWidth
                 endIcon={<HomeRoundedIcon />}
               >
