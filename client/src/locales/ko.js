@@ -31,7 +31,9 @@ export default {
   LABEL: {
     public: "공개",
     username: "사용자 이름",
-    password: "비밀번호"
+    password: "비밀번호",
+    Latest: "최신순",
+    Oldest: " 오래된순",
   },
   ERROR: {
     invalid_room_name_length:

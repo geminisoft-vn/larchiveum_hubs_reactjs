@@ -31,7 +31,9 @@ export default {
   LABEL: {
     public: "Public",
     username: "Username",
-    password: "Password"
+    password: "Password",
+    Latest: "Latest",
+    Oldest: "Oldest",
   },
   ERROR: {
     invalid_room_name_length:

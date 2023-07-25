@@ -8,16 +8,21 @@ import { useAuth, useData, useEventBus } from "src/hooks";
 // components
 import { RoomCard, RoomSearch, RoomSort } from "src/sections/@home/app";
 import { ReservationService } from "src/services";
+
+//Change language
+import { useTranslation } from "react-i18next";
 // ----------------------------------------------------------------------
 
-const SORT_OPTIONS = [
-  { value: "createdAt|desc", label: "Latest" },
-  { value: "createdAt|asc", label: "Oldest" }
-];
 
 const AppPage = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { $emit } = useEventBus();
+
+  const SORT_OPTIONS = [
+    { value: "createdAt|desc", label: t("LABEL.Latest") },
+    { value: "createdAt|asc", label: t("LABEL.Oldest") }
+  ];
 
   const [params, setParams] = useState({
     page: 1,

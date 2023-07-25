@@ -43,7 +43,9 @@ export const resolveUrl = async (url, quality = null, version = 1, bustCache) =>
   let baseURL;
   const parsedURL = new URL(url);
   if(parsedURL.host === HOST_NAME ){
-    baseURL = `${parsedURL.protocol}//${parsedURL.host}`;
+    const contentType = parsedURL.pathname.split("/")[1];
+    const getID = parsedURL.pathname.split("/")[2]
+    baseURL = `${parsedURL.protocol}//${parsedURL.hostname}/?${contentType}=${getID}`;
   }else {
     baseURL = url;
   }
