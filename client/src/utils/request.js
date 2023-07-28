@@ -71,8 +71,13 @@ const onResponse = response => {
 };
 
 const onResponseError = error => {
-  enqueueSnackbar(error?.response?.data?.all || "Failed!", {
-    variant: "error"
+  const invalid_length = JSON.parse(error?.response?.data?.all)[0].message;
+  enqueueSnackbar(invalid_length || "Failed!", {
+    variant: "error",
+    anchorOrigin: {
+      vertical: "bottom",
+      horizontal: "left"
+    }
   });
   return Promise.reject(error);
 };

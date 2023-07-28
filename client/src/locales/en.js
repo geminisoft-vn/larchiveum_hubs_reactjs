@@ -43,6 +43,10 @@ export default {
     invalid_required: "This field is required",
     invalid_room_max_size: "Must be greater 0 and less than 25.",
     invalid_start_date: "Start date is invalid",
-    invalid_end_date: "End date must be greater than start date."
+    invalid_end_date: "End date must be greater than start date.",
+    invalid_title_length: "Title must be contain at least 1 charaters and maximum 100 characters.",
+    invalid_desc_length: "Description must be contain at least 1 charaters and maximum 150 characters",
+    invalid_question_length: "Question must be contain at least 1 charaters and maximum 100 characters",
+    invalid_answer_length: "Answer must be contain at least 1 charaters and maximum 60 characters",
   }
 };

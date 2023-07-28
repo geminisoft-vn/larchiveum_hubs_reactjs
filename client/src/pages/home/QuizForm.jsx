@@ -6,7 +6,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { Button, Stack, TextField, Typography, Box } from "@mui/material";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -58,7 +59,21 @@ const QuizFormPage = () => {
   );
 
   const schema = yup.object().shape({
-    title: yup.string().required(t(`ERROR.required`))
+    title: yup
+      .string()
+      .min(1, t(`ERROR.invalid_title_length`))
+      .max(100, t(`ERROR.invalid_title_length`)).
+      required(t(`ERROR.required`)),
+    desc: yup
+      .string()
+      .min(1, t(`ERROR.invalid_desc_length`))
+      .max(150, t(`ERROR.invalid_desc_length`))
+      .required(t(`ERROR.required`)),
+    questions: yup
+      .array()
+      .min(1, t(`ERROR.invalid_question_length`))
+      .max(100, t(`ERROR.invalid_question_length`))
+      .required(t(`ERROR.required`))
   });
 
   const methods = useForm({
@@ -120,6 +135,51 @@ const QuizFormPage = () => {
     });
   };
 
+  const handleOpenQuizGuide = () => {
+    const titleLimit = 300;
+    const descriptionLimit = 500;
+    const questionLimit = 300;
+    const answerLimit = 100;
+    const maxOptions = 5;
+
+    const title = (
+      <Typography variant="h6" align="center">
+        Quiz Guide
+      </Typography>
+    );
+
+    const content = (
+      <Box sx={{ width: "100%", maxWidth: 500, textAlign: "center" }}>
+        <Typography variant="body1">
+          {`Title: ${titleLimit} alphabetic character limit`}
+        </Typography>
+        <Typography variant="body1">
+          {`Description: ${descriptionLimit} alphabetic character limit`}
+        </Typography>
+        <Typography variant="body1">
+          {`Question: ${questionLimit} alphabetic character limit`}
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          {`Answer: ${answerLimit} alphabetic character limit`}
+        </Typography>
+        <Typography variant="body1">
+          {`The maximum number of options for a question is ${maxOptions}.`}
+        </Typography>
+      </Box>
+    );
+
+    $emit("alert/open", {
+      title,
+      content,
+      cancelText: null,
+      okText: "OK",
+      okCallback: () => {
+        $emit("alert/close");
+      },
+    });
+  };
+  
+
   const handleGoBack = () => {
     if (!methods.getValues("title")) {
       methods.trigger("title", { shouldFocus: true });
@@ -155,6 +215,11 @@ const QuizFormPage = () => {
             {quizId ? "Edit" : "Create"} Quiz
           </Typography>
 
+          <Stack direction="row" spacing={1}>
+          <Button onClick={handleOpenQuizGuide} sx={{ minWidth: "fit-content"}}>
+            <HelpOutlineIcon fontSize="small"/>
+          </Button>
+
           <Button
             color="error"
             variant="contained"
@@ -163,6 +228,7 @@ const QuizFormPage = () => {
           >
             {t("BUTTON.delete")}
           </Button>
+          </Stack>
         </Stack>
 
         <Controller
@@ -193,6 +259,12 @@ const QuizFormPage = () => {
           render={({ field }) => {
             return (
               <TextField
+                error={Boolean(methods.formState.errors.desc)}
+                helperText={
+                  methods.formState.errors &&
+                  methods.formState.errors.desc &&
+                  methods.formState.errors.desc.message
+                }
                 label="Description"
                 InputLabelProps={{ shrink: true }}
                 placeholder="Enter quiz's description"

@@ -113,13 +113,14 @@ const Options = props => {
           />
         ))}
       </Stack>
-      <Button
-        variant="outlined"
-        sx={{ alignSelf: "center" }}
-        onClick={handleAddOption}
-      >
-        Add Answer
-      </Button>
+      {getValues(`questions.${questionIndex}.options`, [])?.length < 5 && (
+        <Button
+          variant="outlined"
+          onClick={() => handleAddOption(questionIndex)}
+        >
+          Add Option
+        </Button>
+      )}
     </Stack>
   );
 };
