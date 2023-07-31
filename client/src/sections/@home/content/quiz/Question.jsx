@@ -27,7 +27,8 @@ const Question = (props) => {
     mutateQuestion,
   } = props;
 
-  const { register, getValues, control } = useFormContext();
+  const { register, getValues, control, formState } = useFormContext();
+  const { errors } = formState;
 
   return (
     <Paper elevation={4} sx={{ p: 2 }}>
@@ -56,6 +57,8 @@ const Question = (props) => {
                 fullWidth
                 {...register(`questions.${questionIndex}.content`)}
                 placeholder="Enter your question"
+                error={Boolean(errors?.questions?.[questionIndex]?.content)}
+                helperText={errors?.questions?.[questionIndex]?.content?.message}
                 onBlur={() =>
                   handleSaveQuestionContent(
                     questionIndex,

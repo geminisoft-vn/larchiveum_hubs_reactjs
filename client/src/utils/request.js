@@ -71,16 +71,26 @@ const onResponse = response => {
 };
 
 const onResponseError = error => {
-  const invalid_length = JSON.parse(error?.response?.data?.all)[0].message;
-  enqueueSnackbar(invalid_length || "Failed!", {
-    variant: "error",
-    anchorOrigin: {
-      vertical: "bottom",
-      horizontal: "left"
+  if (error?.response?.data?.all) {
+    try {
+      const errorData = JSON.parse(error.response.data.all);
+      const errorMessage = errorData[0]?.message;
+      enqueueSnackbar(errorMessage || "Failed!", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "left"
+        }
+      });
+    } catch (parseError) {
+      enqueueSnackbar(error.response.data.all || "Failed!", {
+        variant: "error"
+      });
     }
-  });
+  }
   return Promise.reject(error);
 };
+
 
 request.interceptors.request.use(onRequest, onRequestError);
 request.interceptors.response.use(onResponse, onResponseError);

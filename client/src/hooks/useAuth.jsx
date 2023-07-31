@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
         navigate("/home/app");
       })
       .catch((error) => {
-        if (error.response.data.error === "unverified_email") {
+        if (error.response?.data?.error === "unverified_email") {
           navigate("/auth/verify");
         }
       })

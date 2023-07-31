@@ -20,7 +20,9 @@ const Option = props => {
     handleSaveOptionContent,
   } = props;
 
-  const { register, control, watch, getValues } = useFormContext();
+  const { register, control, watch, getValues, formState } = useFormContext();
+  const { errors } = formState;
+  
 
   return (
     <Stack sx={{ px: 2 }}>
@@ -29,6 +31,9 @@ const Option = props => {
           <TextField
             fullWidth
             placeholder="Enter your option"
+            error={Boolean(errors?.questions?.[questionIndex]?.options?.[optionIndex]?.content)}
+            helperText={
+              errors?.questions?.[questionIndex]?.options?.[optionIndex]?.content?.message}
             {...register(
               `questions.${questionIndex}.options.${optionIndex}.content`
             )}

@@ -62,18 +62,31 @@ const QuizFormPage = () => {
     title: yup
       .string()
       .min(1, t(`ERROR.invalid_title_length`))
-      .max(100, t(`ERROR.invalid_title_length`)).
-      required(t(`ERROR.required`)),
+      .max(100, t(`ERROR.invalid_title_length`))
+      .required(t(`ERROR.required`)),
     desc: yup
       .string()
       .min(1, t(`ERROR.invalid_desc_length`))
       .max(150, t(`ERROR.invalid_desc_length`))
       .required(t(`ERROR.required`)),
-    questions: yup
-      .array()
-      .min(1, t(`ERROR.invalid_question_length`))
-      .max(100, t(`ERROR.invalid_question_length`))
-      .required(t(`ERROR.required`))
+    questions: yup.array().of(
+      yup.object().shape({
+        options: yup.array().of(
+          yup.object().shape({
+            content: yup
+              .string()
+              .min(1, t(`ERROR.invalid_answer_length`))
+              .max(60, t(`ERROR.invalid_answer_length`))
+              .required(t(`ERROR.required`)),
+          })
+        ),
+        content: yup
+          .string()
+          .min(1, t(`ERROR.invalid_question_length`))
+          .max(100, t(`ERROR.invalid_question_length`))
+          .required(t(`ERROR.required`)),
+      })
+    ),
   });
 
   const methods = useForm({
