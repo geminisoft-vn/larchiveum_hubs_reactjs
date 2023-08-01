@@ -32,8 +32,8 @@ const GettingStarted = ({ quiz, handleStartQuiz }) => {
               spacing={2}
               sx={{ height: "100%" }}
             >
-              <Typography variant="h1">{quiz?.title}</Typography>
-              <Typography variant="body1">{quiz?.desc}</Typography>
+              <Typography variant="h2">{quiz?.title}</Typography>
+              <Typography variant="body">{quiz?.desc}</Typography>
               <Button
                 variant="contained"
                 endIcon={<FlagRoundedIcon />}

@@ -29,7 +29,7 @@ const Game = ({
       direction="column"
       sx={{
         maxHeight: "100%",
-        height: "100%",
+        height: "100vh",
         maxWidth: "100%",
 
         pb: 12,

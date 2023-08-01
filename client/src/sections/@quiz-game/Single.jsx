@@ -28,7 +28,7 @@ const Single = ({
           </Typography>
           <Typography
             sx={{
-              fontSize: "28px",
+              fontSize: "22px",
               color: "#000",
               fontWeight: 500
             }}
@@ -89,7 +89,7 @@ const Single = ({
                 label={option.content}
                 sx={{
                   "& .MuiTypography-root": {
-                    fontSize: 20
+                    fontSize: 18
                   }
                 }}
               />

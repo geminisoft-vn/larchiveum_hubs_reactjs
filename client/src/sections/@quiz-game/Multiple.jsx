@@ -32,7 +32,7 @@ const Multiple = ({
           >
             {questionIndex + 1}.
           </Typography>
-          <Typography sx={{ fontSize: "28px", color: "#000", fontWeight: 500 }}>
+          <Typography sx={{ fontSize: "22px", color: "#000", fontWeight: 500 }}>
             {question.content}
           </Typography>
         </Stack>
@@ -84,7 +84,7 @@ const Multiple = ({
                 label={option.content}
                 sx={{
                   "& .MuiTypography-root": {
-                    fontSize: 20
+                    fontSize: 18
                   }
                 }}
                 onChange={e => {
