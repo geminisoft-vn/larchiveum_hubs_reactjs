@@ -18,7 +18,7 @@ const Multiple = ({
 }) => {
   return (
     <FormControl
-      sx={{ maxWidth: "512px" }}
+      sx={{ maxWidth: "600px" }}
       component="fieldset"
       variant="standard"
     >

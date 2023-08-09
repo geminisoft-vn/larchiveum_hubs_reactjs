@@ -31,9 +31,7 @@ const Game = ({
         maxHeight: "100%",
         height: "100vh",
         maxWidth: "100%",
-
-        pb: 12,
-
+        pb: "5%",
         position: "relative"
       }}
     >

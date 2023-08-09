@@ -6,6 +6,8 @@ import _ from "lodash";
 import Multiple from "./Multiple";
 import Single from "./Single";
 
+const isInsideIframe = window.self !== window.top;
+
 const Question = ({
   question,
   index,

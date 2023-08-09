@@ -13,11 +13,12 @@ const Management = () => {
   const navigate = useNavigate();
 
   const handleAddNewDocument = () => {
-    DocumentService.create().then(document => {
-      if (document && document.id) {
-        navigate(`/home/document-form/${document.id}`);
-      }
-    });
+    // DocumentService.create().then(document => {
+    //   if (document && document.id) {
+    //     navigate(`/home/document-form/${document.id}`);
+    //   }
+    // });
+    navigate(`/home/document-form`);
   };
 
   return (

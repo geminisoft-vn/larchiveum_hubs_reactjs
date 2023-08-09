@@ -6,9 +6,12 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  Typography
+  Typography,
+  useMediaQuery
 } from "@mui/material";
 import { purple } from "@mui/material/colors";
+
+import "./style.scss";
 
 const Single = ({
   question,
@@ -16,8 +19,11 @@ const Single = ({
   handleSelectSingleOption,
   isInReview
 }) => {
+
+  const isMobileDevice = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const fontSize = isMobileDevice ? 13 : 18;
   return (
-    <FormControl sx={{ maxWidth: "512px" }}>
+    <FormControl sx={{ maxWidth: "600px", fontSize: "12px" }}>
       <FormLabel id="demo-radio-buttons-group-label">
         <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
           <Typography
@@ -89,7 +95,7 @@ const Single = ({
                 label={option.content}
                 sx={{
                   "& .MuiTypography-root": {
-                    fontSize: 18
+                    fontSize: `${fontSize}px`
                   }
                 }}
               />

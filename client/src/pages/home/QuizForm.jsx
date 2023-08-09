@@ -112,6 +112,11 @@ const QuizFormPage = () => {
   };
 
   const handleSaveQuizTitle = async newTitle => {
+    QuizService.create({title: newTitle}).then(quiz => {
+      if (quiz && quiz.id) {
+        navigate(`/home/quiz-form/${quiz.id}`);
+      }
+    });
     if (!quizId) return;
     if (!newTitle) {
       await methods.trigger("title");

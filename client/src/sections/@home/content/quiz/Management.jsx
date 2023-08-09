@@ -13,11 +13,7 @@ const Management = () => {
   const navigate = useNavigate();
 
   const handleAddNewQuiz = () => {
-    QuizService.create().then(quiz => {
-      if (quiz && quiz.id) {
-        navigate(`/home/quiz-form/${quiz.id}`);
-      }
-    });
+    navigate(`/home/quiz-form`);
   };
 
   return (
