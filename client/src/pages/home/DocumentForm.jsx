@@ -93,7 +93,7 @@ const DocumentFormPage = () => {
   };
 
   const handleSaveDocumentTitle = async newTitle => {
-    if(newTitle){
+    if(newTitle && !documentId){
       DocumentService.create({title: newTitle}).then(document => {
         if (document && document.id) {
           navigate(`/home/document-form/${document.id}`);

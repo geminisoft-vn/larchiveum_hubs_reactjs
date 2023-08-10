@@ -112,7 +112,7 @@ const QuizFormPage = () => {
   };
 
   const handleSaveQuizTitle = async newTitle => {
-   if(newTitle) {
+   if(newTitle && !quizId) {
     QuizService.create({title: newTitle}).then(quiz => {
       if (quiz && quiz.id) {
         navigate(`/home/quiz-form/${quiz.id}`);
