@@ -6,9 +6,11 @@ import {
   FormGroup,
   FormLabel,
   Stack,
-  Typography
+  Typography,
+  useMediaQuery
 } from "@mui/material";
 import { grey, purple } from "@mui/material/colors";
+import "./quizStyles.scss";
 
 const Multiple = ({
   question,
@@ -16,6 +18,9 @@ const Multiple = ({
   handleSelectMultipleOption,
   isInReview
 }) => {
+
+  const isMobileDevice = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const fontSize = isMobileDevice ? 13 : 18;
   return (
     <FormControl
       sx={{ maxWidth: "600px" }}
@@ -84,7 +89,7 @@ const Multiple = ({
                 label={option.content}
                 sx={{
                   "& .MuiTypography-root": {
-                    fontSize: 18
+                    fontSize: `${fontSize}px`
                   }
                 }}
                 onChange={e => {

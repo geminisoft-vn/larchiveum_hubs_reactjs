@@ -79,6 +79,9 @@ function useCreateToken() {
   };
 
   const fetchScopes = async () => {
+    // tokenType, scopes
+    // scopes -> read + write rooms
+    // TokenType: "app" or "account",
     try {
       const fetchedScopes = await fetchAvailableScopes();
       const scopes = fetchedScopes.scopes;

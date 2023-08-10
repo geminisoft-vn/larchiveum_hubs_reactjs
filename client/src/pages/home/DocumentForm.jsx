@@ -31,7 +31,7 @@ const DocumentFormPage = () => {
   );
 
   const schema = yup.object().shape({
-    title: yup.string().required(t(`ERROR.required`))
+    title: yup.string().required(t(`ERROR.required`)).min(1)
   });
 
   const {
@@ -93,11 +93,13 @@ const DocumentFormPage = () => {
   };
 
   const handleSaveDocumentTitle = async newTitle => {
-    DocumentService.create({title: newTitle}).then(document => {
-      if (document && document.id) {
-        navigate(`/home/document-form/${document.id}`);
-      }
-    });
+    if(newTitle){
+      DocumentService.create({title: newTitle}).then(document => {
+        if (document && document.id) {
+          navigate(`/home/document-form/${document.id}`);
+        }
+      });
+    }
     if (!documentId) return;
     if (!newTitle) {
       await trigger("title");

@@ -9,7 +9,7 @@ export function ControlGuideToolbarButton(props) {
       {...props}
       icon={<AvatarIcon />}
       preset="accent2"
-      label={<FormattedMessage id="control-guide-button" defaultMessage="Control Guide" />}
+      label={<FormattedMessage id="control-guide-button" defaultMessage="Guide" />}
     />
   );
 }

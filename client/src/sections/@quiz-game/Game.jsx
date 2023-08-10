@@ -115,7 +115,7 @@ const Game = ({
       {isInReview && (
         <Box sx={{ position: "absolute", top: 32, right: 32, zIndex: 999 }}>
           <IconButton onClick={handleGoToResult}>
-            <CloseRoundedIcon sx={{ fontSize: 64 }} />
+            <CloseRoundedIcon sx={{ fontSize: 40 }} />
           </IconButton>
         </Box>
       )}

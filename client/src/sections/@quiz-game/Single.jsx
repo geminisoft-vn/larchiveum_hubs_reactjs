@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { purple } from "@mui/material/colors";
 
-import "./style.scss";
+import "./quizStyles.scss";
 
 const Single = ({
   question,
