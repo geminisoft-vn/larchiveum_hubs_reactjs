@@ -10,6 +10,9 @@ class MediaService {
       })
       .then(res => res.data.data);
   }
+  static delete(fileName) {
+    return request.delete(`/auth/media/delete-image/${fileName}`).then(res => res.data.data);
+  }
 }
 
 export default MediaService;

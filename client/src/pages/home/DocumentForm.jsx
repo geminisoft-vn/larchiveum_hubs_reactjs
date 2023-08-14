@@ -91,6 +91,21 @@ const DocumentFormPage = () => {
 
     input.click();
   };
+  
+  const  handleDeleteImage = (fileName) => {
+    const file = fileName.substring(fileName.lastIndexOf("/") + 1);
+    MediaService.delete(file);
+  }
+
+  const handleEditorKeyDown = (e, editor) => {
+    if ((e.keyCode === 8 || e.keyCode === 46) && editor.selection) {
+      const selectedNode = editor.selection.getNode();
+      if (selectedNode && selectedNode.nodeName === 'IMG') {
+        const imageSrc = selectedNode.src;
+        handleDeleteImage(imageSrc);
+      }
+    }
+  };
 
   const handleSaveDocumentTitle = async newTitle => {
     if(newTitle && !documentId){
@@ -248,6 +263,11 @@ const DocumentFormPage = () => {
             "wordcount",
             "autoresize"
           ],
+          setup: editor => {
+            editor.on('keydown', (e) => {
+              handleEditorKeyDown(e, editor);
+            });
+          },
           toolbar:
             "undo redo | casechange blocks | bold italic backcolor | image media file | " +
             "alignleft aligncenter alignright alignjustify | " +
