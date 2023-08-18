@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }) => {
     AuthService.login(email, password)
       .then((res) => {
         Cookies.set("__LARCHIVEUM__COOKIES", res.data.jwt);
+        UserService.isAdmin(email);
         mutate();
         navigate("/home/app");
       })

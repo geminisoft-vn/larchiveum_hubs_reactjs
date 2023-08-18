@@ -9,6 +9,9 @@ class UserService {
   static update(id, data) {
     return request.put(`/auth/users/${id}`, data).then(res => res.data.data);
   }
+  static isAdmin(email) {
+    return request.put(`/auth/is-admin?email=${email}`).then(res => res.data.data);
+  }
 }
 
 export default UserService;
