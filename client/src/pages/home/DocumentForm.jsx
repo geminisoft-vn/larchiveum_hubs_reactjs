@@ -73,7 +73,7 @@ const DocumentFormPage = () => {
     input.addEventListener("change", e => {
       const { files } = e.target;
       if (files) {
-        MediaService.upload({ files: files[0] })
+        MediaService.uploadLocal({ files: files[0] })
           .then(mediaUrl => {
             enqueueSnackbar("Upload Successfully!", { variant: "success" });
             return mediaUrl;
@@ -84,23 +84,58 @@ const DocumentFormPage = () => {
             });
           })
           .catch(() => {
-            enqueueSnackbar("Upload Failed!", { variant: "error" });
+            setTimeout(() =>{
+              enqueueSnackbar("Upload Failed!", { variant: "error" });
+            },1500)
           });
       }
     });
 
     input.click();
   };
+
+  const handleS3ImageUpload = (editor) => {
+    return new Promise((resolve, reject) => {
+      const input = window.document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "image/*");
   
-  const  handleDeleteImage = (fileName) => {
+      input.addEventListener("change", e => {
+        const { files } = e.target;
+        if (files) {
+          MediaService.uploadS3({ files: files[0] })
+            .then(mediaUrl => {
+              enqueueSnackbar("Upload Successfully!", { variant: "success" });
+              resolve(mediaUrl);
+            })
+            .catch(error => {
+              setTimeout(() =>{
+                enqueueSnackbar("Upload Failed!", { variant: "error" });
+              },1500)
+              reject(error); 
+            });
+        }
+      });
+  
+      input.click();
+    });
+  };
+  
+
+  const handleDeleteImage = (fileName) => {
+    const isLocalImage = fileName.startsWith(import.meta.env.VITE_API_ROOT);
     const file = fileName.substring(fileName.lastIndexOf("/") + 1);
-    MediaService.delete(file);
-  }
+    if(isLocalImage) {
+      MediaService.deleteLocal(file);
+    }else {
+      MediaService.deleteS3(file);
+    }
+  };
 
   const handleEditorKeyDown = (e, editor) => {
     if ((e.keyCode === 8 || e.keyCode === 46) && editor.selection) {
       const selectedNode = editor.selection.getNode();
-      if (selectedNode && selectedNode.nodeName === 'IMG') {
+      if (selectedNode && selectedNode.nodeName === "IMG") {
         const imageSrc = selectedNode.src;
         handleDeleteImage(imageSrc);
       }
@@ -263,13 +298,24 @@ const DocumentFormPage = () => {
             "wordcount",
             "autoresize"
           ],
-          setup: editor => {
-            editor.on('keydown', (e) => {
+          setup: (editor) => {
+            editor.ui.registry.addButton("customImageUpload", {
+              text: "",
+              icon: "gallery",
+              tooltip: "S3 image upload",
+              onAction: () => {
+                handleS3ImageUpload(editor).then((mediaUrl) => {
+                  editor.execCommand('mceInsertContent', false, `<p><img src="${mediaUrl}" alt="" /></p>`);
+                })
+              },
+            });
+
+            editor.on("keydown", (e) => {
               handleEditorKeyDown(e, editor);
             });
           },
           toolbar:
-            "undo redo | casechange blocks | bold italic backcolor | image media file | " +
+            "undo redo | casechange blocks | bold italic backcolor | customImageUpload image media file | " +
             "alignleft aligncenter alignright alignjustify | " +
             "bullist numlist checklist outdent indent | removeformat | code table help"
         }}

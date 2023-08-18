@@ -12,6 +12,7 @@ import useSWR from "swr";
 
 import { AuthService } from "src/services";
 import request from "src/utils/request";
+import UserService from "src/services/UserService";
 
 const AuthContext = createContext();
 

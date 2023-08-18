@@ -160,6 +160,7 @@ const postgrestClient = (apiUrl, httpClient = fetchJson) => {
         break;
       }
 
+      //API
       case UPDATE: {
         url = `${apiUrl}/${resource}?id=eq.${params.id}`;
         options.method = "PATCH";
