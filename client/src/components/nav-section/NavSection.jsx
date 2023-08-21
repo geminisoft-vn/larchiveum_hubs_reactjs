@@ -15,7 +15,7 @@ NavSection.propTypes = {
 };
 
 export default function NavSection({ data = [], ...other }) {
-  const { user } = useAuth();
+  const { user, syncAdminAccounts } = useAuth();
 
   return (
     <Box {...other}>

@@ -44,12 +44,18 @@ export const AuthProvider = ({ children }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  const syncAdminAccounts = (email) => {
+    UserService.isAdmin(email).then((res) => {
+      mutate();
+    });
+  }
+
   const signIn = useCallback((email, password) => {
     setIsLoading(true);
     AuthService.login(email, password)
       .then((res) => {
         Cookies.set("__LARCHIVEUM__COOKIES", res.data.jwt);
-        UserService.isAdmin(email);
+        syncAdminAccounts(email);
         mutate();
         navigate("/home/app");
       })
