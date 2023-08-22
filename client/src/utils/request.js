@@ -50,6 +50,7 @@ const onResponse = response => {
       response.config.method === "put" ||
       response.config.method === "patch"
     ) {
+      if(!response.config.url.toLowerCase().includes("is-admin"))
       enqueueSnackbar("Update successfully!", {
         variant: "success",
         anchorOrigin: {

@@ -13,6 +13,7 @@ import useSWR from "swr";
 import { AuthService } from "src/services";
 import request from "src/utils/request";
 import UserService from "src/services/UserService";
+import { USER_TYPE_ENUM } from "src/utils/constant";
 
 const AuthContext = createContext();
 
@@ -33,6 +34,9 @@ export const AuthProvider = ({ children }) => {
         })
         .then((res) => {
           if (res.status === 200) {
+            if(res.data.data.type !== USER_TYPE_ENUM.HUBS_ADMIN){
+              syncAdminAccounts(res.data.data.email);
+            }
             return res.data.data;
           }
           return null;
@@ -55,7 +59,7 @@ export const AuthProvider = ({ children }) => {
     AuthService.login(email, password)
       .then((res) => {
         Cookies.set("__LARCHIVEUM__COOKIES", res.data.jwt);
-        syncAdminAccounts(email);
+        // syncAdminAccounts(email);
         mutate();
         navigate("/home/app");
       })
