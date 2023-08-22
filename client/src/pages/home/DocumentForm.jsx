@@ -73,7 +73,7 @@ const DocumentFormPage = () => {
     input.addEventListener("change", e => {
       const { files } = e.target;
       if (files) {
-        MediaService.uploadLocal({ files: files[0] })
+        MediaService.uploadS3({ files: files[0] })
           .then(mediaUrl => {
             enqueueSnackbar("Upload Successfully!", { variant: "success" });
             return mediaUrl;
@@ -93,35 +93,7 @@ const DocumentFormPage = () => {
 
     input.click();
   };
-
-  const handleS3ImageUpload = (editor) => {
-    return new Promise((resolve, reject) => {
-      const input = window.document.createElement("input");
-      input.setAttribute("type", "file");
-      input.setAttribute("accept", "image/*");
   
-      input.addEventListener("change", e => {
-        const { files } = e.target;
-        if (files) {
-          MediaService.uploadS3({ files: files[0] })
-            .then(mediaUrl => {
-              enqueueSnackbar("Upload Successfully!", { variant: "success" });
-              resolve(mediaUrl);
-            })
-            .catch(error => {
-              setTimeout(() =>{
-                enqueueSnackbar("Upload Failed!", { variant: "error" });
-              },1500)
-              reject(error); 
-            });
-        }
-      });
-  
-      input.click();
-    });
-  };
-  
-
   const handleDeleteImage = (fileName) => {
     const isLocalImage = fileName.startsWith(import.meta.env.VITE_API_ROOT);
     const file = fileName.substring(fileName.lastIndexOf("/") + 1);
@@ -299,17 +271,6 @@ const DocumentFormPage = () => {
             "autoresize"
           ],
           setup: (editor) => {
-            editor.ui.registry.addButton("customImageUpload", {
-              text: "",
-              icon: "gallery",
-              tooltip: "S3 image upload",
-              onAction: () => {
-                handleS3ImageUpload(editor).then((mediaUrl) => {
-                  editor.execCommand('mceInsertContent', false, `<p><img src="${mediaUrl}" alt="" /></p>`);
-                })
-              },
-            });
-
             editor.on("keydown", (e) => {
               handleEditorKeyDown(e, editor);
             });
