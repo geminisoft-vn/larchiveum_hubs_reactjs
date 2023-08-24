@@ -35,7 +35,7 @@ const onRequestError = error => {
 };
 
 const onResponse = response => {
-  if ((!response.config.url.toLowerCase().includes("auth")) || (response.config.url.toLowerCase().includes("register"))) return response;
+  if ((!response.config.url.toLowerCase().includes("auth"))) return response;
   if (response.config.method === "get") return response;
   if (response.status === 200 || response.status === 201) {
     if (response.config.method === "post") {

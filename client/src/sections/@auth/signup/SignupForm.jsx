@@ -3,6 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 // ----------------------------------------------------------------------
 import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
+import { SnackbarProvider } from 'notistack'
 // @mui
 import {
   Button,
@@ -20,7 +21,12 @@ import { useAuth } from "src/hooks";
 const SignupForm = () => {
   const { signUp, isLoading } = useAuth();
 
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
@@ -33,6 +39,13 @@ const SignupForm = () => {
 
   return (
     <>
+    <SnackbarProvider
+        autoHideDuration={2000}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      />
       <Stack spacing={3}>
         <Controller
           name={"username"}
