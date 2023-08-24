@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { enqueueSnackbar } from "notistack";
+import { toastNotifications } from "./common";
 
 const request = axios.create({
   baseURL: `${import.meta.env.VITE_API_ROOT}/v1`,
@@ -39,33 +40,15 @@ const onResponse = response => {
   if (response.config.method === "get") return response;
   if (response.status === 200 || response.status === 201) {
     if (response.config.method === "post") {
-      enqueueSnackbar("Create successfully!", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "left"
-        }
-      });
+      toastNotifications("Create successfully!", "success", "bottom");
     } else if (
       response.config.method === "put" ||
       response.config.method === "patch"
     ) {
       if(!response.config.url.toLowerCase().includes("is-admin"))
-      enqueueSnackbar("Update successfully!", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "left"
-        }
-      });
+      toastNotifications("Update successfully!", "success", "bottom");
     } else {
-      enqueueSnackbar("Delete successfully!", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "left"
-        }
-      });
+      toastNotifications("Delete successfully!", "success", "bottom");
     }
   }
   return response;
@@ -76,17 +59,9 @@ const onResponseError = error => {
     try {
       const errorData = JSON.parse(error.response.data.all);
       const errorMessage = errorData[0]?.message;
-      enqueueSnackbar(errorMessage || "Failed!", {
-        variant: "error",
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "left"
-        }
-      });
+      toastNotifications(errorMessage || "Failed!", "error", "bottom");
     } catch (parseError) {
-      enqueueSnackbar(error.response.data.all || "Failed!", {
-        variant: "error"
-      });
+      toastNotifications(error.response.data.all || "Failed!", "error", "top", "center");
     }
   }
   return Promise.reject(error);

@@ -1,3 +1,5 @@
+import { enqueueSnackbar } from "notistack";
+
 const checkExpireJwtToken = (expireDate) => {
 	if (Date.now() >= expireDate * 1000) {
 		return false;
@@ -5,4 +7,14 @@ const checkExpireJwtToken = (expireDate) => {
 	return true;
 };
 
-export { checkExpireJwtToken };
+const toastNotifications = (message, variant, vertical, horizontal) => {
+	enqueueSnackbar(message, {
+		variant: variant,
+		anchorOrigin: {
+			vertical: vertical || "top",
+			horizontal: horizontal || "left"
+		}
+	});
+}
+
+export { checkExpireJwtToken, toastNotifications };
