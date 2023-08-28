@@ -11,6 +11,8 @@ import { ReservationService } from "src/services";
 
 //Change language
 import { useTranslation } from "react-i18next";
+import UserService from "src/services/UserService";
+import Cookies from "js-cookie";
 // ----------------------------------------------------------------------
 
 

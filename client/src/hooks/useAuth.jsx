@@ -34,8 +34,13 @@ export const AuthProvider = ({ children }) => {
         })
         .then((res) => {
           if (res.status === 200) {
-            if(res.data.data.type !== USER_TYPE_ENUM.HUBS_ADMIN){
+            let syncAdminCalled = false;
+            if (
+              res.data.data.type !== USER_TYPE_ENUM.HUBS_ADMIN &&
+              !syncAdminCalled
+            ) {
               syncAdminAccounts(res.data.data.email);
+              syncAdminCalled = true;
             }
             return res.data.data;
           }
@@ -50,7 +55,9 @@ export const AuthProvider = ({ children }) => {
 
   const syncAdminAccounts = (email) => {
     UserService.isAdmin(email).then((res) => {
-      mutate();
+      if (res?.data) {
+        mutate();
+      }
     });
   }
 
