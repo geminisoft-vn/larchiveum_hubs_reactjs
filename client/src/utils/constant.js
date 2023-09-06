@@ -12,3 +12,11 @@ export const USER_TYPE_ENUM = {
   SUPER_ADMIN: 4,
   HUBS_ADMIN: 5,
 };
+
+export const USER_TYPE = {
+  1: "ANONYMOUS",
+  2: "User",
+  3: "Manager",
+  4: "Admin",
+  5: "Hubs Admin",
+};

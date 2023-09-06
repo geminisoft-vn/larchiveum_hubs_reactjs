@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   IconButton,
   Button,
@@ -15,6 +16,7 @@ import { useTranslation } from "react-i18next";
 
 // component
 import Iconify from "src/components/iconify";
+import UserModal from "./UserModal";
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +47,15 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 const UserListToolbar = ({ numSelected, filterName, onFilterName }) => {
   const { t } = useTranslation();
+  const [openAddUserModal, setOpenAddUserModal] = useState(false);
+
+  const handleOpenAddUserModal = () => {
+    setOpenAddUserModal(true);
+  };
+
+  const handleCloseAddUserModal = () => {
+    setOpenAddUserModal(false);
+  };
 
   return (
     <StyledRoot
@@ -79,10 +90,14 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName }) => {
         <Button
           variant="contained"
           startIcon={<Iconify icon="eva:plus-fill" />}
+          onClick={handleOpenAddUserModal}
         >
           {t(`BUTTON.add`)}
         </Button>
-
+        {/* <UserModal
+          open={openAddUserModal}
+          onClose={handleCloseAddUserModal}
+        /> */}
         {numSelected > 0 ? (
           <Tooltip title="Delete">
             <IconButton>

@@ -1,6 +1,12 @@
 import request from "src/utils/request";
 
 class UserService {
+  static create(data) {
+    return request.post("/auth/user", data).then(res => res.data.data);
+  }
+  static getAll(params) {
+    return request.get("/auth/users", {params}).then(res => res.data.data);
+  }
   static getAvatar(userId) {
     return request
       .get(`/auth/users/${userId}/avatar`)

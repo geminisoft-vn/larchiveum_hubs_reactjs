@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 // @mui
 import {
   Card,
@@ -12,9 +13,9 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
-import { red } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import { sentenceCase } from "change-case";
 
 import Iconify from "src/components/iconify";
@@ -23,14 +24,16 @@ import Label from "src/components/label";
 import Scrollbar from "src/components/scrollbar";
 // sections
 import { UserListHead, UserListToolbar } from "src/sections/@home/user";
+import { USER_TYPE } from "src/utils/constant";
+import UserModal from "./UserModal";
 
 const TABLE_HEAD = [
   { id: "username", label: "Username", alignRight: false },
   { id: "email", label: "Email", alignRight: false },
   { id: "role", label: "Role", alignRight: false },
   { id: "isVerified", label: "Verified", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
-  { id: "" }
+  { id: "actions", label: "Actions", alignRight: false },
+  { id: "" },
 ];
 
 const Users = ({
@@ -51,6 +54,22 @@ const Users = ({
   isNotFound,
   users
 }) => {
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isEditingUser, setIsEditingUser] = useState(false);
+  const [editedUser, setEditedUser] = useState(null);
+
+  const handleOpenEditUserModal = (user) => {
+    setIsAddUserModalOpen(true);
+    setIsEditingUser(true);
+    setEditedUser(user);
+  };
+
+  const handleCloseAddUserModal = () => {
+    setIsAddUserModalOpen(false);
+    setIsEditingUser(false);
+    setEditedUser(null);
+  };
+
   return (
     <Container>
       <Card>
@@ -75,7 +94,7 @@ const Users = ({
               <TableBody>
                 {filteredUsers
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(row => {
+                  .map((row) => {
                     const { id, username, type, email, verified } = row;
                     const selectedUser = selected.indexOf(username) !== -1;
 
@@ -90,7 +109,7 @@ const Users = ({
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={selectedUser}
-                            onChange={event => handleClick(event, username)}
+                            onChange={(event) => handleClick(event, username)}
                           />
                         </TableCell>
 
@@ -98,7 +117,7 @@ const Users = ({
 
                         <TableCell align="left">{email}</TableCell>
 
-                        <TableCell align="left">{type}</TableCell>
+                        <TableCell align="left">{USER_TYPE[type]}</TableCell>
 
                         <TableCell align="left">
                           <Label color={verified ? "success" : "error"}>
@@ -109,6 +128,22 @@ const Users = ({
                         </TableCell>
 
                         <TableCell>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              onClick={() => handleOpenEditUserModal(row)}
+                            >
+                              <Iconify
+                                icon={"eva:edit-2-outline"}
+                                sx={{ color: blue[500] }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                          <UserModal
+                            open={isAddUserModalOpen}
+                            onClose={handleCloseAddUserModal}
+                            isEditing={isEditingUser}
+                            userToEdit={editedUser}
+                          />
                           <Tooltip title="Delete">
                             <IconButton>
                               <Iconify
@@ -134,7 +169,7 @@ const Users = ({
                     <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                       <Paper
                         sx={{
-                          textAlign: "center"
+                          textAlign: "center",
                         }}
                       >
                         <Typography variant="h6" paragraph>
