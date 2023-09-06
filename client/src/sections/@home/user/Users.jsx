@@ -144,14 +144,14 @@ const Users = ({
                             isEditing={isEditingUser}
                             userToEdit={editedUser}
                           />
-                          <Tooltip title="Delete">
+                          {/* <Tooltip title="Delete">
                             <IconButton>
                               <Iconify
                                 icon={"eva:trash-2-outline"}
                                 sx={{ color: red[500] }}
                               />
                             </IconButton>
-                          </Tooltip>
+                          </Tooltip> */}
                         </TableCell>
                       </TableRow>
                     );

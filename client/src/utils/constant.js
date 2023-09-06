@@ -17,6 +17,5 @@ export const USER_TYPE = {
   1: "ANONYMOUS",
   2: "User",
   3: "Manager",
-  4: "Admin",
-  5: "Hubs Admin",
+  5: "Admin",
 };

@@ -41,7 +41,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 const UserPage = () => {
-  const { data: users } = useSWR("/auth/users", url => {
+  const { data: users, mutate } = useSWR("/auth/users", url => {
     return request
       .get(url, {
         headers: {

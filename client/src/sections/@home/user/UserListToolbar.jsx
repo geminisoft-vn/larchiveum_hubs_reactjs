@@ -87,13 +87,13 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName }) => {
       )}
 
       <Stack direction="row" alignItems="center" spacing={1}>
-        <Button
+        {/* <Button
           variant="contained"
           startIcon={<Iconify icon="eva:plus-fill" />}
           onClick={handleOpenAddUserModal}
         >
           {t(`BUTTON.add`)}
-        </Button>
+        </Button> */}
         {/* <UserModal
           open={openAddUserModal}
           onClose={handleCloseAddUserModal}

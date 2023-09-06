@@ -52,13 +52,13 @@ const Header = ({ onOpenNav }) => {
     {
       title: t("LINK.content"),
       path: "/home/content",
-      requiredType: 4,
+      requiredType: 3,
       target: "_self"
     },
     {
       title: t("LINK.room"),
       path: "/home/room",
-      requiredType: 4,
+      requiredType: 3,
       target: "_self"
     },
 
@@ -143,7 +143,7 @@ const Header = ({ onOpenNav }) => {
                   </Link>
                 )}
               {user &&
-                user.type >= 5 && (
+                user.type >= 3 && (
                   <Link
                     to={`${
                       import.meta.env.VITE_APP_ROOT

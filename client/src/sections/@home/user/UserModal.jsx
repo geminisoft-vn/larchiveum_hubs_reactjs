@@ -12,15 +12,13 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { Stack } from "@mui/material";
 import UserService from "src/services/UserService";
-import { mutate } from "swr";
-import { useAuth } from "src/hooks";
+import useSWR, { mutate } from "swr";
 
-const UserModal = ({ open, onClose,isEditing, userToEdit, onUpdateUser }) => {
+const UserModal = ({ open, onClose,isEditing, userToEdit, onRefreshData }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [type, setType] = useState(2);
   const [verified, setVerified] = useState(0);
-  const [updateSuccess, setUpdateSuccess] = useState(false);
 
   useEffect(() => {
     if (isEditing && userToEdit) {
@@ -36,17 +34,17 @@ const UserModal = ({ open, onClose,isEditing, userToEdit, onUpdateUser }) => {
       username,
       email,
       type,
-      verified : verified === true ? 1 : 0,
+      verified,
     };
     if (!userToEdit?.id) return;
-    UserService.update(userToEdit?.id, updatedUserData).then((updatedUserData) => {
-      setUpdateSuccess(true);
+    UserService.update(userToEdit?.id, updatedUserData).then(() => {
+      mutate("/auth/users");
     });
     onClose();
   };
 
   return (
-    <Dialog open={open} onClose={onClose} onUpdateUser={updateSuccess}>
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>{"Update user"}</DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 16}}>
         <form>
@@ -75,8 +73,7 @@ const UserModal = ({ open, onClose,isEditing, userToEdit, onUpdateUser }) => {
             >
               <MenuItem value={2}>User</MenuItem>
               <MenuItem value={3}>Manager</MenuItem>
-              <MenuItem value={4}>Admin</MenuItem>
-              <MenuItem value={5}>Hubs Admin</MenuItem>
+              <MenuItem value={5}>Admin</MenuItem>
             </Select>
           </FormControl>
           <FormControlLabel
