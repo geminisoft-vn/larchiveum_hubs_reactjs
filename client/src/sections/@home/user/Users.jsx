@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // @mui
 import {
   Card,
@@ -81,7 +81,7 @@ const Users = ({
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800 }}>
-            <Table>
+            <Table size="medium">
               <UserListHead
                 order={order}
                 orderBy={orderBy}
@@ -188,9 +188,7 @@ const Users = ({
               )}
             </Table>
           </TableContainer>
-        </Scrollbar>
-
-        <TablePagination
+          <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={users.length}
@@ -199,6 +197,7 @@ const Users = ({
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+        </Scrollbar>
       </Card>
     </Container>
   );

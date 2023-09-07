@@ -17,3 +17,7 @@ body {
   overflow-x: hidden;
 }
 
+.simplebar-placeholder{
+  display: none;
+}
+
