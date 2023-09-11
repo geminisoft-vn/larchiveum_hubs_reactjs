@@ -45,7 +45,7 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const UserListToolbar = ({ numSelected, filterName, onFilterName }) => {
+const UserListToolbar = ({ numSelected, filterName, onFilterName, handleDeleteManyUsers, setSelected, selected }) => {
   const { t } = useTranslation();
   const [openAddUserModal, setOpenAddUserModal] = useState(false);
 
@@ -100,7 +100,11 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName }) => {
         /> */}
         {numSelected > 0 ? (
           <Tooltip title="Delete">
-            <IconButton>
+            <IconButton onClick={() =>
+              handleDeleteManyUsers(JSON.stringify(selected), () => {
+                setSelected([]);
+              })
+            }>
               <Iconify icon="eva:trash-2-fill" />
             </IconButton>
           </Tooltip>

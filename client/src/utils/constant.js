@@ -19,3 +19,11 @@ export const USER_TYPE = {
   3: "Manager",
   5: "Admin",
 };
+
+export const LOGIN_METHOD = {
+  1: "GOOGLE",
+  2: "NAVER",
+  3: "KAKAO",
+  4: "FACEBOOK",
+  5: "TRADITIONAL"
+};

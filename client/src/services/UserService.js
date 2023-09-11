@@ -21,6 +21,12 @@ class UserService {
   static update(id, data) {
     return request.put(`/auth/users/${id}`, data).then(res => res.data.data);
   }
+  static delete(id) {
+    return request.delete(`/auth/users/${id}`).then(res => res.data.data);
+  }
+  static deleteMany(ids) {
+    return request.delete(`/auth/users`, { data: { ids } }).then(res => res.data.data);
+  }
   static isAdmin(email) {
     return request.put(`/auth/is-admin?email=${email}`).then(res => res.data);
   }

@@ -71,7 +71,7 @@ const UserPage = () => {
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = users.map(n => n?.username);
+      const newSelecteds = users.map(n => n?.id);
       setSelected(newSelecteds);
       return;
     }
