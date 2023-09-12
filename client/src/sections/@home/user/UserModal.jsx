@@ -13,6 +13,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { Stack } from "@mui/material";
 import UserService from "src/services/UserService";
 import useSWR, { mutate } from "swr";
+import { LOGIN_METHOD } from "src/utils/constant";
 
 const UserModal = ({ open, onClose,isEditing, userToEdit, onRefreshData }) => {
   const [username, setUsername] = useState("");
@@ -64,7 +65,9 @@ const UserModal = ({ open, onClose,isEditing, userToEdit, onRefreshData }) => {
             onChange={(e) => setEmail(e.target.value)}
             sx={{ marginBottom: '16px' }} 
           />
-          <FormControl fullWidth variant="outlined" sx={{ marginBottom: '16px' }}>
+          {
+            userToEdit?.method > 4 && 
+            <FormControl fullWidth variant="outlined" sx={{ marginBottom: '16px' }}>
             <InputLabel>User Type</InputLabel>
             <Select
               label="User Type"
@@ -76,6 +79,7 @@ const UserModal = ({ open, onClose,isEditing, userToEdit, onRefreshData }) => {
               <MenuItem value={5}>Admin</MenuItem>
             </Select>
           </FormControl>
+          }
           <FormControlLabel
             control={
               <Checkbox
