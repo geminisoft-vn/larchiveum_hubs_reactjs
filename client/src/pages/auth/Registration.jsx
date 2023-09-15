@@ -1,9 +1,9 @@
+import { Link } from "react-router-dom";
 // @mui
 import {
   Button,
   Container,
   Divider,
-  Link,
   Stack,
   Typography
 } from "@mui/material";
