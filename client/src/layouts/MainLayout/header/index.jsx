@@ -68,9 +68,15 @@ const Header = ({ onOpenNav }) => {
       requiredType: 2,
       target: "_self"
     },
+    // {
+    //   title: t("LINK.user"),
+    //   path: "/home/user",
+    //   requiredType: 5,
+    //   target: "_self"
+    // },
     {
-      title: t("LINK.user"),
-      path: "/home/user",
+      title: t("LINK.system"),
+      path: "/home/system",
       requiredType: 5,
       target: "_self"
     }

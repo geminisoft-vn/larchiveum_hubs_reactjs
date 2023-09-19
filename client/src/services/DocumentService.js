@@ -15,6 +15,9 @@ class DocumentService {
   static delete(id) {
     return request.delete(`/auth/documents/${id}`).then(res => res.data.data);
   }
+  static deleteMany(ids) {
+    return request.delete(`/auth/documents`, { data: { ids } }).then(res => res.data.data);
+  }
 }
 
 export default DocumentService;

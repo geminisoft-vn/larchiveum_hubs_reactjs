@@ -3,8 +3,9 @@ import Cookies from "js-cookie";
 import { filter } from "lodash";
 import useSWR from "swr";
 
-import { Users } from "src/sections/@home/user";
+import { QuizzsStatistic } from "src/sections/@home/base-management";
 import request from "src/utils/request";
+import { useAuth, useData } from "src/hooks";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -31,24 +32,25 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, _user => {
+    return filter(array, (_user) => {
       if (_user) {
-        return _user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+        return _user.title.toLowerCase().indexOf(query.toLowerCase()) !== -1;
       }
     });
   }
-  return stabilizedThis.map(el => el[0]);
+  return stabilizedThis.map((el) => el[0]);
 }
 
-const UserPage = () => {
-  const { data: users, mutate } = useSWR("/auth/users", url => {
+const QuizManagement = () => {
+  const { user } = useAuth();
+  const { data: quizzes, mutate } = useSWR("/auth/statistic/quizzes?sort=createdAt|desc", (url) => {
     return request
       .get(url, {
         headers: {
-          Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`
-        }
+          Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`,
+        },
       })
-      .then(res => res.data.data);
+      .then((res) => res.data.data);
   });
 
   const [page, setPage] = useState(0);
@@ -57,7 +59,7 @@ const UserPage = () => {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState("username");
+  const [orderBy, setOrderBy] = useState("title");
 
   const [filterName, setFilterName] = useState("");
 
@@ -69,20 +71,20 @@ const UserPage = () => {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = event => {
+  const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map(n => n?.id);
+      const newSelecteds = quizzes.map((n) => n?.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, username) => {
-    const selectedIndex = selected.indexOf(username);
+  const handleClick = (event, title) => {
+    const selectedIndex = selected.indexOf(title);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, username);
+      newSelected = newSelected.concat(selected, title);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -100,21 +102,21 @@ const UserPage = () => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByName = event => {
+  const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - quizzes.length) : 0;
 
   const filteredUsers = applySortFilter(
-    users,
+    quizzes,
     getComparator(order, orderBy),
     filterName
   );
@@ -122,7 +124,7 @@ const UserPage = () => {
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
-    <Users
+    <QuizzsStatistic
       selected={selected}
       filterName={filterName}
       handleFilterByName={handleFilterByName}
@@ -138,9 +140,9 @@ const UserPage = () => {
       handleClick={handleClick}
       emptyRows={emptyRows}
       isNotFound={isNotFound}
-      users={users || []}
+      quizList={quizzes || []}
     />
   );
 };
 
-export default UserPage;
+export default QuizManagement;

@@ -6,7 +6,7 @@ const ProfilePage = lazy(() => import("./home/Profile"));
 const QuizFormPage = lazy(() => import("./home/QuizForm"));
 const DocumentFormPage = lazy(() => import("./home/DocumentForm"));
 const RoomFormPage = lazy(() => import("./home/RoomForm"));
-const UserManagamentPage = lazy(() => import("./home/UserManagement"));
+const UserManagamentPage = lazy(() => import("./home/system/UserManagement"));
 const ContentPage = lazy(() => import("./home/ContentManagement"));
 const RoomManagementPage = lazy(() => import("./home/RoomManagement"));
 
@@ -39,5 +39,5 @@ export {
   ConfirmationPage,
   ResetPasswordPage,
   QuizGamePage,
-  DocumentViewerPage
+  DocumentViewerPage,
 };

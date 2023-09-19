@@ -3,7 +3,8 @@ export default {
     content: "Content",
     room: "Room",
     profile: "Profile",
-    user: "User"
+    user: "User",
+    system: "System",
   },
   BUTTON: {
     reservate: "Reservate",
@@ -24,9 +25,12 @@ export default {
     back: "Back"
   },
   TAB: {
+    info: "Info",
+    user: "User",
     quiz: "Quizzes",
     document: "Documents",
-    map: "Maps"
+    map: "Maps",
+    admin: "Admin",
   },
   LABEL: {
     public: "Public",

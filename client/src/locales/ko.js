@@ -3,7 +3,8 @@ export default {
     content: "콘텐츠",
     room: "방",
     profile: "프로필",
-    user: "사용자"
+    user: "사용자",
+    system: "체계"
   },
   BUTTON: {
     reservate: "예약",
@@ -24,9 +25,12 @@ export default {
     back: "뒤로가기"
   },
   TAB: {
+    info: "정보",
+    user: "사용자",
     quiz: "퀴즈",
     document: "문서",
-    map: "지도"
+    map: "지도",
+    admin: "관리자"
   },
   LABEL: {
     public: "공개",

@@ -32,6 +32,7 @@ const App = () => {
       i18n.changeLanguage(locale);
     }
   }, []);
+
   return (
     <ThemeProvider>
       <LocalizationProvider dateAdapter={AdapterMoment}>

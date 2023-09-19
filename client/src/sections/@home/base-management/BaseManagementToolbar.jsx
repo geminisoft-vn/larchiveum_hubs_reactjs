@@ -45,17 +45,8 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const UserListToolbar = ({ numSelected, filterName, onFilterName, handleDeleteManyUsers, setSelected, selected }) => {
+const BaseManagementToolbar = ({ numSelected, filterName, onFilterName, handleDeleteMany, setSelected, selected, searchContent }) => {
   const { t } = useTranslation();
-  const [openAddUserModal, setOpenAddUserModal] = useState(false);
-
-  const handleOpenAddUserModal = () => {
-    setOpenAddUserModal(true);
-  };
-
-  const handleCloseAddUserModal = () => {
-    setOpenAddUserModal(false);
-  };
 
   return (
     <StyledRoot
@@ -74,7 +65,7 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName, handleDeleteMa
         <StyledSearch
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder={searchContent || "Search..."}
           startAdornment={
             <InputAdornment position="start">
               <Iconify
@@ -101,7 +92,7 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName, handleDeleteMa
         {numSelected > 0 ? (
           <Tooltip title="Delete">
             <IconButton onClick={() =>
-              handleDeleteManyUsers(JSON.stringify(selected), () => {
+              handleDeleteMany(JSON.stringify(selected), () => {
                 setSelected([]);
               })
             }>
@@ -120,10 +111,10 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName, handleDeleteMa
   );
 };
 
-UserListToolbar.propTypes = {
+BaseManagementToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
 };
 
-export default UserListToolbar;
+export default BaseManagementToolbar;
