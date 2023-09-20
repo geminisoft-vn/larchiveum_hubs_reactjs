@@ -1,6 +1,7 @@
 import React from "react";
 // @mui
 import {
+  Box,
   Card,
   Checkbox,
   Container,
@@ -61,10 +62,21 @@ const DocumentStatistic = ({
 
   const { $emit } = useEventBus();
 
+  const content = (
+    <Box sx={{ width: "100%", maxWidth: 500, textAlign: "center" }}>
+      <Typography variant="body1">
+        {`Are you sure you want to delete the selected document?`}
+      </Typography>
+      <Typography variant="body1">
+        {`If you choose to delete it, it cannot be recovered.`}
+      </Typography>
+    </Box>
+  );
+
   const handleDelete = (documentId) => {
     if (!documentId) return;
     $emit("alert/open", {
-      title: "Delete user",
+      title: "Delete document",
       content: "Do you want to delete this document?",
       okText: "Delete",
       okCallback: () => {
@@ -78,8 +90,8 @@ const DocumentStatistic = ({
   const handleDeleteMany = (ids, callback) => {
     if (!ids) return;
     $emit("alert/open", {
-      title: "Delete user",
-      content: "Do you want to delete this user?",
+      title: "Delete document",
+      content,
       okText: "Delete",
       okCallback: () => {
         DocumentService.deleteMany(ids)

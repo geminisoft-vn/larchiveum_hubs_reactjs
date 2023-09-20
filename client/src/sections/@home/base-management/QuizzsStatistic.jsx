@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 // @mui
 import {
+  Box,
   Card,
   Checkbox,
   Container,
@@ -66,10 +67,21 @@ const QuizzsStatistic = ({
   const navigate = useNavigate();
   const { $emit } = useEventBus();
 
+  const content = (
+    <Box sx={{ width: "100%", maxWidth: 500, textAlign: "center" }}>
+      <Typography variant="body1">
+        {`Are you sure you want to delete the selected quiz?`}
+      </Typography>
+      <Typography variant="body1">
+        {`If you choose to delete it, it cannot be recovered.`}
+      </Typography>
+    </Box>
+  );
+
   const handleDelete = (quizId) => {
     if (!quizId) return;
     $emit("alert/open", {
-      title: "Delete user",
+      title: "Delete quiz",
       content: "Do you want to delete this quiz?",
       okText: "Delete",
       okCallback: () => {
@@ -83,13 +95,13 @@ const QuizzsStatistic = ({
   const handleDeleteMany = (ids, callback) => {
     if (!ids) return;
     $emit("alert/open", {
-      title: "Delete user",
-      content: "Do you want to delete this user?",
+      title: "Delete quiz",
+      content: content,
       okText: "Delete",
       okCallback: () => {
         QuizService.deleteMany(ids)
           .then(() => {
-            return mutate("/auth/users");
+            return mutate("/auth/statistic/quizzes?sort=createdAt|desc");
           })
           .then(() => {
             if (callback) callback();
@@ -107,7 +119,7 @@ const QuizzsStatistic = ({
           filterName={filterName}
           onFilterName={handleFilterByName}
           searchContent={"Search Quiz..."}
-          handleDeleteManyUsers={handleDeleteMany}
+          handleDeleteMany={handleDeleteMany}
         />
 
         <Scrollbar>

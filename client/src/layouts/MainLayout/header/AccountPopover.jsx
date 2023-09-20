@@ -101,6 +101,17 @@ const AccountPopover = () => {
           }
         }}
       >
+        {/* <Box sx={{ my: 1.5, px: 2.5 }}>
+          <Typography variant="subtitle2" noWrap sx={{ display: 'flex', alignItems: 'center' }}>
+            {user?.username.length > 10 ? `${user?.username.slice(0, 10)}...` : user?.username}
+            <Box sx={{ m: 1 }}>
+              <Button>Info</Button>
+            </Box>
+          </Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
+            {user?.email}
+          </Typography>
+        </Box> */}
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
             {user?.username}

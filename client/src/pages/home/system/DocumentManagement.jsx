@@ -34,7 +34,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(array, (_user) => {
       if (_user) {
-        return _user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+        return _user.title.toLowerCase().indexOf(query.toLowerCase()) !== -1;
       }
     });
   }
@@ -56,11 +56,11 @@ const DocumentManagement = () => {
 
   const [page, setPage] = useState(0);
 
-  const [order, setOrder] = useState("asc");
+  const [order, setOrder] = useState();
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState("title");
+  const [orderBy, setOrderBy] = useState();
 
   const [filterName, setFilterName] = useState("");
 

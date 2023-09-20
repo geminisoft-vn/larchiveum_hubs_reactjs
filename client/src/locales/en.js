@@ -34,7 +34,7 @@ export default {
   },
   LABEL: {
     public: "Public",
-    username: "Username",
+    username: "Nickname",
     password: "Password",
     Latest: "Latest",
     Oldest: "Oldest",
@@ -52,5 +52,6 @@ export default {
     invalid_desc_length: "Description must be contain at least 1 charaters and maximum 150 characters",
     invalid_question_length: "Question must be contain at least 1 charaters and maximum 100 characters",
     invalid_answer_length: "Answer must be contain at least 1 charaters and maximum 60 characters",
+    invalid_username_length: "Must be between 3 and 32 characters",
   }
 };

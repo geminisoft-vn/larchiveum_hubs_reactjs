@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Grid } from "@mui/material";
@@ -15,10 +15,13 @@ const ProfilePage = () => {
   const { t } = useTranslation();
 
   const schema = yup.object().shape({
-    username: yup.string().required(t("ERROR.required"))
+    username: yup.string()
+    .min(3, t(`ERROR.invalid_username_length`))
+    .max(32, t(`ERROR.invalid_username_length`))
+    .required(t("ERROR.invalid_required"))
   });
 
-  const { control, reset, handleSubmit } = useForm({
+  const methods = useForm({
     defaultValues: {
       username: ""
     },
@@ -35,7 +38,7 @@ const ProfilePage = () => {
     });
   };
 
-  const handleSaveUserInfo = handleSubmit(data => {
+  const handleSaveUserInfo = methods.handleSubmit(data => {
     if (!user?.id) return;
     UserService.update(user?.id, { username: data.username }).then(() => {
       mutate();
@@ -47,7 +50,7 @@ const ProfilePage = () => {
       let defaultValues = {};
       if (user) {
         defaultValues.username = user.username;
-        reset({ ...defaultValues });
+        methods.reset({ ...defaultValues });
       }
     },
     [user]
@@ -55,6 +58,7 @@ const ProfilePage = () => {
 
   return (
     <>
+      <FormProvider {...methods}>
       <Grid container spacing={2}>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <AvatarPreview
@@ -63,9 +67,10 @@ const ProfilePage = () => {
           />
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <UserInfo control={control} handleSaveUserInfo={handleSaveUserInfo} />
+          <UserInfo control={methods.control} handleSaveUserInfo={handleSaveUserInfo} />
         </Grid>
       </Grid>
+      </FormProvider>
 
       <AvatarPickingModal />
     </>

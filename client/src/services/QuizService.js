@@ -13,6 +13,9 @@ class QuizService {
   static delete(id) {
     return request.delete(`/auth/quizzes/${id}`).then(res => res.data.data);
   }
+  static deleteMany(ids) {
+    return request.delete(`/auth/quizzes`, { data: { ids } }).then(res => res.data.data);
+  }
 }
 
 export default QuizService;

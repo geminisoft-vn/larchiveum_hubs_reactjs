@@ -9,6 +9,7 @@ import QuizManagement from "./system/QuizManagement";
 import { useAuth } from "src/hooks";
 import UserManagamentPage from "./system/UserManagement";
 import DocumentManagement from "./system/DocumentManagement";
+import InformationSystemPage from "./system/InformationSystem";
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -62,7 +63,9 @@ const SystemPage = () => {
             <Tab label={t("TAB.document")} sx={{ ml: 2, mr: 2 }} />
           </Tabs>
         </Box>
-        <TabPanel value={tabIndex} index={0} />
+        <TabPanel value={tabIndex} index={0}>
+         <InformationSystemPage/>
+         </TabPanel>
         <TabPanel value={tabIndex} index={1}>
           <UserManagamentPage />
         </TabPanel>
