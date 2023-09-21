@@ -144,7 +144,7 @@ const Users = ({
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
-          searchContent={"Search user..."}
+          searchContent={"Search User..."}
           handleDeleteMany={handleDeleteMany}
         />
 

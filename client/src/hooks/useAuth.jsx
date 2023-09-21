@@ -19,7 +19,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname } = useLocation(); 
 
   const { data: user, mutate } = useSWR(
     Cookies.get("__LARCHIVEUM__COOKIES") && pathname.includes("home")
@@ -39,8 +39,10 @@ export const AuthProvider = ({ children }) => {
               res.data.data.type !== USER_TYPE_ENUM.HUBS_ADMIN &&
               !syncAdminCalled
             ) {
-              syncAdminAccounts(res.data.data.email);
-              syncAdminCalled = true;
+              if(res.data.data.method === 5){
+                syncAdminAccounts(res.data.data.email);
+                syncAdminCalled = true;
+              } 
             }
             return res.data.data;
           }
@@ -48,6 +50,7 @@ export const AuthProvider = ({ children }) => {
         });
     }
   );
+
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);

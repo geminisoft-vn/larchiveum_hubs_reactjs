@@ -10,6 +10,7 @@ import { useAuth } from "src/hooks";
 import UserManagamentPage from "./system/UserManagement";
 import DocumentManagement from "./system/DocumentManagement";
 import InformationSystemPage from "./system/InformationSystem";
+import { useMediaQuery } from '@mui/material';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -32,6 +33,7 @@ const SystemPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -56,11 +58,17 @@ const SystemPage = () => {
     <Container>
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs value={tabIndex} onChange={handleChange} centered>
+          <Tabs value={tabIndex} 
+            onChange={handleChange} 
+            centered
+            variant={ isMobile ? "scrollable" : ""}
+            allowScrollButtonsMobile
+            scrollButtons="auto"
+          >
             <Tab label={t("TAB.info")} />
             <Tab label={t("TAB.user")} />
-            <Tab label={t("TAB.quiz")} sx={{ ml: 2, mr: 2 }} />
-            <Tab label={t("TAB.document")} sx={{ ml: 2, mr: 2 }} />
+            <Tab label={t("TAB.quiz")} sx={{ ml: isMobile ? 0 : 2, mr: isMobile ? 0 : 2 }} />
+            <Tab label={t("TAB.document")} sx={{ ml: isMobile ? 0 : 2, mr: isMobile ? 0 : 2 }} />
           </Tabs>
         </Box>
         <TabPanel value={tabIndex} index={0}>
@@ -79,5 +87,6 @@ const SystemPage = () => {
     </Container>
   );
 };
+
 
 export default SystemPage;

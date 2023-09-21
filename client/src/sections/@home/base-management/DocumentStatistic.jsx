@@ -34,7 +34,7 @@ import moment from "moment";
 import { DocumentService } from "src/services";
 
 const TABLE_HEAD = [
-  { id: "title", label: "Quiz Title", alignRight: false },
+  { id: "title", label: "Document Title", alignRight: false },
   { id: "createdAt", label: "Date Created", alignRight: false },
   { id: "userId", label: "Writer", alignRight: false },
   { id: "actions", label: "Actions", alignRight: false },
