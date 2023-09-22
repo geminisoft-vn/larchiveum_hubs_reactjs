@@ -67,6 +67,11 @@ class AuthService {
   static reSendVerifyMail(email) {
     return request.post("/resend-email-verification", { email });
   }
+
+  static changePassword(accessEmail, oldPassword, newPassword) {
+    return request.post("/change-password", { accessEmail, oldPassword, newPassword });
+  }
+  
 }
 
 export default AuthService;

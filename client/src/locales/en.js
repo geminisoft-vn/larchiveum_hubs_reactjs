@@ -22,7 +22,9 @@ export default {
     open: "Open",
     save: "Save",
     change: "Change",
-    back: "Back"
+    back: "Back",
+    changepass: "Change Password",
+    withdraw: "Withdraw",
   },
   TAB: {
     info: "Info",
