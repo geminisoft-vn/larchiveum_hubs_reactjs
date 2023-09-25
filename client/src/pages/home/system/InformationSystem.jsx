@@ -1,13 +1,39 @@
 import { Box, Grid, Typography } from "@mui/material";
-
+import Cookies from "js-cookie";
+import { useState } from "react";
+import StatisticService from "src/services/StatisticService";
+import request from "src/utils/request";
+import useSWR from "swr";
 
 const InformationSystemPage = () => {
 
-  const version = '1.0.0';
-  const documentUsage = 50;
-  const sceneUsage = 75;
-  const avatarUsage = 30; 
-  const spokeUsage = 200; 
+  const [version, setVersion] = useState("1.0.0");
+  const { data: capacity, mutate } = useSWR(`/auth/statistic`, (url) => {
+    return request
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("__LARCHIVEUM__COOKIES")}`,
+        },
+      })
+      .then((res) => res.data.data);
+  });
+
+  function formatFileSize(bytes) {
+    if (bytes < 1024) {
+      return `${bytes} B`;
+    } else if (bytes < 1024 * 1024) {
+      return `${(bytes / 1024).toFixed(2)} KB`;
+    } else if (bytes < 1024 * 1024 * 1024) {
+      return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    } else {
+      return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+    }
+  }
+
+  const hubVersion = capacity?.version;
+  const sceneUsage = formatFileSize(capacity?.scene);
+  const avatarUsage = formatFileSize(capacity?.avatar);
+  const projectUsage = formatFileSize(capacity?.project);
 
   return (
     <Grid container spacing={2}>
@@ -32,11 +58,12 @@ const InformationSystemPage = () => {
             }}
           />
         </Box>
-        <Typography variant="body1">Version: {version}</Typography>
-        <Typography variant="body1">Document Usage: {documentUsage} MB</Typography>
-        <Typography variant="body1">Scene Usage: {sceneUsage} MB</Typography>
-        <Typography variant="body1">Avatar Usage: {avatarUsage} MB</Typography>
-        <Typography variant="body1">Spoke Resource Usage: {spokeUsage} MB</Typography>
+        {
+          capacity && <><Typography variant="body1">Version: {hubVersion}</Typography>
+          <Typography variant="body1">Avatar Usage: {avatarUsage}</Typography>
+          <Typography variant="body1">Scene Usage: {sceneUsage}</Typography>
+          <Typography variant="body1">Project Resource Usage: {projectUsage}</Typography></>
+        }
       </Grid>
     </Grid>
   );
