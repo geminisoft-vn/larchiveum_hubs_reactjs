@@ -32,6 +32,7 @@ import { useEventBus } from "src/hooks";
 import { mutate } from "swr";
 import moment from "moment";
 import { DocumentService } from "src/services";
+import { Link } from "react-router-dom";
 
 const TABLE_HEAD = [
   { id: "title", label: "Document Title", alignRight: false },
@@ -151,7 +152,7 @@ const DocumentStatistic = ({
                           />
                         </TableCell>
 
-                        <TableCell>{title}</TableCell>
+                        <TableCell><Link to={`/document-viewer/${id}`} target="_blank" style={{ color: 'inherit', textDecoration: 'none' }}>{title}</Link></TableCell>
 
                         <TableCell align="left">{moment(createdAt).format("DD/MM/YYYY")}</TableCell>
                         <TableCell align="left">{user?.username}</TableCell>

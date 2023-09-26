@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import StatisticService from "src/services/StatisticService";
@@ -32,6 +32,7 @@ const InformationSystemPage = () => {
 
   const hubVersion = capacity?.version;
   const sceneUsage = formatFileSize(capacity?.scene);
+  const documentUsage = formatFileSize(capacity?.document);
   const avatarUsage = formatFileSize(capacity?.avatar);
   const projectUsage = formatFileSize(capacity?.project);
 
@@ -61,8 +62,10 @@ const InformationSystemPage = () => {
         {
           capacity && <><Typography variant="body1">Version: {hubVersion}</Typography>
           <Typography variant="body1">Avatar Usage: {avatarUsage}</Typography>
+          <Typography variant="body1">Document Usage: {documentUsage}</Typography>
           <Typography variant="body1">Scene Usage: {sceneUsage}</Typography>
-          <Typography variant="body1">Project Resource Usage: {projectUsage}</Typography></>
+          <Typography variant="body1">Project Resource Usage: {projectUsage}</Typography>
+          </>
         }
       </Grid>
     </Grid>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 // @mui
 import {
   Box,
+  Button,
   Card,
   Checkbox,
   Container,
@@ -36,6 +37,7 @@ import { useEventBus } from "src/hooks";
 import { mutate } from "swr";
 import moment from "moment";
 import { QuizService } from "src/services";
+import { Link } from "react-router-dom";
 
 const TABLE_HEAD = [
   { id: "title", label: "Quiz Title", alignRight: false },
@@ -156,7 +158,7 @@ const QuizzsStatistic = ({
                           />
                         </TableCell>
 
-                        <TableCell>{title}</TableCell>
+                        <TableCell><Link to={`/quiz-game/${id}`} target="_blank" style={{ color: 'inherit', textDecoration: 'none' }}>{title}</Link></TableCell>
 
                         <TableCell align="left">{moment(createdAt).format("DD/MM/YYYY")}</TableCell>
                         <TableCell align="left">{user?.username}</TableCell>

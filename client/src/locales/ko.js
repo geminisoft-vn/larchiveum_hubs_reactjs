@@ -4,7 +4,7 @@ export default {
     room: "방",
     profile: "프로필",
     user: "사용자",
-    system: "체계"
+    system: "시스템"
   },
   BUTTON: {
     reservate: "예약",
