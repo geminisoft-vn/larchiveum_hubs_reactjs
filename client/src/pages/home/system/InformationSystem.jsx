@@ -1,6 +1,7 @@
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import Cookies from "js-cookie";
 import { useState } from "react";
+import { Loader } from "src/components/loader";
 import StatisticService from "src/services/StatisticService";
 import request from "src/utils/request";
 import useSWR from "swr";
@@ -8,7 +9,7 @@ import useSWR from "swr";
 const InformationSystemPage = () => {
 
   const [version, setVersion] = useState("1.0.0");
-  const { data: capacity, mutate } = useSWR(`/auth/statistic`, (url) => {
+  const { data: capacity, mutate, isLoading } = useSWR(`/auth/statistic`, (url) => {
     return request
       .get(url, {
         headers: {
@@ -60,13 +61,14 @@ const InformationSystemPage = () => {
           />
         </Box>
         {
-          capacity && <><Typography variant="body1">Version: {hubVersion}</Typography>
+          !isLoading && capacity && <><Typography variant="body1">Version: {hubVersion}</Typography>
           <Typography variant="body1">Avatar Usage: {avatarUsage}</Typography>
           <Typography variant="body1">Document Usage: {documentUsage}</Typography>
           <Typography variant="body1">Scene Usage: {sceneUsage}</Typography>
           <Typography variant="body1">Project Resource Usage: {projectUsage}</Typography>
           </>
         }
+        {isLoading && <Loader />}{" "}
       </Grid>
     </Grid>
   );
