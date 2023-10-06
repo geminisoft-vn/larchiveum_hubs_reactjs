@@ -13,13 +13,13 @@ import { Loader } from "src/components/loader";
 import StatisticService from "src/services/StatisticService";
 import request from "src/utils/request";
 import useSWR from "swr";
-import { PieChart } from "@mui/x-charts/PieChart";
+// import { PieChart } from "@mui/x-charts/PieChart";
 import { useDrawingArea } from "@mui/x-charts/hooks";
 import { styled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
+import { PieChart, Pie, Tooltip, Cell, Legend } from "recharts";
 
 const InformationSystemPage = () => {
-
   const { t } = useTranslation();
   const { data: capacity, mutate, isLoading } = useSWR(
     `/auth/statistic`,
@@ -52,25 +52,31 @@ const InformationSystemPage = () => {
   const data = [
     {
       value: capacity?.avatar / (1024 * 1024 * 1024),
-      label: t("SYSTEM.avatar"),
-      color: "#354a5f",
+      rawValue: capacity?.avatar,
+      name: t("SYSTEM.avatar"),
+      // color: "#354a5f",
     },
     {
       value: capacity?.scene / (1024 * 1024 * 1024),
-      label: t("SYSTEM.scene"),
-      color: "#1dad94",
+      rawValue: capacity?.scene,
+      name: t("SYSTEM.scene"),
+      // color: "#1dad94",
     },
     {
       value: capacity?.document / (1024 * 1024 * 1024),
-      label: t("SYSTEM.document"),
-      color: "#11a3dd",
+      rawValue: capacity?.document,
+      name: t("SYSTEM.document"),
+      // color: "#11a3dd",
     },
     {
       value: capacity?.project / (1024 * 1024 * 1024),
-      label: t("SYSTEM.project"),
-      color: "#f8b32e",
+      rawValue: capacity?.project,
+      name: t("SYSTEM.project"),
+      // color: "#f8b32e",
     },
   ];
+
+  const COLORS = ["#354a5f", "#1dad94", "#11a3dd", "#f8b32e"];
 
   const size = {
     width: 500,
@@ -83,28 +89,52 @@ const InformationSystemPage = () => {
     dominantBaseline: "central",
   }));
 
-  const PieCenterLabel = ({ children }) => {
-    const { width, height, left, top } = useDrawingArea();
+  const renderCustomLabel = ({ cx, cy, chirldren }) => {
+    const fontSize = 24;
+    const fontWeight = "bold";
+    const lineHeight = fontSize * 1;
     return (
-      <>
+      <g>
         <StyledText
-          x={left + width / 2}
-          y={top + height / 2}
-          fontSize={24}
-          fontWeight="bold"
+          x={cx}
+          y={cy - lineHeight / 2}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize={fontSize}
+          fontWeight={fontWeight}
         >
-          {children.split(" ")[0]}
+          {formatFileSize(totalUsage).split(" ")[0]}
         </StyledText>
         <StyledText
-          x={left + width / 2}
-          y={top + height / 2 + 20}
-          fontSize={14}
+          x={cx}
+          y={cy + lineHeight / 2}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize={fontSize / 2}
         >
-          {children.split(" ")[1]}
+          {formatFileSize(totalUsage).split(" ")[1]}
         </StyledText>
-      </>
+      </g>
     );
   };
+
+  const CustomTooltip = ({ active, payload, label }) =>
+  active && payload && payload.length ? (
+    <div
+      className="custom-tooltip"
+      style={{
+        backgroundColor: "white",
+        border: "1px solid #ccc",
+        borderRadius: "10px",
+        padding: "0px 4px",
+        textAlign: "center",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <p className="label">{`${payload[0].name} : ${formatFileSize(payload[0].payload.rawValue)} ~ ${((payload[0].value * 100) / formatFileSize(totalUsage).split(" ")[0]).toFixed(2)} %`}</p>
+    </div>
+  ) : null;
+
 
   return (
     <Grid container spacing={2}>
@@ -145,8 +175,30 @@ const InformationSystemPage = () => {
                 </Typography> */}
                 <Chip label={t("SYSTEM.usage")} variant="outlined" />
               </Divider>
-              <PieChart series={[{ data, innerRadius: 60 }]} {...size}>
-                <PieCenterLabel>{formatFileSize(totalUsage)}</PieCenterLabel>
+              <PieChart width={500} height={280}>
+                <Pie
+                  data={data}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={55}
+                  fill="#8884d8"
+                  dataKey="value"
+                  labelLine={false}
+                  label={renderCustomLabel}
+                >
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend
+                  align="right"
+                  verticalAlign="middle"
+                  layout="vertical"
+                />
               </PieChart>
             </Paper>
           </>
