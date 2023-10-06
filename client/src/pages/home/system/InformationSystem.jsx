@@ -46,40 +46,27 @@ const InformationSystemPage = () => {
     }
   }
 
-  const totalUsage =
-    capacity?.scene + capacity?.document + capacity?.avatar + capacity?.project;
+  // const totalUsage =
+  //   capacity?.scene + capacity?.document + capacity?.avatar + capacity?.project;
 
-  const data = [
-    {
-      value: capacity?.avatar / (1024 * 1024 * 1024),
-      rawValue: capacity?.avatar,
-      percent: (capacity?.avatar / totalUsage * 100).toFixed(2),
-      name: t("SYSTEM.avatar"),
-      // color: "#354a5f",
-    },
-    {
-      value: capacity?.scene / (1024 * 1024 * 1024),
-      rawValue: capacity?.scene,
-      percent: (capacity?.scene / totalUsage * 100).toFixed(2),
-      name: t("SYSTEM.scene"),
-      // color: "#1dad94",
-    },
-    {
-      value: capacity?.document / (1024 * 1024 * 1024),
-      rawValue: capacity?.document,
-      percent: (100 - (capacity?.avatar / totalUsage * 100).toFixed(2) - (capacity?.scene / totalUsage * 100).toFixed(2) - (capacity?.project / totalUsage * 100).toFixed(2)).toFixed(2) ,
-      name: t("SYSTEM.document"),
-      // color: "#11a3dd",
-    },
-    {
-      value: capacity?.project / (1024 * 1024 * 1024),
-      rawValue: capacity?.project,
-      percent: (capacity?.project / totalUsage * 100).toFixed(2),
-      name: t("SYSTEM.project"),
-      // color: "#f8b32e",
-    },
-  ];
+  const dataKeys = ["avatar", "scene", "document", "project"];
+  const totalUsage = dataKeys.reduce((acc, key) => acc + (capacity?.[key] || 0), 0);
   
+  const data = dataKeys.map((key) => ({
+    value: (capacity?.[key] || 0) / (1024 * 1024 * 1024),
+    rawValue: capacity?.[key] || 0,
+    name: t(`SYSTEM.${key}`),
+  }));
+  
+  data.forEach((item, index) => {
+    if (index === dataKeys.length - 1) {
+      //"document"
+      const usedPercentages = data.slice(0, dataKeys.length - 1).map((d) => parseFloat(d.percent));
+      item.percent = (100 - usedPercentages.reduce((acc, curr) => acc + curr, 0)).toFixed(2);
+    } else {
+      item.percent = ((item.rawValue / totalUsage) * 100).toFixed(2);
+    }
+  });
 
   const COLORS = ["#354a5f", "#1dad94", "#11a3dd", "#f8b32e"];
 
