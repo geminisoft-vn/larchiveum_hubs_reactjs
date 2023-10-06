@@ -41,6 +41,13 @@ export default {
     Latest: "Latest",
     Oldest: "Oldest",
   },
+  SYSTEM: {
+    usage: "Usage",
+    avatar: "Avatar",
+    scene: "Scene",
+    document: "Document",
+    project: "Project",
+  },
   ERROR: {
     invalid_room_name_length:
       "Name must be contain at least 4 charaters and maximum 255 characters.",

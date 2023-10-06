@@ -39,6 +39,13 @@ export default {
     Latest: "최신순",
     Oldest: " 오래된순",
   },
+  SYSTEM: {
+    usage: "용법",
+    avatar: "화신",
+    scene: "장면",
+    document: "문서",
+    project: "프로젝트",
+  },
   ERROR: {
     invalid_room_name_length:
       "Name must be contain at least 4 charaters and maximum 255 characters.",

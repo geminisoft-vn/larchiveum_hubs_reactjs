@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "5.0.0-alpha.131",
     "@mui/material": "^5.13.2",
+    "@mui/x-charts": "^6.0.0-alpha.13",
     "@mui/x-date-pickers": "^6.5.0",
     "@tinymce/tinymce-react": "^4.3.0",
     "axios": "^1.4.0",
