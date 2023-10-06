@@ -53,28 +53,33 @@ const InformationSystemPage = () => {
     {
       value: capacity?.avatar / (1024 * 1024 * 1024),
       rawValue: capacity?.avatar,
+      percent: (capacity?.avatar / totalUsage * 100).toFixed(2),
       name: t("SYSTEM.avatar"),
       // color: "#354a5f",
     },
     {
       value: capacity?.scene / (1024 * 1024 * 1024),
       rawValue: capacity?.scene,
+      percent: (capacity?.scene / totalUsage * 100).toFixed(2),
       name: t("SYSTEM.scene"),
       // color: "#1dad94",
     },
     {
       value: capacity?.document / (1024 * 1024 * 1024),
       rawValue: capacity?.document,
+      percent: (100 - (capacity?.avatar / totalUsage * 100).toFixed(2) - (capacity?.scene / totalUsage * 100).toFixed(2) - (capacity?.project / totalUsage * 100).toFixed(2)).toFixed(2) ,
       name: t("SYSTEM.document"),
       // color: "#11a3dd",
     },
     {
       value: capacity?.project / (1024 * 1024 * 1024),
       rawValue: capacity?.project,
+      percent: (capacity?.project / totalUsage * 100).toFixed(2),
       name: t("SYSTEM.project"),
       // color: "#f8b32e",
     },
   ];
+  
 
   const COLORS = ["#354a5f", "#1dad94", "#11a3dd", "#f8b32e"];
 
@@ -131,7 +136,7 @@ const InformationSystemPage = () => {
         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
       }}
     >
-      <p className="label">{`${payload[0].name} : ${formatFileSize(payload[0].payload.rawValue)} ~ ${((payload[0].value * 100) / formatFileSize(totalUsage).split(" ")[0]).toFixed(2)} %`}</p>
+      <p className="label">{`${payload[0].name} : ${formatFileSize(payload[0].payload.rawValue)} ~ ${(payload[0].payload.percent)} %`}</p>
     </div>
   ) : null;
 
